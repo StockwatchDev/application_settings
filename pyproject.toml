@@ -1,0 +1,133 @@
+[tool.poetry]
+name = "application_config"
+version = "0.1.0"
+description = ""
+authors = ["Theo de Vries <t.j.a.devries@gmail.com>", "Jorik de Vries"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.group.testing]
+optional = true
+
+[tool.poetry.group.testing.dependencies]
+pytest = "^7.0"
+pytest-cov = "^4.0.0"
+
+[tool.poetry.group.typing]
+optional = true
+
+[tool.poetry.group.typing.dependencies]
+mypy = ">=0.942"
+
+[tool.poetry.group.style]
+optional = true
+
+[tool.poetry.group.style.dependencies]
+black = "^22.10.0"
+isort = "^5.10.1"
+pylint = "^2.15.4"
+
+[tool.poetry.group.testrunner]
+optional = true
+
+[tool.poetry.group.testrunner.dependencies]
+tox = "^3.24.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+warn_unused_configs = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = false
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+no_implicit_reexport = true
+strict_equality = true
+show_error_codes = true
+show_error_context = true
+
+[[tool.mypy.overrides]]
+module = [
+    "dash.*",
+    "dash_bootstrap_components.*",
+    "dash_bootstrap_templates.*",
+    "dash_extensions.*",
+    "plotly.*",
+]
+ignore_missing_imports = true
+
+[tool.pylint.main]
+load-plugins = [
+    "pylint.extensions.bad_builtin",
+    "pylint.extensions.code_style",
+    "pylint.extensions.typing",
+    "pylint.extensions.no_self_use",
+]
+
+[tool.pylint.messages_control]
+# Reasons disabled:
+# format - handled by black
+# wrong-import-order - isort guards this
+# fixme - too handy for now
+disable = [
+    "fixme",
+    "format",
+    "wrong-import-order",
+]
+enable = [
+    "useless-suppression",
+    "use-symbolic-message-instead",
+]
+
+[tool.pylint.typecheck]
+mixin-class-rgx = ".*[Mm]ix[Ii]n"
+
+[tool.pylint.typing]
+runtime-typing = false
+
+[tool.pylint.similarities]
+ignore-imports = "yes"
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+skipsdist = true
+envlist =
+    py{310,311}
+    style
+    typing
+
+[testenv]
+whitelist_externals = poetry
+commands_pre =
+    poetry install --with testing -v
+commands =
+    poetry run pytest --cov-report xml:coverage.xml --cov-report term-missing --cov=application_config tests/
+
+[testenv:style]
+commands_pre =
+    poetry install --with style -v
+commands =
+    poetry run python -m black --check ./src
+    poetry run isort --check --diff ./src
+    poetry run pylint --recursive=y ./src
+
+[testenv:typing]
+commands_pre =
+    poetry install --with typing -v
+commands =
+    poetry run mypy ./src
+"""

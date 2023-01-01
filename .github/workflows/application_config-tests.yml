@@ -1,0 +1,45 @@
+# Run this job on pushes to `main`, and for pull requests. If you don't specify
+# `branches: [develop], then this actions runs _twice_ on pull requests, which is
+# annoying.
+name: "application_config merge checks"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "develop"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.2.1
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Check lockfile
+        run: poetry lock --check
+
+      - name: Install packages
+        run: poetry install --no-interaction --no-root --only testrunner
+
+      - name: Run tests
+        run: poetry run tox -e style -e typing -e py310
+
+      - name: Report coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.xml
+          flags: unittests
