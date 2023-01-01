@@ -57,10 +57,18 @@ Note that you have to define `get_app_basename()` for the container.
 
 ### Write a config file
 
-Example: file `~/.example/config.toml`
+For the example, the config file `~/.example/config.toml` will be something like this:
 
 ```toml
 [section1]
 field1 = "my own version of field1"
 field2 = 22
+```
+
+### Use config parameters in your code
+
+```python
+the_config = ExampleConfig.get()
+a_variable: str = the_config.section1.field1  # a_variable == "my own version of field1"
+another_variable: int = the_config.section1.field2  # another_variable == 22
 ```
