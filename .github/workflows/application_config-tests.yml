@@ -1,7 +1,7 @@
 # Run this job on pushes to `main`, and for pull requests. If you don't specify
 # `branches: [develop], then this actions runs _twice_ on pull requests, which is
 # annoying.
-name: "application_config merge checks"
+name: "Merge checks"
 
 on:
   pull_request:
@@ -36,7 +36,7 @@ jobs:
         run: poetry install --no-interaction --no-root --only testrunner
 
       - name: Run tests
-        run: poetry run tox -e style -e typing -e py310
+        run: poetry run tox -e style -e typing -e py310 -e py311
 
       - name: Report coverage
         uses: codecov/codecov-action@v3
