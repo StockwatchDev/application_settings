@@ -10,12 +10,13 @@
 ## What and why
 
 Application_config is a module for configuring a python application. It uses toml 
-configuration files that are parsed into data classes.
+configuration files that are parsed into dataclasses.
 This brings some benefits:
 
 - Configuration parameters are typed
 - IDEs will provide helpful hints and completion when using configuration parameters
-- More control over what happens when a config file contains erroneous or malicious text
+- More control over what happens when a config file contains incorrect or malicious text
+- Possibility to specify defaults when no config file is found
 
 ## How
 
@@ -50,4 +51,16 @@ class ExampleConfig(ConfigBase):
         """Return the string that describes the application base name"""
         return "example"
 
+```
+
+Note that you have to define `get_app_basename()` for the container.
+
+### Write a config file
+
+Example: file `~/.example/config.toml`
+
+```toml
+[section1]
+field1 = "my own version of field1"
+field2 = 22
 ```
