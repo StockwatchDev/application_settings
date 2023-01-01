@@ -23,7 +23,7 @@ This brings some benefits:
 
 Example:
 
-```
+```python
 from application_config import (
     ConfigBase,
     ConfigSectionBase,
