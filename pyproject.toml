@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "application_config"
 version = "0.1.0"
-description = ""
-authors = ["Theo de Vries <t.j.a.devries@gmail.com>", "Jorik de Vries"]
+description = "Module for configuring a python application"
+authors = ["Stockwatchdevs <stockwatchdevs@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
