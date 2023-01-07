@@ -48,7 +48,11 @@ class ExampleConfig(ConfigBase):
 
     @staticmethod
     def get_app_basename() -> str:
-        """Return the string that describes the application base name"""
+        """Return the application base name.
+
+        This name, with a preceding dot, will also be the folder name in the home directory
+        that will store the config. I.e., for the case here: ~/.example
+        """
         return "example"
 
 ```
@@ -64,6 +68,17 @@ For the example, the config file `~/.example/config.toml` will be something like
 field1 = "my own version of field1"
 field2 = 22
 ```
+
+Currently, there is no check on types when loading the config file (to be added soon).
+Consider the case where you would use the following config file for the example:
+
+```toml
+[section1]
+field1 = "my own version of field1"
+field2 = "22"
+```
+
+Now `the_config.section1.field2` silently becomes a *string* rather than the specified int.
 
 ### Use config parameters in your code
 
