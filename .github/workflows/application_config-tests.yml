@@ -1,7 +1,7 @@
-# Run this job on pushes to `main`, and for pull requests. If you don't specify
+# Run this job on pushes to `develop`, and for pull requests. If you don't specify
 # `branches: [develop], then this actions runs _twice_ on pull requests, which is
 # annoying.
-name: "application_config merge checks"
+name: "Merge checks"
 
 on:
   pull_request:
@@ -13,14 +13,39 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - name: Style check with py310-ubuntu
+          python: '3.10'
+          arch: x64
+          os: ubuntu-latest
+          toxenv: style
+        - name: Type check with py310-ubuntu
+          python: '3.10'
+          arch: x64
+          os: ubuntu-latest
+          toxenv: typing
+        - name: Test suite with py310-ubuntu
+          python: '3.10'
+          arch: x64
+          os: ubuntu-latest
+          toxenv: py310
+        - name: Test suite with py311-ubuntu
+          python: '3.11'
+          arch: x64
+          os: ubuntu-latest
+          toxenv: py311
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Setup python
+      - name: Setup python ${{ matrix.python }}
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: ${{ matrix.python }}
 
       - name: Install poetry
         uses: snok/install-poetry@v1
@@ -36,7 +61,7 @@ jobs:
         run: poetry install --no-interaction --no-root --only testrunner
 
       - name: Run tests
-        run: poetry run tox -e style -e typing -e py310
+        run: poetry run tox -e ${{ matrix.toxenv }}
 
       - name: Report coverage
         uses: codecov/codecov-action@v3
