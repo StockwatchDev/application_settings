@@ -34,7 +34,11 @@ class ConfigBase(ABC):
     @staticmethod
     @abstractmethod
     def get_app_basename() -> str:
-        """Return the string that describes the application base name (e.g. 'stockwatch')"""
+        """Return the application base name.
+
+        This name, with a preceding dot, will also be the folder name in the home directory
+        that will store the config.
+        """
 
     @classmethod
     def get_configfile_path(cls: type[TConfig]) -> Path:
