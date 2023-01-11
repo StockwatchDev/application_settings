@@ -1,9 +1,11 @@
 """Module for handling configuration."""
 import sys
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, fields
+from dataclasses import fields
 from pathlib import Path
 from typing import Any, TypeVar
+
+from pydantic.dataclasses import dataclass
 
 if sys.version_info >= (3, 11):
     import tomllib

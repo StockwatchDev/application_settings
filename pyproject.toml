@@ -6,13 +6,14 @@ authors = ["Stockwatchdevs <stockwatchdevs@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+pydantic = "^1.10"
 
 [tool.poetry.group.testing]
 optional = true
 
 [tool.poetry.group.testing.dependencies]
 pytest = "^7.0"
-pytest-cov = "^4.0.0"
+pytest-cov = "^4.0"
 
 [tool.poetry.group.typing]
 optional = true
@@ -24,15 +25,15 @@ mypy = ">=0.942"
 optional = true
 
 [tool.poetry.group.style.dependencies]
-black = "^22.10.0"
-isort = "^5.10.1"
-pylint = "^2.15.4"
+black = "^22.10"
+isort = "^5.10"
+pylint = "^2.15"
 
 [tool.poetry.group.testrunner]
 optional = true
 
 [tool.poetry.group.testrunner.dependencies]
-tox = "^3.24.5"
+tox = "^3.24"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
