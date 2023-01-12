@@ -1,16 +1,15 @@
 # pylint: disable=redefined-outer-name
 # pylint: disable=missing-module-docstring
 # pylint: disable=missing-function-docstring
-from pydantic.dataclasses import dataclass
-from pydantic import ValidationError
-import pytest
-from pathlib import Path
-from application_config import (
-    ConfigBase,
-    ConfigSectionBase,
-)
 import sys
+from pathlib import Path
 from typing import Any
+
+import pytest
+from pydantic import ValidationError
+from pydantic.dataclasses import dataclass
+
+from application_config import ConfigBase, ConfigSectionBase
 
 if sys.version_info >= (3, 11):
     import tomllib
