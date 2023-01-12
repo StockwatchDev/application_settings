@@ -35,7 +35,7 @@ from application_config import (
     ConfigBase,
     ConfigSectionBase,
 )
-from dataclasses import dataclass
+from pydantic.dataclasses import dataclass
 
 
 @dataclass(frozen=True)
@@ -117,4 +117,3 @@ To do
   [pydantic types](https://docs.pydantic.dev/usage/types/#pydantic-types)
 - The value of numerous common types can be restricted using 
   [pydantic constrained types](https://docs.pydantic.dev/usage/types/#constrained-types)
--  
