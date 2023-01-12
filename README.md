@@ -9,15 +9,17 @@
 
 ## What and why
 
-Application_config is a module for configuring a python application. It uses toml 
-configuration files that are parsed into dataclasses.
+Application_config is a module for configuring a python application. It uses 
+[toml](https://toml.io/en/) configuration files that are parsed into dataclasses.
 This brings some benefits:
 
 - Configuration parameters are typed;
-- IDEs will provide helpful hints and completion when using configuration parameters
+- IDEs will provide helpful hints and completion when using configuration parameters;
 - More control over what happens when a config file contains incorrect or malicious text
-  (by leveraging the power of [pydantic](https://docs.pydantic.dev/))
-- Possibility to specify defaults when no config file is found
+  (by leveraging the power of [pydantic](https://docs.pydantic.dev/));
+- Possibility to specify defaults when no config file (entry) is found;
+- Configuration described in a human-usable, flexible, standardardized and not overly 
+  complex format.
 
 Parsing is done once during first access and the resulting configuration is stored
 as a singleton.
@@ -37,7 +39,7 @@ from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
-class ExampleConfigSection(ConfigSectionBase):
+class ExampleConfigSection1(ConfigSectionBase):
     """Config section for an example"""
 
     field1: str = "field1"
@@ -48,7 +50,7 @@ class ExampleConfigSection(ConfigSectionBase):
 class ExampleConfig(ConfigBase):
     """Config for an example"""
 
-    section1: ExampleConfigSection = ExampleConfigSection()
+    section1: ExampleConfigSection1 = ExampleConfigSection1()
 
     @staticmethod
     def get_app_basename() -> str:
@@ -83,6 +85,8 @@ a_variable: str = the_config.section1.field1  # a_variable == "my own version of
 another_variable: int = the_config.section1.field2  # another_variable == 22
 ```
 
+## Handling deviations in the config file
+
 ### When your config file does not adhere to the specified types
 
 When loading the config file, the values specified are coerced into the appropriate type
@@ -98,3 +102,19 @@ field2 = "22"
 
 The `bool` specified for `field1` will be coerced into a `str` value of `"True"`.
 The `str` specified for `field2` will be coerced into an `int` value of `22`.
+
+### When your config file does not contain all specified attributes
+
+To do
+
+### When your config file contains additional, unspecified attributes
+
+To do
+
+## More advanced typing and validation with pydantic
+
+- Non-standard types useful for configuration, such as network adresses, are offered, see 
+  [pydantic types](https://docs.pydantic.dev/usage/types/#pydantic-types)
+- The value of numerous common types can be restricted using 
+  [pydantic constrained types](https://docs.pydantic.dev/usage/types/#constrained-types)
+-  
