@@ -66,7 +66,7 @@ for the container.
 
 ### Write a config file
 
-For the example, the config file `~/.example/config.toml` will be something like this:
+For the example, the config file `~/.example/config.toml` could be something like this:
 
 ```toml
 [section1]
