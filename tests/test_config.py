@@ -72,7 +72,7 @@ def test_config2(monkeypatch: pytest.MonkeyPatch) -> DummyConfig:
     ) -> dict[str, dict[str, str | int]]:
         return {
             "section1": {
-                "field1": "f1",
+                "field1": True,
                 "field2": "22",
             }
         }
@@ -115,7 +115,10 @@ def test_get(test_config: DummyConfig) -> None:
 
 
 def test_type_coercion(test_config2: DummyConfig) -> None:
+    assert isinstance(test_config2.section1.field1, str)
+    assert test_config2.section1.field1 == "True"
     assert isinstance(test_config2.section1.field2, int)
+    assert test_config2.section1.field2 == 22
 
 
 def test_wrong_type(monkeypatch: pytest.MonkeyPatch) -> None:
