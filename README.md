@@ -15,7 +15,7 @@ This brings some benefits:
 
 - Configuration parameters are typed;
 - IDEs will provide helpful hints and completion when using configuration parameters;
-- More control over what happens when a config file contains incorrect or malicious text
+- More control over what happens when a config file contains mistakes
   (by leveraging the power of [pydantic](https://docs.pydantic.dev/));
 - Possibility to specify defaults when no config file (entry) is found;
 - Configuration described in a human-usable, flexible, standardardized and not overly 
