@@ -92,10 +92,9 @@ the `ExampleConfig` defined above:
 
 ```toml
 [section1]
-field1 = "my own version of field1"
+field1 = True
 field2 = "22"
 ```
 
 The `bool` specified for `field1` will be coerced into a `str` value of `"True"`.
 The `str` specified for `field2` will be coerced into an `int` value of `22`.
-
