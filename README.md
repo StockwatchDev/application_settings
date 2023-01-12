@@ -13,10 +13,14 @@ Application_config is a module for configuring a python application. It uses tom
 configuration files that are parsed into dataclasses.
 This brings some benefits:
 
-- Configuration parameters are typed
+- Configuration parameters are typed;
 - IDEs will provide helpful hints and completion when using configuration parameters
 - More control over what happens when a config file contains incorrect or malicious text
+  (by leveraging the power of [pydantic](https://docs.pydantic.dev/))
 - Possibility to specify defaults when no config file is found
+
+Parsing is done once during first access and the resulting configuration is stored
+as a singleton.
 
 ## How
 
@@ -57,7 +61,8 @@ class ExampleConfig(ConfigBase):
 
 ```
 
-Note that you have to define `get_app_basename()` for the container.
+The method `get_app_basename()` is abstract in `ConfigBase` and hence has to be defined
+for the container.
 
 ### Write a config file
 
@@ -69,8 +74,21 @@ field1 = "my own version of field1"
 field2 = 22
 ```
 
-Currently, there is no check on types when loading the config file (to be added soon).
-Consider the case where you would use the following config file for the example:
+### Use config parameters in your code
+
+```python
+# the first invocation of get() will create the singleton instance of ExampleConfig
+the_config = ExampleConfig.get()
+a_variable: str = the_config.section1.field1  # a_variable == "my own version of field1"
+another_variable: int = the_config.section1.field2  # another_variable == 22
+```
+
+### When your config file does not adhere to the specified types
+
+When loading the config file, the values specified are coerced into the appropriate type
+where possible. If type coercion is not possible, then a `pydantic.ValidationError`
+is raised. Consider the case where you would use the following config file for 
+the `ExampleConfig` defined above:
 
 ```toml
 [section1]
@@ -78,12 +96,6 @@ field1 = "my own version of field1"
 field2 = "22"
 ```
 
-Now `the_config.section1.field2` silently becomes a *string* rather than the specified int.
+The `bool` specified for `field1` will be coerced into a `str` value of `"True"`.
+The `str` specified for `field2` will be coerced into an `int` value of `22`.
 
-### Use config parameters in your code
-
-```python
-the_config = ExampleConfig.get()
-a_variable: str = the_config.section1.field1  # a_variable == "my own version of field1"
-another_variable: int = the_config.section1.field2  # another_variable == 22
-```
