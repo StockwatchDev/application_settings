@@ -31,17 +31,12 @@ class DummyConfig(ConfigBase):
 
     section1: DummyConfigSection = DummyConfigSection()
 
-    @staticmethod
-    def get_app_basename() -> str:
-        """Return the string that describes the application base name"""
-        return "dummyconfig"
-
 
 @pytest.fixture
 def test_config(monkeypatch: pytest.MonkeyPatch) -> DummyConfig:
-    # here do monkeypatching of get_app_basename and _get_stored_config
+    # here do monkeypatching of defaut_config_filepath and _get_stored_config
 
-    def mock_get_configfile_path() -> Path:
+    def mock_defaut_config_filepath() -> Path:
         return Path(__file__)
 
     def mock_tomllib_load(
@@ -54,16 +49,18 @@ def test_config(monkeypatch: pytest.MonkeyPatch) -> DummyConfig:
             }
         }
 
-    monkeypatch.setattr(DummyConfig, "get_configfile_path", mock_get_configfile_path)
+    monkeypatch.setattr(
+        DummyConfig, "defaut_config_filepath", mock_defaut_config_filepath
+    )
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
     return DummyConfig.get()
 
 
 @pytest.fixture
 def test_config2(monkeypatch: pytest.MonkeyPatch) -> DummyConfig:
-    # here do monkeypatching of get_app_basename and _get_stored_config
+    # here do monkeypatching of defaut_config_filepath and _get_stored_config
 
-    def mock_get_configfile_path() -> Path:
+    def mock_defaut_config_filepath() -> Path:
         return Path(__file__)
 
     def mock_tomllib_load(
@@ -76,16 +73,18 @@ def test_config2(monkeypatch: pytest.MonkeyPatch) -> DummyConfig:
             }
         }
 
-    monkeypatch.setattr(DummyConfig, "get_configfile_path", mock_get_configfile_path)
+    monkeypatch.setattr(
+        DummyConfig, "defaut_config_filepath", mock_defaut_config_filepath
+    )
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
     return DummyConfig.get(reload=True)
 
 
 @pytest.fixture
 def test_config3(monkeypatch: pytest.MonkeyPatch) -> DummyConfig:
-    # here do monkeypatching of get_app_basename and _get_stored_config
+    # here do monkeypatching of defaut_config_filepath and _get_stored_config
 
-    def mock_get_configfile_path() -> Path:
+    def mock_defaut_config_filepath() -> Path:
         return Path(__file__)
 
     def mock_tomllib_load(
@@ -98,14 +97,20 @@ def test_config3(monkeypatch: pytest.MonkeyPatch) -> DummyConfig:
             }
         }
 
-    monkeypatch.setattr(DummyConfig, "get_configfile_path", mock_get_configfile_path)
+    monkeypatch.setattr(
+        DummyConfig, "defaut_config_filepath", mock_defaut_config_filepath
+    )
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
     return DummyConfig.get(reload=True)
 
 
-def test_get_config_path() -> None:
-    assert DummyConfig.get_configfile_path().parts[-1] == "config.toml"
-    assert DummyConfig.get_configfile_path().parts[-2] == ".dummyconfig"
+def test_defaults(capfd: pytest.CaptureFixture) -> None:
+    assert DummyConfig.defaut_config_filepath().parts[-1] == "config.toml"
+    assert DummyConfig.defaut_config_filepath().parts[-2] == ".Dummy"
+    DummyConfig.get().section1.field1 == "field1"
+    DummyConfig.get().section1.field2 == 2
+    captured = capfd.readouterr()
+    assert "trying with defaults, but this may not work." in captured.out
 
 
 def test_get(test_config: DummyConfig) -> None:
@@ -122,9 +127,9 @@ def test_type_coercion(test_config2: DummyConfig) -> None:
 
 def test_wrong_type(monkeypatch: pytest.MonkeyPatch) -> None:
 
-    # here do monkeypatching of get_app_basename and _get_stored_config
+    # here do monkeypatching of defaut_config_filepathd _get_stored_config
 
-    def mock_get_configfile_path() -> Path:
+    def mock_defaut_config_filepath() -> Path:
         return Path(__file__)
 
     def mock_tomllib_load(
@@ -137,7 +142,9 @@ def test_wrong_type(monkeypatch: pytest.MonkeyPatch) -> None:
             }
         }
 
-    monkeypatch.setattr(DummyConfig, "get_configfile_path", mock_get_configfile_path)
+    monkeypatch.setattr(
+        DummyConfig, "defaut_config_filepath", mock_defaut_config_filepath
+    )
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
 
     with pytest.raises(ValidationError) as excinfo:

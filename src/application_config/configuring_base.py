@@ -1,6 +1,5 @@
 """Module for handling configuration."""
 import sys
-from abc import ABC, abstractmethod
 from dataclasses import fields
 from pathlib import Path
 from typing import Any, TypeVar
@@ -23,49 +22,45 @@ _ALL_CONFIGS: dict[int, Any] = {}
 
 
 @dataclass(frozen=True)
-class ConfigSectionBase(ABC):
-    """Base class for all ConfigSection classes"""
+class ConfigSectionBase:
+    """Base class for all ConfigSection classes (so that we can bound a TypeVar)"""
 
 
-# The next line has a type: ignore because MyPy has a problem with @abstractmethod
-# If you comment the line with @abstractmethod, you can do type checking
 @dataclass(frozen=True)
-class ConfigBase(ABC):
+class ConfigBase:
     """Base class for main Config class"""
 
-    @staticmethod
-    @abstractmethod
-    def get_app_basename() -> str:
-        """Return the application base name.
-
-        This name, with a preceding dot, will also be the folder name in the home directory
-        that will store the config.
-        """
+    @classmethod
+    def default_config_foldername(cls: type[TConfig]) -> str:
+        """Return the class name without 'Config' and with a preceding dot as default for the folder that will hold the config file."""
+        return f".{cls.__name__.replace('Config', '')}"
 
     @classmethod
-    def get_configfile_path(cls: type[TConfig]) -> Path:
-        """Return the fully qualified path for the configfile: e.g. ~/.stockwatch/stockwatch-config.toml"""
-        return Path.home() / f".{cls.get_app_basename()}" / "config.toml"
+    def defaut_config_filepath(cls: type[TConfig]) -> Path:
+        """Return the fully qualified path for the configfile: e.g. ~/.stockwatch/config.toml"""
+        return Path.home() / f"{cls.default_config_foldername()}" / "config.toml"
 
     @classmethod
-    def get(cls: type[TConfig], reload: bool = False) -> TConfig:
+    def get(
+        cls: type[TConfig], reload: bool = False, configfile_path: str = ""
+    ) -> TConfig:
         """Access method for the singleton."""
 
         if ((_the_config_or_none := _ALL_CONFIGS.get(id(cls))) is None) or reload:
             # no config has been made yet or it needs to be reloaded,
             # so let's instantiate one and keep it in the global store
-            _the_config = cls._create_instance()
+            _the_config = cls._create_instance(configfile_path)
             _ALL_CONFIGS[id(cls)] = _the_config
         else:
             _the_config = _the_config_or_none
         return _the_config
 
     @classmethod
-    def _create_instance(cls: type[TConfig]) -> TConfig:
+    def _create_instance(cls: type[TConfig], configfile_path: str) -> TConfig:
         """Instantiate the Config."""
 
         # get whatever is stored in the config file
-        config_stored = cls._get_stored_config()
+        config_stored = cls._get_stored_config(configfile_path)
         # filter out fields that are both stored and an attribute of the Config
         _config_fields = {
             fld for fld in fields(cls) if fld.init and fld.name in config_stored.keys()
@@ -82,10 +77,13 @@ class ConfigBase(ABC):
         return cls(**sections)
 
     @classmethod
-    def _get_stored_config(cls) -> dict[str, Any]:
+    def _get_stored_config(cls, configfile_path: str) -> dict[str, Any]:
         """Get the config stored in the toml file"""
         config_stored: dict[str, Any] = {}
-        path = cls.get_configfile_path()
+        if configfile_path:
+            path = Path(configfile_path)
+        else:
+            path = cls.defaut_config_filepath()
         try:
             with path.open(mode="rb") as fptr:
                 config_stored = tomllib.load(fptr)
