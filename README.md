@@ -13,11 +13,11 @@ Application_config is a module for configuring a python application. It uses
 [toml](https://toml.io/en/) configuration files that are parsed into dataclasses.
 This brings some benefits:
 
-- Configuration parameters are typed;
+- Configuration parameters are typed, which allows for improved static code analyses;
 - IDEs will provide helpful hints and completion when using configuration parameters;
 - More control over what happens when a config file contains mistakes
   (by leveraging the power of [pydantic](https://docs.pydantic.dev/));
-- Possibility to specify defaults when no config file (entry) is found;
+- Possibility to specify defaults when no config file is found or entries are missing;
 - Configuration described in a human-usable, flexible, standardardized and not overly 
   complex format.
 
@@ -53,17 +53,17 @@ class ExampleConfig(ConfigBase):
     section1: ExampleConfigSection1 = ExampleConfigSection1()
 
     @staticmethod
-    def get_app_basename() -> str:
-        """Return the application base name.
+    def default_config_foldername() -> str:
+        """Return the name of the folder where the application will be stored.
 
-        This name, with a preceding dot, will also be the folder name in the home directory
-        that will store the config. I.e., for the case here: ~/.example
+        This name, with a preceding dot, will be created in the home directory
+        and will store the config. I.e., for the case here: ~/.example
         """
         return "example"
 
 ```
 
-The method `get_app_basename()` is abstract in `ConfigBase` and hence has to be defined
+The method `default_config_foldername()` is abstract in `ConfigBase` and hence has to be defined
 for the container.
 
 ### Write a config file
