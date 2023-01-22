@@ -1,4 +1,3 @@
-# pylint: disable=redefined-outer-name
 # pylint: disable=missing-module-docstring
 # pylint: disable=missing-function-docstring
 import sys
@@ -18,24 +17,30 @@ else:
 
 
 @dataclass(frozen=True)
-class DummyConfigSection(ConfigSectionBase):
-    """Config section for testing"""
+class Example1ConfigSection(ConfigSectionBase):
+    """Example 1 of a Config section"""
 
     field1: str = "field1"
     field2: int = 2
 
 
 @dataclass(frozen=True)
-class DummyConfig(ConfigBase):
-    """Config for testing"""
+class Example1Config(ConfigBase):
+    """Example Config"""
 
-    section1: DummyConfigSection = DummyConfigSection()
+    section1: Example1ConfigSection = Example1ConfigSection()
 
 
-@pytest.fixture
-def test_config(monkeypatch: pytest.MonkeyPatch) -> DummyConfig:
-    # here do monkeypatching of defaut_config_filepath and _get_stored_config
+def test_defaults(capfd: pytest.CaptureFixture[str]) -> None:
+    assert Example1Config.defaut_config_filepath().parts[-1] == "config.toml"
+    assert Example1Config.defaut_config_filepath().parts[-2] == ".Example1"
+    assert Example1Config.get().section1.field1 == "field1"
+    assert Example1Config.get().section1.field2 == 2
+    captured = capfd.readouterr()
+    assert "trying with defaults, but this may not work." in captured.out
 
+
+def test_get(monkeypatch: pytest.MonkeyPatch) -> None:
     def mock_defaut_config_filepath() -> Path:
         return Path(__file__)
 
@@ -49,20 +54,23 @@ def test_config(monkeypatch: pytest.MonkeyPatch) -> DummyConfig:
             }
         }
 
-    monkeypatch.setattr(
-        DummyConfig, "defaut_config_filepath", mock_defaut_config_filepath
-    )
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
-    return DummyConfig.get()
+
+    assert (
+        Example1Config.get(
+            reload=True, configfile_path=str(Path(__file__))
+        ).section1.field1
+        == "f1"
+    )
+
+    monkeypatch.setattr(
+        Example1Config, "defaut_config_filepath", mock_defaut_config_filepath
+    )
+
+    assert Example1Config.get(reload=True).section1.field2 == 22
 
 
-@pytest.fixture
-def test_config2(monkeypatch: pytest.MonkeyPatch) -> DummyConfig:
-    # here do monkeypatching of defaut_config_filepath and _get_stored_config
-
-    def mock_defaut_config_filepath() -> Path:
-        return Path(__file__)
-
+def test_type_coercion(monkeypatch: pytest.MonkeyPatch) -> None:
     def mock_tomllib_load(
         fptr: Any,  # pylint: disable=unused-argument
     ) -> dict[str, dict[str, str | int]]:
@@ -73,65 +81,16 @@ def test_config2(monkeypatch: pytest.MonkeyPatch) -> DummyConfig:
             }
         }
 
-    monkeypatch.setattr(
-        DummyConfig, "defaut_config_filepath", mock_defaut_config_filepath
-    )
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
-    return DummyConfig.get(reload=True)
 
-
-@pytest.fixture
-def test_config3(monkeypatch: pytest.MonkeyPatch) -> DummyConfig:
-    # here do monkeypatching of defaut_config_filepath and _get_stored_config
-
-    def mock_defaut_config_filepath() -> Path:
-        return Path(__file__)
-
-    def mock_tomllib_load(
-        fptr: Any,  # pylint: disable=unused-argument
-    ) -> dict[str, dict[str, tuple[str, int] | int]]:
-        return {
-            "section1": {
-                "field1": ("f1", 22),
-                "field2": 22,
-            }
-        }
-
-    monkeypatch.setattr(
-        DummyConfig, "defaut_config_filepath", mock_defaut_config_filepath
-    )
-    monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
-    return DummyConfig.get(reload=True)
-
-
-def test_defaults(capfd: pytest.CaptureFixture) -> None:
-    assert DummyConfig.defaut_config_filepath().parts[-1] == "config.toml"
-    assert DummyConfig.defaut_config_filepath().parts[-2] == ".Dummy"
-    DummyConfig.get().section1.field1 == "field1"
-    DummyConfig.get().section1.field2 == 2
-    captured = capfd.readouterr()
-    assert "trying with defaults, but this may not work." in captured.out
-
-
-def test_get(test_config: DummyConfig) -> None:
-    assert test_config.section1.field1 == "f1"
-    assert DummyConfig.get().section1.field2 == 22
-
-
-def test_type_coercion(test_config2: DummyConfig) -> None:
-    assert isinstance(test_config2.section1.field1, str)
-    assert test_config2.section1.field1 == "True"
-    assert isinstance(test_config2.section1.field2, int)
-    assert test_config2.section1.field2 == 22
+    test_config = Example1Config.get(reload=True, configfile_path=str(Path(__file__)))
+    assert isinstance(test_config.section1.field1, str)
+    assert test_config.section1.field1 == "True"
+    assert isinstance(test_config.section1.field2, int)
+    assert test_config.section1.field2 == 22
 
 
 def test_wrong_type(monkeypatch: pytest.MonkeyPatch) -> None:
-
-    # here do monkeypatching of defaut_config_filepathd _get_stored_config
-
-    def mock_defaut_config_filepath() -> Path:
-        return Path(__file__)
-
     def mock_tomllib_load(
         fptr: Any,  # pylint: disable=unused-argument
     ) -> dict[str, dict[str, tuple[str, int] | None]]:
@@ -142,18 +101,90 @@ def test_wrong_type(monkeypatch: pytest.MonkeyPatch) -> None:
             }
         }
 
-    monkeypatch.setattr(
-        DummyConfig, "defaut_config_filepath", mock_defaut_config_filepath
-    )
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
 
     with pytest.raises(ValidationError) as excinfo:
-        _ = DummyConfig.get(reload=True)
-    # assert len(e.) == 2
+        _ = Example1Config.get(reload=True, configfile_path=str(Path(__file__)))
     assert "2 validation errors" in str(excinfo.value)
     assert "str type expected" in str(excinfo.value)
     assert "none is not an allowed value" in str(excinfo.value)
 
 
 def test_get_defaults() -> None:
-    assert DummyConfig.get(reload=True).section1.field2 == 2
+    assert Example1Config.get(reload=True).section1.field2 == 2
+
+
+def test_missing_extra_attributes(monkeypatch: pytest.MonkeyPatch) -> None:
+    def mock_tomllib_load(
+        fptr: Any,  # pylint: disable=unused-argument
+    ) -> dict[str, dict[str, str | int]]:
+        return {
+            "section1": {
+                "field1": "f1",
+                "field3": 22,
+            }
+        }
+
+    monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
+
+    test_config = Example1Config.get(reload=True, configfile_path=str(Path(__file__)))
+    assert test_config.section1.field2 == 2
+    with pytest.raises(AttributeError):
+        assert test_config.section1.field3 == 22  # type: ignore[attr-defined]
+
+
+@dataclass(frozen=True)
+class Example2aConfigSection(ConfigSectionBase):
+    """Example 2a of a Config section"""
+
+    field3: float
+    field4: float = 0.5
+
+
+@dataclass(frozen=True)
+class Example2bConfigSection(ConfigSectionBase):
+    """Example 2b of a Config section"""
+
+    field1: str = "field1"
+    field2: int = 2
+
+
+@dataclass(frozen=True)
+class Example2Config(ConfigBase):
+    """Example Config"""
+
+    section1: Example2aConfigSection
+    section2: Example2bConfigSection = Example2bConfigSection()
+
+
+def test_attributes_no_default(monkeypatch: pytest.MonkeyPatch) -> None:
+    def mock_tomllib_load1(
+        fptr: Any,  # pylint: disable=unused-argument
+    ) -> dict[str, dict[str, str | int]]:
+        return {
+            "section2": {
+                "field1": "f1",
+                "field2": 22,
+            }
+        }
+
+    monkeypatch.setattr(tomllib, "load", mock_tomllib_load1)
+
+    with pytest.raises(TypeError):
+        _ = Example2Config.get(reload=True, configfile_path=str(Path(__file__)))
+
+    def mock_tomllib_load2(
+        fptr: Any,  # pylint: disable=unused-argument
+    ) -> dict[str, dict[str, float]]:
+        return {
+            "section1": {
+                "field3": 1.1,
+            }
+        }
+
+    monkeypatch.setattr(tomllib, "load", mock_tomllib_load2)
+
+    test_config = Example2Config.get(reload=True, configfile_path=str(Path(__file__)))
+    assert test_config.section1.field3 == 1.1
+    assert test_config.section1.field4 == 0.5
+    assert test_config.section2.field1 == "field1"
