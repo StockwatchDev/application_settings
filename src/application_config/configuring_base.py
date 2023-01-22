@@ -37,7 +37,7 @@ class ConfigBase:
 
     @classmethod
     def defaut_config_filepath(cls: type[TConfig]) -> Path:
-        """Return the fully qualified path for the configfile: e.g. ~/.stockwatch/config.toml"""
+        """Return the fully qualified path for the configfile: e.g. ~/.Example/config.toml"""
         return Path.home() / f"{cls.default_config_foldername()}" / "config.toml"
 
     @classmethod
