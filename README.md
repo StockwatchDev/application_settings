@@ -52,19 +52,7 @@ class ExampleConfig(ConfigBase):
 
     section1: ExampleConfigSection1 = ExampleConfigSection1()
 
-    @staticmethod
-    def default_config_foldername() -> str:
-        """Return the name of the folder where the application will be stored.
-
-        This name, with a preceding dot, will be created in the home directory
-        and will store the config. I.e., for the case here: ~/.example
-        """
-        return "example"
-
 ```
-
-The method `default_config_foldername()` is abstract in `ConfigBase` and hence has to be defined
-for the container.
 
 ### Write a config file
 
@@ -76,6 +64,9 @@ field1 = "my own version of field1"
 field2 = 22
 ```
 
+The order of sections and/or fields in the toml file does not have to adhere to the order
+in which attributes have been specified in the Config(Section) classes.
+
 ### Use config parameters in your code
 
 ```python
@@ -83,6 +74,10 @@ field2 = 22
 the_config = ExampleConfig.get()
 a_variable: str = the_config.section1.field1  # a_variable == "my own version of field1"
 another_variable: int = the_config.section1.field2  # another_variable == 22
+
+# you can reload a config and / or set a non-default path
+another_config = ExampleConfig.get(reload=True, configfile_path="./my_config.tml")
+
 ```
 
 ## Handling deviations in the config file
@@ -105,11 +100,18 @@ The `str` specified for `field2` will be coerced into an `int` value of `22`.
 
 ### When your config file does not contain all specified attributes
 
-To do
+If your Config has one of more sections with attributes that do not have a default
+value, then a config file must be loaded and these sections and attributes must be 
+present in the loaded config file. Attributes that have default values can be omitted
+from the config file without problems.
+
+Note that in the dataclass definitions, attributes without default value have to come
+before attributes with default values.
 
 ### When your config file contains additional, unspecified attributes
 
-To do
+Entries in a config file that are not defined in the Config(Section) classes will simply
+be ignored silently.
 
 ## More advanced typing and validation with pydantic
 
