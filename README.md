@@ -13,11 +13,11 @@ Application_config is a module for configuring a python application. It uses
 [toml](https://toml.io/en/) configuration files that are parsed into dataclasses.
 This brings some benefits:
 
-- Configuration parameters are typed, which allows for improved static code analyses;
-- IDEs will provide helpful hints and completion when using configuration parameters;
+- Configuration parameters are typed, which allows for improved static code analyses.
+- IDEs will provide helpful hints and completion when using configuration parameters.
 - More control over what happens when a config file contains mistakes
-  (by leveraging the power of [pydantic](https://docs.pydantic.dev/));
-- Possibility to specify defaults when no config file is found or entries are missing;
+  (by leveraging the power of [pydantic](https://docs.pydantic.dev/)).
+- Possibility to specify defaults when no config file is found or entries are missing.
 - Configuration described in a human-usable, flexible, standardardized and not overly 
   complex format.
 
@@ -91,7 +91,7 @@ the `ExampleConfig` defined above:
 
 ```toml
 [section1]
-field1 = True
+field1 = true
 field2 = "22"
 ```
 
@@ -102,7 +102,8 @@ The `str` specified for `field2` will be coerced into an `int` value of `22`.
 
 If your Config has one of more sections with attributes that do not have a default
 value, then a config file must be loaded and these sections and attributes must be 
-present in the loaded config file. Attributes that have default values can be omitted
+present in the loaded config file. If this is not the case, a `TypeError` is raised.
+Attributes that have default values can be omitted
 from the config file without problems.
 
 Note that in the dataclass definitions, attributes without default value have to come
