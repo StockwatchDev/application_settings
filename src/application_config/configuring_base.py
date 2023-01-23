@@ -2,6 +2,7 @@
 import sys
 from dataclasses import fields
 from pathlib import Path
+from re import sub
 from typing import Any, TypeVar
 
 from pydantic.dataclasses import dataclass
@@ -33,10 +34,13 @@ class ConfigBase:
     @classmethod
     def default_config_foldername(cls: type[TConfig]) -> str:
         """Return the class name without 'Config' and with a preceding dot as default for the folder that will hold the config file."""
-        return f".{cls.__name__.replace('Config', '')}"
+        return (
+            "."
+            + sub("(?<!^)(?=[A-Z])", "_", cls.__name__.replace("Config", "")).lower()
+        )
 
     @classmethod
-    def defaut_config_filepath(cls: type[TConfig]) -> Path:
+    def default_config_filepath(cls: type[TConfig]) -> Path | None:
         """Return the fully qualified path for the configfile: e.g. ~/.Example/config.toml"""
         return Path.home() / f"{cls.default_config_foldername()}" / "config.toml"
 
@@ -81,16 +85,17 @@ class ConfigBase:
         """Get the config stored in the toml file"""
         config_stored: dict[str, Any] = {}
         if configfile_path:
-            path = Path(configfile_path)
+            path: Path | None = Path(configfile_path)
         else:
-            path = cls.defaut_config_filepath()
-        try:
-            with path.open(mode="rb") as fptr:
-                config_stored = tomllib.load(fptr)
-        except FileNotFoundError:
-            print(
-                f"Error: configfile {path} not found; trying with defaults, but this may not work."
-            )
+            path = cls.default_config_filepath()
+        if path:
+            try:
+                with path.open(mode="rb") as fptr:
+                    config_stored = tomllib.load(fptr)
+            except FileNotFoundError:
+                print(
+                    f"Error: configfile {path} not found; trying with defaults, but this may not work."
+                )
         return config_stored
 
     @classmethod

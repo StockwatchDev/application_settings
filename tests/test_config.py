@@ -17,7 +17,7 @@ else:
 
 
 @dataclass(frozen=True)
-class Example1ConfigSection(ConfigSectionBase):
+class AnExample1ConfigSection(ConfigSectionBase):
     """Example 1 of a Config section"""
 
     field1: str = "field1"
@@ -25,23 +25,23 @@ class Example1ConfigSection(ConfigSectionBase):
 
 
 @dataclass(frozen=True)
-class Example1Config(ConfigBase):
+class AnExample1Config(ConfigBase):
     """Example Config"""
 
-    section1: Example1ConfigSection = Example1ConfigSection()
+    section1: AnExample1ConfigSection = AnExample1ConfigSection()
 
 
 def test_defaults(capfd: pytest.CaptureFixture[str]) -> None:
-    assert Example1Config.defaut_config_filepath().parts[-1] == "config.toml"
-    assert Example1Config.defaut_config_filepath().parts[-2] == ".Example1"
-    assert Example1Config.get().section1.field1 == "field1"
-    assert Example1Config.get().section1.field2 == 2
+    assert AnExample1Config.default_config_filepath().parts[-1] == "config.toml"  # type: ignore[union-attr]
+    assert AnExample1Config.default_config_filepath().parts[-2] == ".an_example1"  # type: ignore[union-attr]
+    assert AnExample1Config.get().section1.field1 == "field1"
+    assert AnExample1Config.get().section1.field2 == 2
     captured = capfd.readouterr()
     assert "trying with defaults, but this may not work." in captured.out
 
 
 def test_get(monkeypatch: pytest.MonkeyPatch) -> None:
-    def mock_defaut_config_filepath() -> Path:
+    def mock_default_config_filepath() -> Path:
         return Path(__file__)
 
     def mock_tomllib_load(
@@ -57,17 +57,17 @@ def test_get(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
 
     assert (
-        Example1Config.get(
+        AnExample1Config.get(
             reload=True, configfile_path=str(Path(__file__))
         ).section1.field1
         == "f1"
     )
 
     monkeypatch.setattr(
-        Example1Config, "defaut_config_filepath", mock_defaut_config_filepath
+        AnExample1Config, "default_config_filepath", mock_default_config_filepath
     )
 
-    assert Example1Config.get(reload=True).section1.field2 == 22
+    assert AnExample1Config.get(reload=True).section1.field2 == 22
 
 
 def test_type_coercion(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -83,7 +83,7 @@ def test_type_coercion(monkeypatch: pytest.MonkeyPatch) -> None:
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
 
-    test_config = Example1Config.get(reload=True, configfile_path=str(Path(__file__)))
+    test_config = AnExample1Config.get(reload=True, configfile_path=str(Path(__file__)))
     assert isinstance(test_config.section1.field1, str)
     assert test_config.section1.field1 == "True"
     assert isinstance(test_config.section1.field2, int)
@@ -104,14 +104,14 @@ def test_wrong_type(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
 
     with pytest.raises(ValidationError) as excinfo:
-        _ = Example1Config.get(reload=True, configfile_path=str(Path(__file__)))
+        _ = AnExample1Config.get(reload=True, configfile_path=str(Path(__file__)))
     assert "2 validation errors" in str(excinfo.value)
     assert "str type expected" in str(excinfo.value)
     assert "none is not an allowed value" in str(excinfo.value)
 
 
 def test_get_defaults() -> None:
-    assert Example1Config.get(reload=True).section1.field2 == 2
+    assert AnExample1Config.get(reload=True).section1.field2 == 2
 
 
 def test_missing_extra_attributes(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -127,7 +127,7 @@ def test_missing_extra_attributes(monkeypatch: pytest.MonkeyPatch) -> None:
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
 
-    test_config = Example1Config.get(reload=True, configfile_path=str(Path(__file__)))
+    test_config = AnExample1Config.get(reload=True, configfile_path=str(Path(__file__)))
     assert test_config.section1.field2 == 2
     with pytest.raises(AttributeError):
         assert test_config.section1.field3 == 22  # type: ignore[attr-defined]
