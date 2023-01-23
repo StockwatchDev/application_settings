@@ -26,7 +26,7 @@ optional = true
 [tool.poetry.group.style.dependencies]
 black = "^22.10.0"
 isort = "^5.10.1"
-pylint = "^2.15.4"
+pylint = "^2.15.10"
 
 [tool.poetry.group.testrunner]
 optional = true
