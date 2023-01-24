@@ -2,6 +2,7 @@
 import sys
 from dataclasses import fields
 from pathlib import Path
+from pathvalidate import validate_filepath
 from re import sub
 from typing import Any, TypeVar
 
@@ -46,7 +47,7 @@ class ConfigBase:
 
     @classmethod
     def get(
-        cls: type[TConfig], reload: bool = False, configfile_path: str = ""
+        cls: type[TConfig], reload: bool = False, configfile_path: str | Path = ""
     ) -> TConfig:
         """Access method for the singleton."""
 
@@ -60,7 +61,7 @@ class ConfigBase:
         return _the_config
 
     @classmethod
-    def _create_instance(cls: type[TConfig], configfile_path: str) -> TConfig:
+    def _create_instance(cls: type[TConfig], configfile_path: str | Path) -> TConfig:
         """Instantiate the Config."""
 
         # get whatever is stored in the config file
@@ -81,11 +82,17 @@ class ConfigBase:
         return cls(**sections)
 
     @classmethod
-    def _get_stored_config(cls, configfile_path: str) -> dict[str, Any]:
+    def _get_stored_config(cls, configfile_path: str | Path) -> dict[str, Any]:
         """Get the config stored in the toml file"""
         config_stored: dict[str, Any] = {}
         if configfile_path:
-            path: Path | None = Path(configfile_path)
+            if isinstance(configfile_path, str):
+                validate_filepath(configfile_path)
+                path: Path | None = Path(configfile_path)
+                if not path:
+                    raise ValueError
+            else:
+                path = configfile_path
         else:
             path = cls.default_config_filepath()
         if path:

@@ -2,6 +2,7 @@
 # pylint: disable=missing-function-docstring
 import sys
 from pathlib import Path
+from pathvalidate import ValidationError as PathValidationError
 from typing import Any
 
 import pytest
@@ -32,12 +33,21 @@ class AnExample1Config(ConfigBase):
 
 
 def test_defaults(capfd: pytest.CaptureFixture[str]) -> None:
-    assert AnExample1Config.default_config_filepath().parts[-1] == "config.toml"  # type: ignore[union-attr]
-    assert AnExample1Config.default_config_filepath().parts[-2] == ".an_example1"  # type: ignore[union-attr]
+    the_path = AnExample1Config.default_config_filepath()
+    if the_path:
+        assert the_path.parts[-1] == "config.toml"
+        assert the_path.parts[-2] == ".an_example1"
     assert AnExample1Config.get().section1.field1 == "field1"
     assert AnExample1Config.get().section1.field2 == 2
     captured = capfd.readouterr()
     assert "trying with defaults, but this may not work." in captured.out
+    with pytest.raises(PathValidationError):
+        assert (
+            AnExample1Config.get(
+                reload=True, configfile_path="\npoijf:*)"
+            ).section1.field1
+            == "field1"
+        )
 
 
 def test_get(monkeypatch: pytest.MonkeyPatch) -> None:
