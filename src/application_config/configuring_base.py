@@ -86,13 +86,11 @@ class ConfigBase:
         """Get the config stored in the toml file"""
         config_stored: dict[str, Any] = {}
         if configfile_path:
-            if isinstance(configfile_path, str):
-                validate_filepath(configfile_path, platform="auto")
-                path: Path | None = Path(configfile_path)
-                if not path:
-                    raise ValueError
+            if isinstance(configfile_path, Path):
+                path: Path | None = configfile_path
             else:
-                path = configfile_path
+                validate_filepath(configfile_path, platform="auto")
+                path = Path(configfile_path)
         else:
             path = cls.default_config_filepath()
         if path:
