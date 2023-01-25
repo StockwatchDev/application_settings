@@ -57,9 +57,7 @@ def test_defaults(
 
     with pytest.raises(PathValidationError):
         assert (
-            AnExample1Config.get(
-                reload=True, configfile_path="\npoijf:*)"
-            ).section1.field1
+            AnExample1Config.get(reload=True, configfile_path="\n😃:/").section1.field1
             == "field1"
         )
 
@@ -85,6 +83,13 @@ def test_get(monkeypatch: pytest.MonkeyPatch) -> None:
             reload=True, configfile_path=str(Path(__file__))
         ).section1.field1
         == "f1"
+    )
+
+    assert (
+        AnExample1Config.get(
+            reload=True, configfile_path=Path(__file__)
+        ).section1.field2
+        == 22
     )
 
     monkeypatch.setattr(
