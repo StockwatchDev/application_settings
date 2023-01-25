@@ -32,7 +32,12 @@ class AnExample1Config(ConfigBase):
     section1: AnExample1ConfigSection = AnExample1ConfigSection()
 
 
-def test_defaults(capfd: pytest.CaptureFixture[str]) -> None:
+def test_defaults(
+    monkeypatch: pytest.MonkeyPatch, capfd: pytest.CaptureFixture[str]
+) -> None:
+    def mock_default_config_filepath() -> Path | None:
+        return None
+
     the_path = AnExample1Config.default_config_filepath()
     if the_path:
         assert the_path.parts[-1] == "config.toml"
@@ -40,7 +45,16 @@ def test_defaults(capfd: pytest.CaptureFixture[str]) -> None:
     assert AnExample1Config.get().section1.field1 == "field1"
     assert AnExample1Config.get().section1.field2 == 2
     captured = capfd.readouterr()
-    assert "trying with defaults, but this may not work." in captured.out
+    assert "not found; trying with defaults, but this may not work." in captured.out
+
+    monkeypatch.setattr(
+        AnExample1Config, "default_config_filepath", mock_default_config_filepath
+    )
+
+    assert AnExample1Config.get(reload=True).section1.field1 == "field1"
+    captured = capfd.readouterr()
+    assert "No path specified for configfile" in captured.out
+
     with pytest.raises(PathValidationError):
         assert (
             AnExample1Config.get(
@@ -51,7 +65,7 @@ def test_defaults(capfd: pytest.CaptureFixture[str]) -> None:
 
 
 def test_get(monkeypatch: pytest.MonkeyPatch) -> None:
-    def mock_default_config_filepath() -> Path:
+    def mock_default_config_filepath() -> Path | None:
         return Path(__file__)
 
     def mock_tomllib_load(
