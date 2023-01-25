@@ -89,7 +89,7 @@ class ConfigBase:
             if isinstance(configfile_path, Path):
                 path: Path | None = configfile_path
             else:
-                validate_filepath(configfile_path, platform="auto")
+                validate_filepath(configfile_path, platform="linux")
                 path = Path(configfile_path)
         else:
             path = cls.default_config_filepath()
