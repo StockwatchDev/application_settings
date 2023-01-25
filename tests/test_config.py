@@ -57,7 +57,9 @@ def test_defaults(
 
     with pytest.raises(PathValidationError):
         assert (
-            AnExample1Config.get(reload=True, configfile_path="\n😃:/").section1.field1
+            AnExample1Config.get(
+                reload=True, configfile_path='fi:l*e/p"a?t>h|.t<xt'
+            ).section1.field1
             == "field1"
         )
 
