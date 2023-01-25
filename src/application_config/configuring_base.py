@@ -87,7 +87,7 @@ class ConfigBase:
         config_stored: dict[str, Any] = {}
         if configfile_path:
             if isinstance(configfile_path, str):
-                validate_filepath(configfile_path)
+                validate_filepath(configfile_path, platform="auto")
                 path: Path | None = Path(configfile_path)
                 if not path:
                     raise ValueError
@@ -103,6 +103,10 @@ class ConfigBase:
                 print(
                     f"Error: configfile {path} not found; trying with defaults, but this may not work."
                 )
+        else:
+            print(
+                "No path specified for configfile; trying with defaults, but this may not work."
+            )
         return config_stored
 
     @classmethod
