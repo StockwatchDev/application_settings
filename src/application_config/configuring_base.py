@@ -5,7 +5,7 @@ from pathlib import Path
 from re import sub
 from typing import Any, TypeVar
 
-from pathvalidate import validate_filepath
+from pathvalidate import sanitize_filepath
 from pydantic.dataclasses import dataclass
 
 if sys.version_info >= (3, 11):
@@ -89,7 +89,11 @@ class ConfigBase:
             if isinstance(configfile_path, Path):
                 path: Path | None = configfile_path
             else:
-                validate_filepath(configfile_path, platform="linux")
+                if (
+                    not sanitize_filepath(configfile_path, platform="auto")
+                    == configfile_path
+                ):
+                    raise ValueError
                 path = Path(configfile_path)
         else:
             path = cls.default_config_filepath()

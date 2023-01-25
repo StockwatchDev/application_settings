@@ -2,7 +2,6 @@
 # pylint: disable=missing-function-docstring
 import sys
 from pathlib import Path
-from pathvalidate import ValidationError as PathValidationError
 from typing import Any
 
 import pytest
@@ -55,7 +54,7 @@ def test_defaults(
     captured = capfd.readouterr()
     assert "No path specified for configfile" in captured.out
 
-    with pytest.raises(PathValidationError):
+    with pytest.raises(ValueError):
         assert (
             AnExample1Config.get(
                 reload=True, configfile_path='fi:l*e/p"a?t>h|.t<xt'
