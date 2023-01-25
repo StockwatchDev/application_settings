@@ -2,10 +2,10 @@
 import sys
 from dataclasses import fields
 from pathlib import Path
-from pathvalidate import validate_filepath
 from re import sub
 from typing import Any, TypeVar
 
+from pathvalidate import validate_filepath
 from pydantic.dataclasses import dataclass
 
 if sys.version_info >= (3, 11):
