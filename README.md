@@ -26,7 +26,7 @@ as a singleton.
 
 ## How
 
-### Define config section(s) and the container with application info
+### Define config section(s) and the config container
 
 Example:
 
@@ -39,7 +39,7 @@ from pydantic.dataclasses import dataclass
 
 
 @dataclass(frozen=True)
-class ExampleConfigSection1(ConfigSectionBase):
+class Example1ConfigSection(ConfigSectionBase):
     """Config section for an example"""
 
     field1: str = "field1"
@@ -50,9 +50,13 @@ class ExampleConfigSection1(ConfigSectionBase):
 class ExampleConfig(ConfigBase):
     """Config for an example"""
 
-    section1: ExampleConfigSection1 = ExampleConfigSection1()
+    section1: Example1ConfigSection = Example1ConfigSection()
 
 ```
+
+Note: a `pydantic.dataclasses.dataclass` is a drop-in replacement for the standard 
+`dataclasses.dataclass`, with validation, see 
+[pydantic dataclasses](https://docs.pydantic.dev/usage/dataclasses/).
 
 ### Write a config file
 
@@ -80,6 +84,10 @@ another_config = ExampleConfig.get(reload=True, configfile_path="./my_config.tml
 
 ```
 
+## Location of the config file on your file system
+
+To do
+
 ## Handling deviations in the config file
 
 ### When your config file does not adhere to the specified types
@@ -95,7 +103,7 @@ field1 = true
 field2 = "22"
 ```
 
-The `bool` specified for `field1` will be coerced into a `str` value of `"True"`.
+The `bool` specified for `field1` will be coerced into a `str` value of `"true"`.
 The `str` specified for `field2` will be coerced into an `int` value of `22`.
 
 ### When your config file does not contain all specified attributes
