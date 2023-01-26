@@ -5,7 +5,7 @@ from pathlib import Path
 from re import sub
 from typing import Any, TypeVar
 
-from pathvalidate import sanitize_filepath, is_valid_filepath
+from pathvalidate import is_valid_filepath
 from pydantic.dataclasses import dataclass
 
 if sys.version_info >= (3, 11):
