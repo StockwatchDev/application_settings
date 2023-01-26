@@ -85,15 +85,16 @@ class ConfigBase:
     def _get_stored_config(cls, configfile_path: str | Path) -> dict[str, Any]:
         """Get the config stored in the toml file"""
         config_stored: dict[str, Any] = {}
-        if configfile_path:
-            if isinstance(configfile_path, Path):
-                path: Path | None = configfile_path
-            else:
-                if not is_valid_filepath(configfile_path, platform="auto"):
-                    raise ValueError
-                path = Path(configfile_path)
-        else:
+
+        path: Path | None = None
+        if isinstance(configfile_path, Path):
+            path = configfile_path
+        elif is_valid_filepath(configfile_path, platform="auto"):
+            path = Path(configfile_path)
+
+        if not path:
             path = cls.default_config_filepath()
+
         if path:
             try:
                 with path.open(mode="rb") as fptr:
@@ -103,6 +104,8 @@ class ConfigBase:
                     f"Error: configfile {path} not found; trying with defaults, but this may not work."
                 )
         else:
+            # This can happen if no valid path was given as an argument, and the default path
+            # also is not valid.
             print(
                 "No path specified for configfile; trying with defaults, but this may not work."
             )

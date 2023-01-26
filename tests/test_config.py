@@ -54,13 +54,13 @@ def test_defaults(
     captured = capfd.readouterr()
     assert "No path specified for configfile" in captured.out
 
-    with pytest.raises(ValueError):
-        assert (
-            AnExample1Config.get(
-                reload=True, configfile_path='fi:l*e/p"a?t>h|.t<xt'
-            ).section1.field1
-            == "field1"
-        )
+    assert (
+        AnExample1Config.get(
+            reload=True, configfile_path='fi:\\l*e/p"a?t>h|.t<xt'
+        ).section1.field1
+        == "field1"
+    )
+    assert "No path specified for configfile" in captured.out
 
 
 def test_get(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -70,12 +70,7 @@ def test_get(monkeypatch: pytest.MonkeyPatch) -> None:
     def mock_tomllib_load(
         fptr: Any,  # pylint: disable=unused-argument
     ) -> dict[str, dict[str, str | int]]:
-        return {
-            "section1": {
-                "field1": "f1",
-                "field2": 22,
-            }
-        }
+        return {"section1": {"field1": "f1", "field2": 22}}
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
 
@@ -104,12 +99,7 @@ def test_type_coercion(monkeypatch: pytest.MonkeyPatch) -> None:
     def mock_tomllib_load(
         fptr: Any,  # pylint: disable=unused-argument
     ) -> dict[str, dict[str, str | int]]:
-        return {
-            "section1": {
-                "field1": True,
-                "field2": "22",
-            }
-        }
+        return {"section1": {"field1": True, "field2": "22"}}
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
 
@@ -124,12 +114,7 @@ def test_wrong_type(monkeypatch: pytest.MonkeyPatch) -> None:
     def mock_tomllib_load(
         fptr: Any,  # pylint: disable=unused-argument
     ) -> dict[str, dict[str, tuple[str, int] | None]]:
-        return {
-            "section1": {
-                "field1": ("f1", 22),
-                "field2": None,
-            }
-        }
+        return {"section1": {"field1": ("f1", 22), "field2": None}}
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
 
@@ -148,12 +133,7 @@ def test_missing_extra_attributes(monkeypatch: pytest.MonkeyPatch) -> None:
     def mock_tomllib_load(
         fptr: Any,  # pylint: disable=unused-argument
     ) -> dict[str, dict[str, str | int]]:
-        return {
-            "section1": {
-                "field1": "f1",
-                "field3": 22,
-            }
-        }
+        return {"section1": {"field1": "f1", "field3": 22}}
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
 
@@ -191,12 +171,7 @@ def test_attributes_no_default(monkeypatch: pytest.MonkeyPatch) -> None:
     def mock_tomllib_load1(
         fptr: Any,  # pylint: disable=unused-argument
     ) -> dict[str, dict[str, str | int]]:
-        return {
-            "section2": {
-                "field1": "f1",
-                "field2": 22,
-            }
-        }
+        return {"section2": {"field1": "f1", "field2": 22}}
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load1)
 
@@ -206,11 +181,7 @@ def test_attributes_no_default(monkeypatch: pytest.MonkeyPatch) -> None:
     def mock_tomllib_load2(
         fptr: Any,  # pylint: disable=unused-argument
     ) -> dict[str, dict[str, float]]:
-        return {
-            "section1": {
-                "field3": 1.1,
-            }
-        }
+        return {"section1": {"field3": 1.1}}
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load2)
 
