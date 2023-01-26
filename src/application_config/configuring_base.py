@@ -34,7 +34,7 @@ class ConfigBase:
 
     @classmethod
     def default_config_foldername(cls: type[TConfig]) -> str:
-        """Return the class name without 'Config' and with a preceding dot as default for the folder that will hold the config file."""
+        """Return the class name without 'Config', lowercase, with a preceding dot and underscores to seperate words."""
         return (
             "."
             + sub("(?<!^)(?=[A-Z])", "_", cls.__name__.replace("Config", "")).lower()
@@ -42,7 +42,7 @@ class ConfigBase:
 
     @classmethod
     def default_config_filepath(cls: type[TConfig]) -> Path | None:
-        """Return the fully qualified path for the configfile: e.g. ~/.Example/config.toml"""
+        """Return the fully qualified path for the configfile: e.g. ~/.example/config.toml"""
         return Path.home() / f"{cls.default_config_foldername()}" / "config.toml"
 
     @classmethod
