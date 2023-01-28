@@ -39,7 +39,7 @@ from pydantic.dataclasses import dataclass
 
 
 @dataclass(frozen=True)
-class Example1ConfigSection(ConfigSectionBase):
+class MyExample1ConfigSection(ConfigSectionBase):
     """Config section for an example"""
 
     field1: str = "field1"
@@ -76,13 +76,13 @@ in which fields have been specified in the Config(Section) classes.
 ### Use config parameters in your code
 
 ```python
-# the first invocation of get() will create the singleton instance of ExampleConfig
-the_config = ExampleConfig.get()
+# the first invocation of get() will create the singleton instance of MyExampleConfig
+the_config = MyExampleConfig.get()
 a_variable: str = the_config.section1.field1  # a_variable == "my own version of field1"
 another_variable: int = the_config.section1.field2  # another_variable == 22
 
 # you can reload a config and / or set a non-default path
-another_config = ExampleConfig.get(reload=True, configfile_path="./my_config.tml")
+another_config = MyExampleConfig.get(reload=True, configfile_path="./my_config.tml")
 
 ```
 
@@ -114,7 +114,7 @@ enforce that a `configfile_path` is specified in `get()`, then let
 When loading the config file, the values specified are coerced into the appropriate type
 where possible. If type coercion is not possible, then a `pydantic.ValidationError`
 is raised. Consider the case where you would use the following config file for 
-the `ExampleConfig` defined above:
+the `MyExampleConfig` defined above:
 
 ```toml
 [section1]
