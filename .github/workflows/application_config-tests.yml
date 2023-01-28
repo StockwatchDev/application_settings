@@ -17,26 +17,26 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - name: Style check with py310-ubuntu
-          python: '3.10'
-          arch: x64
-          os: ubuntu-latest
-          toxenv: style
-        - name: Type check with py310-ubuntu
-          python: '3.10'
-          arch: x64
-          os: ubuntu-latest
-          toxenv: typing
-        - name: Test suite with py310-ubuntu
-          python: '3.10'
-          arch: x64
-          os: ubuntu-latest
-          toxenv: py310
-        - name: Test suite with py311-ubuntu
-          python: '3.11'
-          arch: x64
-          os: ubuntu-latest
-          toxenv: py311
+          - name: Style check with py310-ubuntu
+            python: '3.10'
+            arch: x64
+            os: ubuntu-latest
+            toxenv: style
+          - name: Type check with py310-ubuntu
+            python: '3.10'
+            arch: x64
+            os: ubuntu-latest
+            toxenv: typing
+          - name: Test suite with py310-ubuntu
+            python: '3.10'
+            arch: x64
+            os: ubuntu-latest
+            toxenv: py310
+          - name: Test suite with py311-ubuntu
+            python: '3.11'
+            arch: x64
+            os: ubuntu-latest
+            toxenv: py311
 
     steps:
       - name: Checkout repo
@@ -50,7 +50,7 @@ jobs:
       - name: Install poetry
         uses: snok/install-poetry@v1
         with:
-          version: 1.2.1
+          version: 1.2.2
           virtualenvs-create: true
           virtualenvs-in-project: true
 
