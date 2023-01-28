@@ -54,13 +54,10 @@ def test_defaults(
     captured = capfd.readouterr()
     assert "No path specified for configfile" in captured.out
 
-    assert (
-        AnExample1Config.get(
+    with pytest.raises(ValueError):
+        _ = AnExample1Config.get(
             reload=True, configfile_path='fi:\\l*e/p"a?t>h|.t<xt'
         ).section1.field1
-        == "field1"
-    )
-    assert "No path specified for configfile" in captured.out
 
 
 def test_get(monkeypatch: pytest.MonkeyPatch) -> None:

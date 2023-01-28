@@ -89,8 +89,11 @@ class ConfigBase:
         path: Path | None = None
         if isinstance(configfile_path, Path):
             path = configfile_path
-        elif is_valid_filepath(configfile_path, platform="auto"):
-            path = Path(configfile_path)
+        elif configfile_path:
+            if is_valid_filepath(configfile_path, platform="auto"):
+                path = Path(configfile_path)
+            else:
+                raise ValueError
 
         if not path:
             path = cls.default_config_filepath()
@@ -104,8 +107,8 @@ class ConfigBase:
                     f"Error: configfile {path} not found; trying with defaults, but this may not work."
                 )
         else:
-            # This can happen if no valid path was given as an argument, and the default path
-            # also is not valid.
+            # This situation can occur if no valid path was given as an argument, and
+            # the default path is set to None.
             print(
                 "No path specified for configfile; trying with defaults, but this may not work."
             )
