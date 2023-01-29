@@ -1,15 +1,14 @@
 # pylint: disable=redefined-outer-name
 # pylint: disable=missing-module-docstring
 # pylint: disable=missing-function-docstring
-from dataclasses import dataclass
-import pytest
-from pathlib import Path
-from application_config import (
-    ConfigBase,
-    ConfigSectionBase,
-)
 import sys
+from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
+
+import pytest
+
+from application_config import ConfigBase, ConfigSectionBase, __version__
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -35,6 +34,10 @@ class DummyConfig(ConfigBase):
     def get_app_basename() -> str:
         """Return the string that describes the application base name"""
         return "dummyconfig"
+
+
+def test_version() -> None:
+    assert __version__ == "0.1.0"
 
 
 @pytest.fixture
