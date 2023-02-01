@@ -1,6 +1,7 @@
 # pylint: disable=missing-module-docstring
 # pylint: disable=missing-function-docstring
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -8,7 +9,7 @@ import pytest
 from pydantic import ValidationError
 from pydantic.dataclasses import dataclass
 
-from application_config import ConfigBase, ConfigSectionBase
+from application_config import ConfigBase, ConfigSectionBase, __version__
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -30,6 +31,8 @@ class AnExample1Config(ConfigBase):
 
     section1: AnExample1ConfigSection = AnExample1ConfigSection()
 
+def test_version() -> None:
+    assert __version__ == "0.1.0"
 
 def test_defaults(
     monkeypatch: pytest.MonkeyPatch, capfd: pytest.CaptureFixture[str]
@@ -50,6 +53,10 @@ def test_defaults(
         AnExample1Config, "default_config_filepath", mock_default_config_filepath
     )
 
+
+@pytest.fixture
+def test_config(monkeypatch: pytest.MonkeyPatch) -> DummyConfig:
+    # here do monkeypatching of get_app_basename and _get_stored_config
     assert AnExample1Config.get(reload=True).section1.field1 == "field1"
     captured = capfd.readouterr()
     assert "No path specified for configfile" in captured.out

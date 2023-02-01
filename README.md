@@ -9,7 +9,7 @@
 
 ## What and why
 
-Application_config is a module for configuring a python application. It uses 
+Application\_config is a module for configuring a python application. It uses
 [toml](https://toml.io/en/) configuration files that are parsed into dataclasses.
 This brings some benefits:
 
@@ -18,15 +18,19 @@ This brings some benefits:
 - More control over what happens when a config file contains mistakes
   (by leveraging the power of [pydantic](https://docs.pydantic.dev/)).
 - Possibility to specify defaults when no config file is found or entries are missing.
-- Configuration described in a human-usable, flexible, standardardized and not overly 
+- Configuration described in a human-usable, flexible, standardardized and not overly
   complex format.
 
 Parsing is done once during first access and the resulting configuration is stored
 as a singleton.
 
 ## How
+### Install the package
 
-### Define config section(s) and the config container
+On Linux: `python -m pip install -U application_config`.
+On Windows: `python -m pip install -U application_config`
+
+### Define config section(s) and the container with application info
 
 Example:
 
@@ -54,8 +58,8 @@ class MyExampleConfig(ConfigBase):
 
 ```
 
-Note: a `pydantic.dataclasses.dataclass` is a drop-in replacement for the standard 
-`dataclasses.dataclass`, with validation, see 
+Note: a `pydantic.dataclasses.dataclass` is a drop-in replacement for the standard
+`dataclasses.dataclass`, with validation, see
 [pydantic dataclasses](https://docs.pydantic.dev/usage/dataclasses/).
 
 ### Write a config file
@@ -92,11 +96,11 @@ The path for the config file can be specified via the optional argument `configf
 of the `get` method that creates the singleton. The path is not stored; if you `reload`
 then you again have to pass the `configfile_path`.
 
-You can specify the path either as a string or as a pathlib `Path`. In case of a string 
+You can specify the path either as a string or as a pathlib `Path`. In case of a string
 spec, it is first validated for the platform that you are using; if the validation fails,
 a `ValueError` is raised, otherwise a `Path` is constructed from the string.
 
-If you do not specify a `configfile_path`, then a default location is fetched via 
+If you do not specify a `configfile_path`, then a default location is fetched via
 `default_config_filepath()`. Class `ConfigBase` provides a default implementation, being
 a filename `config.toml` located in a subfolder of your home directory. The default name
 of that subfolder is provided by `default_config_foldername()` and consists
@@ -113,7 +117,7 @@ enforce that a `configfile_path` is specified in `get()`, then let
 
 When loading the config file, the values specified are coerced into the appropriate type
 where possible. If type coercion is not possible, then a `pydantic.ValidationError`
-is raised. Consider the case where you would use the following config file for 
+is raised. Consider the case where you would use the following config file for
 the `MyExampleConfig` defined above:
 
 ```toml
@@ -128,7 +132,7 @@ The `str` specified for `field2` will be coerced into an `int` value of `22`.
 ### When your config file does not contain all specified attributes
 
 If your Config has one of more sections with attributes that do not have a default
-value, then a config file must be loaded and these sections and attributes must be 
+value, then a config file must be loaded and these sections and attributes must be
 present in the loaded config file. If this is not the case, a `TypeError` is raised.
 Attributes that have default values can be omitted
 from the config file without problems.
@@ -136,14 +140,13 @@ from the config file without problems.
 Note that in the dataclass definitions, attributes without default value have to come
 before attributes with default values.
 
-### When your config file contains additional, unspecified attributes
-
-Entries in a config file that are not defined in the Config(Section) classes will simply
-be ignored silently.
-
 ## More advanced typing and validation with pydantic
 
-- Non-standard types useful for configuration, such as network adresses, are offered, see 
+- Non-standard types useful for configuration, such as network addresses, are offered, see
   [pydantic types](https://docs.pydantic.dev/usage/types/#pydantic-types)
-- The value of numerous common types can be restricted using 
+- The value of numerous common types can be restricted using
   [pydantic constrained types](https://docs.pydantic.dev/usage/types/#constrained-types)
+
+## License
+
+This project is licensed under the terms of the MIT license.
