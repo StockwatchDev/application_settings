@@ -31,8 +31,10 @@ class AnExample1Config(ConfigBase):
 
     section1: AnExample1ConfigSection = AnExample1ConfigSection()
 
+
 def test_version() -> None:
     assert __version__ == "0.1.0"
+
 
 def test_defaults(
     monkeypatch: pytest.MonkeyPatch, capfd: pytest.CaptureFixture[str]
@@ -55,7 +57,7 @@ def test_defaults(
 
 
 @pytest.fixture
-def test_config(monkeypatch: pytest.MonkeyPatch) -> DummyConfig:
+def test_invalid_path(monkeypatch: pytest.MonkeyPatch) -> None:
     # here do monkeypatching of get_app_basename and _get_stored_config
     assert AnExample1Config.get(reload=True).section1.field1 == "field1"
     captured = capfd.readouterr()
