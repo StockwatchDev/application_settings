@@ -1,8 +1,10 @@
 """Module for loading and retrieving configuration."""
 
+from importlib.metadata import version
+
 from .configuring_base import ConfigBase, ConfigSectionBase, TConfig, TConfigSection
 
-__version__ = "0.1.0"
+__version__ = version("application_config")
 
 __all__ = [
     "TConfigSection",

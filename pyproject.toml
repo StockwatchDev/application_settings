@@ -3,6 +3,29 @@ name = "application_config"
 version = "0.1.0"
 description = "Module for configuring a python application"
 authors = ["Stockwatchdevs <stockwatchdevs@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/StockwatchDev/application_config"
+repository = "https://github.com/StockwatchDev/application_config"
+keywords = ["configuration", "dataclass", "pydantic"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+include = [
+    { path = "CHANGELOG.md" },
+    { path = "LICENSE" },
+    { path = "README.md" },
+    { path = "tests", format = "sdist" },
+]
+
 
 [tool.poetry.dependencies]
 python = "^3.10"

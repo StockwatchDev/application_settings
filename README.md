@@ -20,6 +20,11 @@ This brings some benefits:
 
 ## How
 
+### Install the package
+
+On Linux: `python -m pip install -U application_config`. 
+On Windows: `python -m pip install -U application_config`
+
 ### Define config section(s) and the container with application info
 
 Example:
@@ -87,3 +92,7 @@ the_config = ExampleConfig.get()
 a_variable: str = the_config.section1.field1  # a_variable == "my own version of field1"
 another_variable: int = the_config.section1.field2  # another_variable == 22
 ```
+
+## License
+
+This project is licensed under the terms of the MIT license.
