@@ -93,7 +93,7 @@ class ConfigBase:
             if is_valid_filepath(configfile_path, platform="auto"):
                 path = Path(configfile_path)
             else:
-                raise ValueError
+                raise ValueError(f"Given path: '{configfile_path}' is not a valid path for this OS")
 
         if not path:
             path = cls.default_config_filepath()
