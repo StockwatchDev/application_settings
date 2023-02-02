@@ -140,6 +140,11 @@ from the config file without problems.
 Note that in the dataclass definitions, attributes without default value have to come
 before attributes with default values.
 
+### When your config file contains additional, unspecified attributes
+
+Entries in a config file that are not defined in the Config(Section) classes will simply
+be ignored silently.
+
 ## More advanced typing and validation with pydantic
 
 - Non-standard types useful for configuration, such as network addresses, are offered, see
