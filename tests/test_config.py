@@ -1,7 +1,6 @@
 # pylint: disable=missing-module-docstring
 # pylint: disable=missing-function-docstring
 import sys
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -57,7 +56,7 @@ def test_defaults(
 
 
 @pytest.fixture
-def test_invalid_path(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_invalid_path(capfd: pytest.CaptureFixture[str]) -> None:
     # here do monkeypatching of get_app_basename and _get_stored_config
     assert AnExample1Config.get(reload=True).section1.field1 == "field1"
     captured = capfd.readouterr()
