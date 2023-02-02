@@ -35,20 +35,17 @@ def test_version() -> None:
     assert __version__ == "0.1.0"
 
 
-def test_defaults(capfd: pytest.CaptureFixture[str]) -> None:
+def test_defaults(
+    monkeypatch: pytest.MonkeyPatch, capfd: pytest.CaptureFixture[str]
+) -> None:
     the_path = AnExample1Config.default_config_filepath()
     if the_path:
         assert the_path.parts[-1] == "config.toml"
         assert the_path.parts[-2] == ".an_example1"
-    assert AnExample1Config.get().section1.field1 == "field1"
-    assert AnExample1Config.get().section1.field2 == 2
-    captured = capfd.readouterr()
-    assert "not found; trying with defaults, but this may not work." in captured.out
 
+    with pytest.raises(FileNotFoundError):
+        _ = AnExample1Config.get().section1.field1
 
-def test_invalid_path(
-    monkeypatch: pytest.MonkeyPatch, capfd: pytest.CaptureFixture[str]
-) -> None:
     def mock_default_config_filepath() -> Path | None:
         return None
 
@@ -56,9 +53,15 @@ def test_invalid_path(
         AnExample1Config, "default_config_filepath", mock_default_config_filepath
     )
     assert AnExample1Config.get(reload=True).section1.field1 == "field1"
+    assert AnExample1Config.get().section1.field2 == 2
     captured = capfd.readouterr()
-    assert "No path specified for configfile" in captured.out
+    assert (
+        "No path specified for configfile; trying with defaults, but this may not work."
+        in captured.out
+    )
 
+
+def test_invalid_path() -> None:
     with pytest.raises(ValueError):
         _ = AnExample1Config.get(
             reload=True, configfile_path='fi:\0\\l*e/p"a?t>h|.t<xt'
@@ -125,10 +128,6 @@ def test_wrong_type(monkeypatch: pytest.MonkeyPatch) -> None:
     assert "2 validation errors" in str(excinfo.value)
     assert "str type expected" in str(excinfo.value)
     assert "none is not an allowed value" in str(excinfo.value)
-
-
-def test_get_defaults() -> None:
-    assert AnExample1Config.get(reload=True).section1.field2 == 2
 
 
 def test_missing_extra_attributes(monkeypatch: pytest.MonkeyPatch) -> None:

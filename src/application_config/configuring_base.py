@@ -101,13 +101,8 @@ class ConfigBase:
             path = cls.default_config_filepath()
 
         if path:
-            try:
-                with path.open(mode="rb") as fptr:
-                    config_stored = tomllib.load(fptr)
-            except FileNotFoundError:
-                print(
-                    f"Error: configfile {path} not found; trying with defaults, but this may not work."
-                )
+            with path.open(mode="rb") as fptr:
+                config_stored = tomllib.load(fptr)
         else:
             # This situation can occur if no valid path was given as an argument, and
             # the default path is set to None.
