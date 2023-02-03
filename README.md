@@ -28,7 +28,7 @@ as a singleton.
 ### Install the package
 
 On Linux: `python -m pip install -U application_config`.
-On Windows: `python -m pip install -U application_config`
+On Windows: `py -m pip install -U application_config`
 
 ### Define config section(s) and the container with application info
 
