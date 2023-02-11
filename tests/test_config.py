@@ -40,9 +40,8 @@ def test_paths(
 ) -> None:
     # default_filepath:
     the_path = AnExample1Config.default_filepath()
-    if the_path:
-        assert the_path.parts[-1] == "config.toml"
-        assert the_path.parts[-2] == ".an_example1"
+    assert the_path.parts[-1] == "config.toml"
+    assert the_path.parts[-2] == ".an_example1"
 
     # filepath:
     # if not set, then equal to default_filepath
