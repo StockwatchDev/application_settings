@@ -35,9 +35,7 @@ def test_version() -> None:
     assert __version__ == "0.1.0"
 
 
-def test_paths(
-    monkeypatch: pytest.MonkeyPatch, capfd: pytest.CaptureFixture[str]
-) -> None:
+def test_paths() -> None:
     # default_filepath:
     the_path = AnExample1Config.default_filepath()
     if the_path:
@@ -203,3 +201,10 @@ def test_attributes_no_default(monkeypatch: pytest.MonkeyPatch) -> None:
     assert test_config.section1.field3 == 1.1
     assert test_config.section1.field4 == 0.5
     assert test_config.section2.field1 == "field1"
+
+
+def test_update() -> None:
+    with pytest.raises(TypeError):
+        _ = AnExample1Config.get().update(
+            {"section1": {"setting1": "new s1", "setting2": 222}}
+        )

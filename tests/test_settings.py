@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from pydantic import ValidationError
 from pydantic.dataclasses import dataclass
 
 from application_config import SettingsBase, SettingsSectionBase
@@ -52,6 +51,8 @@ def test_update(monkeypatch: pytest.MonkeyPatch) -> None:
     assert AnExample1Settings.get(reload=True).section1.setting1 == "s1"
     assert AnExample1Settings.get().section1.setting2 == 22
 
-    new_settings = AnExample1Settings.get().update({"section1": {"setting1": "new s1"}})
+    new_settings = AnExample1Settings.get().update(
+        {"section1": {"setting1": "new s1", "setting2": 222}}
+    )
     assert new_settings.section1.setting1 == "new s1"
-    assert AnExample1Settings.get().section1.setting2 == 22
+    assert AnExample1Settings.get().section1.setting2 == 222
