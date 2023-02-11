@@ -19,7 +19,8 @@ _ContainerT = TypeVar("_ContainerT", bound="ContainerBase")
 _ContainerSectionT = TypeVar("_ContainerSectionT", bound="ContainerSectionBase")
 
 
-_All_CONTAINERS: dict[int, Any] = {}
+_ALL_CONTAINERS: dict[int, Any] = {}
+_ALL_PATHS: dict[int, Path | None] = {}
 
 
 @dataclass(frozen=True)
@@ -55,26 +56,49 @@ class ContainerBase(ABC):
         )
 
     @classmethod
-    def get(
-        cls: type[_ContainerT], reload: bool = False, file_path: str | Path = ""
-    ) -> _ContainerT:
+    def set_filepath(cls: type[_ContainerT], file_path: str | Path = "") -> None:
+        """Set the path for the file (a singleton)."""
+
+        path: Path | None = None
+        if isinstance(file_path, Path):
+            path = file_path.resolve()
+        elif file_path:
+            if is_valid_filepath(file_path, platform="auto"):
+                path = Path(file_path).resolve()
+            else:
+                raise ValueError(
+                    f"Given path: '{file_path}' is not a valid path for this OS"
+                )
+
+        if path:
+            _ALL_PATHS[id(cls)] = path
+        else:
+            _ALL_PATHS.pop(id(cls), None)
+
+    @classmethod
+    def filepath(cls) -> Path | None:
+        """Return the path for the file that holds the config / settings."""
+        return _ALL_PATHS.get(id(cls), cls.default_filepath())
+
+    @classmethod
+    def get(cls: type[_ContainerT], reload: bool = False) -> _ContainerT:
         """Access method for the singleton."""
 
-        if ((_the_container_or_none := _All_CONTAINERS.get(id(cls))) is None) or reload:
+        if ((_the_container_or_none := _ALL_CONTAINERS.get(id(cls))) is None) or reload:
             # no config has been made yet or it needs to be reloaded,
             # so let's instantiate one and keep it in the global store
-            _the_config = cls._create_instance(file_path)
-            _All_CONTAINERS[id(cls)] = _the_config
+            _the_config = cls._create_instance()
+            _ALL_CONTAINERS[id(cls)] = _the_config
         else:
             _the_config = _the_container_or_none
         return _the_config
 
     @classmethod
-    def _create_instance(cls: type[_ContainerT], file_path: str | Path) -> _ContainerT:
+    def _create_instance(cls: type[_ContainerT]) -> _ContainerT:
         """Instantiate the Container."""
 
         # get whatever is stored in the config/settings file
-        data_stored = cls._get_stored_data(file_path)
+        data_stored = cls._get_stored_data()
         # filter out fields that are both stored and an attribute of the Container
         _data_fields = {
             fld for fld in fields(cls) if fld.init and fld.name in data_stored.keys()
@@ -91,23 +115,11 @@ class ContainerBase(ABC):
         return cls(**sections)
 
     @classmethod
-    def _get_stored_data(cls, file_path: str | Path) -> dict[str, Any]:
+    def _get_stored_data(cls) -> dict[str, Any]:
         """Get the data stored in the toml file"""
         data_stored: dict[str, Any] = {}
 
-        path: Path | None = None
-        if isinstance(file_path, Path):
-            path = file_path
-        elif file_path:
-            if is_valid_filepath(file_path, platform="auto"):
-                path = Path(file_path)
-            else:
-                raise ValueError(
-                    f"Given path: '{file_path}' is not a valid path for this OS"
-                )
-
-        if not path:
-            path = cls.default_filepath()
+        path = cls.filepath()
 
         if path:
             with path.open(mode="rb") as fptr:
