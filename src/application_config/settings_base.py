@@ -35,7 +35,7 @@ class SettingsBase(ContainerBase):
         # actually sections: dict[str, _ContainerSectionT]
         # but MyPy doesn't swallow that
         updated_sections: dict[str, Any] = {
-            fld.name: self._update_section(getattr(self, fld.name), changes[fld.name])
+            fld.name: _update_section(getattr(self, fld.name), changes[fld.name])
             for fld in _sections_to_update
         }
         new_settings = replace(self, **updated_sections)
@@ -43,10 +43,10 @@ class SettingsBase(ContainerBase):
         # save to file
         return new_settings
 
-    def _update_section(
-        self, section: SettingsSectionT, changes: dict[str, Any]
-    ) -> SettingsSectionT:
-        "Update the settings section fieldname with data specified in changes"
-        # filter out fields that are both in changes and an attribute of the SettingsSection
-        assert isinstance(section, SettingsSectionBase)
-        return replace(section, **changes)
+
+def _update_section(
+    section: SettingsSectionT, changes: dict[str, Any]
+) -> SettingsSectionT:
+    "Update the settings section with data specified in changes"
+    # filter out fields that are both in changes and an attribute of the SettingsSection
+    return replace(section, **changes)
