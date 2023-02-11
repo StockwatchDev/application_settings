@@ -1,6 +1,6 @@
 """Module for handling settings."""
 from dataclasses import fields, replace
-from typing import TypeVar, Any
+from typing import Any, TypeVar
 
 from pydantic.dataclasses import dataclass
 
