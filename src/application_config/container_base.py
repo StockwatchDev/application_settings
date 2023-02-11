@@ -116,7 +116,7 @@ class ContainerBase(ABC):
             # This situation can occur if no valid path was given as an argument, and
             # the default path is set to None.
             print(
-                "No path specified for configfile; trying with defaults, but this may not work."
+                f"No path specified for {cls.kind_string().lower()}file; trying with defaults, but this may not work."
             )
         return data_stored
 
