@@ -119,9 +119,7 @@ class ContainerBase(ABC):
         """Get the data stored in the toml file"""
         data_stored: dict[str, Any] = {}
 
-        path = cls.filepath()
-
-        if path:
+        if path := cls.filepath():
             with path.open(mode="rb") as fptr:
                 data_stored = tomllib.load(fptr)
         else:
