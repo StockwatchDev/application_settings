@@ -24,7 +24,7 @@ class SettingsBase(ContainerBase):
         "Return Settings"
         return "Settings"
 
-    def update(self, changes: dict[str, dict[str, Any]]) -> None:
+    def update(self: SettingsT, changes: dict[str, dict[str, Any]]) -> SettingsT:
         "Update and save the settings with data specified in changes"
         # filter out fields that are both in changes and an attribute of the SettingsContainer
         _sections_to_update = {
@@ -41,6 +41,7 @@ class SettingsBase(ContainerBase):
         new_settings = replace(self, **updated_sections)
         # store new settings in _ALL_CONTAINERS
         # save to file
+        return new_settings
 
     def _update_section(
         self, section: SettingsSectionT, changes: dict[str, Any]
