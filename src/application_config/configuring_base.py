@@ -1,5 +1,5 @@
 """Module for handling configuration."""
-from typing import TypeVar
+from typing import Any, TypeVar
 
 from pydantic.dataclasses import dataclass
 
@@ -22,3 +22,9 @@ class ConfigBase(ContainerBase):
     def kind_string(cls: type[ConfigT]) -> str:
         "Return Config"
         return "Config"
+
+    def update(self: ConfigT, changes: dict[str, dict[str, Any]]) -> ConfigT:
+        "Update and save the settings with data specified in changes; not meant for config"
+        raise TypeError(
+            "Configs should not be updated runtime; consider converting to settings."
+        )

@@ -1,7 +1,7 @@
 """Base classes for containers and sections for configuration and settings."""
 import sys
 from abc import ABC, abstractmethod
-from dataclasses import fields
+from dataclasses import fields, replace
 from pathlib import Path
 from re import sub
 from typing import Any, TypeVar
@@ -84,14 +84,38 @@ class ContainerBase(ABC):
     def get(cls: type[_ContainerT], reload: bool = False) -> _ContainerT:
         """Access method for the singleton."""
 
-        if ((_the_container_or_none := _ALL_CONTAINERS.get(id(cls))) is None) or reload:
+        if (_the_container_or_none := cls._get()) is None or reload:
             # no config has been made yet or it needs to be reloaded,
             # so let's instantiate one and keep it in the global store
             _the_config = cls._create_instance()
-            _ALL_CONTAINERS[id(cls)] = _the_config
+            _the_config._set()
         else:
             _the_config = _the_container_or_none
         return _the_config
+
+    @classmethod
+    def _get(cls: type[_ContainerT]) -> _ContainerT | None:
+        """Private getter for the singleton."""
+        return _ALL_CONTAINERS.get(id(cls))
+
+    def update(self: _ContainerT, changes: dict[str, dict[str, Any]]) -> _ContainerT:
+        "Update and save the settings with data specified in changes; not meant for config"
+        # filter out fields that are both in changes and an attribute of the SettingsContainer
+        _sections_to_update = {
+            fld for fld in fields(self) if fld.init and fld.name in changes.keys()
+        }
+
+        # update the sections and keep them in a dict
+        # actually sections: dict[str, _ContainerSectionT]
+        # but MyPy doesn't swallow that
+        updated_sections: dict[str, Any] = {
+            fld.name: _update_section(getattr(self, fld.name), changes[fld.name])
+            for fld in _sections_to_update
+        }
+        new_settings = replace(self, **updated_sections)
+        new_settings._set()  # pylint: disable=protected-access
+        # save to file
+        return new_settings
 
     @classmethod
     def _create_instance(cls: type[_ContainerT]) -> _ContainerT:
@@ -146,3 +170,15 @@ class ContainerBase(ABC):
         field_set = {f.name for f in fields(class_to_instantiate) if f.init}
         filtered_arg_dict = {k: v for k, v in arg_dict.items() if k in field_set}
         return class_to_instantiate(**filtered_arg_dict)
+
+    def _set(self) -> None:
+        """Private method to store the singleton."""
+        _ALL_CONTAINERS[id(self.__class__)] = self
+
+
+def _update_section(
+    section: _ContainerSectionT, changes: dict[str, Any]
+) -> _ContainerSectionT:
+    "Update the settings section with data specified in changes; not meant for config"
+    # filter out fields that are both in changes and an attribute of the SettingsSection
+    return replace(section, **changes)

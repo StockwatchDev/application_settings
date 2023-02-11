@@ -1,6 +1,5 @@
 """Module for handling settings."""
-from dataclasses import fields, replace
-from typing import Any, TypeVar
+from typing import TypeVar
 
 from pydantic.dataclasses import dataclass
 
@@ -23,30 +22,3 @@ class SettingsBase(ContainerBase):
     def kind_string(cls: type[SettingsT]) -> str:
         "Return Settings"
         return "Settings"
-
-    def update(self: SettingsT, changes: dict[str, dict[str, Any]]) -> SettingsT:
-        "Update and save the settings with data specified in changes"
-        # filter out fields that are both in changes and an attribute of the SettingsContainer
-        _sections_to_update = {
-            fld for fld in fields(self) if fld.init and fld.name in changes.keys()
-        }
-
-        # update the sections and keep them in a dict
-        # actually sections: dict[str, _ContainerSectionT]
-        # but MyPy doesn't swallow that
-        updated_sections: dict[str, Any] = {
-            fld.name: _update_section(getattr(self, fld.name), changes[fld.name])
-            for fld in _sections_to_update
-        }
-        new_settings = replace(self, **updated_sections)
-        # store new settings in _ALL_CONTAINERS
-        # save to file
-        return new_settings
-
-
-def _update_section(
-    section: SettingsSectionT, changes: dict[str, Any]
-) -> SettingsSectionT:
-    "Update the settings section with data specified in changes"
-    # filter out fields that are both in changes and an attribute of the SettingsSection
-    return replace(section, **changes)
