@@ -29,9 +29,10 @@ include = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pydantic = "^1.10"
-tomli = { version = "^2.0.1", python = "<3.11" }
 pathvalidate = "^2.5"
+pydantic = "^1.10"
+tomli = { version = "^2.0", python = "<3.11" }
+tomli-w = "^1.0"
 
 [tool.poetry.group.testing]
 optional = true

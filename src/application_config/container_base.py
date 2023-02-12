@@ -1,13 +1,14 @@
 """Base classes for containers and sections for configuration and settings."""
 import sys
 from abc import ABC, abstractmethod
-from dataclasses import fields, replace
+from dataclasses import asdict, fields, replace
 from pathlib import Path
 from re import sub
 from typing import Any, TypeVar
 
 from pathvalidate import is_valid_filepath
 from pydantic.dataclasses import dataclass
+import tomli_w
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -114,7 +115,7 @@ class ContainerBase(ABC):
         }
         new_settings = replace(self, **updated_sections)
         new_settings._set()  # pylint: disable=protected-access
-        # save to file
+        new_settings._save()
         return new_settings
 
     @classmethod
@@ -174,6 +175,19 @@ class ContainerBase(ABC):
     def _set(self) -> None:
         """Private method to store the singleton."""
         _ALL_CONTAINERS[id(self.__class__)] = self
+
+    def _save(self) -> None:
+        """Private method to save the singleton to file."""
+        if path := self.__class__.filepath():
+            path.parent.mkdir(parents=True, exist_ok=True)
+            with path.open(mode="wb") as fptr:
+                tomli_w.dump(asdict(self), fptr)
+        else:
+            # This situation can occur if no valid path was given as an argument, and
+            # the default path is set to None.
+            print(
+                f"No path specified for {cls.kind_string().lower()}file; trying with defaults, but this may not work."
+            )
 
 
 def _update_section(
