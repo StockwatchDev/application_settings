@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "application_settings"
 version = "0.2.0"
-description = "Module for providing a python application with configuration and settings"
+description = "For providing a python application with configuration and/or settings"
 authors = ["Stockwatchdevs <stockwatchdevs@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/StockwatchDev/application_settings"
 repository = "https://github.com/StockwatchDev/application_settings"
-keywords = ["configuration", "dataclass", "pydantic"]
+keywords = ["configuration", "settings", "dataclass", "pydantic", "toml"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
