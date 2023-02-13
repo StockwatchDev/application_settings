@@ -4,7 +4,7 @@ from importlib.metadata import version
 
 from .configuring_base import ConfigBase, ConfigSectionBase, TConfig, TConfigSection
 
-__version__ = version("application_config")
+__version__ = version("application_settings")
 
 __all__ = [
     "TConfigSection",
