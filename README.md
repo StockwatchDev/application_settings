@@ -1,7 +1,7 @@
-# Application_config
+# application_settings
 
-[![Build Status](https://github.com/StockwatchDev/application_config/actions/workflows/application_config-tests.yml/badge.svg?branch=develop)](https://github.com/StockwatchDev/application_config/actions)
-[![codecov](https://codecov.io/gh/StockwatchDev/application_config/branch/develop/graph/badge.svg)](https://app.codecov.io/gh/StockwatchDev/application_config)
+[![Build Status](https://github.com/StockwatchDev/application_settings/actions/workflows/application_settings-tests.yml/badge.svg?branch=develop)](https://github.com/StockwatchDev/application_settings/actions)
+[![codecov](https://codecov.io/gh/StockwatchDev/application_settings/branch/develop/graph/badge.svg)](https://app.codecov.io/gh/StockwatchDev/application_settings)
 [![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
 [![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -9,9 +9,9 @@
 
 ## What and why
 
-Application\_config is a module for configuring a python application. It uses
-[toml](https://toml.io/en/) configuration files that are parsed into dataclasses.
-This brings some benefits:
+Application\_settings is a module for providing a python application with configuration
+and settings. It uses [toml](https://toml.io/en/) configuration files that are parsed
+into dataclasses. This brings some benefits:
 
 - Configuration parameters are typed, which allows for improved static code analyses.
 - IDEs will provide helpful hints and completion when using configuration parameters.
@@ -27,15 +27,15 @@ as a singleton.
 ## How
 ### Install the package
 
-On Linux: `python -m pip install -U application_config`.
-On Windows: `py -m pip install -U application_config`
+On Linux: `python -m pip install -U application_settings`.
+On Windows: `py -m pip install -U application_settings`
 
 ### Define config section(s) and the container with application info
 
 Example:
 
 ```python
-from application_config import (
+from application_settings import (
     ConfigBase,
     ConfigSectionBase,
 )
@@ -81,9 +81,8 @@ in which fields have been specified in the Config(Section) classes.
 
 ```python
 # the first invocation of get() will create the singleton instance of MyExampleConfig
-the_config = MyExampleConfig.get()
-a_variable: str = the_config.section1.field1  # a_variable == "my own version of field1"
-another_variable: int = the_config.section1.field2  # another_variable == 22
+a_variable: str = MyExampleConfig.get().section1.field1  # a_variable == "my own version of field1"
+another_variable: int = MyExampleConfig.get().section1.field2  # another_variable == 22
 
 # you can reload a config and / or set a non-default path
 another_config = MyExampleConfig.get(reload=True, configfile_path="./my_config.tml")

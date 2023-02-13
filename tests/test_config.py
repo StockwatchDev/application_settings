@@ -8,7 +8,7 @@ import pytest
 from pydantic import ValidationError
 from pydantic.dataclasses import dataclass
 
-from application_config import ConfigBase, ConfigSectionBase, __version__
+from application_settings import ConfigBase, ConfigSectionBase, __version__
 
 if sys.version_info >= (3, 11):
     import tomllib
