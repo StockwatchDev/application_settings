@@ -32,13 +32,12 @@ class AnExample1Config(ConfigBase):
 
 
 def test_version() -> None:
-    assert __version__ == "0.1.0"
+    assert __version__ == "0.2.0"
 
 
 def test_paths() -> None:
     # default_filepath:
-    the_path = AnExample1Config.default_filepath()
-    if the_path:
+    if the_path := AnExample1Config.default_filepath():
         assert the_path.parts[-1] == "config.toml"
         assert the_path.parts[-2] == ".an_example1"
     else:

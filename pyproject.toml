@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "application_config"
-version = "0.1.0"
+version = "0.2.0"
 description = "Module for configuring a python application"
 authors = ["Stockwatchdevs <stockwatchdevs@gmail.com>"]
 license = "MIT"
