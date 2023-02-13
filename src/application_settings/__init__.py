@@ -10,7 +10,7 @@ from .settings_base import (
     SettingsT,
 )
 
-__version__ = version("application_config")
+__version__ = version("application_settings")
 
 __all__ = [
     "ConfigSectionT",

@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "application_config"
+name = "application_settings"
 version = "0.2.0"
-description = "Module for configuring a python application"
+description = "Module for providing a python application with configuration and settings"
 authors = ["Stockwatchdevs <stockwatchdevs@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/StockwatchDev/application_config"
-repository = "https://github.com/StockwatchDev/application_config"
+homepage = "https://github.com/StockwatchDev/application_settings"
+repository = "https://github.com/StockwatchDev/application_settings"
 keywords = ["configuration", "dataclass", "pydantic"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -135,7 +135,7 @@ whitelist_externals = poetry
 commands_pre =
     poetry install --with testing -v
 commands =
-    poetry run pytest --cov-report xml:coverage.xml --cov-report term-missing --cov=application_config tests/
+    poetry run pytest --cov-report xml:coverage.xml --cov-report term-missing --cov=application_settings tests/
 
 [testenv:style]
 commands_pre =

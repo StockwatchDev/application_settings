@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 from pydantic.dataclasses import dataclass
 
-from application_config import SettingsBase, SettingsSectionBase
+from application_settings import SettingsBase, SettingsSectionBase
 
 
 @dataclass(frozen=True)
