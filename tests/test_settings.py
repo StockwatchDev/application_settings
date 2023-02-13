@@ -1,18 +1,11 @@
 # pylint: disable=missing-module-docstring
 # pylint: disable=missing-function-docstring
-import sys
 from pathlib import Path
-from typing import Any
 
 import pytest
 from pydantic.dataclasses import dataclass
 
 from application_config import SettingsBase, SettingsSectionBase
-
-if sys.version_info >= (3, 11):
-    import tomllib
-else:
-    import tomli as tomllib
 
 
 @dataclass(frozen=True)
@@ -32,27 +25,34 @@ class AnExample1Settings(SettingsBase):
 
 def test_paths() -> None:
     # default_filepath:
-    the_path = AnExample1Settings.default_filepath()
-    if the_path:
+    if the_path := AnExample1Settings.default_filepath():
         assert the_path.parts[-1] == "settings.toml"
         assert the_path.parts[-2] == ".an_example1"
     else:
         assert False
 
 
-def test_update(monkeypatch: pytest.MonkeyPatch) -> None:
-    def mock_tomllib_load(
-        fptr: Any,  # pylint: disable=unused-argument
-    ) -> dict[str, dict[str, str | int]]:
-        return {"section1": {"setting1": "s1", "setting2": 22}}
+def test_update(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    def mock_default_filepath() -> Path | None:
+        return None
 
-    monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
-    AnExample1Settings.set_filepath(Path(__file__))
-    assert AnExample1Settings.get(reload=True).section1.setting1 == "s1"
-    assert AnExample1Settings.get().section1.setting2 == 22
-
+    monkeypatch.setattr(AnExample1Settings, "default_filepath", mock_default_filepath)
+    AnExample1Settings.set_filepath("")
+    assert AnExample1Settings.get(reload=True).section1.setting1 == "setting1"
+    assert AnExample1Settings.get().section1.setting2 == 2
+    with pytest.raises(RuntimeError):
+        new_settings = AnExample1Settings.get().update(
+            {"section1": {"setting1": "new s1", "setting2": 222}}
+        )
+    tmp_filepath = (
+        tmp_path
+        / AnExample1Settings.default_foldername()
+        / AnExample1Settings.default_filename()
+    )
+    AnExample1Settings.set_filepath(tmp_filepath)
     new_settings = AnExample1Settings.get().update(
         {"section1": {"setting1": "new s1", "setting2": 222}}
     )
+
     assert new_settings.section1.setting1 == "new s1"
     assert AnExample1Settings.get().section1.setting2 == 222

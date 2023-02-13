@@ -6,9 +6,9 @@ from pathlib import Path
 from re import sub
 from typing import Any, TypeVar
 
+import tomli_w
 from pathvalidate import is_valid_filepath
 from pydantic.dataclasses import dataclass
-import tomli_w
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -48,13 +48,14 @@ class ContainerBase(ABC):
         )
 
     @classmethod
+    def default_filename(cls: type[_ContainerT]) -> str:
+        """Return the kind_string, lowercase, with '.toml' extension."""
+        return f"{cls.kind_string().lower()}.toml"
+
+    @classmethod
     def default_filepath(cls: type[_ContainerT]) -> Path | None:
         """Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml"""
-        return (
-            Path.home()
-            / f"{cls.default_foldername()}"
-            / f"{cls.kind_string().lower()}.toml"
-        )
+        return Path.home() / f"{cls.default_foldername()}" / cls.default_filename()
 
     @classmethod
     def set_filepath(cls: type[_ContainerT], file_path: str | Path = "") -> None:
@@ -115,7 +116,7 @@ class ContainerBase(ABC):
         }
         new_settings = replace(self, **updated_sections)
         new_settings._set()  # pylint: disable=protected-access
-        new_settings._save()
+        new_settings._save()  # pylint: disable=protected-access
         return new_settings
 
     @classmethod
@@ -178,15 +179,15 @@ class ContainerBase(ABC):
 
     def _save(self) -> None:
         """Private method to save the singleton to file."""
-        if path := self.__class__.filepath():
+        if path := self.filepath():
             path.parent.mkdir(parents=True, exist_ok=True)
             with path.open(mode="wb") as fptr:
                 tomli_w.dump(asdict(self), fptr)
         else:
             # This situation can occur if no valid path was given as an argument, and
             # the default path is set to None.
-            print(
-                f"No path specified for {cls.kind_string().lower()}file; trying with defaults, but this may not work."
+            raise RuntimeError(
+                f"No path specified for {self.kind_string().lower()} file, cannot be saved."
             )
 
 
