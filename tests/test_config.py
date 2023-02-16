@@ -1,10 +1,12 @@
 # pylint: disable=missing-module-docstring
 # pylint: disable=missing-function-docstring
+import json
 import sys
 from pathlib import Path
 from typing import Any
 
 import pytest
+import tomli_w
 from pydantic import ValidationError
 from pydantic.dataclasses import dataclass
 
@@ -31,11 +33,42 @@ class AnExample1Config(ConfigBase):
     section1: AnExample1ConfigSection = AnExample1ConfigSection()
 
 
+@pytest.fixture(scope="session")
+def toml_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    file_path = (
+        tmp_path_factory.mktemp(AnExample1Config.default_foldername())
+        / AnExample1Config.default_filename()
+    )
+    with file_path.open(mode="wb") as fptr:
+        tomli_w.dump({"section1": {"field1": "f1", "field2": 22}}, fptr)
+    return file_path
+
+
+@pytest.fixture(scope="session")
+def json_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    file_path = tmp_path_factory.mktemp(
+        AnExample1Config.default_foldername()
+    ) / AnExample1Config.default_filename().replace("toml", "json")
+    with file_path.open(mode="w") as fptr:
+        json.dump({"section1": {"field1": "f2", "field2": 33}}, fptr)
+    return file_path
+
+
+@pytest.fixture(scope="session")
+def ini_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    file_path = tmp_path_factory.mktemp(
+        AnExample1Config.default_foldername()
+    ) / AnExample1Config.default_filename().replace("toml", "ini")
+    with file_path.open(mode="w") as fptr:
+        fptr.write("inifile")
+    return file_path
+
+
 def test_version() -> None:
     assert __version__ == "0.2.0"
 
 
-def test_paths() -> None:
+def test_paths(toml_file: Path) -> None:
     # default_filepath:
     if the_path := AnExample1Config.default_filepath():
         assert the_path.parts[-1] == "config.toml"
@@ -47,8 +80,8 @@ def test_paths() -> None:
     # if not set, then equal to default_filepath
     assert AnExample1Config.filepath() == the_path
     # check set_filepath with a Path
-    AnExample1Config.set_filepath(Path(__file__))
-    assert AnExample1Config.filepath() == Path(__file__)
+    AnExample1Config.set_filepath(toml_file)
+    assert AnExample1Config.filepath() == toml_file
     # check set_filepath with a str
     AnExample1Config.set_filepath(".")
     assert AnExample1Config.filepath() == Path.cwd()
@@ -83,38 +116,46 @@ def test_get_defaults(
     )
 
 
-def test_get(monkeypatch: pytest.MonkeyPatch) -> None:
-    def mock_tomllib_load(
-        fptr: Any,  # pylint: disable=unused-argument
-    ) -> dict[str, dict[str, str | int]]:
-        return {"section1": {"field1": "f1", "field2": 22}}
-
-    monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
-    AnExample1Config.set_filepath(Path(__file__))
+def test_get(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
+    AnExample1Config.set_filepath(toml_file)
     assert AnExample1Config.get(reload=True).section1.field1 == "f1"
     assert AnExample1Config.get().section1.field2 == 22
 
     # test that by default it is not reloaded
-    def mock_tomllib_load2(
+    def mock_tomllib_load(
         fptr: Any,  # pylint: disable=unused-argument
     ) -> dict[str, dict[str, str | int]]:
         return {"section1": {"field1": "f1", "field2": 222}}
 
-    monkeypatch.setattr(tomllib, "load", mock_tomllib_load2)
+    monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
     assert AnExample1Config.get().section1.field2 == 22
 
     # and now test reload
     assert AnExample1Config.get(reload=True).section1.field2 == 222
 
 
-def test_type_coercion(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_get_json(monkeypatch: pytest.MonkeyPatch, json_file: Path) -> None:
+    AnExample1Config.set_filepath(json_file)
+    assert AnExample1Config.get(reload=True).section1.field1 == "f2"
+    assert AnExample1Config.get().section1.field2 == 33
+
+
+def test_get_ini(ini_file: Path, capfd: pytest.CaptureFixture[str]) -> None:
+    AnExample1Config.set_filepath(ini_file)
+    assert AnExample1Config.get(reload=True).section1.field1 == "field1"
+    assert AnExample1Config.get().section1.field2 == 2
+    captured = capfd.readouterr()
+    assert "Unknown file format ini given in" in captured.out
+
+
+def test_type_coercion(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
     def mock_tomllib_load(
         fptr: Any,  # pylint: disable=unused-argument
     ) -> dict[str, dict[str, str | int]]:
         return {"section1": {"field1": True, "field2": "22"}}
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
-    AnExample1Config.set_filepath(Path(__file__))
+    AnExample1Config.set_filepath(toml_file)
     test_config = AnExample1Config.get(reload=True)
     assert isinstance(test_config.section1.field1, str)
     assert test_config.section1.field1 == "True"
@@ -122,7 +163,7 @@ def test_type_coercion(monkeypatch: pytest.MonkeyPatch) -> None:
     assert test_config.section1.field2 == 22
 
 
-def test_wrong_type(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_wrong_type(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
     def mock_tomllib_load(
         fptr: Any,  # pylint: disable=unused-argument
     ) -> dict[str, dict[str, tuple[str, int] | None]]:
@@ -130,7 +171,7 @@ def test_wrong_type(monkeypatch: pytest.MonkeyPatch) -> None:
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
 
-    AnExample1Config.set_filepath(Path(__file__))
+    AnExample1Config.set_filepath(toml_file)
     with pytest.raises(ValidationError) as excinfo:
         _ = AnExample1Config.get(reload=True)
     assert "2 validation errors" in str(excinfo.value)
@@ -138,7 +179,9 @@ def test_wrong_type(monkeypatch: pytest.MonkeyPatch) -> None:
     assert "none is not an allowed value" in str(excinfo.value)
 
 
-def test_missing_extra_attributes(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_missing_extra_attributes(
+    monkeypatch: pytest.MonkeyPatch, toml_file: Path
+) -> None:
     def mock_tomllib_load(
         fptr: Any,  # pylint: disable=unused-argument
     ) -> dict[str, dict[str, str | int]]:
@@ -146,7 +189,7 @@ def test_missing_extra_attributes(monkeypatch: pytest.MonkeyPatch) -> None:
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
 
-    AnExample1Config.set_filepath(Path(__file__))
+    AnExample1Config.set_filepath(toml_file)
     test_config = AnExample1Config.get(reload=True)
     assert test_config.section1.field2 == 2
     with pytest.raises(AttributeError):
@@ -177,7 +220,9 @@ class Example2Config(ConfigBase):
     section2: Example2bConfigSection = Example2bConfigSection()
 
 
-def test_attributes_no_default(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_attributes_no_default(
+    monkeypatch: pytest.MonkeyPatch, toml_file: Path
+) -> None:
     def mock_tomllib_load1(
         fptr: Any,  # pylint: disable=unused-argument
     ) -> dict[str, dict[str, str | int]]:
@@ -185,7 +230,7 @@ def test_attributes_no_default(monkeypatch: pytest.MonkeyPatch) -> None:
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load1)
 
-    Example2Config.set_filepath(Path(__file__))
+    Example2Config.set_filepath(toml_file)
     with pytest.raises(TypeError):
         _ = Example2Config.get(reload=True)
 

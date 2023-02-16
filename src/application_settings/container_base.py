@@ -1,7 +1,9 @@
 """Base classes for containers and sections for configuration and settings."""
+import json
 import sys
 from abc import ABC, abstractmethod
 from dataclasses import asdict, fields, replace
+from enum import Enum
 from pathlib import Path
 from re import sub
 from typing import Any, TypeVar
@@ -22,6 +24,12 @@ _ContainerSectionT = TypeVar("_ContainerSectionT", bound="ContainerSectionBase")
 
 _ALL_CONTAINERS: dict[int, Any] = {}
 _ALL_PATHS: dict[int, Path | None] = {}
+
+
+class FileFormat(str, Enum):
+    "File formats that are supported"
+    TOML = "toml"
+    JSON = "json"
 
 
 @dataclass(frozen=True)
@@ -49,7 +57,7 @@ class ContainerBase(ABC):
 
     @classmethod
     def default_filename(cls: type[_ContainerT]) -> str:
-        """Return the kind_string, lowercase, with '.toml' extension."""
+        """Return the kind_string, lowercase, with the extension that fits the file_format."""
         return f"{cls.kind_string().lower()}.toml"
 
     @classmethod
@@ -146,8 +154,14 @@ class ContainerBase(ABC):
         data_stored: dict[str, Any] = {}
 
         if path := cls.filepath():
-            with path.open(mode="rb") as fptr:
-                data_stored = tomllib.load(fptr)
+            if (ext := path.suffix[1:]) == FileFormat.TOML.value:
+                with path.open(mode="rb") as fptr:
+                    data_stored = tomllib.load(fptr)
+            elif ext == FileFormat.JSON.value:
+                with path.open(mode="r") as fptr:
+                    data_stored = json.load(fptr)
+            else:
+                print(f"Unknown file format {path.suffix[1:]} given in {path}.")
         else:
             # This situation can occur if no valid path was given as an argument, and
             # the default path is set to None.
@@ -181,8 +195,14 @@ class ContainerBase(ABC):
         """Private method to save the singleton to file."""
         if path := self.filepath():
             path.parent.mkdir(parents=True, exist_ok=True)
-            with path.open(mode="wb") as fptr:
-                tomli_w.dump(asdict(self), fptr)
+            if (ext := path.suffix[1:]) == FileFormat.TOML.value:
+                with path.open(mode="wb") as fptr:
+                    tomli_w.dump(asdict(self), fptr)
+            elif ext == FileFormat.JSON.value:
+                with path.open(mode="w") as fptr:
+                    json.dump(asdict(self), fptr)
+            else:
+                print(f"Unknown file format {path.suffix[1:]} given in {path}.")
         else:
             # This situation can occur if no valid path was given as an argument, and
             # the default path is set to None.

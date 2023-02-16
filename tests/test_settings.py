@@ -56,3 +56,54 @@ def test_update(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
 
     assert new_settings.section1.setting1 == "new s1"
     assert AnExample1Settings.get().section1.setting2 == 222
+
+
+def test_update_json(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    def mock_default_filepath() -> Path | None:
+        return None
+
+    monkeypatch.setattr(AnExample1Settings, "default_filepath", mock_default_filepath)
+    AnExample1Settings.set_filepath("")
+    assert AnExample1Settings.get(reload=True).section1.setting1 == "setting1"
+    assert AnExample1Settings.get().section1.setting2 == 2
+    tmp_filepath = (
+        tmp_path
+        / AnExample1Settings.default_foldername()
+        / AnExample1Settings.default_filename().replace("toml", "json")
+    )
+    AnExample1Settings.set_filepath(tmp_filepath)
+    new_settings = AnExample1Settings.get().update(
+        {"section1": {"setting1": "new s1a", "setting2": 333}}
+    )
+
+    assert new_settings.section1.setting1 == "new s1a"
+    assert AnExample1Settings.get().section1.setting2 == 333
+
+
+def test_update_ini(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, capfd: pytest.CaptureFixture[str]
+) -> None:
+    def mock_default_filepath() -> Path | None:
+        return None
+
+    monkeypatch.setattr(AnExample1Settings, "default_filepath", mock_default_filepath)
+    AnExample1Settings.set_filepath("")
+    assert AnExample1Settings.get(reload=True).section1.setting1 == "setting1"
+    assert AnExample1Settings.get().section1.setting2 == 2
+    tmp_filepath = (
+        tmp_path
+        / AnExample1Settings.default_foldername()
+        / AnExample1Settings.default_filename().replace("toml", "ini")
+    )
+    AnExample1Settings.set_filepath(tmp_filepath)
+    new_settings = AnExample1Settings.get().update(
+        {"section1": {"setting1": "new s1a", "setting2": 333}}
+    )
+
+    # new settings have been applied but not stored to file
+    assert new_settings.section1.setting1 == "new s1a"
+    assert AnExample1Settings.get().section1.setting2 == 333
+    captured = capfd.readouterr()
+    assert "Unknown file format ini given in" in captured.out
+    assert AnExample1Settings.get(reload=True).section1.setting1 == "setting1"
+    assert AnExample1Settings.get().section1.setting2 == 2
