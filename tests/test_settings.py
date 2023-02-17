@@ -1,11 +1,16 @@
 # pylint: disable=missing-module-docstring
 # pylint: disable=missing-function-docstring
+# pylint: disable=consider-alternative-union-syntax
+import sys
 from pathlib import Path
 
 import pytest
 from pydantic.dataclasses import dataclass
 
 from application_settings import SettingsBase, SettingsSectionBase
+
+if sys.version_info < (3, 10):
+    from typing import Union
 
 
 @dataclass(frozen=True)
@@ -33,8 +38,15 @@ def test_paths() -> None:
 
 
 def test_update(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
-    def mock_default_filepath() -> Path | None:
-        return None
+    if sys.version_info >= (3, 10):
+
+        def mock_default_filepath() -> Path | None:
+            return None
+
+    else:
+
+        def mock_default_filepath() -> Union[Path, None]:
+            return None
 
     monkeypatch.setattr(AnExample1Settings, "default_filepath", mock_default_filepath)
     AnExample1Settings.set_filepath("")
@@ -59,8 +71,15 @@ def test_update(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
 
 
 def test_update_json(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
-    def mock_default_filepath() -> Path | None:
-        return None
+    if sys.version_info >= (3, 10):
+
+        def mock_default_filepath() -> Path | None:
+            return None
+
+    else:
+
+        def mock_default_filepath() -> Union[Path, None]:
+            return None
 
     monkeypatch.setattr(AnExample1Settings, "default_filepath", mock_default_filepath)
     AnExample1Settings.set_filepath("")
@@ -83,8 +102,15 @@ def test_update_json(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
 def test_update_ini(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path, capfd: pytest.CaptureFixture[str]
 ) -> None:
-    def mock_default_filepath() -> Path | None:
-        return None
+    if sys.version_info >= (3, 10):
+
+        def mock_default_filepath() -> Path | None:
+            return None
+
+    else:
+
+        def mock_default_filepath() -> Union[Path, None]:
+            return None
 
     monkeypatch.setattr(AnExample1Settings, "default_filepath", mock_default_filepath)
     AnExample1Settings.set_filepath("")

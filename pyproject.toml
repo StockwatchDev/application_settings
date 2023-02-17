@@ -28,7 +28,7 @@ include = [
 
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.9"
 pathvalidate = "^2.5"
 pydantic = "^1.10"
 tomli = { version = "^2.0", python = "<3.11" }
@@ -126,7 +126,7 @@ legacy_tox_ini = """
 [tox]
 skipsdist = true
 envlist =
-    py{310,311}
+    py{39,310,311}
     style
     typing
 

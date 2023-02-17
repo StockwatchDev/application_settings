@@ -1,3 +1,4 @@
+# pylint: disable=consider-alternative-union-syntax
 """Base classes for containers and sections for configuration and settings."""
 import json
 import sys
@@ -12,6 +13,9 @@ import tomli_w
 from pathvalidate import is_valid_filepath
 from pydantic.dataclasses import dataclass
 
+if sys.version_info < (3, 10):
+    from typing import Union
+
 if sys.version_info >= (3, 11):
     import tomllib
 else:
@@ -23,7 +27,10 @@ _ContainerSectionT = TypeVar("_ContainerSectionT", bound="ContainerSectionBase")
 
 
 _ALL_CONTAINERS: dict[int, Any] = {}
-_ALL_PATHS: dict[int, Path | None] = {}
+if sys.version_info >= (3, 10):
+    _ALL_PATHS: dict[int, Path | None] = {}
+else:
+    _ALL_PATHS: dict[int, Union[Path, None]] = {}
 
 
 class FileFormat(str, Enum):
@@ -60,35 +67,81 @@ class ContainerBase(ABC):
         """Return the kind_string, lowercase, with the extension that fits the file_format."""
         return f"{cls.kind_string().lower()}.toml"
 
-    @classmethod
-    def default_filepath(cls: type[_ContainerT]) -> Path | None:
-        """Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml"""
-        return Path.home() / f"{cls.default_foldername()}" / cls.default_filename()
+    if sys.version_info >= (3, 10):
 
-    @classmethod
-    def set_filepath(cls: type[_ContainerT], file_path: str | Path = "") -> None:
-        """Set the path for the file (a singleton)."""
+        @classmethod
+        def default_filepath(cls: type[_ContainerT]) -> Path | None:
+            """Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml"""
+            return Path.home() / f"{cls.default_foldername()}" / cls.default_filename()
 
-        path: Path | None = None
-        if isinstance(file_path, Path):
-            path = file_path.resolve()
-        elif file_path:
-            if is_valid_filepath(file_path, platform="auto"):
-                path = Path(file_path).resolve()
+        @classmethod
+        def set_filepath(cls: type[_ContainerT], file_path: str | Path = "") -> None:
+            """Set the path for the file (a singleton)."""
+
+            path: Path | None = None
+            if isinstance(file_path, Path):
+                path = file_path.resolve()
+            elif file_path:
+                if is_valid_filepath(file_path, platform="auto"):
+                    path = Path(file_path).resolve()
+                else:
+                    raise ValueError(
+                        f"Given path: '{file_path}' is not a valid path for this OS"
+                    )
+
+            if path:
+                _ALL_PATHS[id(cls)] = path
             else:
-                raise ValueError(
-                    f"Given path: '{file_path}' is not a valid path for this OS"
-                )
+                _ALL_PATHS.pop(id(cls), None)
 
-        if path:
-            _ALL_PATHS[id(cls)] = path
-        else:
-            _ALL_PATHS.pop(id(cls), None)
+        @classmethod
+        def filepath(cls) -> Path | None:
+            """Return the path for the file that holds the config / settings."""
+            return _ALL_PATHS.get(id(cls), cls.default_filepath())
 
-    @classmethod
-    def filepath(cls) -> Path | None:
-        """Return the path for the file that holds the config / settings."""
-        return _ALL_PATHS.get(id(cls), cls.default_filepath())
+        @classmethod
+        def _get(cls: type[_ContainerT]) -> _ContainerT | None:
+            """Private getter for the singleton."""
+            return _ALL_CONTAINERS.get(id(cls))
+
+    else:
+
+        @classmethod
+        def default_filepath(cls: type[_ContainerT]) -> Union[Path, None]:
+            """Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml"""
+            return Path.home() / f"{cls.default_foldername()}" / cls.default_filename()
+
+        @classmethod
+        def set_filepath(
+            cls: type[_ContainerT], file_path: Union[str, Path] = ""
+        ) -> None:
+            """Set the path for the file (a singleton)."""
+
+            path: Union[Path, None] = None
+            if isinstance(file_path, Path):
+                path = file_path.resolve()
+            elif file_path:
+                if is_valid_filepath(file_path, platform="auto"):
+                    path = Path(file_path).resolve()
+                else:
+                    raise ValueError(
+                        f"Given path: '{file_path}' is not a valid path for this OS"
+                    )
+
+            if path:
+                _ALL_PATHS[id(cls)] = path
+            else:
+                _ALL_PATHS.pop(id(cls), None)
+
+        @classmethod
+        def filepath(cls) -> Union[Path, None]:
+            """Return the path for the file that holds the config / settings."""
+            return _ALL_PATHS.get(id(cls), cls.default_filepath())
+
+        @classmethod
+        def _get(cls: type[_ContainerT]) -> Union[_ContainerT, None]:
+            """Private getter for the singleton."""
+            return _ALL_CONTAINERS.get(id(cls))
 
     @classmethod
     def get(cls: type[_ContainerT], reload: bool = False) -> _ContainerT:
@@ -102,11 +155,6 @@ class ContainerBase(ABC):
         else:
             _the_config = _the_container_or_none
         return _the_config
-
-    @classmethod
-    def _get(cls: type[_ContainerT]) -> _ContainerT | None:
-        """Private getter for the singleton."""
-        return _ALL_CONTAINERS.get(id(cls))
 
     def update(self: _ContainerT, changes: dict[str, dict[str, Any]]) -> _ContainerT:
         "Update and save the settings with data specified in changes; not meant for config"

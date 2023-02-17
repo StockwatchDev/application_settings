@@ -1,5 +1,6 @@
 # pylint: disable=missing-module-docstring
 # pylint: disable=missing-function-docstring
+# pylint: disable=consider-alternative-union-syntax
 import json
 import sys
 from pathlib import Path
@@ -11,6 +12,9 @@ from pydantic import ValidationError
 from pydantic.dataclasses import dataclass
 
 from application_settings import ConfigBase, ConfigSectionBase, __version__
+
+if sys.version_info < (3, 10):
+    from typing import Union
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -102,8 +106,15 @@ def test_paths(toml_file: Path) -> None:
 def test_get_defaults(
     monkeypatch: pytest.MonkeyPatch, capfd: pytest.CaptureFixture[str]
 ) -> None:
-    def mock_default_filepath() -> Path | None:
-        return None
+    if sys.version_info >= (3, 10):
+
+        def mock_default_filepath() -> Path | None:
+            return None
+
+    else:
+
+        def mock_default_filepath() -> Union[Path, None]:
+            return None
 
     monkeypatch.setattr(AnExample1Config, "default_filepath", mock_default_filepath)
     AnExample1Config.set_filepath("")
@@ -122,10 +133,19 @@ def test_get(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
     assert AnExample1Config.get().section1.field2 == 22
 
     # test that by default it is not reloaded
-    def mock_tomllib_load(
-        fptr: Any,  # pylint: disable=unused-argument
-    ) -> dict[str, dict[str, str | int]]:
-        return {"section1": {"field1": "f1", "field2": 222}}
+    if sys.version_info >= (3, 10):
+
+        def mock_tomllib_load(
+            fptr: Any,  # pylint: disable=unused-argument
+        ) -> dict[str, dict[str, str | int]]:
+            return {"section1": {"field1": "f1", "field2": 222}}
+
+    else:
+
+        def mock_tomllib_load(
+            fptr: Any,  # pylint: disable=unused-argument
+        ) -> dict[str, dict[str, Union[str, int]]]:
+            return {"section1": {"field1": "f1", "field2": 222}}
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
     assert AnExample1Config.get().section1.field2 == 22
@@ -149,10 +169,19 @@ def test_get_ini(ini_file: Path, capfd: pytest.CaptureFixture[str]) -> None:
 
 
 def test_type_coercion(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
-    def mock_tomllib_load(
-        fptr: Any,  # pylint: disable=unused-argument
-    ) -> dict[str, dict[str, str | int]]:
-        return {"section1": {"field1": True, "field2": "22"}}
+    if sys.version_info >= (3, 10):
+
+        def mock_tomllib_load(
+            fptr: Any,  # pylint: disable=unused-argument
+        ) -> dict[str, dict[str, str | int]]:
+            return {"section1": {"field1": True, "field2": "22"}}
+
+    else:
+
+        def mock_tomllib_load(
+            fptr: Any,  # pylint: disable=unused-argument
+        ) -> dict[str, dict[str, Union[str, int]]]:
+            return {"section1": {"field1": True, "field2": "22"}}
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
     AnExample1Config.set_filepath(toml_file)
@@ -164,10 +193,19 @@ def test_type_coercion(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None
 
 
 def test_wrong_type(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
-    def mock_tomllib_load(
-        fptr: Any,  # pylint: disable=unused-argument
-    ) -> dict[str, dict[str, tuple[str, int] | None]]:
-        return {"section1": {"field1": ("f1", 22), "field2": None}}
+    if sys.version_info >= (3, 10):
+
+        def mock_tomllib_load(
+            fptr: Any,  # pylint: disable=unused-argument
+        ) -> dict[str, dict[str, str | int]]:
+            return {"section1": {"field1": ("f1", 22), "field2": None}}  # type: ignore
+
+    else:
+
+        def mock_tomllib_load(
+            fptr: Any,  # pylint: disable=unused-argument
+        ) -> dict[str, dict[str, Union[str, int]]]:
+            return {"section1": {"field1": ("f1", 22), "field2": None}}  # type: ignore
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
 
@@ -182,10 +220,19 @@ def test_wrong_type(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
 def test_missing_extra_attributes(
     monkeypatch: pytest.MonkeyPatch, toml_file: Path
 ) -> None:
-    def mock_tomllib_load(
-        fptr: Any,  # pylint: disable=unused-argument
-    ) -> dict[str, dict[str, str | int]]:
-        return {"section1": {"field1": "f1", "field3": 22}}
+    if sys.version_info >= (3, 10):
+
+        def mock_tomllib_load(
+            fptr: Any,  # pylint: disable=unused-argument
+        ) -> dict[str, dict[str, str | int]]:
+            return {"section1": {"field1": "f1", "field3": 22}}
+
+    else:
+
+        def mock_tomllib_load(
+            fptr: Any,  # pylint: disable=unused-argument
+        ) -> dict[str, dict[str, Union[str, int]]]:
+            return {"section1": {"field1": "f1", "field3": 22}}
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
 
@@ -223,13 +270,6 @@ class Example2Config(ConfigBase):
 def test_attributes_no_default(
     monkeypatch: pytest.MonkeyPatch, toml_file: Path
 ) -> None:
-    def mock_tomllib_load1(
-        fptr: Any,  # pylint: disable=unused-argument
-    ) -> dict[str, dict[str, str | int]]:
-        return {"section2": {"field1": "f1", "field2": 22}}
-
-    monkeypatch.setattr(tomllib, "load", mock_tomllib_load1)
-
     Example2Config.set_filepath(toml_file)
     with pytest.raises(TypeError):
         _ = Example2Config.get(reload=True)
