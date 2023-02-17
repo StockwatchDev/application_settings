@@ -27,6 +27,11 @@ jobs:
             arch: x64
             os: ubuntu-latest
             toxenv: typing
+          - name: Test suite with py39-ubuntu
+            python: '3.9'
+            arch: x64
+            os: ubuntu-latest
+            toxenv: py39
           - name: Test suite with py310-ubuntu
             python: '3.10'
             arch: x64
