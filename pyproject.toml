@@ -127,12 +127,16 @@ runtime-typing = false
 [tool.pylint.similarities]
 ignore-imports = "yes"
 
-[tool.portray]
-extra_markdown_extensions = [
+[tool.portray.mkdocs]
+markdown_extensions = [
     "pymdownx.highlight",
     "pymdownx.superfences",
     "pymdownx.tabbed",
 ]
+
+[[tool.portray.extra_markdown_extensions]]
+[tool.portray.extra_markdown_extensions."pymdownx.tabbed"]
+alternate_style = true
 
 [tool.portray.mkdocs.theme]
 name = "material"
@@ -142,20 +146,23 @@ palette = { scheme = "slate", primary = "blue" }
 Home = "README.md"
 
 [[tool.portray.mkdocs.nav]]
-"Quick start" = "docs/1-Quick_start.md"
+"Quick start" = "docs/Quick_start.md"
 
 [[tool.portray.mkdocs.nav]]
 [[tool.portray.mkdocs.nav.Usage]]
-"2. Installation" = "docs/2-Installation.md"
+"1. Installation" = "docs/1-Installation.md"
 
 [[tool.portray.mkdocs.nav.Usage]]
-"3. Defining parameters" = "docs/3-Defining_parameters.md"
+"2. Defining parameters" = "docs/2-Defining_parameters.md"
 
 [[tool.portray.mkdocs.nav.Usage]]
-"4. Using parameters" = "docs/4-Using_parameters.md"
+"3. Using parameters" = "docs/3-Using_parameters.md"
 
 [[tool.portray.mkdocs.nav.Usage]]
-"5. File location" = "docs/5-File_location.md"
+"4. File location" = "docs/4-File_location.md"
+
+[[tool.portray.mkdocs.nav.Usage]]
+"5. Handling deviations" = "docs/5-Handling_deviations.md"
 
 [[tool.portray.mkdocs.nav]]
 Changelog = "CHANGELOG.md"
