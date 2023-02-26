@@ -1,34 +1,4 @@
-# application_settings
-
-[![pypi](https://img.shields.io/pypi/v/application-settings.svg)](https://pypi.python.org/pypi/application-settings)
-[![versions](https://img.shields.io/pypi/pyversions/application-settings.svg)](https://github.com/StockwatchDev/application_settings)
-[![Build Status](https://github.com/StockwatchDev/application_settings/actions/workflows/application_settings-tests.yml/badge.svg?branch=develop)](https://github.com/StockwatchDev/application_settings/actions)
-[![codecov](https://codecov.io/gh/StockwatchDev/application_settings/branch/develop/graph/badge.svg)](https://app.codecov.io/gh/StockwatchDev/application_settings)
-[![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
-[![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-## What and why
-
-Application\_settings is a module for providing a python application with configuration
-and settings. It uses [toml](https://toml.io/en/) configuration files that are parsed
-into dataclasses. This brings some benefits:
-
-- Configuration parameters are typed, which allows for improved static code analyses.
-- IDEs will provide helpful hints and completion when using configuration parameters.
-- More control over what happens when a config file contains mistakes
-  (by leveraging the power of [pydantic](https://docs.pydantic.dev/)).
-- Possibility to specify defaults when no config file is found or entries are missing.
-- Configuration described in a human-usable, flexible, standardardized and not overly
-  complex format.
-
-Parsing is done once during first access and the resulting configuration is stored
-as a singleton.
-
-## How
-### Install the package
+## Install the package
 
 On Linux: `python -m pip install -U application_settings`.
 On Windows: `py -m pip install -U application_settings`
