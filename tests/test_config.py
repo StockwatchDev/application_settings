@@ -122,7 +122,7 @@ def test_get_defaults(
     assert AnExample1Config.get().section1.field2 == 2
     captured = capfd.readouterr()
     assert (
-        "No path specified for configfile; trying with defaults, but this may not work."
+        "No path specified for config file; trying with defaults, but this may not work."
         in captured.out
     )
 

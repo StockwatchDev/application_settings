@@ -4,17 +4,16 @@ import json
 import sys
 from abc import ABC, abstractmethod
 from dataclasses import asdict, fields, replace
-from enum import Enum
+from enum import Enum, unique
 from pathlib import Path
 from re import sub
-from typing import Any, TypeVar
+from typing import Any, Literal, Optional, TypeVar
 
 import tomli_w
 from pathvalidate import is_valid_filepath
 from pydantic.dataclasses import dataclass
 
-if sys.version_info < (3, 10):
-    from typing import Union
+from .type_notation_helper import PathOptT, PathOrStrT
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -27,16 +26,17 @@ _ContainerSectionT = TypeVar("_ContainerSectionT", bound="ContainerSectionBase")
 
 
 _ALL_CONTAINERS: dict[int, Any] = {}
-if sys.version_info >= (3, 10):
-    _ALL_PATHS: dict[int, Path | None] = {}
-else:
-    _ALL_PATHS: dict[int, Union[Path, None]] = {}
+_ALL_PATHS: dict[int, PathOptT] = {}
 
 
-class FileFormat(str, Enum):
+@unique
+class FileFormat(Enum):
     "File formats that are supported"
     TOML = "toml"
     JSON = "json"
+
+
+ContainerTypeStr = Literal["Config", "Settings"]
 
 
 @dataclass(frozen=True)
@@ -50,8 +50,8 @@ class ContainerBase(ABC):
 
     @classmethod
     @abstractmethod
-    def kind_string(cls: type[_ContainerT]) -> str:
-        "Return either Config or Settings"
+    def kind_string(cls: type[_ContainerT]) -> ContainerTypeStr:
+        "Return either 'Config' or 'Settings'"
 
     @classmethod
     def default_foldername(cls: type[_ContainerT]) -> str:
@@ -67,81 +67,40 @@ class ContainerBase(ABC):
         """Return the kind_string, lowercase, with the extension that fits the file_format."""
         return f"{cls.kind_string().lower()}.toml"
 
-    if sys.version_info >= (3, 10):
+    @classmethod
+    def default_filepath(cls: type[_ContainerT]) -> PathOptT:
+        """Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml"""
+        return Path.home() / f"{cls.default_foldername()}" / cls.default_filename()
 
-        @classmethod
-        def default_filepath(cls: type[_ContainerT]) -> Path | None:
-            """Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml"""
-            return Path.home() / f"{cls.default_foldername()}" / cls.default_filename()
+    @classmethod
+    def set_filepath(cls: type[_ContainerT], file_path: PathOrStrT = "") -> None:
+        """Set the path for the file (a singleton)."""
 
-        @classmethod
-        def set_filepath(cls: type[_ContainerT], file_path: str | Path = "") -> None:
-            """Set the path for the file (a singleton)."""
-
-            path: Path | None = None
-            if isinstance(file_path, Path):
-                path = file_path.resolve()
-            elif file_path:
-                if is_valid_filepath(file_path, platform="auto"):
-                    path = Path(file_path).resolve()
-                else:
-                    raise ValueError(
-                        f"Given path: '{file_path}' is not a valid path for this OS"
-                    )
-
-            if path:
-                _ALL_PATHS[id(cls)] = path
+        path: PathOptT = None
+        if isinstance(file_path, Path):
+            path = file_path.resolve()
+        elif file_path:
+            if is_valid_filepath(file_path, platform="auto"):
+                path = Path(file_path).resolve()
             else:
-                _ALL_PATHS.pop(id(cls), None)
+                raise ValueError(
+                    f"Given path: '{file_path}' is not a valid path for this OS"
+                )
 
-        @classmethod
-        def filepath(cls) -> Path | None:
-            """Return the path for the file that holds the config / settings."""
-            return _ALL_PATHS.get(id(cls), cls.default_filepath())
+        if path:
+            _ALL_PATHS[id(cls)] = path
+        else:
+            _ALL_PATHS.pop(id(cls), None)
 
-        @classmethod
-        def _get(cls: type[_ContainerT]) -> _ContainerT | None:
-            """Private getter for the singleton."""
-            return _ALL_CONTAINERS.get(id(cls))
+    @classmethod
+    def filepath(cls) -> PathOptT:
+        """Return the path for the file that holds the config / settings."""
+        return _ALL_PATHS.get(id(cls), cls.default_filepath())
 
-    else:
-
-        @classmethod
-        def default_filepath(cls: type[_ContainerT]) -> Union[Path, None]:
-            """Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml"""
-            return Path.home() / f"{cls.default_foldername()}" / cls.default_filename()
-
-        @classmethod
-        def set_filepath(
-            cls: type[_ContainerT], file_path: Union[str, Path] = ""
-        ) -> None:
-            """Set the path for the file (a singleton)."""
-
-            path: Union[Path, None] = None
-            if isinstance(file_path, Path):
-                path = file_path.resolve()
-            elif file_path:
-                if is_valid_filepath(file_path, platform="auto"):
-                    path = Path(file_path).resolve()
-                else:
-                    raise ValueError(
-                        f"Given path: '{file_path}' is not a valid path for this OS"
-                    )
-
-            if path:
-                _ALL_PATHS[id(cls)] = path
-            else:
-                _ALL_PATHS.pop(id(cls), None)
-
-        @classmethod
-        def filepath(cls) -> Union[Path, None]:
-            """Return the path for the file that holds the config / settings."""
-            return _ALL_PATHS.get(id(cls), cls.default_filepath())
-
-        @classmethod
-        def _get(cls: type[_ContainerT]) -> Union[_ContainerT, None]:
-            """Private getter for the singleton."""
-            return _ALL_CONTAINERS.get(id(cls))
+    @classmethod
+    def _get(cls: type[_ContainerT]) -> Optional[_ContainerT]:
+        """Private getter for the singleton."""
+        return _ALL_CONTAINERS.get(id(cls))
 
     @classmethod
     def get(cls: type[_ContainerT], reload: bool = False) -> _ContainerT:
@@ -202,10 +161,10 @@ class ContainerBase(ABC):
         data_stored: dict[str, Any] = {}
 
         if path := cls.filepath():
-            if (ext := path.suffix[1:]) == FileFormat.TOML.value:
+            if (ext := path.suffix[1:]) == str(FileFormat.TOML.value).lower():
                 with path.open(mode="rb") as fptr:
                     data_stored = tomllib.load(fptr)
-            elif ext == FileFormat.JSON.value:
+            elif ext == str(FileFormat.JSON.value):
                 with path.open(mode="r") as fptr:
                     data_stored = json.load(fptr)
             else:
@@ -214,7 +173,7 @@ class ContainerBase(ABC):
             # This situation can occur if no valid path was given as an argument, and
             # the default path is set to None.
             print(
-                f"No path specified for {cls.kind_string().lower()}file; trying with defaults, but this may not work."
+                f"No path specified for {cls.kind_string().lower()} file; trying with defaults, but this may not work."
             )
         return data_stored
 
