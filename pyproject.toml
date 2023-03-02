@@ -156,10 +156,10 @@ Home = "README.md"
 "2. Defining parameters" = "docs/2-Defining_parameters.md"
 
 [[tool.portray.mkdocs.nav.Usage]]
-"3. Using parameters" = "docs/3-Using_parameters.md"
+"3. Files and file location" = "docs/3-Files.md"
 
 [[tool.portray.mkdocs.nav.Usage]]
-"4. File location" = "docs/4-File_location.md"
+"4. Using parameters" = "docs/4-Using_parameters.md"
 
 [[tool.portray.mkdocs.nav.Usage]]
 "5. Handling deviations" = "docs/5-Handling_deviations.md"
