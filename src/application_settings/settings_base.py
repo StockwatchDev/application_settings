@@ -3,7 +3,7 @@ from typing import TypeVar
 
 from pydantic.dataclasses import dataclass
 
-from .container_base import ContainerBase, ContainerSectionBase
+from .container_base import ContainerBase, ContainerSectionBase, ContainerTypeStr
 
 SettingsT = TypeVar("SettingsT", bound="SettingsBase")
 SettingsSectionT = TypeVar("SettingsSectionT", bound="SettingsSectionBase")
@@ -19,6 +19,6 @@ class SettingsBase(ContainerBase):
     """Base class for main Settings class"""
 
     @classmethod
-    def kind_string(cls: type[SettingsT]) -> str:
-        "Return Settings"
+    def kind_string(cls: type[SettingsT]) -> ContainerTypeStr:
+        "Return 'Settings'"
         return "Settings"

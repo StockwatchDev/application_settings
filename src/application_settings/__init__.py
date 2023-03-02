@@ -9,6 +9,7 @@ from .settings_base import (
     SettingsSectionT,
     SettingsT,
 )
+from .type_notation_helper import PathOptT, PathOrStrT
 
 __version__ = version("application_settings")
 
@@ -17,6 +18,8 @@ __all__ = [
     "ConfigT",
     "ConfigSectionBase",
     "ConfigBase",
+    "PathOptT",
+    "PathOrStrT",
     "SettingsSectionT",
     "SettingsT",
     "SettingsSectionBase",
