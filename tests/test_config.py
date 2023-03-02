@@ -1,6 +1,7 @@
 # pylint: disable=missing-module-docstring
 # pylint: disable=missing-function-docstring
 # pylint: disable=consider-alternative-union-syntax
+# pylint: disable=redefined-outer-name
 import json
 import sys
 from pathlib import Path
@@ -154,7 +155,7 @@ def test_get(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
     assert AnExample1Config.get(reload=True).section1.field2 == 222
 
 
-def test_get_json(monkeypatch: pytest.MonkeyPatch, json_file: Path) -> None:
+def test_get_json(json_file: Path) -> None:
     AnExample1Config.set_filepath(json_file)
     assert AnExample1Config.get(reload=True).section1.field1 == "f2"
     assert AnExample1Config.get().section1.field2 == 33
