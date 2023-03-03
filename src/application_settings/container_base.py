@@ -54,6 +54,11 @@ class ContainerBase(ABC):
         "Return either 'Config' or 'Settings'"
 
     @classmethod
+    @abstractmethod
+    def default_file_format(cls: type[_ContainerT]) -> FileFormat:
+        "Return the default file format"
+
+    @classmethod
     def default_foldername(cls: type[_ContainerT]) -> str:
         """Return the class name without kind_string, lowercase, with a preceding dot and underscores to seperate words."""
         kind_str = cls.kind_string()
@@ -65,12 +70,12 @@ class ContainerBase(ABC):
     @classmethod
     def default_filename(cls: type[_ContainerT]) -> str:
         """Return the kind_string, lowercase, with the extension that fits the file_format."""
-        return f"{cls.kind_string().lower()}.toml"
+        return f"{cls.kind_string().lower()}.{cls.default_file_format().value}"
 
     @classmethod
     def default_filepath(cls: type[_ContainerT]) -> PathOptT:
         """Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml"""
-        return Path.home() / f"{cls.default_foldername()}" / cls.default_filename()
+        return Path.home() / cls.default_foldername() / cls.default_filename()
 
     @classmethod
     def set_filepath(cls: type[_ContainerT], file_path: PathOrStrT = "") -> None:

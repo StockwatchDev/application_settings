@@ -3,7 +3,12 @@ from typing import Any, TypeVar
 
 from pydantic.dataclasses import dataclass
 
-from .container_base import ContainerBase, ContainerSectionBase, ContainerTypeStr
+from .container_base import (
+    ContainerBase,
+    ContainerSectionBase,
+    ContainerTypeStr,
+    FileFormat,
+)
 
 ConfigT = TypeVar("ConfigT", bound="ConfigBase")
 ConfigSectionT = TypeVar("ConfigSectionT", bound="ConfigSectionBase")
@@ -22,6 +27,11 @@ class ConfigBase(ContainerBase):
     def kind_string(cls: type[ConfigT]) -> ContainerTypeStr:
         "Return 'Config'"
         return "Config"
+
+    @classmethod
+    def default_file_format(cls: type[ConfigT]) -> FileFormat:
+        "Return the default file format"
+        return FileFormat.TOML
 
     def update(self: ConfigT, changes: dict[str, dict[str, Any]]) -> ConfigT:
         "Update and save the settings with data specified in changes; not meant for config"
