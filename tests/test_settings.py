@@ -31,7 +31,7 @@ class AnExample1Settings(SettingsBase):
 def test_paths() -> None:
     # default_filepath:
     if the_path := AnExample1Settings.default_filepath():
-        assert the_path.parts[-1] == "settings.toml"
+        assert the_path.parts[-1] == "settings.json"
         assert the_path.parts[-2] == ".an_example1"
     else:
         assert False
@@ -119,7 +119,7 @@ def test_update_ini(
     tmp_filepath = (
         tmp_path
         / AnExample1Settings.default_foldername()
-        / AnExample1Settings.default_filename().replace("toml", "ini")
+        / AnExample1Settings.default_filename().replace("json", "ini")
     )
     AnExample1Settings.set_filepath(tmp_filepath)
     new_settings = AnExample1Settings.get().update(
