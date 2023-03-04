@@ -17,7 +17,7 @@ application\_settings takes care of the logic."
 
 Application\_settings is a package for providing a python application with parameters for
 configuration and settings. It uses [toml](https://toml.io/en/) or 
-[json](https://docs.python.org/3/library/json.html) files that are parsed
+[json](https://www.json.org/) files that are parsed
 into dataclasses. This brings some benefits:
 
 - Parameters are typed, which allows for improved static code analyses.
@@ -26,7 +26,7 @@ into dataclasses. This brings some benefits:
   (by leveraging the power of [pydantic](https://docs.pydantic.dev/)).
 - Possibility to specify defaults when no file is found or entries are missing.
 - Configuration parameters are read-only (i.e., changed by editing the config file); we
-  recommend (and support) the use of `toml` for this, which is a human-orineted,
+  recommend (and support) the use of `toml` for this, which is a human-oriented,
   flexible, standardardized and not overly complex format.
 - Settings parameters are read-write (i.e., mostly changed via the UI of the
   application); we recommend (and support) use `json` for this, an established

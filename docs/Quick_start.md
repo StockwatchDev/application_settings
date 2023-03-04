@@ -73,7 +73,7 @@ By default, the following files are expected for the dataclasses defined above:
     # A config is read-only, so they will not be overwritten by your application
     # (unlike for settings)
     [section1]
-    field1 = "my own version of field1"
+    field1 = "my own version of the first field"
     field2 = 22
     ```
 
