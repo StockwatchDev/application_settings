@@ -1,4 +1,4 @@
-### Files for storing parameters
+## Files for storing parameters
 
 Currently, two formats are supported for persistent storage of parameters: 
 [`toml`](https://toml.io/en/) and [`json`](https://www.json.org/).
@@ -85,4 +85,4 @@ MyExampleSettings.set_filepath(r"C:\ProgramData\testsettings.toml")
 ```
 
 The extension of the file is used to select the format for parsing and hence has to be
-either, `json`, `JSON`, `toml` or `TOML`.
+either `json`, `JSON`, `toml` or `TOML`.
