@@ -58,7 +58,7 @@ pylint = "^2.15"
 optional = true
 
 [tool.poetry.group.testrunner.dependencies]
-tox = ">=3.24,<5.0"
+tox = "^4.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -123,22 +123,22 @@ ignore-imports = "yes"
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-skipsdist = true
+isolated_build = true
 envlist =
     py{310,311}
     style
     typing
 
 [testenv]
-whitelist_externals = poetry
+allowlist_externals = poetry
 commands_pre =
-    poetry install --with testing -v
+    poetry install --no-root --with testing -v
 commands =
-    poetry run pytest --cov-report xml:coverage.xml --cov-report term-missing --cov=application_settings tests/
+    poetry run pytest --cov-report xml:coverage.xml --cov-report term-missing --cov=application_settings tests/ --import-mode importlib
 
 [testenv:style]
 commands_pre =
-    poetry install --with style -v
+    poetry install --no-root --with style -v
 commands =
     poetry run python -m black --check ./src
     poetry run isort --check --diff ./src
@@ -146,7 +146,7 @@ commands =
 
 [testenv:typing]
 commands_pre =
-    poetry install --with typing -v
+    poetry install --no-root --with typing -v
 commands =
     poetry run mypy ./src
 """
