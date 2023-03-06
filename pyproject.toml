@@ -50,7 +50,7 @@ mypy = ">=0.942"
 optional = true
 
 [tool.poetry.group.style.dependencies]
-black = "^22.10"
+black = ">=22.10,<24.0"
 isort = "^5.12"
 pylint = "^2.15"
 
@@ -137,16 +137,18 @@ commands =
     poetry run pytest --cov-report xml:coverage.xml --cov-report term-missing --cov=application_settings tests/ --import-mode importlib
 
 [testenv:style]
+skip_install = true
 commands_pre =
-    poetry install --no-root --with style -v
+    poetry install --with style -v
 commands =
     poetry run python -m black --check ./src
     poetry run isort --check --diff ./src
     poetry run pylint --recursive=y ./src
 
 [testenv:typing]
+skip_install = true
 commands_pre =
-    poetry install --no-root --with typing -v
+    poetry install --with typing -v
 commands =
     poetry run mypy ./src
 """
