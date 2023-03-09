@@ -6,7 +6,7 @@ and can hence be installed with `pip`:
 - On Linux: `python -m pip install -U application_settings`
 - On Windows: `py -m pip install -U application_settings`
 
-We have a dependency on the following packages:
+We  have a dependency on the following packages:
 
 - [pathvalidate](https://pypi.org/project/pathvalidate/)
 - [pydantic](https://pypi.org/project/pydantic/)
