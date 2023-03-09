@@ -1,6 +1,6 @@
 ## Install the package
 
-`application_settings` is available on [pypi](https://pypi.org/project/application-settings/)
+`Application_settings` is available on [pypi](https://pypi.org/project/application-settings/)
 and can hence be installed with `pip`:
 
 - On Linux: `python -m pip install -U application_settings`
