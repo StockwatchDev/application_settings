@@ -39,7 +39,7 @@ jobs:
         run: poetry lock --check
 
       - name: Install packages
-        run: poetry install --no-interaction --only docs
+        run: poetry install --no-interaction --with docs
 
 
 
