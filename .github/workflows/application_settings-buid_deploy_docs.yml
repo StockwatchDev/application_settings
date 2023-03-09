@@ -54,3 +54,9 @@ jobs:
           folder: site # The folder the action should deploy.
           branch: gh-pages
           target-folder: develop
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
