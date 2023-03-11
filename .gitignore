@@ -60,7 +60,7 @@ Thumbs.db
 stocks/
 
 # Playground folder for local develop scripts
-#develop/
+develop/
 
 # Build stuff
 build/
