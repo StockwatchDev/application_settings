@@ -1,4 +1,4 @@
-### Use config parameters in your code
+### Use parameters in your code
 
 ```python
 # the first invocation of get() will create the singleton instance of MyExampleConfig
