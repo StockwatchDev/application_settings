@@ -1,3 +1,4 @@
+# Simple workflow for deploying static content to GitHub Pages
 # Run this job on pushes to `develop` (later; now pushes to update-docs).
 name: "Build and deploy docs"
 
@@ -11,18 +12,24 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-
-    # The type of runner that the job will run on
+  # Single deploy job since we're just deploying
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v3
-
       - name: Setup python 3.11
         uses: actions/setup-python@v4
         with:
@@ -48,14 +55,88 @@ jobs:
         run:
           poetry run portray as_html --overwrite -o site
 
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          folder: site # The folder the action should deploy.
-          branch: gh-pages
-          # target-folder: develop
+          # Upload entire repository
+          path: 'site'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
+
+
+
+# jobs:
+#   # This workflow contains a single job called "build"
+#   build:
+
+#     # The type of runner that the job will run on
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repo
+#         uses: actions/checkout@v3
+
+#       - name: Setup python 3.11
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: 3.11
+
+#       - name: Install poetry
+#         uses: snok/install-poetry@v1
+#         with:
+#           version: 1.2.2
+#           virtualenvs-create: true
+#           virtualenvs-in-project: true
+
+#       - name: Check lockfile
+#         run: poetry lock --check
+
+#       - name: Install packages
+#         run: poetry install --no-interaction --with docs
+
+
+
+
+#       - name: Build
+#         run:
+#           poetry run portray as_html --overwrite -o site
+
+#       - name: Deploy
+#         uses: JamesIves/github-pages-deploy-action@v4
+#         with:
+#           folder: site # The folder the action should deploy.
+#           branch: gh-pages
+#           # target-folder: develop
 
       # - name: Push changes
       #   uses: ad-m/github-push-action@master
       #   with:
       #     branch: gh-pages
+
+
+
+
+
+jobs:
+  # Single deploy job since we're just deploying
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          # Upload entire repository
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
