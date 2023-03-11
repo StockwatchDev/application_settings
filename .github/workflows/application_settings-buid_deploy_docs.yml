@@ -49,7 +49,7 @@ jobs:
 
       - name: Build html
         run:
-          poetry run portray as_html --overwrite -o site/develop
+          poetry run portray as_html --overwrite -o site/develop2
 
       - name: Setup Pages
         uses: actions/configure-pages@v3
