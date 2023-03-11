@@ -45,15 +45,16 @@ jobs:
 
 
       - name: Build
-        run: |
-          poetry run portray as_html --overwrite -o site
+        run:
+          poetry run portray on_github_pages --force --ignore-version
+          # poetry run portray as_html --overwrite -o site
 
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: site # The folder the action should deploy.
-          branch: gh-pages
-          target-folder: develop
+      # - name: Deploy
+      #   uses: JamesIves/github-pages-deploy-action@v4
+      #   with:
+      #     folder: site # The folder the action should deploy.
+      #     branch: gh-pages
+      #     target-folder: develop
 
       # - name: Push changes
       #   uses: ad-m/github-push-action@master
