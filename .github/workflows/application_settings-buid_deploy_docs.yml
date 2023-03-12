@@ -49,7 +49,7 @@ jobs:
 
       - name: Build html
         run:
-          poetry run portray as_html --overwrite -o site/develop
+          poetry run portray as_html --overwrite -o site
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
