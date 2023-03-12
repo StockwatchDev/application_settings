@@ -29,6 +29,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Setup python 3.11
         uses: actions/setup-python@v4
         with:
@@ -51,15 +52,9 @@ jobs:
         run:
           poetry run portray as_html --overwrite -o site/develop
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          # Upload site folder
-          path: 'site/'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v1
+          folder: site # The folder the action should deploy.
+          branch: gh-pages
+          target-folder: develop
