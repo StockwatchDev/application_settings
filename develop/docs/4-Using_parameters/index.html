@@ -582,12 +582,38 @@
 <h3 id="use-parameters-in-your-code">Use parameters in your code</h3>
 <p>Let's see if this works!</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># the first invocation of get() will create the singleton instance of MyExampleConfig</span>
-<span class="n">a_variable</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>  <span class="c1"># a_variable == &quot;my own version of field1&quot;</span>
+<span class="n">a_variable</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>  <span class="c1"># a_variable == &quot;my own version of the first field&quot;</span>
 <span class="n">another_variable</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field2</span>  <span class="c1"># another_variable == 22</span>
 
-<span class="c1"># you can reload a config and / or set a non-default path</span>
-<span class="n">another_config</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">configfile_path</span><span class="o">=</span><span class="s2">&quot;./my_config.tml&quot;</span><span class="p">)</span>
+<span class="c1"># you can reload a config</span>
+<span class="n">another_config</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Configuration</label><label for="__tabbed_1_2">Settings</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="c1"># import MyExampleConfig</span>
+
+<span class="c1"># the first invocation of get() will create the singleton instance of MyExampleConfig</span>
+<span class="n">a_variable</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>  <span class="c1"># a_variable == &quot;my own version of the first field&quot;</span>
+<span class="n">another_variable</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field2</span>  <span class="c1"># another_variable == 22</span>
+
+<span class="c1"># if you have edited the config file, you can reload it</span>
+<span class="n">a_new_variable</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="c1"># import MyExampleSettings</span>
+
+<span class="c1"># the first invocation of get() will create the singleton instance of MyExampleSettings</span>
+<span class="n">a_variable</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>  <span class="c1"># a_variable == &quot;my own version of the first field&quot;</span>
+<span class="n">another_variable</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field2</span>  <span class="c1"># another_variable == 22</span>
+
+<span class="c1"># if you have edited the config file, you can reload it</span>
+<span class="n">a_new_variable</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>
+</code></pre></div>
+</div>
+</div>
+</div>
 
 
 
