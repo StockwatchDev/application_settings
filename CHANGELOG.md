@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Files can be formatted as `toml` or `json`.
 - Introduced settings, i.e., read-write parameters (where config is read-only)
 - Now also useable with python 3.9
+- Documentation extended and served on Github Pages
 
 ### Changed
 
