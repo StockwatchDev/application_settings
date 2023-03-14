@@ -20,6 +20,7 @@ configuration and settings. It uses [toml](https://toml.io/en/) or
 [json](https://www.json.org/) files that are parsed
 into dataclasses. This brings some benefits:
 
+- Minimal work for the application designer
 - Parameters are typed, which allows for improved static code analyses.
 - IDEs will provide helpful hints and completion when using the parameters.
 - More control over what happens when a file contains mistakes
