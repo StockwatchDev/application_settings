@@ -580,36 +580,50 @@
   <h1>4. Using parameters</h1>
 
 <h3 id="use-parameters-in-your-code">Use parameters in your code</h3>
-<p>Let's see if this works!</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># the first invocation of get() will create the singleton instance of MyExampleConfig</span>
-<span class="n">a_variable</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>  <span class="c1"># a_variable == &quot;my own version of the first field&quot;</span>
-<span class="n">another_variable</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field2</span>  <span class="c1"># another_variable == 22</span>
-
-<span class="c1"># you can reload a config</span>
-<span class="n">another_config</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</code></pre></div>
+<p>Parameter containers are meant to be instantiated just once and be available globally for
+the application. Therefore, implementation has been done as follows:</p>
+<ul>
+<li>The instance of a parameter container is accessed via a class method <code>get()</code>;</li>
+<li>The parameter value is then obtained by chaining with the section name and the
+  the parameter name;</li>
+<li>The first invocation of <code>get()</code> will create the container instance, try to read values
+  from file and store it for future access in a private module global (a dictionary with
+  the class id as key);</li>
+<li>A parameter container should not be instantiated directly by client code (although it
+  is possible to do so, e.g. for testing purposes);</li>
+<li>If needed, you can set the path for the parameter file before the first invocation of
+  <code>get()</code>.</li>
+</ul>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Configuration</label><label for="__tabbed_1_2">Settings</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="c1"># import MyExampleConfig</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">MyExampleConfig</span>
 
-<span class="c1"># the first invocation of get() will create the singleton instance of MyExampleConfig</span>
-<span class="n">a_variable</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>  <span class="c1"># a_variable == &quot;my own version of the first field&quot;</span>
-<span class="n">another_variable</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field2</span>  <span class="c1"># another_variable == 22</span>
+<span class="c1"># if the config file is not in the default location, then set the path first</span>
+<span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\ProgramData\MyApp\config.toml&quot;</span><span class="p">)</span>
 
-<span class="c1"># if you have edited the config file, you can reload it</span>
-<span class="n">a_new_variable</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>
+<span class="c1"># the next statement will create the config</span>
+<span class="n">field1_var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>  <span class="c1"># field1_var == &quot;my own version of the first field&quot;</span>
+<span class="c1"># the next statement just gets that same instance</span>
+<span class="n">field2_var</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field2</span>  <span class="c1"># field2_var == 22</span>
+
+<span class="c1"># if you have edited the config file, you can reload it (which will create a new instance)</span>
+<span class="n">field1_var</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="c1"># import MyExampleSettings</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">MyExampleSettings</span>
 
-<span class="c1"># the first invocation of get() will create the singleton instance of MyExampleSettings</span>
-<span class="n">a_variable</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>  <span class="c1"># a_variable == &quot;my own version of the first field&quot;</span>
-<span class="n">another_variable</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field2</span>  <span class="c1"># another_variable == 22</span>
+<span class="c1"># if the settings file is not in the default location, then set the path first</span>
+<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\ProgramData\MyApp\settings.json&quot;</span><span class="p">)</span>
 
-<span class="c1"># if you have edited the config file, you can reload it</span>
-<span class="n">a_new_variable</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>
+<span class="c1"># the next statement will create the settings</span>
+<span class="n">name_var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">name</span>  <span class="c1"># name_var == &quot;the name&quot;</span>
+<span class="c1"># the next statement just gets that same instance</span>
+<span class="n">totals_var</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">totals</span>  <span class="c1"># totals_var == 2</span>
+
+<span class="c1"># if you have edited the settings file, you can reload it (which will create a new instance)</span>
+<span class="n">name_var</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">name</span>
 </code></pre></div>
 </div>
 </div>
