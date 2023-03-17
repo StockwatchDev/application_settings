@@ -168,7 +168,7 @@ class ContainerBase(ABC):
                 with path.open(mode="r") as fptr:
                     data_stored = json.load(fptr)
             else:
-                print(f"Unknown file format {path.suffix[1:]} given in {path}.")
+                print(f"Unknown file format {ext} given in {path}.")
         else:
             # This situation can occur if no valid path was given as an argument, and
             # the default path is set to None.
@@ -209,7 +209,7 @@ class ContainerBase(ABC):
                 with path.open(mode="w") as fptr:
                     json.dump(asdict(self), fptr)
             else:
-                print(f"Unknown file format {path.suffix[1:]} given in {path}.")
+                print(f"Unknown file format {ext} given in {path}.")
         else:
             # This situation can occur if no valid path was given as an argument, and
             # the default path is set to None.
