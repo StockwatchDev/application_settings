@@ -12,7 +12,7 @@ import tomli_w
 from pydantic import ValidationError
 from pydantic.dataclasses import dataclass
 
-from application_settings import ConfigBase, ConfigSectionBase, PathOptT, __version__
+from application_settings import ConfigBase, ConfigSectionBase, PathOpt, __version__
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -104,8 +104,7 @@ def test_paths(toml_file: Path) -> None:
 def test_get_defaults(
     monkeypatch: pytest.MonkeyPatch, capfd: pytest.CaptureFixture[str]
 ) -> None:
-
-    def mock_default_filepath() -> PathOptT:
+    def mock_default_filepath() -> PathOpt:
         return None
 
     monkeypatch.setattr(AnExample1Config, "default_filepath", mock_default_filepath)

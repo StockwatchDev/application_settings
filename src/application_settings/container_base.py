@@ -13,7 +13,7 @@ import tomli_w
 from pathvalidate import is_valid_filepath
 from pydantic.dataclasses import dataclass
 
-from .type_notation_helper import PathOptT, PathOrStrT
+from .type_notation_helper import PathOpt, PathOrStr
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -26,7 +26,7 @@ _ContainerSectionT = TypeVar("_ContainerSectionT", bound="ContainerSectionBase")
 
 
 _ALL_CONTAINERS: dict[int, Any] = {}
-_ALL_PATHS: dict[int, PathOptT] = {}
+_ALL_PATHS: dict[int, PathOpt] = {}
 
 
 @unique
@@ -68,15 +68,15 @@ class ContainerBase(ABC):
         return f"{cls.kind_string().lower()}.toml"
 
     @classmethod
-    def default_filepath(cls: type[_ContainerT]) -> PathOptT:
+    def default_filepath(cls: type[_ContainerT]) -> PathOpt:
         """Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml"""
         return Path.home() / f"{cls.default_foldername()}" / cls.default_filename()
 
     @classmethod
-    def set_filepath(cls: type[_ContainerT], file_path: PathOrStrT = "") -> None:
+    def set_filepath(cls: type[_ContainerT], file_path: PathOrStr = "") -> None:
         """Set the path for the file (a singleton)."""
 
-        path: PathOptT = None
+        path: PathOpt = None
         if isinstance(file_path, Path):
             path = file_path.resolve()
         elif file_path:
@@ -93,7 +93,7 @@ class ContainerBase(ABC):
             _ALL_PATHS.pop(id(cls), None)
 
     @classmethod
-    def filepath(cls) -> PathOptT:
+    def filepath(cls) -> PathOpt:
         """Return the path for the file that holds the config / settings."""
         return _ALL_PATHS.get(id(cls), cls.default_filepath())
 
