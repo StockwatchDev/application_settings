@@ -5,7 +5,7 @@ the application. Therefore, implementation has been done as follows:
 
 - The instance of a parameter container is accessed via a class method `get()`;
 - The parameter value is then obtained by chaining with the section name and the
-  the parameter name;
+  parameter name;
 - The first invocation of `get()` will create the container instance, try to read values
   from file and store it for future access in a private module global (a dictionary with
   the class id as key);
