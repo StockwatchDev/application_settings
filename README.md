@@ -1,11 +1,14 @@
 # application_settings
 
+[![pypi](https://img.shields.io/pypi/v/application-settings.svg)](https://pypi.python.org/pypi/application-settings)
+[![versions](https://img.shields.io/pypi/pyversions/application-settings.svg)](https://github.com/StockwatchDev/application_settings)
 [![Build Status](https://github.com/StockwatchDev/application_settings/actions/workflows/application_settings-tests.yml/badge.svg?branch=develop)](https://github.com/StockwatchDev/application_settings/actions)
 [![codecov](https://codecov.io/gh/StockwatchDev/application_settings/branch/develop/graph/badge.svg)](https://app.codecov.io/gh/StockwatchDev/application_settings)
 [![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
 [![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## What and why
 
@@ -100,15 +103,15 @@ spec, it is first validated for the platform that you are using; if the validati
 a `ValueError` is raised, otherwise a `Path` is constructed from the string.
 
 If you do not specify a `configfile_path`, then a default location is fetched via
-`default_config_filepath()`. Class `ConfigBase` provides a default implementation, being
+`default_filepath()`. Class `ConfigBase` provides a default implementation, being
 a filename `config.toml` located in a subfolder of your home directory. The default name
-of that subfolder is provided by `default_config_foldername()` and consists
+of that subfolder is provided by `default_foldername()` and consists
 of a dot, followed by a name derived from your container class: the word `Config` is
 removed, underscores in front of capitals (except for the first letter) and all lower case.
 See also the example above. If you do not like the default implementation, you can
-override `default_config_filepath()` and/or `default_config_foldername()`. If you want to
+override `default_filepath()` and/or `default_foldername()`. If you want to
 enforce that a `configfile_path` is specified in `get()`, then let
-`default_config_filepath()` return `None`.
+`default_filepath()` return `None`.
 
 ## Handling deviations in the config file
 

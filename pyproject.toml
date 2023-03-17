@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "application_settings"
-version = "0.1.0"
+version = "0.2.0"
 description = "For providing a python application with configuration and/or settings"
 authors = ["Stockwatchdevs <stockwatchdevs@gmail.com>"]
 license = "MIT"
@@ -28,10 +28,11 @@ include = [
 
 
 [tool.poetry.dependencies]
-python = "^3.10"
-pydantic = "^1.10"
-tomli = { version = "^2.0.1", python = "<3.11" }
+python = "^3.9"
 pathvalidate = "^2.5"
+pydantic = "^1.10"
+tomli = { version = "^2.0", python = "<3.11" }
+tomli-w = "^1.0"
 
 [tool.poetry.group.testing]
 optional = true
@@ -125,7 +126,7 @@ legacy_tox_ini = """
 [tox]
 isolated_build = true
 envlist =
-    py{310,311}
+    py{39,310,311}
     style
     typing
 
