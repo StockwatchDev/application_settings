@@ -978,7 +978,7 @@
 <p>Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def default_filepath(cls: type[_ContainerT]) -&gt; PathOptT:
+<div class="highlight"><pre><span></span><code>        def default_filepath(cls: type[_ContainerT]) -&gt; PathOpt:
 
             &quot;&quot;&quot;Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml&quot;&quot;&quot;
 
@@ -1014,7 +1014,7 @@
 <p>Return the path for the file that holds the config / settings.</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def filepath(cls) -&gt; PathOptT:
+<div class="highlight"><pre><span></span><code>        def filepath(cls) -&gt; PathOpt:
 
             &quot;&quot;&quot;Return the path for the file that holds the config / settings.&quot;&quot;&quot;
 
@@ -1070,11 +1070,11 @@
 <p>Set the path for the file (a singleton).</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def set_filepath(cls: type[_ContainerT], file_path: PathOrStrT = &quot;&quot;) -&gt; None:
+<div class="highlight"><pre><span></span><code>        def set_filepath(cls: type[_ContainerT], file_path: PathOrStr = &quot;&quot;) -&gt; None:
 
             &quot;&quot;&quot;Set the path for the file (a singleton).&quot;&quot;&quot;
 
-            path: PathOptT = None
+            path: PathOpt = None
 
             if isinstance(file_path, Path):
 

@@ -941,7 +941,7 @@
 
     from pydantic.dataclasses import dataclass
 
-    from .type_notation_helper import PathOptT, PathOrStrT
+    from .type_notation_helper import PathOpt, PathOrStr
 
     if sys.version_info &gt;= (3, 11):
 
@@ -961,7 +961,7 @@
 
     _ALL_CONTAINERS: dict[int, Any] = {}
 
-    _ALL_PATHS: dict[int, PathOptT] = {}
+    _ALL_PATHS: dict[int, PathOpt] = {}
 
 
 
@@ -1037,7 +1037,7 @@
 
         @classmethod
 
-        def default_filepath(cls: type[_ContainerT]) -&gt; PathOptT:
+        def default_filepath(cls: type[_ContainerT]) -&gt; PathOpt:
 
             &quot;&quot;&quot;Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml&quot;&quot;&quot;
 
@@ -1045,11 +1045,11 @@
 
         @classmethod
 
-        def set_filepath(cls: type[_ContainerT], file_path: PathOrStrT = &quot;&quot;) -&gt; None:
+        def set_filepath(cls: type[_ContainerT], file_path: PathOrStr = &quot;&quot;) -&gt; None:
 
             &quot;&quot;&quot;Set the path for the file (a singleton).&quot;&quot;&quot;
 
-            path: PathOptT = None
+            path: PathOpt = None
 
             if isinstance(file_path, Path):
 
@@ -1079,7 +1079,7 @@
 
         @classmethod
 
-        def filepath(cls) -&gt; PathOptT:
+        def filepath(cls) -&gt; PathOpt:
 
             &quot;&quot;&quot;Return the path for the file that holds the config / settings.&quot;&quot;&quot;
 
@@ -1195,7 +1195,7 @@
 
             if path := cls.filepath():
 
-                if (ext := path.suffix[1:]) == str(FileFormat.TOML.value).lower():
+                if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
 
                     with path.open(mode=&quot;rb&quot;) as fptr:
 
@@ -1209,7 +1209,7 @@
 
                 else:
 
-                    print(f&quot;Unknown file format {path.suffix[1:]} given in {path}.&quot;)
+                    print(f&quot;Unknown file format {ext} given in {path}.&quot;)
 
             else:
 
@@ -1269,7 +1269,7 @@
 
                 path.parent.mkdir(parents=True, exist_ok=True)
 
-                if (ext := path.suffix[1:]) == FileFormat.TOML.value:
+                if (ext := path.suffix[1:].lower()) == FileFormat.TOML.value:
 
                     with path.open(mode=&quot;wb&quot;) as fptr:
 
@@ -1283,7 +1283,7 @@
 
                 else:
 
-                    print(f&quot;Unknown file format {path.suffix[1:]} given in {path}.&quot;)
+                    print(f&quot;Unknown file format {ext} given in {path}.&quot;)
 
             else:
 
@@ -1369,7 +1369,7 @@
 
         @classmethod
 
-        def default_filepath(cls: type[_ContainerT]) -&gt; PathOptT:
+        def default_filepath(cls: type[_ContainerT]) -&gt; PathOpt:
 
             &quot;&quot;&quot;Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml&quot;&quot;&quot;
 
@@ -1377,11 +1377,11 @@
 
         @classmethod
 
-        def set_filepath(cls: type[_ContainerT], file_path: PathOrStrT = &quot;&quot;) -&gt; None:
+        def set_filepath(cls: type[_ContainerT], file_path: PathOrStr = &quot;&quot;) -&gt; None:
 
             &quot;&quot;&quot;Set the path for the file (a singleton).&quot;&quot;&quot;
 
-            path: PathOptT = None
+            path: PathOpt = None
 
             if isinstance(file_path, Path):
 
@@ -1411,7 +1411,7 @@
 
         @classmethod
 
-        def filepath(cls) -&gt; PathOptT:
+        def filepath(cls) -&gt; PathOpt:
 
             &quot;&quot;&quot;Return the path for the file that holds the config / settings.&quot;&quot;&quot;
 
@@ -1527,7 +1527,7 @@
 
             if path := cls.filepath():
 
-                if (ext := path.suffix[1:]) == str(FileFormat.TOML.value).lower():
+                if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
 
                     with path.open(mode=&quot;rb&quot;) as fptr:
 
@@ -1541,7 +1541,7 @@
 
                 else:
 
-                    print(f&quot;Unknown file format {path.suffix[1:]} given in {path}.&quot;)
+                    print(f&quot;Unknown file format {ext} given in {path}.&quot;)
 
             else:
 
@@ -1601,7 +1601,7 @@
 
                 path.parent.mkdir(parents=True, exist_ok=True)
 
-                if (ext := path.suffix[1:]) == FileFormat.TOML.value:
+                if (ext := path.suffix[1:].lower()) == FileFormat.TOML.value:
 
                     with path.open(mode=&quot;wb&quot;) as fptr:
 
@@ -1615,7 +1615,7 @@
 
                 else:
 
-                    print(f&quot;Unknown file format {path.suffix[1:]} given in {path}.&quot;)
+                    print(f&quot;Unknown file format {ext} given in {path}.&quot;)
 
             else:
 
@@ -1676,7 +1676,7 @@
 <p>Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def default_filepath(cls: type[_ContainerT]) -&gt; PathOptT:
+<div class="highlight"><pre><span></span><code>        def default_filepath(cls: type[_ContainerT]) -&gt; PathOpt:
 
             &quot;&quot;&quot;Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml&quot;&quot;&quot;
 
@@ -1712,7 +1712,7 @@
 <p>Return the path for the file that holds the config / settings.</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def filepath(cls) -&gt; PathOptT:
+<div class="highlight"><pre><span></span><code>        def filepath(cls) -&gt; PathOpt:
 
             &quot;&quot;&quot;Return the path for the file that holds the config / settings.&quot;&quot;&quot;
 
@@ -1768,11 +1768,11 @@
 <p>Set the path for the file (a singleton).</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def set_filepath(cls: type[_ContainerT], file_path: PathOrStrT = &quot;&quot;) -&gt; None:
+<div class="highlight"><pre><span></span><code>        def set_filepath(cls: type[_ContainerT], file_path: PathOrStr = &quot;&quot;) -&gt; None:
 
             &quot;&quot;&quot;Set the path for the file (a singleton).&quot;&quot;&quot;
 
-            path: PathOptT = None
+            path: PathOpt = None
 
             if isinstance(file_path, Path):
 
