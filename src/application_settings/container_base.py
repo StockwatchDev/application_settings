@@ -161,7 +161,7 @@ class ContainerBase(ABC):
         data_stored: dict[str, Any] = {}
 
         if path := cls.filepath():
-            if (ext := path.suffix[1:]) == str(FileFormat.TOML.value).lower():
+            if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
                 with path.open(mode="rb") as fptr:
                     data_stored = tomllib.load(fptr)
             elif ext == str(FileFormat.JSON.value):
@@ -202,7 +202,7 @@ class ContainerBase(ABC):
         """Private method to save the singleton to file."""
         if path := self.filepath():
             path.parent.mkdir(parents=True, exist_ok=True)
-            if (ext := path.suffix[1:]) == FileFormat.TOML.value:
+            if (ext := path.suffix[1:].lower()) == FileFormat.TOML.value:
                 with path.open(mode="wb") as fptr:
                     tomli_w.dump(asdict(self), fptr)
             elif ext == FileFormat.JSON.value:
