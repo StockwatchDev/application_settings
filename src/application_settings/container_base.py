@@ -13,7 +13,7 @@ import tomli_w
 from pathvalidate import is_valid_filepath
 from pydantic.dataclasses import dataclass
 
-from .type_notation_helper import PathOptT, PathOrStrT
+from .type_notation_helper import PathOpt, PathOrStr
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -26,7 +26,7 @@ _ContainerSectionT = TypeVar("_ContainerSectionT", bound="ContainerSectionBase")
 
 
 _ALL_CONTAINERS: dict[int, Any] = {}
-_ALL_PATHS: dict[int, PathOptT] = {}
+_ALL_PATHS: dict[int, PathOpt] = {}
 
 
 @unique
@@ -73,15 +73,15 @@ class ContainerBase(ABC):
         return f"{cls.kind_string().lower()}.{cls.default_file_format().value}"
 
     @classmethod
-    def default_filepath(cls: type[_ContainerT]) -> PathOptT:
+    def default_filepath(cls: type[_ContainerT]) -> PathOpt:
         """Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml"""
         return Path.home() / cls.default_foldername() / cls.default_filename()
 
     @classmethod
-    def set_filepath(cls: type[_ContainerT], file_path: PathOrStrT = "") -> None:
+    def set_filepath(cls: type[_ContainerT], file_path: PathOrStr = "") -> None:
         """Set the path for the file (a singleton)."""
 
-        path: PathOptT = None
+        path: PathOpt = None
         if isinstance(file_path, Path):
             path = file_path.resolve()
         elif file_path:
@@ -98,7 +98,7 @@ class ContainerBase(ABC):
             _ALL_PATHS.pop(id(cls), None)
 
     @classmethod
-    def filepath(cls) -> PathOptT:
+    def filepath(cls) -> PathOpt:
         """Return the path for the file that holds the config / settings."""
         return _ALL_PATHS.get(id(cls), cls.default_filepath())
 
@@ -166,14 +166,14 @@ class ContainerBase(ABC):
         data_stored: dict[str, Any] = {}
 
         if path := cls.filepath():
-            if (ext := path.suffix[1:]) == str(FileFormat.TOML.value).lower():
+            if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
                 with path.open(mode="rb") as fptr:
                     data_stored = tomllib.load(fptr)
             elif ext == str(FileFormat.JSON.value):
                 with path.open(mode="r") as fptr:
                     data_stored = json.load(fptr)
             else:
-                print(f"Unknown file format {path.suffix[1:]} given in {path}.")
+                print(f"Unknown file format {ext} given in {path}.")
         else:
             # This situation can occur if no valid path was given as an argument, and
             # the default path is set to None.
@@ -207,14 +207,14 @@ class ContainerBase(ABC):
         """Private method to save the singleton to file."""
         if path := self.filepath():
             path.parent.mkdir(parents=True, exist_ok=True)
-            if (ext := path.suffix[1:]) == FileFormat.TOML.value:
+            if (ext := path.suffix[1:].lower()) == FileFormat.TOML.value:
                 with path.open(mode="wb") as fptr:
                     tomli_w.dump(asdict(self), fptr)
             elif ext == FileFormat.JSON.value:
                 with path.open(mode="w") as fptr:
                     json.dump(asdict(self), fptr)
             else:
-                print(f"Unknown file format {path.suffix[1:]} given in {path}.")
+                print(f"Unknown file format {ext} given in {path}.")
         else:
             # This situation can occur if no valid path was given as an argument, and
             # the default path is set to None.
