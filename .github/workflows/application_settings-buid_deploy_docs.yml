@@ -56,4 +56,4 @@ jobs:
         with:
           folder: site # The folder the action should deploy.
           branch: gh-pages
-          target-folder: develop
+          target-folder: 0.2.0
