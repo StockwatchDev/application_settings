@@ -345,6 +345,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#changing-parameter-values" class="md-nav__link">
+    Changing parameter values
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -557,6 +564,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#changing-parameter-values" class="md-nav__link">
+    Changing parameter values
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -579,13 +593,13 @@
 
   <h1>4. Using parameters</h1>
 
-<h3 id="use-parameters-in-your-code">Use parameters in your code</h3>
+<h2 id="use-parameters-in-your-code">Use parameters in your code</h2>
 <p>Parameter containers are meant to be instantiated just once and be available globally for
 the application. Therefore, implementation has been done as follows:</p>
 <ul>
 <li>The instance of a parameter container is accessed via a class method <code>get()</code>;</li>
 <li>The parameter value is then obtained by chaining with the section name and the
-  the parameter name;</li>
+  parameter name;</li>
 <li>The first invocation of <code>get()</code> will create the container instance, try to read values
   from file and store it for future access in a private module global (a dictionary with
   the class id as key);</li>
@@ -628,6 +642,12 @@ the application. Therefore, implementation has been done as follows:</p>
 </div>
 </div>
 </div>
+<h2 id="changing-parameter-values">Changing parameter values</h2>
+<p>Parameters are defined as fields of frozen dataclasses. Hence, changing parameter values
+by means of straightforward assignment will raise an error.</p>
+<p>Config parameters are meant to be read only. Changing values of such parameters has to be
+done by editing the config file and restarting your application (or reloading the config
+container).</p>
 
 
 
