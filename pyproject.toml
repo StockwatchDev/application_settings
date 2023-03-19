@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "application_settings"
-version = "0.1.0"
+version = "0.2.0"
 description = "For providing a python application with configuration and/or settings"
 authors = ["Stockwatchdevs <stockwatchdevs@gmail.com>"]
 license = "MIT"
@@ -14,6 +14,7 @@ classifiers = [
     "Natural Language :: English",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Topic :: Software Development :: Libraries :: Python Modules",
@@ -28,10 +29,11 @@ include = [
 
 
 [tool.poetry.dependencies]
-python = "^3.10"
-pydantic = "^1.10"
-tomli = { version = "^2.0.1", python = "<3.11" }
+python = "^3.9"
 pathvalidate = "^2.5"
+pydantic = "^1.10"
+tomli = { version = "^2.0", python = "<3.11" }
+tomli-w = "^1.0"
 
 [tool.poetry.group.testing]
 optional = true
@@ -50,7 +52,7 @@ mypy = ">=0.942"
 optional = true
 
 [tool.poetry.group.style.dependencies]
-black = "^22.10"
+black = ">=22.10,<24.0"
 isort = "^5.12"
 pylint = "^2.15"
 
@@ -58,7 +60,7 @@ pylint = "^2.15"
 optional = true
 
 [tool.poetry.group.testrunner.dependencies]
-tox = "^3.24"
+tox = "^4.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -123,20 +125,21 @@ ignore-imports = "yes"
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-skipsdist = true
+isolated_build = true
 envlist =
-    py{310,311}
+    py{39,310,311}
     style
     typing
 
 [testenv]
-whitelist_externals = poetry
+allowlist_externals = poetry
 commands_pre =
-    poetry install --with testing -v
+    poetry install --no-root --with testing -v
 commands =
-    poetry run pytest --cov-report xml:coverage.xml --cov-report term-missing --cov=application_settings tests/
+    poetry run pytest --cov-report xml:coverage.xml --cov-report term-missing --cov=application_settings tests/ --import-mode importlib
 
 [testenv:style]
+skip_install = true
 commands_pre =
     poetry install --with style -v
 commands =
@@ -145,6 +148,7 @@ commands =
     poetry run pylint --recursive=y ./src
 
 [testenv:typing]
+skip_install = true
 commands_pre =
     poetry install --with typing -v
 commands =
