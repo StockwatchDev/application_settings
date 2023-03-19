@@ -1,4 +1,4 @@
-### Use parameters in your code
+## Use parameters in your code
 
 Parameter containers are meant to be instantiated just once and be available globally for
 the application. Therefore, implementation has been done as follows:
@@ -47,3 +47,13 @@ the application. Therefore, implementation has been done as follows:
     name_var = MyExampleSettings.get(reload=True).basics.name
 
     ```
+
+## Changing parameter values
+
+Parameters are defined as fields of frozen dataclasses. Hence, changing parameter values
+by means of straightforward assignment will raise an error.
+
+Config parameters are meant to be read only. Changing values of such parameters has to be
+done by editing the config file and restarting your application (or reloading the config
+container).
+
