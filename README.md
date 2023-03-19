@@ -37,7 +37,7 @@ Parsing is done once during first access and the resulting set of parameters is 
 as a singleton.
 
 Interested? Then have a look at our
-[quick start](https://stockwatchdev.github.io/application_settings/develop/docs/Quick_start/).
+[quick start](https://github.com/StockwatchDev/application_settings/0.2.0/docs/Quick_start/).
 
 [//]: # (Change link to published quick start)
 
