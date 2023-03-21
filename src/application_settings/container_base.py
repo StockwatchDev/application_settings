@@ -120,7 +120,13 @@ class ContainerBase(ABC):
             _the_config = _the_container_or_none
         return _the_config
 
-    def update(self: _ContainerT, changes: dict[str, dict[str, Any]]) -> _ContainerT:
+    @classmethod
+    def update(
+        cls: type[_ContainerT], changes: dict[str, dict[str, Any]]
+    ) -> _ContainerT:
+        return cls.get()._update(changes)
+
+    def _update(self: _ContainerT, changes: dict[str, dict[str, Any]]) -> _ContainerT:
         "Update and save the settings with data specified in changes; not meant for config"
         # filter out fields that are both in changes and an attribute of the SettingsContainer
         _sections_to_update = {

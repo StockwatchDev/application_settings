@@ -53,7 +53,7 @@ def test_update(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     assert AnExample1Settings.get(reload=True).section1.setting1 == "setting1"
     assert AnExample1Settings.get().section1.setting2 == 2
     with pytest.raises(RuntimeError):
-        new_settings = AnExample1Settings.get().update(
+        new_settings = AnExample1Settings.update(
             {"section1": {"setting1": "new s1", "setting2": 222}}
         )
     tmp_filepath = (
@@ -62,7 +62,7 @@ def test_update(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
         / AnExample1Settings.default_filename()
     )
     AnExample1Settings.set_filepath(tmp_filepath)
-    new_settings = AnExample1Settings.get().update(
+    new_settings = AnExample1Settings.update(
         {"section1": {"setting1": "new s1", "setting2": 222}}
     )
 
@@ -91,7 +91,7 @@ def test_update_json(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
         / AnExample1Settings.default_filename()
     )
     AnExample1Settings.set_filepath(tmp_filepath)
-    new_settings = AnExample1Settings.get().update(
+    new_settings = AnExample1Settings.update(
         {"section1": {"setting1": "new s1a", "setting2": 333}}
     )
 
@@ -122,7 +122,7 @@ def test_update_toml(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
         / AnExample1Settings.default_filename().replace("json", "toml")
     )
     AnExample1Settings.set_filepath(tmp_filepath)
-    new_settings = AnExample1Settings.get().update(
+    new_settings = AnExample1Settings.update(
         {"section1": {"setting1": "new s1b", "setting2": 444}}
     )
 
@@ -155,7 +155,7 @@ def test_update_ini(
         / AnExample1Settings.default_filename().replace("json", "ini")
     )
     AnExample1Settings.set_filepath(tmp_filepath)
-    new_settings = AnExample1Settings.get().update(
+    new_settings = AnExample1Settings.update(
         {"section1": {"setting1": "new s1a", "setting2": 333}}
     )
 
