@@ -124,7 +124,8 @@ class ContainerBase(ABC):
     def update(
         cls: type[_ContainerT], changes: dict[str, dict[str, Any]]
     ) -> _ContainerT:
-        return cls.get()._update(changes)
+        "Update and save the settings with data specified in changes; not meant for config"
+        return cls.get()._update(changes)  # pylint: disable=protected-access
 
     def _update(self: _ContainerT, changes: dict[str, dict[str, Any]]) -> _ContainerT:
         "Update and save the settings with data specified in changes; not meant for config"
