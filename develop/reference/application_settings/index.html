@@ -1164,7 +1164,11 @@
 
         @classmethod
 
-        def update(cls: type[&quot;ConfigBase&quot;], changes: dict[str, dict[str, Any]]) -&gt; &quot;ConfigBase&quot;:
+        def update(
+
+            cls: type[&quot;ConfigBase&quot;], changes: dict[str, dict[str, Any]]
+
+        ) -&gt; &quot;ConfigBase&quot;:
 
             &quot;Update and save the settings with data specified in changes; not meant for config&quot;
 
@@ -1349,7 +1353,11 @@
 <p>Update and save the settings with data specified in changes; not meant for config</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def update(cls: type[&quot;ConfigBase&quot;], changes: dict[str, dict[str, Any]]) -&gt; &quot;ConfigBase&quot;:
+<div class="highlight"><pre><span></span><code>        def update(
+
+            cls: type[&quot;ConfigBase&quot;], changes: dict[str, dict[str, Any]]
+
+        ) -&gt; &quot;ConfigBase&quot;:
 
             &quot;Update and save the settings with data specified in changes; not meant for config&quot;
 
