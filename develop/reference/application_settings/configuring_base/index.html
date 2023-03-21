@@ -541,13 +541,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#methods" class="md-nav__link">
-    Methods
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#update" class="md-nav__link">
     update
   </a>
@@ -782,13 +775,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#methods" class="md-nav__link">
-    Methods
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#update" class="md-nav__link">
     update
   </a>
@@ -901,7 +887,9 @@
 
             return FileFormat.TOML
 
-        def update(self: ConfigT, changes: dict[str, dict[str, Any]]) -&gt; ConfigT:
+        @classmethod
+
+        def update(cls: type[&quot;ConfigBase&quot;], changes: dict[str, dict[str, Any]]) -&gt; &quot;ConfigBase&quot;:
 
             &quot;Update and save the settings with data specified in changes; not meant for config&quot;
 
@@ -945,7 +933,9 @@
 
             return FileFormat.TOML
 
-        def update(self: ConfigT, changes: dict[str, dict[str, Any]]) -&gt; ConfigT:
+        @classmethod
+
+        def update(cls: type[&quot;ConfigBase&quot;], changes: dict[str, dict[str, Any]]) -&gt; &quot;ConfigBase&quot;:
 
             &quot;Update and save the settings with data specified in changes; not meant for config&quot;
 
@@ -1122,17 +1112,17 @@
 
                 _ALL_PATHS.pop(id(cls), None)
 </code></pre></div>
-<h4 id="methods">Methods</h4>
 <h4 id="update">update</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">update</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">:</span> <span class="o">~</span><span class="n">ConfigT</span><span class="p">,</span>
     <span class="n">changes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]]</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="o">~</span><span class="n">ConfigT</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;ConfigBase&#39;</span>
 </code></pre></div>
 <p>Update and save the settings with data specified in changes; not meant for config</p>
 <p>??? example "View Source"
-            def update(self: ConfigT, changes: dict[str, dict[str, Any]]) -&gt; ConfigT:</p>
-<div class="highlight"><pre><span></span><code>            &quot;Update and save the settings with data specified in changes; not meant for config&quot;
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def update(cls: type[&quot;ConfigBase&quot;], changes: dict[str, dict[str, Any]]) -&gt; &quot;ConfigBase&quot;:
+
+            &quot;Update and save the settings with data specified in changes; not meant for config&quot;
 
             raise TypeError(
 
