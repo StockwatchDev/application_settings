@@ -562,13 +562,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#methods" class="md-nav__link">
-    Methods
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#update" class="md-nav__link">
     update
   </a>
@@ -818,13 +811,6 @@
           <li class="md-nav__item">
   <a href="#set_filepath" class="md-nav__link">
     set_filepath
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#methods" class="md-nav__link">
-    Methods
   </a>
   
 </li>
@@ -1115,7 +1101,19 @@
 
             return _the_config
 
-        def update(self: _ContainerT, changes: dict[str, dict[str, Any]]) -&gt; _ContainerT:
+        @classmethod
+
+        def update(
+
+            cls: type[_ContainerT], changes: dict[str, dict[str, Any]]
+
+        ) -&gt; _ContainerT:
+
+            &quot;Update and save the settings with data specified in changes; not meant for config&quot;
+
+            return cls.get()._update(changes)  # pylint: disable=protected-access
+
+        def _update(self: _ContainerT, changes: dict[str, dict[str, Any]]) -&gt; _ContainerT:
 
             &quot;Update and save the settings with data specified in changes; not meant for config&quot;
 
@@ -1447,7 +1445,19 @@
 
             return _the_config
 
-        def update(self: _ContainerT, changes: dict[str, dict[str, Any]]) -&gt; _ContainerT:
+        @classmethod
+
+        def update(
+
+            cls: type[_ContainerT], changes: dict[str, dict[str, Any]]
+
+        ) -&gt; _ContainerT:
+
+            &quot;Update and save the settings with data specified in changes; not meant for config&quot;
+
+            return cls.get()._update(changes)  # pylint: disable=protected-access
+
+        def _update(self: _ContainerT, changes: dict[str, dict[str, Any]]) -&gt; _ContainerT:
 
             &quot;Update and save the settings with data specified in changes; not meant for config&quot;
 
@@ -1800,47 +1810,23 @@
 
                 _ALL_PATHS.pop(id(cls), None)
 </code></pre></div>
-<h4 id="methods">Methods</h4>
 <h4 id="update">update</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">update</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">:</span> <span class="o">~</span><span class="n">_ContainerT</span><span class="p">,</span>
     <span class="n">changes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="o">~</span><span class="n">_ContainerT</span>
 </code></pre></div>
 <p>Update and save the settings with data specified in changes; not meant for config</p>
 <p>??? example "View Source"
-            def update(self: _ContainerT, changes: dict[str, dict[str, Any]]) -&gt; _ContainerT:</p>
-<div class="highlight"><pre><span></span><code>            &quot;Update and save the settings with data specified in changes; not meant for config&quot;
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def update(
 
-            # filter out fields that are both in changes and an attribute of the SettingsContainer
+            cls: type[_ContainerT], changes: dict[str, dict[str, Any]]
 
-            _sections_to_update = {
+        ) -&gt; _ContainerT:
 
-                fld for fld in fields(self) if fld.init and fld.name in changes.keys()
+            &quot;Update and save the settings with data specified in changes; not meant for config&quot;
 
-            }
-
-            # update the sections and keep them in a dict
-
-            # actually sections: dict[str, _ContainerSectionT]
-
-            # but MyPy doesn&#39;t swallow that
-
-            updated_sections: dict[str, Any] = {
-
-                fld.name: _update_section(getattr(self, fld.name), changes[fld.name])
-
-                for fld in _sections_to_update
-
-            }
-
-            new_settings = replace(self, **updated_sections)
-
-            new_settings._set()  # pylint: disable=protected-access
-
-            new_settings._save()  # pylint: disable=protected-access
-
-            return new_settings
+            return cls.get()._update(changes)  # pylint: disable=protected-access
 </code></pre></div>
 <h3 id="containersectionbase">ContainerSectionBase</h3>
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ContainerSectionBase</span><span class="p">(</span>

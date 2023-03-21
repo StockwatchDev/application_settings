@@ -352,6 +352,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -571,6 +578,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -608,6 +622,22 @@ the application. Therefore, implementation has been done as follows:</p>
 <li>If needed, you can set the path for the parameter file before the first invocation of
   <code>get()</code>.</li>
 </ul>
+<h2 id="changing-parameter-values">Changing parameter values</h2>
+<p>Parameters are defined as fields of frozen dataclasses. Hence, changing parameter values
+by means of straightforward assignment will raise an error.</p>
+<p>Config parameters are meant to be read only. Changing values of such parameters has to be
+done by editing the config file and restarting your application or reloading the config
+container.</p>
+<p>Obviously, settings parameters can also be changed by editing the settings file and
+restarting the application or reloading the settings container. In addition to that,
+settings can be changed programmatically by calling a class method 
+<code>update(changes: dict[str, dict[str, Any])</code>, where the argument <code>changes</code> is a dictionary
+of dictionaries that specifies the sections (keys of the outer dict) and fields (keys of
+the inner dicts) that are changed. The method <code>update</code> will replace the stored settings
+in the private module global with an updated instance and the settings file will be
+updated as well. So the invocation of <code>get()</code> after <code>update</code> or application restart or
+reloading will return the changed parameter values.</p>
+<h2 id="example">Example</h2>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Configuration</label><label for="__tabbed_1_2">Settings</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -623,6 +653,8 @@ the application. Therefore, implementation has been done as follows:</p>
 
 <span class="c1"># if you have edited the config file, you can reload it (which will create a new instance)</span>
 <span class="n">field1_var</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>
+
+<span class="c1"># you cannot programmatically change config parameters</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -638,16 +670,15 @@ the application. Therefore, implementation has been done as follows:</p>
 
 <span class="c1"># if you have edited the settings file, you can reload it (which will create a new instance)</span>
 <span class="n">name_var</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">name</span>
+
+<span class="c1"># change settings parameters programmatically using update</span>
+<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;basics&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;new and shiny name&quot;</span><span class="p">,</span> <span class="s2">&quot;totals&quot;</span><span class="p">:</span> <span class="mi">222</span><span class="p">}})</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">totals</span><span class="p">)</span>  <span class="c1"># 222</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># new and shiny name</span>
 </code></pre></div>
 </div>
 </div>
 </div>
-<h2 id="changing-parameter-values">Changing parameter values</h2>
-<p>Parameters are defined as fields of frozen dataclasses. Hence, changing parameter values
-by means of straightforward assignment will raise an error.</p>
-<p>Config parameters are meant to be read only. Changing values of such parameters has to be
-done by editing the config file and restarting your application (or reloading the config
-container).</p>
 
 
 
