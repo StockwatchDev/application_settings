@@ -34,7 +34,9 @@ class ConfigBase(ContainerBase):
         return FileFormat.TOML
 
     @classmethod
-    def update(cls: type["ConfigBase"], changes: dict[str, dict[str, Any]]) -> "ConfigBase":
+    def update(
+        cls: type["ConfigBase"], changes: dict[str, dict[str, Any]]
+    ) -> "ConfigBase":
         "Update and save the settings with data specified in changes; not meant for config"
         raise TypeError(
             "Configs should not be updated runtime; consider converting to settings."
