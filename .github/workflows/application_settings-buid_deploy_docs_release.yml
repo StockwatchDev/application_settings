@@ -56,7 +56,7 @@ jobs:
       - name: Redirect stable to new release
         run: |
             echo "Redirecting stable to newly released version " $RELEASE_VERSION
-            cd site
+            mv site "$RELEASE_VERSION"
             ln -s $RELEASE_VERSION stable
             git add stable
             git commit -m "redirect stable to new version $RELEASE_VERSION"
@@ -65,6 +65,6 @@ jobs:
       # - name: Deploy
       #   uses: JamesIves/github-pages-deploy-action@v4
       #   with:
-      #     folder: site # The folder the action should deploy.
+      #     folder: ${{ env.RELEASE_VERSION }} # The folder the action should deploy.
       #     branch: gh-pages
       #     target-folder: ${{ env.RELEASE_VERSION }}
