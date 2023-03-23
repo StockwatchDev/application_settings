@@ -1,6 +1,5 @@
 # pylint: disable=missing-module-docstring
 # pylint: disable=missing-function-docstring
-# pylint: disable=consider-alternative-union-syntax
 # pylint: disable=redefined-outer-name
 import json
 import sys
@@ -67,7 +66,7 @@ def ini_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
 
 
 def test_version() -> None:
-    assert __version__ == "0.2.0"
+    assert __version__ == "0.2.1"
 
 
 def test_paths(toml_file: Path) -> None:
@@ -169,7 +168,7 @@ def test_wrong_type(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
     def mock_tomllib_load(
         fptr: Any,  # pylint: disable=unused-argument
     ) -> dict[str, dict[str, Any]]:
-        return {"section1": {"field1": ("f1", 22), "field2": None}}  # type: ignore
+        return {"section1": {"field1": ("f1", 22), "field2": None}}
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
 

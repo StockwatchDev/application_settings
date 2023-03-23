@@ -3,7 +3,12 @@ from typing import Any, TypeVar
 
 from pydantic.dataclasses import dataclass
 
-from .container_base import ContainerBase, ContainerSectionBase, ContainerTypeStr
+from .container_base import (
+    ContainerBase,
+    ContainerSectionBase,
+    ContainerTypeStr,
+    FileFormat,
+)
 
 ConfigT = TypeVar("ConfigT", bound="ConfigBase")
 ConfigSectionT = TypeVar("ConfigSectionT", bound="ConfigSectionBase")
@@ -23,7 +28,15 @@ class ConfigBase(ContainerBase):
         "Return 'Config'"
         return "Config"
 
-    def update(self: ConfigT, changes: dict[str, dict[str, Any]]) -> ConfigT:
+    @classmethod
+    def default_file_format(cls: type[ConfigT]) -> FileFormat:
+        "Return the default file format"
+        return FileFormat.TOML
+
+    @classmethod
+    def update(
+        cls: type["ConfigBase"], changes: dict[str, dict[str, Any]]
+    ) -> "ConfigBase":
         "Update and save the settings with data specified in changes; not meant for config"
         raise TypeError(
             "Configs should not be updated runtime; consider converting to settings."

@@ -1,0 +1,71 @@
+# Simple workflow for deploying static content to GitHub Pages
+# Create versioned docs on releas.
+name: "Build and deploy versioned docs on release"
+
+on:
+  release:
+    types: [published]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build_and_deploy:
+    environment: dev_environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
+
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+      - name: Setup python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.2.2
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Check lockfile
+        run: poetry lock --check
+
+      - name: Install packages
+        run: poetry install --no-interaction --with docs
+
+      - name: Build html
+        run:
+          poetry run portray as_html --overwrite -o site
+
+      - name: Redirect stable to new release
+        run: |
+            echo "Redirecting stable to newly released version " $RELEASE_VERSION
+            cd site
+# rm -rf stable
+            ln -s $RELEASE_VERSION stable
+            git add stable
+            git commit -m "redirect stable to new version $RELEASE_VERSION"
+            cd ..
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: site # The folder the action should deploy.
+          branch: gh-pages
+          target-folder: ${{ env.RELEASE_VERSION }}

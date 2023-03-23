@@ -64,3 +64,6 @@ stocks/
 
 # Playground folder for local develop scripts
 develop/
+
+# Build stuff
+build/
