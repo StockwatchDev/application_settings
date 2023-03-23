@@ -1,5 +1,5 @@
 # Simple workflow for deploying static content to GitHub Pages
-# Run this job on pushes to `develop` (later; now pushes to update-docs).
+# Create versioned docs on releas.
 name: "Build and deploy versioned docs on release"
 
 on:
@@ -57,7 +57,7 @@ jobs:
         run: |
             echo "Redirecting stable to newly released version " $RELEASE_VERSION
             cd site
-            rm -rf stable
+# rm -rf stable
             ln -s $RELEASE_VERSION stable
             git add stable
             git commit -m "redirect stable to new version $RELEASE_VERSION"
@@ -69,9 +69,3 @@ jobs:
           folder: site # The folder the action should deploy.
           branch: gh-pages
           target-folder: ${{ env.RELEASE_VERSION }}
-
-    # - name: Push changes
-    #   uses: ad-m/github-push-action@master
-    #   with:
-    #     github_token: ${{ secrets.GITHUB_TOKEN }}
-    #     branch: gh-pages
