@@ -20,13 +20,14 @@ concurrency:
 
 jobs:
   build_and_deploy:
-    environment: dev_environment
+    # environment: dev_environment
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@master
         with:
           fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
+          ref: release
 
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
@@ -53,19 +54,26 @@ jobs:
         run:
           poetry run portray as_html --overwrite -o site
 
-      - name: Redirect stable to new release
+      - name: Setup git config
         run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+
+      - name: Rename folder and redirect stable to new release
+        run: |
+            echo "Renaming site folder and committing"
+            git checkout gh-pages
+            mv site "$RELEASE_VERSION"
+            git add "$RELEASE_VERSION"/
+            git commit -m "add docs for new version $RELEASE_VERSION"
             echo "Redirecting stable to newly released version " $RELEASE_VERSION
-            cd site
-# rm -rf stable
+            rm -rf stable
             ln -s $RELEASE_VERSION stable
             git add stable
             git commit -m "redirect stable to new version $RELEASE_VERSION"
             cd ..
 
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Push changes
+        uses: ad-m/github-push-action@master
         with:
-          folder: site # The folder the action should deploy.
           branch: gh-pages
-          target-folder: ${{ env.RELEASE_VERSION }}
