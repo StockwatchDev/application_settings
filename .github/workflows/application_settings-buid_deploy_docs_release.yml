@@ -67,6 +67,11 @@ jobs:
             git commit -m "redirect stable to new version $RELEASE_VERSION"
             cd ..
 
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: gh-pages
+
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
