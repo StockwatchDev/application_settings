@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#handling-deviations-in-the-config-file" class="md-skip">
+        <a href="#handling-deviations-in-the-parameter-file" class="md-skip">
           Skip to content
         </a>
       
@@ -353,30 +353,30 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#handling-deviations-in-the-config-file" class="md-nav__link">
-    Handling deviations in the config file
+  <a href="#handling-deviations-in-the-parameter-file" class="md-nav__link">
+    Handling deviations in the parameter file
   </a>
   
-    <nav class="md-nav" aria-label="Handling deviations in the config file">
+    <nav class="md-nav" aria-label="Handling deviations in the parameter file">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#when-your-config-file-does-not-adhere-to-the-specified-types" class="md-nav__link">
-    When your config file does not adhere to the specified types
+  <a href="#when-your-parameter-file-does-not-adhere-to-the-specified-types" class="md-nav__link">
+    When your parameter file does not adhere to the specified types
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#when-your-config-file-does-not-contain-all-specified-attributes" class="md-nav__link">
-    When your config file does not contain all specified attributes
+  <a href="#when-your-parameter-file-does-not-contain-all-specified-attributes" class="md-nav__link">
+    When your parameter file does not contain all specified attributes
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#when-your-config-file-contains-additional-unspecified-attributes" class="md-nav__link">
-    When your config file contains additional, unspecified attributes
+  <a href="#when-your-parameter-file-contains-additional-unspecified-attributes" class="md-nav__link">
+    When your parameter file contains additional, unspecified attributes
   </a>
   
 </li>
@@ -585,30 +585,30 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#handling-deviations-in-the-config-file" class="md-nav__link">
-    Handling deviations in the config file
+  <a href="#handling-deviations-in-the-parameter-file" class="md-nav__link">
+    Handling deviations in the parameter file
   </a>
   
-    <nav class="md-nav" aria-label="Handling deviations in the config file">
+    <nav class="md-nav" aria-label="Handling deviations in the parameter file">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#when-your-config-file-does-not-adhere-to-the-specified-types" class="md-nav__link">
-    When your config file does not adhere to the specified types
+  <a href="#when-your-parameter-file-does-not-adhere-to-the-specified-types" class="md-nav__link">
+    When your parameter file does not adhere to the specified types
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#when-your-config-file-does-not-contain-all-specified-attributes" class="md-nav__link">
-    When your config file does not contain all specified attributes
+  <a href="#when-your-parameter-file-does-not-contain-all-specified-attributes" class="md-nav__link">
+    When your parameter file does not contain all specified attributes
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#when-your-config-file-contains-additional-unspecified-attributes" class="md-nav__link">
-    When your config file contains additional, unspecified attributes
+  <a href="#when-your-parameter-file-contains-additional-unspecified-attributes" class="md-nav__link">
+    When your parameter file contains additional, unspecified attributes
   </a>
   
 </li>
@@ -647,33 +647,34 @@
 
   <h1>5. Handling deviations</h1>
 
-<h2 id="handling-deviations-in-the-config-file">Handling deviations in the config file</h2>
-<h3 id="when-your-config-file-does-not-adhere-to-the-specified-types">When your config file does not adhere to the specified types</h3>
-<p>When loading the config file, the values specified are coerced into the appropriate type
-where possible. If type coercion is not possible, then a <code>pydantic.ValidationError</code>
+<h2 id="handling-deviations-in-the-parameter-file">Handling deviations in the parameter file</h2>
+<h3 id="when-your-parameter-file-does-not-adhere-to-the-specified-types">When your parameter file does not adhere to the specified types</h3>
+<p>When loading the parameter file, the values specified are coerced into the appropriate
+type where possible. If type coercion is not possible, then a <code>pydantic.ValidationError</code>
 is raised. Consider the case where you would use the following config file for
-the <code>MyExampleConfig</code> defined above:</p>
+the <code>MyExampleConfig</code> defined before:</p>
 <div class="highlight"><pre><span></span><code><span class="k">[section1]</span>
 <span class="n">field1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
 <span class="n">field2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;22&quot;</span>
 </code></pre></div>
 <p>The <code>bool</code> specified for <code>field1</code> will be coerced into a <code>str</code> value of <code>"true"</code>.
 The <code>str</code> specified for <code>field2</code> will be coerced into an <code>int</code> value of <code>22</code>.</p>
-<h3 id="when-your-config-file-does-not-contain-all-specified-attributes">When your config file does not contain all specified attributes</h3>
-<p>If your Config has one of more sections with attributes that do not have a default
-value, then a config file must be loaded and these sections and attributes must be
-present in the loaded config file. If this is not the case, a <code>TypeError</code> is raised.
-Attributes that have default values can be omitted
-from the config file without problems.</p>
+<h3 id="when-your-parameter-file-does-not-contain-all-specified-attributes">When your parameter file does not contain all specified attributes</h3>
+<p>If your Config or Settings has one of more sections with one or more attributes that do
+not have a default value, then a parameter file must be loaded and these sections and
+attributes must be present in the loaded parameter file. If this is not the case, a
+<code>TypeError</code> is raised. Attributes that have default values can be omitted
+from the parameter file without problems. Likewise, sections of which all attributes
+have default values can also be omitted without problems.</p>
 <p>Note that in the dataclass definitions, attributes without default value have to come
 before attributes with default values.</p>
-<h3 id="when-your-config-file-contains-additional-unspecified-attributes">When your config file contains additional, unspecified attributes</h3>
-<p>Entries in a config file that are not defined in the Config(Section) classes will simply
-be ignored silently.</p>
+<h3 id="when-your-parameter-file-contains-additional-unspecified-attributes">When your parameter file contains additional, unspecified attributes</h3>
+<p>Entries in a parameter file that are not defined in the Container or Section classes
+will simply be ignored silently.</p>
 <h2 id="more-advanced-typing-and-validation-with-pydantic">More advanced typing and validation with pydantic</h2>
 <ul>
-<li>Non-standard types useful for configuration, such as network addresses, are offered, see
-  <a href="https://docs.pydantic.dev/usage/types/#pydantic-types">pydantic types</a></li>
+<li>Non-standard types useful for configuration or settings, such as network addresses,
+  are offered, see <a href="https://docs.pydantic.dev/usage/types/#pydantic-types">pydantic types</a></li>
 <li>The value of numerous common types can be restricted using
   <a href="https://docs.pydantic.dev/usage/types/#constrained-types">pydantic constrained types</a></li>
 </ul>
