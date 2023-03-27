@@ -66,7 +66,7 @@ def ini_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
 
 
 def test_version() -> None:
-    assert __version__ == "0.2.1"
+    assert __version__ == "0.3.0"
 
 
 def test_paths(toml_file: Path) -> None:
