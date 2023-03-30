@@ -119,7 +119,7 @@ def test_get_defaults(
 
 
 def test_set_filepath_after_get(
-    toml_file: Path, monkeypatch: pytest.MonkeyPatch, capfd: pytest.CaptureFixture[str]
+    toml_file: Path, capfd: pytest.CaptureFixture[str]
 ) -> None:
     AnExample1Config.set_filepath(toml_file, reload=True)
     assert AnExample1Config.get().section1.field1 == "f1"
