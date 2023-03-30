@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Documentation extended and multiple versions served on Github Pages
+- You can now request a reload when setting the filepath
 
 ### Changed
 
