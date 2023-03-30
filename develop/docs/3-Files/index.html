@@ -663,10 +663,17 @@ the Container class <code>MyExampleConfig</code> by default will store its confi
 <code>~/.my_example/config.toml</code>. And <code>MyExampleSettings</code> will default to a settings file 
 <code>~/.my_example/settings.json</code>.</p>
 <p>If you want the files to be stored in a different location and/or have a different name
-and/or change the format, then you can use the method <code>set_filepath</code>:</p>
+and/or change the format, then you can use the method <code>set_filepath</code>. If you invoke this
+method but you have already instantiated the parameters via <code>get()</code>, then you most likely
+want to reload them. You can do so by setting an argument <code>reload=True</code> in <code>set_filepath</code>.
+If you invoke this function after parameters have been instantiated and do not set
+<code>reload</code>, then a warning is printed. Example:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># the next statement sets the location, name and format of the settings file</span>
 <span class="c1"># the argument can be eiter a string or a Path</span>
 <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\ProgramData\testsettings.toml&quot;</span><span class="p">)</span>
+<span class="c1"># the next statement loads the settings</span>
+<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\ProgramData\productionsettings.toml&quot;</span><span class="p">,</span> <span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 <p>The extension of the file is used to select the format for parsing and hence has to be
 either <code>json</code>, <code>JSON</code>, <code>toml</code> or <code>TOML</code>.</p>
