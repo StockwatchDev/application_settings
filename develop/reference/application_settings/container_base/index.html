@@ -1031,7 +1031,11 @@
 
         @classmethod
 
-        def set_filepath(cls: type[_ContainerT], file_path: PathOrStr = &quot;&quot;) -&gt; None:
+        def set_filepath(
+
+            cls: type[_ContainerT], file_path: PathOrStr = &quot;&quot;, reload: bool = False
+
+        ) -&gt; None:
 
             &quot;&quot;&quot;Set the path for the file (a singleton).&quot;&quot;&quot;
 
@@ -1062,6 +1066,20 @@
             else:
 
                 _ALL_PATHS.pop(id(cls), None)
+
+            if reload:
+
+                cls.get(reload=True)
+
+            else:
+
+                if cls._get() is not None:
+
+                    print(
+
+                        f&quot;Warning: filepath has been set the but file is not loaded into the {cls.kind_string()}.&quot;
+
+                    )
 
         @classmethod
 
@@ -1375,7 +1393,11 @@
 
         @classmethod
 
-        def set_filepath(cls: type[_ContainerT], file_path: PathOrStr = &quot;&quot;) -&gt; None:
+        def set_filepath(
+
+            cls: type[_ContainerT], file_path: PathOrStr = &quot;&quot;, reload: bool = False
+
+        ) -&gt; None:
 
             &quot;&quot;&quot;Set the path for the file (a singleton).&quot;&quot;&quot;
 
@@ -1406,6 +1428,20 @@
             else:
 
                 _ALL_PATHS.pop(id(cls), None)
+
+            if reload:
+
+                cls.get(reload=True)
+
+            else:
+
+                if cls._get() is not None:
+
+                    print(
+
+                        f&quot;Warning: filepath has been set the but file is not loaded into the {cls.kind_string()}.&quot;
+
+                    )
 
         @classmethod
 
@@ -1772,13 +1808,18 @@
 </code></pre></div>
 <h4 id="set_filepath">set_filepath</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_filepath</span><span class="p">(</span>
-    <span class="n">file_path</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">file_path</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">reload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
 </code></pre></div>
 <p>Set the path for the file (a singleton).</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def set_filepath(cls: type[_ContainerT], file_path: PathOrStr = &quot;&quot;) -&gt; None:
+<div class="highlight"><pre><span></span><code>        def set_filepath(
+
+            cls: type[_ContainerT], file_path: PathOrStr = &quot;&quot;, reload: bool = False
+
+        ) -&gt; None:
 
             &quot;&quot;&quot;Set the path for the file (a singleton).&quot;&quot;&quot;
 
@@ -1809,6 +1850,20 @@
             else:
 
                 _ALL_PATHS.pop(id(cls), None)
+
+            if reload:
+
+                cls.get(reload=True)
+
+            else:
+
+                if cls._get() is not None:
+
+                    print(
+
+                        f&quot;Warning: filepath has been set the but file is not loaded into the {cls.kind_string()}.&quot;
+
+                    )
 </code></pre></div>
 <h4 id="update">update</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">update</span><span class="p">(</span>
