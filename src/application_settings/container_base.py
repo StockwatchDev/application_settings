@@ -78,7 +78,9 @@ class ContainerBase(ABC):
         return Path.home() / cls.default_foldername() / cls.default_filename()
 
     @classmethod
-    def set_filepath(cls: type[_ContainerT], file_path: PathOrStr = "") -> None:
+    def set_filepath(
+        cls: type[_ContainerT], file_path: PathOrStr = "", reload: bool = False
+    ) -> None:
         """Set the path for the file (a singleton)."""
 
         path: PathOpt = None
@@ -96,6 +98,14 @@ class ContainerBase(ABC):
             _ALL_PATHS[id(cls)] = path
         else:
             _ALL_PATHS.pop(id(cls), None)
+
+        if reload:
+            cls.get(reload=True)
+        else:
+            if cls._get() is not None:
+                print(
+                    f"Warning: filepath has been set the but file is not loaded into the {cls.kind_string()}."
+                )
 
     @classmethod
     def filepath(cls) -> PathOpt:

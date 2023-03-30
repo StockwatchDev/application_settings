@@ -70,8 +70,10 @@ reloading will return the changed parameter values.
     name_var = MyExampleSettings.get(reload=True).basics.name
 
     # change settings parameters programmatically using update
-    MyExampleSettings.update({"basics": {"name": "new and shiny name", "totals": 222}})
-    print(MyExampleSettings.get().basics.totals)  # 222
+    MyExampleSettings.update({"basics": {"name": "new and shiny name"}})
+    print(MyExampleSettings.get().basics.name)  # new and shiny name
+    print(MyExampleSettings.get().basics.totals)  # 2
+    # the update has been written to file as well
     print(MyExampleSettings.get(reload=True).basics.name)  # new and shiny name
 
     ```

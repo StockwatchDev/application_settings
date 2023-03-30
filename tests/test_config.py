@@ -107,14 +107,25 @@ def test_get_defaults(
         return None
 
     monkeypatch.setattr(AnExample1Config, "default_filepath", mock_default_filepath)
-    AnExample1Config.set_filepath("")
-    assert AnExample1Config.get(reload=True).section1.field1 == "field1"
+    AnExample1Config.set_filepath("", reload=True)
+    assert AnExample1Config.get().section1.field1 == "field1"
+    AnExample1Config.set_filepath("", reload=True)
     assert AnExample1Config.get().section1.field2 == 2
     captured = capfd.readouterr()
     assert (
         "No path specified for config file; trying with defaults, but this may not work."
         in captured.out
     )
+
+
+def test_set_filepath_after_get(
+    toml_file: Path, monkeypatch: pytest.MonkeyPatch, capfd: pytest.CaptureFixture[str]
+) -> None:
+    AnExample1Config.set_filepath(toml_file, reload=True)
+    assert AnExample1Config.get().section1.field1 == "f1"
+    AnExample1Config.set_filepath("", reload=False)
+    captured = capfd.readouterr()
+    assert "file is not loaded into the Config." in captured.out
 
 
 def test_get(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
