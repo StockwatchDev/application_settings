@@ -31,6 +31,7 @@ class AnExample1ConfigSection(ConfigSectionBase):
 class AnExample1Config(ConfigBase):
     """Example Config"""
 
+    field0: float = 2.2
     section1: AnExample1ConfigSection = AnExample1ConfigSection()
 
 
@@ -41,7 +42,9 @@ def toml_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
         / AnExample1Config.default_filename()
     )
     with file_path.open(mode="wb") as fptr:
-        tomli_w.dump({"section1": {"field1": "f1", "field2": 22}}, fptr)
+        tomli_w.dump(
+            {"field0": 33.33, "section1": {"field1": "f1", "field2": 22}}, fptr
+        )
     return file_path
 
 
@@ -130,7 +133,8 @@ def test_set_filepath_after_get(
 
 def test_get(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
     AnExample1Config.set_filepath(toml_file)
-    assert AnExample1Config.get(reload=True).section1.field1 == "f1"
+    assert AnExample1Config.get(reload=True).field0 == 33.33
+    assert AnExample1Config.get().section1.field1 == "f1"
     assert AnExample1Config.get().section1.field2 == 22
 
     # test that by default it is not reloaded
@@ -143,7 +147,8 @@ def test_get(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
     assert AnExample1Config.get().section1.field2 == 22
 
     # and now test reload
-    assert AnExample1Config.get(reload=True).section1.field2 == 222
+    assert AnExample1Config.get(reload=True).field0 == 2.2
+    assert AnExample1Config.get().section1.field2 == 222
 
 
 def test_get_json(json_file: Path) -> None:

@@ -13,7 +13,7 @@ import tomli_w
 from pathvalidate import is_valid_filepath
 from pydantic.dataclasses import dataclass
 
-from .type_notation_helper import PathOpt, PathOrStr
+from .type_notation_helper import PathOpt, PathOrStr, dictOrAny
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -166,16 +166,14 @@ class ContainerBase(ABC):
         _data_fields = {
             fld for fld in fields(cls) if fld.init and fld.name in data_stored.keys()
         }
-        # instantiate the sections and keep them in a dict
-        # actually sections: dict[str, _ContainerSectionT]
-        # but MyPy doesn't swallow that
-        sections: dict[str, Any] = {
-            fld.name: cls._instantiate_section(fld.type, data_stored[fld.name])
+        # instantiate the fields of the dataclass and keep them in a dict
+        stored_fields: dict[str, Any] = {
+            fld.name: _instantiate_field(fld.type, data_stored[fld.name])
             for fld in _data_fields
         }
 
         # instantiate the Container with the sections
-        return cls(**sections)
+        return cls(**stored_fields)
 
     @classmethod
     def _get_stored_data(cls) -> dict[str, Any]:
@@ -199,23 +197,6 @@ class ContainerBase(ABC):
             )
         return data_stored
 
-    @classmethod
-    def _instantiate_section(
-        cls: type[_ContainerT],
-        class_to_instantiate: type[_ContainerSectionT],
-        arg_dict: dict[str, Any],
-    ) -> _ContainerSectionT:
-        """Return an instance of class_to_instantiate, properly initialized"""
-        # pre-condition: class_to_instantiate is the class of an initializable field of cls
-        assert (
-            len([f for f in fields(cls) if f.init and f.type == class_to_instantiate])
-            > 0
-        )
-
-        field_set = {f.name for f in fields(class_to_instantiate) if f.init}
-        filtered_arg_dict = {k: v for k, v in arg_dict.items() if k in field_set}
-        return class_to_instantiate(**filtered_arg_dict)
-
     def _set(self) -> None:
         """Private method to store the singleton."""
         _ALL_CONTAINERS[id(self.__class__)] = self
@@ -238,6 +219,27 @@ class ContainerBase(ABC):
             raise RuntimeError(
                 f"No path specified for {self.kind_string().lower()} file, cannot be saved."
             )
+
+
+def _instantiate_field(
+    class_to_instantiate: Any,
+    arg_dict_or_val: dictOrAny,
+) -> object:
+    """Return an instance of class_to_instantiate, properly initialized with arg_dict"""
+    if issubclass(class_to_instantiate, ContainerSectionBase):
+        assert isinstance(arg_dict_or_val, dict)
+        return _instantiate_section(class_to_instantiate, arg_dict_or_val)
+    return class_to_instantiate(arg_dict_or_val)
+
+
+def _instantiate_section(
+    class_to_instantiate: type[_ContainerSectionT],
+    arg_dict: dict[str, Any],
+) -> _ContainerSectionT:
+    """Return an instance of class_to_instantiate, properly initialized"""
+    field_set = {f.name for f in fields(class_to_instantiate) if f.init}
+    filtered_arg_dict = {k: v for k, v in arg_dict.items() if k in field_set}
+    return class_to_instantiate(**filtered_arg_dict)
 
 
 def _update_section(
