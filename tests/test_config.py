@@ -20,11 +20,19 @@ else:
 
 
 @dataclass(frozen=True)
+class AnExampleConfigSubSection(ConfigSectionBase):
+    """Example of a Config subsection"""
+
+    field3: tuple[int, str] = (3, "yes")
+
+
+@dataclass(frozen=True)
 class AnExample1ConfigSection(ConfigSectionBase):
     """Example 1 of a Config section"""
 
     field1: str = "field1"
     field2: int = 2
+    subsec: AnExampleConfigSubSection = AnExampleConfigSubSection()
 
 
 @dataclass(frozen=True)
@@ -43,7 +51,15 @@ def toml_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
     )
     with file_path.open(mode="wb") as fptr:
         tomli_w.dump(
-            {"field0": 33.33, "section1": {"field1": "f1", "field2": 22}}, fptr
+            {
+                "field0": 33.33,
+                "section1": {
+                    "field1": "f1",
+                    "field2": 22,
+                    "subsec": {"field3": (-3, "no")},
+                },
+            },
+            fptr,
         )
     return file_path
 
@@ -114,6 +130,7 @@ def test_get_defaults(
     assert AnExample1Config.get().section1.field1 == "field1"
     AnExample1Config.set_filepath("", reload=True)
     assert AnExample1Config.get().section1.field2 == 2
+    assert AnExample1Config.get().section1.subsec.field3[1] == "yes"
     captured = capfd.readouterr()
     assert (
         "No path specified for config file; trying with defaults, but this may not work."
@@ -126,6 +143,7 @@ def test_set_filepath_after_get(
 ) -> None:
     AnExample1Config.set_filepath(toml_file, reload=True)
     assert AnExample1Config.get().section1.field1 == "f1"
+    assert AnExample1Config.get().section1.subsec.field3[1] == "no"
     AnExample1Config.set_filepath("", reload=False)
     captured = capfd.readouterr()
     assert "file is not loaded into the Config." in captured.out

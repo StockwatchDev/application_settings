@@ -25,6 +25,18 @@ _ContainerT = TypeVar("_ContainerT", bound="ContainerBase")
 _ContainerSectionT = TypeVar("_ContainerSectionT", bound="ContainerSectionBase")
 
 
+if sys.version_info >= (3, 10):
+    from typing import TypeAlias
+
+    ContainerOrContainerSection: TypeAlias = _ContainerT | _ContainerSectionT
+else:
+    from typing import Union
+
+    from typing_extensions import TypeAlias
+
+    ContainerOrContainerSection: TypeAlias = Union[_ContainerT, _ContainerSectionT]
+
+
 _ALL_CONTAINERS: dict[int, Any] = {}
 _ALL_PATHS: dict[int, PathOpt] = {}
 
@@ -162,18 +174,8 @@ class ContainerBase(ABC):
 
         # get whatever is stored in the config/settings file
         data_stored = cls._get_stored_data()
-        # filter out fields that are both stored and an attribute of the Container
-        _data_fields = {
-            fld for fld in fields(cls) if fld.init and fld.name in data_stored.keys()
-        }
-        # instantiate the fields of the dataclass and keep them in a dict
-        stored_fields: dict[str, Any] = {
-            fld.name: _instantiate_field(fld.type, data_stored[fld.name])
-            for fld in _data_fields
-        }
-
-        # instantiate the Container with the sections
-        return cls(**stored_fields)
+        # instantiate the Container with the stored data
+        return _instantiate_dataclass(cls, data_stored)
 
     @classmethod
     def _get_stored_data(cls) -> dict[str, Any]:
@@ -228,18 +230,56 @@ def _instantiate_field(
     """Return an instance of class_to_instantiate, properly initialized with arg_dict"""
     if issubclass(class_to_instantiate, ContainerSectionBase):
         assert isinstance(arg_dict_or_val, dict)
-        return _instantiate_section(class_to_instantiate, arg_dict_or_val)
-    return class_to_instantiate(arg_dict_or_val)
+        return _instantiate_dataclass(class_to_instantiate, arg_dict_or_val)
+    # expectation: isinstance(arg_dict_or_val, class_to_instantiate)
+    # but type coercion can take place
+    return arg_dict_or_val
 
 
-def _instantiate_section(
-    class_to_instantiate: type[_ContainerSectionT],
-    arg_dict: dict[str, Any],
-) -> _ContainerSectionT:
-    """Return an instance of class_to_instantiate, properly initialized"""
-    field_set = {f.name for f in fields(class_to_instantiate) if f.init}
-    filtered_arg_dict = {k: v for k, v in arg_dict.items() if k in field_set}
-    return class_to_instantiate(**filtered_arg_dict)
+if sys.version_info >= (3, 10):
+
+    def _instantiate_dataclass(
+        class_to_instantiate: type[_ContainerT] | type[_ContainerSectionT],
+        arg_dict: dict[str, Any],
+    ) -> _ContainerT | _ContainerSectionT:
+        """Return an instance of class_to_instantiate, properly initialized"""
+        # filter out fields that are both stored and an attribute of the ContainerSection
+        _data_fields = {
+            fld
+            for fld in fields(class_to_instantiate)
+            if fld.init and fld.name in arg_dict.keys()
+        }
+        # instantiate the fields of the dataclass and keep them in a dict
+        stored_fields: dict[str, Any] = {
+            fld.name: _instantiate_field(fld.type, arg_dict[fld.name])
+            for fld in _data_fields
+        }
+
+        # instantiate the ContainerSection
+        return class_to_instantiate(**stored_fields)
+
+else:
+    from typing import Union
+
+    def _instantiate_dataclass(
+        class_to_instantiate: Union[type[_ContainerT], type[_ContainerSectionT]],
+        arg_dict: dict[str, Any],
+    ) -> Union[_ContainerT, _ContainerSectionT]:
+        """Return an instance of class_to_instantiate, properly initialized"""
+        # filter out fields that are both stored and an attribute of the ContainerSection
+        _data_fields = {
+            fld
+            for fld in fields(class_to_instantiate)
+            if fld.init and fld.name in arg_dict.keys()
+        }
+        # instantiate the fields of the dataclass and keep them in a dict
+        stored_fields: dict[str, Any] = {
+            fld.name: _instantiate_field(fld.type, arg_dict[fld.name])
+            for fld in _data_fields
+        }
+
+        # instantiate the ContainerSection
+        return class_to_instantiate(**stored_fields)
 
 
 def _update_section(
