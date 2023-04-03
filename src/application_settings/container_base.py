@@ -37,10 +37,6 @@ else:
     ContainerOrContainerSection: TypeAlias = Union[_ContainerT, _ContainerSectionT]
 
 
-_ALL_CONTAINERS: dict[int, Any] = {}
-_ALL_PATHS: dict[int, PathOpt] = {}
-
-
 @unique
 class FileFormat(Enum):
     "File formats that are supported"
@@ -221,6 +217,10 @@ class ContainerBase(ABC):
             raise RuntimeError(
                 f"No path specified for {self.kind_string().lower()} file, cannot be saved."
             )
+
+
+_ALL_CONTAINERS: dict[int, ContainerBase] = {}
+_ALL_PATHS: dict[int, PathOpt] = {}
 
 
 def _instantiate_field(
