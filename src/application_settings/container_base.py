@@ -3,7 +3,7 @@
 import json
 import sys
 from abc import ABC, abstractmethod
-from dataclasses import asdict, fields, replace
+from dataclasses import asdict
 from enum import Enum, unique
 from pathlib import Path
 from re import sub
@@ -14,7 +14,7 @@ from pathvalidate import is_valid_filepath
 from pydantic.dataclasses import dataclass
 
 from .container_section_base import ContainerSectionBase
-from .type_notation_helper import PathOpt, PathOrStr, dictOrAny
+from .type_notation_helper import PathOpt, PathOrStr
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -104,13 +104,6 @@ class ContainerBase(ContainerSectionBase, ABC):
     if sys.version_info >= (3, 11):
 
         @classmethod
-        def _get(cls) -> Self | None:
-            """Get the singleton."""
-            if the_container := _ALL_CONTAINERS.get(id(cls)):
-                return cast(Self, the_container)
-            return None
-
-        @classmethod
         def get(cls, reload: bool = False) -> Self:
             """Get the singleton; if not existing, create it."""
 
@@ -125,6 +118,13 @@ class ContainerBase(ContainerSectionBase, ABC):
             "Update and save the settings with data specified in changes; not meant for config"
             return cls.get()._update(changes)  # pylint: disable=protected-access
 
+        @classmethod
+        def _get(cls) -> Self | None:
+            """Get the singleton."""
+            if the_container := _ALL_CONTAINERS.get(id(cls)):
+                return cast(Self, the_container)
+            return None
+
         def _update(self, changes: dict[str, dict[str, Any]]) -> Self:
             "Update and save the settings with data specified in changes; not meant for config"
             new_container = super()._update(changes)
@@ -138,7 +138,7 @@ class ContainerBase(ContainerSectionBase, ABC):
             # get whatever is stored in the config/settings file
             data_stored = cls._get_stored_data()
             # instantiate and store the Container with the stored data
-            return cls._instantiate_dataclass(data_stored)._set()
+            return cls(**data_stored)._set()
 
         def _set(self) -> Self:
             """Store the singleton."""
@@ -168,13 +168,6 @@ class ContainerBase(ContainerSectionBase, ABC):
     else:
 
         @classmethod
-        def _get(cls: type[Self]) -> Optional[Self]:
-            """Get the singleton."""
-            if the_container := _ALL_CONTAINERS.get(id(cls)):
-                return cast(Self, the_container)
-            return None
-
-        @classmethod
         def get(cls: type[Self], reload: bool = False) -> Self:
             """Get the singleton; if not existing, create it."""
 
@@ -189,23 +182,18 @@ class ContainerBase(ContainerSectionBase, ABC):
             "Update and save the settings with data specified in changes; not meant for config"
             return cls.get()._update(changes)  # pylint: disable=protected-access
 
+        @classmethod
+        def _get(cls: type[Self]) -> Optional[Self]:
+            """Get the singleton."""
+            if the_container := _ALL_CONTAINERS.get(id(cls)):
+                return cast(Self, the_container)
+            return None
+
         def _update(self: Self, changes: dict[str, dict[str, Any]]) -> Self:
             "Update and save the settings with data specified in changes; not meant for config"
-            # filter out fields that are both in changes and an attribute of the SettingsContainer
-            _sections_to_update = {
-                fld for fld in fields(self) if fld.init and fld.name in changes.keys()
-            }
-
-            # update the sections and keep them in a dict
-            # actually sections: dict[str, _ContainerSectionT]
-            # but MyPy doesn't swallow that
-            updated_sections: dict[str, Any] = {
-                fld.name: _update_section(getattr(self, fld.name), changes[fld.name])
-                for fld in _sections_to_update
-            }
-            new_settings = replace(self, **updated_sections)
-            new_settings._set()._save()  # pylint: disable=protected-access
-            return new_settings
+            new_container = super()._update(changes)
+            new_container._set()._save()  # pylint: disable=protected-access,no-member
+            return new_container
 
         @classmethod
         def _create_instance(cls: type[Self]) -> Self:
@@ -214,7 +202,7 @@ class ContainerBase(ContainerSectionBase, ABC):
             # get whatever is stored in the config/settings file
             data_stored = cls._get_stored_data()
             # instantiate and store the Container with the stored data
-            return cls._instantiate_dataclass(data_stored)._set()
+            return cls(**data_stored)._set()
 
         def _set(self: Self) -> Self:
             """Store the singleton."""

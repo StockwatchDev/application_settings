@@ -259,7 +259,7 @@ def test_attributes_no_default(
     monkeypatch: pytest.MonkeyPatch, toml_file: Path
 ) -> None:
     Example2Config.set_filepath(toml_file)
-    with pytest.raises(TypeError):
+    with pytest.raises(ValidationError):
         _ = Example2Config.get(reload=True)
 
     def mock_tomllib_load2(
