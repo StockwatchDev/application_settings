@@ -165,24 +165,6 @@ class ContainerBase(ContainerSectionBase, ABC):
                 )
             return self
 
-        @classmethod
-        def _instantiate_dataclass(
-            cls,
-            arg_dict: dict[str, Any],
-        ) -> Self:
-            """Return an instance, properly initialized"""
-            # filter out fields that are both stored and an attribute of the ContainerSection
-            _data_fields = {
-                fld for fld in fields(cls) if fld.init and fld.name in arg_dict.keys()
-            }
-            # instantiate the fields of the dataclass and keep them in a dict
-            stored_fields: dict[str, Any] = {
-                fld.name: _instantiate_field(fld.type, arg_dict[fld.name])
-                for fld in _data_fields
-            }
-
-            return cls(**stored_fields)
-
     else:
 
         @classmethod
@@ -284,19 +266,3 @@ class ContainerBase(ContainerSectionBase, ABC):
 
 _ALL_CONTAINERS: dict[int, Any] = {}
 _ALL_PATHS: dict[int, PathOpt] = {}
-
-
-def _instantiate_field(
-    class_to_instantiate: Any,
-    arg_dict_or_val: dictOrAny,
-) -> object:
-    """Return an instance of class_to_instantiate, properly initialized with arg_dict"""
-    if issubclass(class_to_instantiate, ContainerSectionBase):
-        assert isinstance(arg_dict_or_val, dict)
-        return class_to_instantiate._instantiate_dataclass(  # pylint: disable=protected-access
-            arg_dict_or_val
-        )
-
-    # expectation: isinstance(arg_dict_or_val, class_to_instantiate)
-    # but type coercion can take place
-    return arg_dict_or_val

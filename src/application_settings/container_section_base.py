@@ -25,9 +25,7 @@ class ContainerSectionBase:
             """Return an instance of cls, properly initialized"""
             # filter out fields that are both stored and an attribute of the ContainerSection
             data_fields = {
-                fld
-                for fld in fields(cls)
-                if fld.init and fld.name in arg_dict.keys()
+                fld for fld in fields(cls) if fld.init and fld.name in arg_dict.keys()
             }
             # instantiate the fields of the dataclass and keep them in a dict
             stored_fields: dict[str, Any] = {
@@ -59,7 +57,9 @@ class ContainerSectionBase:
 
             # filter out fields that are not a section
             parameters_to_update: dict[str, Any] = {
-                fld.name: fld for fld in fields_to_update if not isinstance(fld, ContainerSectionBase)
+                fld.name: fld
+                for fld in fields_to_update
+                if not isinstance(fld, ContainerSectionBase)
             }
             update_values = parameters_to_update | updated_sections
 
@@ -90,8 +90,6 @@ class ContainerSectionBase:
             return class_to_instantiate(**stored_fields)
 
 
-
-
 def _instantiate_field(
     class_to_instantiate: Any,
     arg_dict_or_val: dictOrAny,
@@ -99,7 +97,10 @@ def _instantiate_field(
     """Return an instance of class_to_instantiate, properly initialized with arg_dict"""
     if issubclass(class_to_instantiate, ContainerSectionBase):
         assert isinstance(arg_dict_or_val, dict)
-        return class_to_instantiate._instantiate_dataclass(**arg_dict_or_val)  # pylint: disable=protected-access
+        new_section = class_to_instantiate._instantiate_dataclass(  # pylint: disable=protected-access
+            **arg_dict_or_val
+        )
+        return new_section
     # expectation: isinstance(arg_dict_or_val, class_to_instantiate)
     # but type coercion can take place
     return arg_dict_or_val
