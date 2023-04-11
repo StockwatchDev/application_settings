@@ -31,7 +31,7 @@ class AnExample1Settings(SettingsBase):
 def test_paths() -> None:
     # default_filepath:
     if the_path := AnExample1Settings.default_filepath():
-        assert the_path.parts[-1] == "settings.toml"
+        assert the_path.parts[-1] == "settings.json"
         assert the_path.parts[-2] == ".an_example1"
     else:
         assert False
@@ -53,7 +53,7 @@ def test_update(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     assert AnExample1Settings.get(reload=True).section1.setting1 == "setting1"
     assert AnExample1Settings.get().section1.setting2 == 2
     with pytest.raises(RuntimeError):
-        new_settings = AnExample1Settings.get().update(
+        new_settings = AnExample1Settings.update(
             {"section1": {"setting1": "new s1", "setting2": 222}}
         )
     tmp_filepath = (
@@ -62,7 +62,7 @@ def test_update(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
         / AnExample1Settings.default_filename()
     )
     AnExample1Settings.set_filepath(tmp_filepath)
-    new_settings = AnExample1Settings.get().update(
+    new_settings = AnExample1Settings.update(
         {"section1": {"setting1": "new s1", "setting2": 222}}
     )
 
@@ -88,15 +88,48 @@ def test_update_json(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     tmp_filepath = (
         tmp_path
         / AnExample1Settings.default_foldername()
-        / AnExample1Settings.default_filename().replace("toml", "json")
+        / AnExample1Settings.default_filename()
     )
     AnExample1Settings.set_filepath(tmp_filepath)
-    new_settings = AnExample1Settings.get().update(
+    new_settings = AnExample1Settings.update(
         {"section1": {"setting1": "new s1a", "setting2": 333}}
     )
 
     assert new_settings.section1.setting1 == "new s1a"
     assert AnExample1Settings.get().section1.setting2 == 333
+    assert AnExample1Settings.get(reload=True).section1.setting1 == "new s1a"
+    assert AnExample1Settings.get().section1.setting2 == 333
+
+
+def test_update_toml(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    if sys.version_info >= (3, 10):
+
+        def mock_default_filepath() -> Path | None:
+            return None
+
+    else:
+
+        def mock_default_filepath() -> Union[Path, None]:
+            return None
+
+    monkeypatch.setattr(AnExample1Settings, "default_filepath", mock_default_filepath)
+    AnExample1Settings.set_filepath("")
+    assert AnExample1Settings.get(reload=True).section1.setting1 == "setting1"
+    assert AnExample1Settings.get().section1.setting2 == 2
+    tmp_filepath = (
+        tmp_path
+        / AnExample1Settings.default_foldername()
+        / AnExample1Settings.default_filename().replace("json", "toml")
+    )
+    AnExample1Settings.set_filepath(tmp_filepath)
+    new_settings = AnExample1Settings.update(
+        {"section1": {"setting1": "new s1b", "setting2": 444}}
+    )
+
+    assert new_settings.section1.setting1 == "new s1b"
+    assert AnExample1Settings.get().section1.setting2 == 444
+    assert AnExample1Settings.get(reload=True).section1.setting1 == "new s1b"
+    assert AnExample1Settings.get().section1.setting2 == 444
 
 
 def test_update_ini(
@@ -119,10 +152,10 @@ def test_update_ini(
     tmp_filepath = (
         tmp_path
         / AnExample1Settings.default_foldername()
-        / AnExample1Settings.default_filename().replace("toml", "ini")
+        / AnExample1Settings.default_filename().replace("json", "ini")
     )
     AnExample1Settings.set_filepath(tmp_filepath)
-    new_settings = AnExample1Settings.get().update(
+    new_settings = AnExample1Settings.update(
         {"section1": {"setting1": "new s1a", "setting2": 333}}
     )
 

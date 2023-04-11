@@ -1,6 +1,5 @@
 # pylint: disable=missing-module-docstring
 # pylint: disable=missing-function-docstring
-# pylint: disable=consider-alternative-union-syntax
 # pylint: disable=redefined-outer-name
 import json
 import sys
@@ -67,7 +66,7 @@ def ini_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
 
 
 def test_version() -> None:
-    assert __version__ == "0.2.0"
+    assert __version__ == "0.3.0"
 
 
 def test_paths(toml_file: Path) -> None:
@@ -108,14 +107,25 @@ def test_get_defaults(
         return None
 
     monkeypatch.setattr(AnExample1Config, "default_filepath", mock_default_filepath)
-    AnExample1Config.set_filepath("")
-    assert AnExample1Config.get(reload=True).section1.field1 == "field1"
+    AnExample1Config.set_filepath("", reload=True)
+    assert AnExample1Config.get().section1.field1 == "field1"
+    AnExample1Config.set_filepath("", reload=True)
     assert AnExample1Config.get().section1.field2 == 2
     captured = capfd.readouterr()
     assert (
         "No path specified for config file; trying with defaults, but this may not work."
         in captured.out
     )
+
+
+def test_set_filepath_after_get(
+    toml_file: Path, capfd: pytest.CaptureFixture[str]
+) -> None:
+    AnExample1Config.set_filepath(toml_file, reload=True)
+    assert AnExample1Config.get().section1.field1 == "f1"
+    AnExample1Config.set_filepath("", reload=False)
+    captured = capfd.readouterr()
+    assert "file is not loaded into the Config." in captured.out
 
 
 def test_get(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
@@ -169,7 +179,7 @@ def test_wrong_type(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
     def mock_tomllib_load(
         fptr: Any,  # pylint: disable=unused-argument
     ) -> dict[str, dict[str, Any]]:
-        return {"section1": {"field1": ("f1", 22), "field2": None}}  # type: ignore
+        return {"section1": {"field1": ("f1", 22), "field2": None}}
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
 

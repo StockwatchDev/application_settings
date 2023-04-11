@@ -3,7 +3,12 @@ from typing import TypeVar
 
 from pydantic.dataclasses import dataclass
 
-from .container_base import ContainerBase, ContainerSectionBase, ContainerTypeStr
+from .container_base import (
+    ContainerBase,
+    ContainerSectionBase,
+    ContainerTypeStr,
+    FileFormat,
+)
 
 SettingsT = TypeVar("SettingsT", bound="SettingsBase")
 SettingsSectionT = TypeVar("SettingsSectionT", bound="SettingsSectionBase")
@@ -22,3 +27,8 @@ class SettingsBase(ContainerBase):
     def kind_string(cls: type[SettingsT]) -> ContainerTypeStr:
         "Return 'Settings'"
         return "Settings"
+
+    @classmethod
+    def default_file_format(cls: type[SettingsT]) -> FileFormat:
+        "Return the default file format"
+        return FileFormat.JSON
