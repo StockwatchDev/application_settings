@@ -129,20 +129,20 @@ class ContainerBase(ContainerSectionBase, ABC):
                 return cast(Self, the_container)
             return None
 
-        def _update(self, changes: dict[str, dict[str, Any]]) -> Self:
-            "Update and save the settings with data specified in changes; not meant for config"
-            new_container = super()._update(changes)
-            new_container._set()._save()  # pylint: disable=protected-access,no-member
-            return new_container
-
         @classmethod
         def _create_instance(cls) -> Self:
             """Load stored data, instantiate the Container with it, store it in the singleton and return it."""
 
             # get whatever is stored in the config/settings file
-            data_stored = cls._get_stored_data()
+            data_stored = cls._get_saved_data()
             # instantiate and store the Container with the stored data
             return cls(**data_stored)._set()
+
+        def _update(self, changes: dict[str, dict[str, Any]]) -> Self:
+            "Update and save the settings with data specified in changes; not meant for config"
+            new_container = super()._update(changes)
+            new_container._set()._save()  # pylint: disable=protected-access,no-member
+            return new_container
 
         def _set(self) -> Self:
             """Store the singleton."""
@@ -187,26 +187,26 @@ class ContainerBase(ContainerSectionBase, ABC):
             return cls.get()._update(changes)  # pylint: disable=protected-access
 
         @classmethod
-        def _get(cls: type[Self]) -> Optional[Self]:
+        def _get(cls: type[Self]) -> Self | None:
             """Get the singleton."""
             if the_container := _ALL_CONTAINERS.get(id(cls)):
                 return cast(Self, the_container)
             return None
-
-        def _update(self: Self, changes: dict[str, dict[str, Any]]) -> Self:
-            "Update and save the settings with data specified in changes; not meant for config"
-            new_container = super()._update(changes)
-            new_container._set()._save()  # pylint: disable=protected-access,no-member
-            return new_container
 
         @classmethod
         def _create_instance(cls: type[Self]) -> Self:
             """Load stored data, instantiate the Container with it, store it in the singleton and return it."""
 
             # get whatever is stored in the config/settings file
-            data_stored = cls._get_stored_data()
+            data_stored = cls._get_saved_data()
             # instantiate and store the Container with the stored data
             return cls(**data_stored)._set()
+
+        def _update(self: Self, changes: dict[str, dict[str, Any]]) -> Self:
+            "Update and save the settings with data specified in changes; not meant for config"
+            new_container = super()._update(changes)
+            new_container._set()._save()  # pylint: disable=protected-access,no-member
+            return new_container
 
         def _set(self: Self) -> Self:
             """Store the singleton."""
@@ -234,7 +234,7 @@ class ContainerBase(ContainerSectionBase, ABC):
             return self
 
     @classmethod
-    def _get_stored_data(cls) -> dict[str, Any]:
+    def _get_saved_data(cls) -> dict[str, Any]:
         """Get the data stored in the parameter file"""
         data_stored: dict[str, Any] = {}
 
