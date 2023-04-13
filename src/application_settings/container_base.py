@@ -1,4 +1,3 @@
-# pylint: disable=consider-alternative-union-syntax
 """Base class for a container (= root section) for configuration and settings."""
 import json
 import sys
@@ -7,7 +6,7 @@ from dataclasses import asdict
 from enum import Enum, unique
 from pathlib import Path
 from re import sub
-from typing import Any, Literal, Optional, TypeVar, cast
+from typing import Any, Literal, TypeVar, cast
 
 import tomli_w
 from pathvalidate import is_valid_filepath
