@@ -1,5 +1,5 @@
 # pylint: disable=consider-alternative-union-syntax
-"""Base classes for containers and sections for configuration and settings."""
+"""Base class for a container (= root section) for configuration and settings."""
 import json
 import sys
 from abc import ABC, abstractmethod
@@ -27,7 +27,7 @@ else:
 
 @unique
 class FileFormat(Enum):
-    "File formats that are supported"
+    "File formats that are supported by application_settings"
     TOML = "toml"
     JSON = "json"
 
@@ -37,7 +37,7 @@ ContainerTypeStr = Literal["Config", "Settings"]
 
 @dataclass(frozen=True)
 class ContainerBase(ContainerSectionBase, ABC):
-    """Base class for Config and Settings classes"""
+    """Base class for Config and Settings container classes"""
 
     @classmethod
     @abstractmethod
@@ -52,7 +52,8 @@ class ContainerBase(ContainerSectionBase, ABC):
     @classmethod
     def default_foldername(cls) -> str:
         """Return the class name without kind_string, lowercase, with a preceding dot and underscores to seperate words."""
-        kind_str = cls.kind_string()
+        if (kind_str := cls.kind_string()) == cls.__name__:
+            return f".{kind_str.lower()}"
         return (
             "."
             + sub("(?<!^)(?=[A-Z])", "_", cls.__name__.replace(kind_str, "")).lower()
