@@ -66,7 +66,10 @@ class ContainerBase(ContainerSectionBase, ABC):
 
     @classmethod
     def default_filepath(cls) -> PathOpt:
-        """Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml"""
+        """
+        Return the fully qualified default path for the config/settingsfile: e.g. ~/.example/config.toml.
+        If you prefer to not have a default path then overwrite this method and return None.
+        """
         return Path.home() / cls.default_foldername() / cls.default_filename()
 
     @classmethod
