@@ -70,7 +70,16 @@ def json_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
         AnExample1Config.default_foldername()
     ) / AnExample1Config.default_filename().replace("toml", "json")
     with file_path.open(mode="w") as fptr:
-        json.dump({"section1": {"field1": "f2", "field2": 33}}, fptr)
+        json.dump(
+            {
+                "section1": {
+                    "field1": "f2",
+                    "field2": 33,
+                    "subsec": {"field3": (-4, "maybe")},
+                }
+            },
+            fptr,
+        )
     return file_path
 
 
