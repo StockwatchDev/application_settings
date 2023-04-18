@@ -26,6 +26,7 @@ else:
     Self = TypeVar("Self", bound="ContainerBase")
     if sys.version_info < (3, 10):
         from typing import Union
+
         from typing_extensions import TypeAlias
 
         SelfOpt: TypeAlias = Union[Self, None]
