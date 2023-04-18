@@ -29,7 +29,9 @@ else:
 
         from typing_extensions import TypeAlias
 
-        SelfOpt: TypeAlias = Union[Self, None]
+        SelfOpt: TypeAlias = Union[  # pylint: disable=consider-alternative-union-syntax
+            Self, None
+        ]
     else:
         from typing import TypeAlias
 
