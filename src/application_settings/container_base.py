@@ -1,4 +1,6 @@
 """Base class for a container (= root section) for configuration and settings."""
+from __future__ import annotations
+
 import json
 import sys
 from abc import ABC, abstractmethod
@@ -23,7 +25,6 @@ else:
 
     Self = TypeVar("Self", bound="ContainerBase")
     if sys.version_info < (3, 10):
-        from __future__ import annotations
         from typing import Union
         from typing_extensions import TypeAlias
 
