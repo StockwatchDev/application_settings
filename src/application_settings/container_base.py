@@ -22,6 +22,10 @@ else:
     import tomli as tomllib
 
     Self = TypeVar("Self", bound="ContainerBase")
+    if sys.version_info < (3, 10):
+        SelfOpt: TypeAlias = Optional[Self]
+    else:
+        SelfOpt: Self | None
 
 
 @unique
@@ -186,7 +190,7 @@ class ContainerBase(ContainerSectionBase, ABC):
             return cls.get()._update(changes)  # pylint: disable=protected-access
 
         @classmethod
-        def _get(cls: type[Self]) -> Self | None:
+        def _get(cls: type[Self]) -> SelfOpt:
             """Get the singleton."""
             if the_container := _ALL_CONTAINERS.get(id(cls)):
                 return cast(Self, the_container)
