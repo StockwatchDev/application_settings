@@ -23,8 +23,13 @@ else:
 
     Self = TypeVar("Self", bound="ContainerBase")
     if sys.version_info < (3, 10):
+        from typing import Optional
+        from typing_extensions import TypeAlias
+
         SelfOpt: TypeAlias = Optional[Self]
     else:
+        from typing import TypeAlias
+
         SelfOpt: Self | None
 
 
