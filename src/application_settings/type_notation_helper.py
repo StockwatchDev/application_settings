@@ -11,10 +11,10 @@ if sys.version_info >= (3, 10):
     dictOrAny: TypeAlias = dict[str, Any] | Any  # pylint: disable=invalid-name
     PathOpt: TypeAlias = Path | None
 else:
-    from typing import Optional, Union
+    from typing import Union
 
     from typing_extensions import TypeAlias
 
     PathOrStr: TypeAlias = Union[Path, str]
     dictOrAny: TypeAlias = Union[dict[str, Any], Any]  # pylint: disable=invalid-name
-    PathOpt: TypeAlias = Optional[Path]
+    PathOpt: TypeAlias = Union[Path, None]
