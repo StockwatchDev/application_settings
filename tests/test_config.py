@@ -43,6 +43,11 @@ class AnExample1Config(ConfigBase):
     section1: AnExample1ConfigSection = AnExample1ConfigSection()
 
 
+@dataclass(frozen=True)
+class Config(ConfigBase):
+    """Config class def"""
+
+
 @pytest.fixture(scope="session")
 def toml_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
     file_path = (
@@ -99,6 +104,11 @@ def test_version() -> None:
 
 def test_paths(toml_file: Path) -> None:
     # default_filepath:
+    if the_path := Config.default_filepath():
+        assert the_path.parts[-2] == ".config"
+    else:
+        assert False
+
     if the_path := AnExample1Config.default_filepath():
         assert the_path.parts[-1] == "config.toml"
         assert the_path.parts[-2] == ".an_example1"
