@@ -90,7 +90,8 @@ If you invoke this function after parameters have been instantiated and do not s
 MyExampleSettings.set_filepath(r"C:\ProgramData\testsettings.toml")
 # the next statement loads the settings
 MyExampleSettings.get()
-MyExampleSettings.set_filepath(r"C:\ProgramData\productionsettings.toml", reload=True)
+# the next statement sets a new name for the settings file and reloads it
+MyExampleConfig.set_filepath(r"C:\ProgramData\productionsettings.toml", reload=True)
 ```
 
 The extension of the file is used to select the format for parsing and hence has to be

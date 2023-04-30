@@ -23,11 +23,11 @@ and vice versa).
 
 The container is a special section that is to be the root for parametrisation of an
 application. It is defined likewise: by subclassing the relevant base class (ConfigBase
-for config, SettingsBase for settings) decorating it with `@dataclass(frozen=True)` and
-nesting non-root sections.
+for config, SettingsBase for settings), decorating it with `@dataclass(frozen=True)`,
+defining fields for parameters and nested non-root sections.
 
 Note that albeit settings can be changed programmatically, we still set `frozen=True` for
-the settings container and -sections (see also the section below).
+the settings container and -sections (see also the example section below).
 
 ## Example
 
