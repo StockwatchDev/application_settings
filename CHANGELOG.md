@@ -11,10 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Documentation extended and multiple versions served on Github Pages
 - You can now request a reload when setting the filepath
+- Support for parameters in the main container
+- Support for subsections (arbitrary depth)
 
 ### Changed
 
 - The method `update` now is a class method (breaking).
+
+## Fixed
+
+- Default folder name no longer just a dot if container class is called Config or Settings
 
 ## [0.2.0] - 2023-03-19
 
