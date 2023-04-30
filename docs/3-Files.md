@@ -25,10 +25,11 @@ following files.
 
 === "`config.toml` file for the configuration example"
     ```toml
+    # Use this file to set the config that you prefer by editing the file
+    name = "application specific name"
     [section1]
-    # Use this section to set the config that you prefer by editing the file
-    # field1 has default value 'field1'
-    field1 = "my own version of the first field"
+    # field1 has default value 0.5
+    field1 = -0.5
     # field2 has default value 2
     field2 = 22
     ```
@@ -36,22 +37,22 @@ following files.
 === "`settings.json` file for the settings example"
     ```json
     {
+        "name": "the stored name",
         "basics": {
-            "name": "the stored name",
             "totals": 3
         }
     }
     ```
 
 
-The fieldnames of a Container class are found as:
+The field names of a Container class are found as:
 
-- the section names in the `toml` file
+- the root parameter names and the section names in the `toml` file
 - the member names of the root object in the `json` file
 
-The fieldnames of a Section class are found as:
+The field names of a Section class are found as:
 
-- the fieldnames inside the corresponding section in the `toml` file
+- the parameter names inside the corresponding section in the `toml` file
 - the member names of the object that is the value of the name that represents the
   section in the `json` file
 
@@ -67,7 +68,7 @@ on data validation [click here](./5-Handling_deviations.md)
 
 ## Location, name and type of the file
 
-By default, the config and settings file are located in a subfolder of the home folder of
+By default, the config and settings files are located in a subfolder of the home folder of
 the user running the application. The default name of that subfolder is provided by the
 `default_foldername()` method and consists of a dot, followed by a name derived from your
 container class: the word `Config`/`Settings` is removed, underscores are put in front of
