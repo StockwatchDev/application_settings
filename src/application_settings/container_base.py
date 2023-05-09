@@ -6,7 +6,7 @@ from dataclasses import asdict
 from enum import Enum, unique
 from pathlib import Path
 from re import sub
-from typing import Any, Literal, TypeVar, cast
+from typing import Any, Literal, TypeVar
 
 import tomli_w
 from pathvalidate import is_valid_filepath
@@ -122,13 +122,6 @@ class ContainerBase(ContainerSectionBase, ABC):
             return cls.get()._update(changes)  # pylint: disable=protected-access
 
         @classmethod
-        def _get(cls) -> Self | None:
-            """Get the singleton."""
-            if the_container := _ALL_CONTAINERS.get(id(cls)):
-                return cast(Self, the_container)
-            return None
-
-        @classmethod
         def _create_instance(cls) -> Self:
             """Load stored data, instantiate the Container with it, store it in the singleton and return it."""
 
@@ -142,11 +135,6 @@ class ContainerBase(ContainerSectionBase, ABC):
             new_container = super()._update(changes)
             new_container._set()._save()  # pylint: disable=protected-access,no-member
             return new_container
-
-        def _set(self) -> Self:
-            """Store the singleton."""
-            _ALL_CONTAINERS[id(self.__class__)] = self
-            return self
 
         def _save(self) -> Self:
             """Private method to save the singleton to file."""
@@ -185,25 +173,6 @@ class ContainerBase(ContainerSectionBase, ABC):
             "Update and save the settings with data specified in changes; not meant for config"
             return cls.get()._update(changes)  # pylint: disable=protected-access
 
-        if sys.version_info < (3, 10):
-            from typing import Union  # pylint: disable=import-outside-toplevel
-
-            @classmethod
-            def _get(cls: type[Self]) -> Union[Self, None]:
-                """Get the singleton."""
-                if the_container := _ALL_CONTAINERS.get(id(cls)):
-                    return cast(Self, the_container)
-                return None
-
-        else:
-
-            @classmethod
-            def _get(cls: type[Self]) -> Self | None:
-                """Get the singleton."""
-                if the_container := _ALL_CONTAINERS.get(id(cls)):
-                    return cast(Self, the_container)
-                return None
-
         @classmethod
         def _create_instance(cls: type[Self]) -> Self:
             """Load stored data, instantiate the Container with it, store it in the singleton and return it."""
@@ -218,11 +187,6 @@ class ContainerBase(ContainerSectionBase, ABC):
             new_container = super()._update(changes)
             new_container._set()._save()  # pylint: disable=protected-access,no-member
             return new_container
-
-        def _set(self: Self) -> Self:
-            """Store the singleton."""
-            _ALL_CONTAINERS[id(self.__class__)] = self
-            return self
 
         def _save(self: Self) -> Self:
             """Private method to save the singleton to file."""
@@ -267,5 +231,4 @@ class ContainerBase(ContainerSectionBase, ABC):
         return data_stored
 
 
-_ALL_CONTAINERS: dict[int, Any] = {}
 _ALL_PATHS: dict[int, PathOpt] = {}
