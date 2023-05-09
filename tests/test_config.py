@@ -20,18 +20,32 @@ else:
 
 
 @dataclass(frozen=True)
+class AnExampleConfigSubSection(ConfigSectionBase):
+    """Example of a Config subsection"""
+
+    field3: tuple[int, str] = (3, "yes")
+
+
+@dataclass(frozen=True)
 class AnExample1ConfigSection(ConfigSectionBase):
     """Example 1 of a Config section"""
 
     field1: str = "field1"
     field2: int = 2
+    subsec: AnExampleConfigSubSection = AnExampleConfigSubSection()
 
 
 @dataclass(frozen=True)
 class AnExample1Config(ConfigBase):
     """Example Config"""
 
+    field0: float = 2.2
     section1: AnExample1ConfigSection = AnExample1ConfigSection()
+
+
+@dataclass(frozen=True)
+class Config(ConfigBase):
+    """Config class def"""
 
 
 @pytest.fixture(scope="session")
@@ -41,7 +55,17 @@ def toml_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
         / AnExample1Config.default_filename()
     )
     with file_path.open(mode="wb") as fptr:
-        tomli_w.dump({"section1": {"field1": "f1", "field2": 22}}, fptr)
+        tomli_w.dump(
+            {
+                "field0": 33.33,
+                "section1": {
+                    "field1": "f1",
+                    "field2": 22,
+                    "subsec": {"field3": (-3, "no")},
+                },
+            },
+            fptr,
+        )
     return file_path
 
 
@@ -51,7 +75,16 @@ def json_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
         AnExample1Config.default_foldername()
     ) / AnExample1Config.default_filename().replace("toml", "json")
     with file_path.open(mode="w") as fptr:
-        json.dump({"section1": {"field1": "f2", "field2": 33}}, fptr)
+        json.dump(
+            {
+                "section1": {
+                    "field1": "f2",
+                    "field2": 33,
+                    "subsec": {"field3": (-4, "maybe")},
+                }
+            },
+            fptr,
+        )
     return file_path
 
 
@@ -71,6 +104,11 @@ def test_version() -> None:
 
 def test_paths(toml_file: Path) -> None:
     # default_filepath:
+    if the_path := Config.default_filepath():
+        assert the_path.parts[-2] == ".config"
+    else:
+        assert False
+
     if the_path := AnExample1Config.default_filepath():
         assert the_path.parts[-1] == "config.toml"
         assert the_path.parts[-2] == ".an_example1"
@@ -111,6 +149,7 @@ def test_get_defaults(
     assert AnExample1Config.get().section1.field1 == "field1"
     AnExample1Config.set_filepath("", reload=True)
     assert AnExample1Config.get().section1.field2 == 2
+    assert AnExample1Config.get().section1.subsec.field3[1] == "yes"
     captured = capfd.readouterr()
     assert (
         "No path specified for config file; trying with defaults, but this may not work."
@@ -123,6 +162,7 @@ def test_set_filepath_after_get(
 ) -> None:
     AnExample1Config.set_filepath(toml_file, reload=True)
     assert AnExample1Config.get().section1.field1 == "f1"
+    assert AnExample1Config.get().section1.subsec.field3[1] == "no"
     AnExample1Config.set_filepath("", reload=False)
     captured = capfd.readouterr()
     assert "file is not loaded into the Config." in captured.out
@@ -130,7 +170,8 @@ def test_set_filepath_after_get(
 
 def test_get(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
     AnExample1Config.set_filepath(toml_file)
-    assert AnExample1Config.get(reload=True).section1.field1 == "f1"
+    assert AnExample1Config.get(reload=True).field0 == 33.33
+    assert AnExample1Config.get().section1.field1 == "f1"
     assert AnExample1Config.get().section1.field2 == 22
 
     # test that by default it is not reloaded
@@ -143,7 +184,8 @@ def test_get(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
     assert AnExample1Config.get().section1.field2 == 22
 
     # and now test reload
-    assert AnExample1Config.get(reload=True).section1.field2 == 222
+    assert AnExample1Config.get(reload=True).field0 == 2.2
+    assert AnExample1Config.get().section1.field2 == 222
 
 
 def test_get_json(json_file: Path) -> None:
@@ -236,7 +278,7 @@ def test_attributes_no_default(
     monkeypatch: pytest.MonkeyPatch, toml_file: Path
 ) -> None:
     Example2Config.set_filepath(toml_file)
-    with pytest.raises(TypeError):
+    with pytest.raises(ValidationError):
         _ = Example2Config.get(reload=True)
 
     def mock_tomllib_load2(
