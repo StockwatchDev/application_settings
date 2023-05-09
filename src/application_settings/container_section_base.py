@@ -24,6 +24,9 @@ class ContainerSectionBase:
         def _set(self) -> Self:
             """Store the singleton."""
             _ALL_CONTAINER_SECTION_SINGLETONS[id(self.__class__)] = self
+            subsections = [attr for attr in vars(self) if isinstance(attr, ContainerSectionBase)]
+            for subsec in subsections:
+                subsec._set()  # pylint: disable=protected-access
             return self
 
         @classmethod
