@@ -92,7 +92,7 @@ class ContainerBase(ContainerSectionBase, ABC):
             _ALL_PATHS.pop(id(cls), None)
 
         if reload:
-            cls.get(reload=True)
+            cls.reload()
         else:
             if cls._get() is not None:
                 print(
@@ -107,19 +107,9 @@ class ContainerBase(ContainerSectionBase, ABC):
     if sys.version_info >= (3, 11):
 
         @classmethod
-        def get(cls, reload: bool = False) -> Self:
-            """Get the singleton; if not existing, create it."""
-
-            if (_the_container_or_none := cls._get()) is None or reload:
-                # no config has been made yet or it needs to be reloaded,
-                # so let's instantiate one and keep it in the global store
-                return cls._create_instance()
-            return _the_container_or_none
-
-        @classmethod
-        def update(cls, changes: dict[str, dict[str, Any]]) -> Self:
-            "Update and save the settings with data specified in changes; not meant for config"
-            return cls.get()._update(changes)  # pylint: disable=protected-access
+        def reload(cls) -> Self:
+            """Create a new singleton"""
+            return cls._create_instance()
 
         @classmethod
         def _create_instance(cls) -> Self:
@@ -128,13 +118,15 @@ class ContainerBase(ContainerSectionBase, ABC):
             # get whatever is stored in the config/settings file
             data_stored = cls._get_saved_data()
             # instantiate and store the Container with the stored data
-            return cls(**data_stored)._set()
+            return cls.set(data_stored)
 
         def _update(self, changes: dict[str, dict[str, Any]]) -> Self:
             "Update and save the settings with data specified in changes; not meant for config"
-            new_container = super()._update(changes)
-            new_container._set()._save()  # pylint: disable=protected-access,no-member
-            return new_container
+            return (
+                super()  # pylint: disable=protected-access,no-member
+                ._update(changes)
+                ._save()
+            )
 
         def _save(self) -> Self:
             """Private method to save the singleton to file."""
@@ -159,19 +151,9 @@ class ContainerBase(ContainerSectionBase, ABC):
     else:
 
         @classmethod
-        def get(cls: type[Self], reload: bool = False) -> Self:
-            """Get the singleton; if not existing, create it."""
-
-            if (_the_container_or_none := cls._get()) is None or reload:
-                # no config has been made yet or it needs to be reloaded,
-                # so let's instantiate one and keep it in the global store
-                return cls._create_instance()
-            return _the_container_or_none
-
-        @classmethod
-        def update(cls: type[Self], changes: dict[str, dict[str, Any]]) -> Self:
-            "Update and save the settings with data specified in changes; not meant for config"
-            return cls.get()._update(changes)  # pylint: disable=protected-access
+        def reload(cls: type[Self]) -> Self:
+            """Create a new singleton"""
+            return cls._create_instance()
 
         @classmethod
         def _create_instance(cls: type[Self]) -> Self:
@@ -180,13 +162,15 @@ class ContainerBase(ContainerSectionBase, ABC):
             # get whatever is stored in the config/settings file
             data_stored = cls._get_saved_data()
             # instantiate and store the Container with the stored data
-            return cls(**data_stored)._set()
+            return cls.set(data_stored)
 
         def _update(self: Self, changes: dict[str, dict[str, Any]]) -> Self:
             "Update and save the settings with data specified in changes; not meant for config"
-            new_container = super()._update(changes)
-            new_container._set()._save()  # pylint: disable=protected-access,no-member
-            return new_container
+            return (
+                super()  # pylint: disable=protected-access,no-member
+                ._update(changes)
+                ._save()
+            )
 
         def _save(self: Self) -> Self:
             """Private method to save the singleton to file."""
