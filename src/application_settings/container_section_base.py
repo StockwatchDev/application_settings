@@ -15,13 +15,6 @@ else:
 class ContainerSectionBase:
     """Base class for all ContainerSection classes"""
 
-    if sys.version_info >= (3, 11):
-
-        def _update(self, changes: dict[str, dict[str, Any]]) -> Self:
-            "Update parameters and sections with data specified in changes; not meant for config"
-            return replace(self, **changes)
-
-    else:
-
-        def _update(self: Self, changes: dict[str, dict[str, Any]]) -> Self:
-            return replace(self, **changes)
+    def _update(self: Self, changes: dict[str, dict[str, Any]]) -> Self:
+        "Update parameters and sections with data specified in changes; not meant for config"
+        return replace(self, **changes)

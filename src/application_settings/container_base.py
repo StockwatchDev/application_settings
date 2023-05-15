@@ -6,7 +6,7 @@ from dataclasses import asdict
 from enum import Enum, unique
 from pathlib import Path
 from re import sub
-from typing import Any, Literal, TypeVar, cast
+from typing import Any, Literal, Optional, TypeVar, cast
 
 import tomli_w
 from pathvalidate import is_valid_filepath
@@ -22,19 +22,6 @@ else:
     import tomli as tomllib
 
     Self = TypeVar("Self", bound="ContainerBase")
-    if sys.version_info == (3, 10):
-        from typing import TypeAlias
-
-        SelfOpt: TypeAlias = Self | None
-    else:
-        # sys.version_info == (3, 9)
-        from typing import Union
-
-        from typing_extensions import TypeAlias
-
-        SelfOpt: TypeAlias = Union[  # pylint: disable=consider-alternative-union-syntax, useless-suppression
-            Path, None
-        ]
 
 
 @unique
@@ -117,133 +104,67 @@ class ContainerBase(ContainerSectionBase, ABC):
         """Return the path for the file that holds the config / settings."""
         return _ALL_PATHS.get(id(cls), cls.default_filepath())
 
-    if sys.version_info >= (3, 11):
+    @classmethod
+    def get(cls: type[Self], reload: bool = False) -> Self:  # type: ignore[misc]
+        """Get the singleton; if not existing, create it."""
 
-        @classmethod
-        def get(cls, reload: bool = False) -> Self:
-            """Get the singleton; if not existing, create it."""
+        if (_the_container_or_none := cls._get()) is None or reload:
+            # no config has been made yet or it needs to be reloaded,
+            # so let's instantiate one and keep it in the global store
+            return cls._create_instance()
+        return _the_container_or_none
 
-            if (_the_container_or_none := cls._get()) is None or reload:
-                # no config has been made yet or it needs to be reloaded,
-                # so let's instantiate one and keep it in the global store
-                return cls._create_instance()
-            return _the_container_or_none
+    @classmethod
+    def update(cls: type[Self], changes: dict[str, dict[str, Any]]) -> Self:  # type: ignore[misc]
+        "Update and save the settings with data specified in changes; not meant for config"
+        return cls.get()._update(changes)  # pylint: disable=protected-access
 
-        @classmethod
-        def update(cls, changes: dict[str, dict[str, Any]]) -> Self:
-            "Update and save the settings with data specified in changes; not meant for config"
-            return cls.get()._update(changes)  # pylint: disable=protected-access
+    @classmethod
+    def _get(cls: type[Self]) -> Optional[Self]:  # type: ignore[misc]    # pylint: disable=consider-alternative-union-syntax
+        """Get the singleton."""
+        if the_container := _ALL_CONTAINERS.get(id(cls)):
+            return cast(Self, the_container)
+        return None
 
-        @classmethod
-        def _get(cls) -> Self | None:
-            """Get the singleton."""
-            if the_container := _ALL_CONTAINERS.get(id(cls)):
-                return cast(Self, the_container)
-            return None
+    @classmethod
+    def _create_instance(cls: type[Self]) -> Self:  # type: ignore[misc]
+        """Load stored data, instantiate the Container with it, store it in the singleton and return it."""
 
-        @classmethod
-        def _create_instance(cls) -> Self:
-            """Load stored data, instantiate the Container with it, store it in the singleton and return it."""
+        # get whatever is stored in the config/settings file
+        data_stored = cls._get_saved_data()
+        # instantiate and store the Container with the stored data
+        return cls(**data_stored)._set()
 
-            # get whatever is stored in the config/settings file
-            data_stored = cls._get_saved_data()
-            # instantiate and store the Container with the stored data
-            return cls(**data_stored)._set()
+    def _update(self: Self, changes: dict[str, dict[str, Any]]) -> Self:
+        "Update and save the settings with data specified in changes; not meant for config"
+        new_container = super()._update(changes)
+        new_container._set()._save()  # pylint: disable=protected-access,no-member
+        return new_container
 
-        def _update(self, changes: dict[str, dict[str, Any]]) -> Self:
-            "Update and save the settings with data specified in changes; not meant for config"
-            new_container = super()._update(changes)
-            new_container._set()._save()  # pylint: disable=protected-access,no-member
-            return new_container
+    def _set(self: Self) -> Self:
+        """Store the singleton."""
+        _ALL_CONTAINERS[id(self.__class__)] = self
+        return self
 
-        def _set(self) -> Self:
-            """Store the singleton."""
-            _ALL_CONTAINERS[id(self.__class__)] = self
-            return self
-
-        def _save(self) -> Self:
-            """Private method to save the singleton to file."""
-            if path := self.filepath():
-                path.parent.mkdir(parents=True, exist_ok=True)
-                if (ext := path.suffix[1:].lower()) == FileFormat.TOML.value:
-                    with path.open(mode="wb") as fptr:
-                        tomli_w.dump(asdict(self), fptr)
-                elif ext == FileFormat.JSON.value:
-                    with path.open(mode="w") as fptr:
-                        json.dump(asdict(self), fptr)
-                else:
-                    print(f"Unknown file format {ext} given in {path}.")
+    def _save(self: Self) -> Self:
+        """Private method to save the singleton to file."""
+        if path := self.filepath():
+            path.parent.mkdir(parents=True, exist_ok=True)
+            if (ext := path.suffix[1:].lower()) == FileFormat.TOML.value:
+                with path.open(mode="wb") as fptr:
+                    tomli_w.dump(asdict(self), fptr)
+            elif ext == FileFormat.JSON.value:
+                with path.open(mode="w") as fptr:
+                    json.dump(asdict(self), fptr)
             else:
-                # This situation can occur if no valid path was given as an argument, and
-                # the default path is set to None.
-                raise RuntimeError(
-                    f"No path specified for {self.kind_string().lower()} file, cannot be saved."
-                )
-            return self
-
-    else:
-
-        @classmethod
-        def get(cls: type[Self], reload: bool = False) -> Self:
-            """Get the singleton; if not existing, create it."""
-
-            if (_the_container_or_none := cls._get()) is None or reload:
-                # no config has been made yet or it needs to be reloaded,
-                # so let's instantiate one and keep it in the global store
-                return cls._create_instance()
-            return _the_container_or_none
-
-        @classmethod
-        def update(cls: type[Self], changes: dict[str, dict[str, Any]]) -> Self:
-            "Update and save the settings with data specified in changes; not meant for config"
-            return cls.get()._update(changes)  # pylint: disable=protected-access
-
-        @classmethod
-        def _get(cls: type[Self]) -> SelfOpt:
-            """Get the singleton."""
-            if the_container := _ALL_CONTAINERS.get(id(cls)):
-                return cast(Self, the_container)
-            return None
-
-        @classmethod
-        def _create_instance(cls: type[Self]) -> Self:
-            """Load stored data, instantiate the Container with it, store it in the singleton and return it."""
-
-            # get whatever is stored in the config/settings file
-            data_stored = cls._get_saved_data()
-            # instantiate and store the Container with the stored data
-            return cls(**data_stored)._set()
-
-        def _update(self: Self, changes: dict[str, dict[str, Any]]) -> Self:
-            "Update and save the settings with data specified in changes; not meant for config"
-            new_container = super()._update(changes)
-            new_container._set()._save()  # pylint: disable=protected-access,no-member
-            return new_container
-
-        def _set(self: Self) -> Self:
-            """Store the singleton."""
-            _ALL_CONTAINERS[id(self.__class__)] = self
-            return self
-
-        def _save(self: Self) -> Self:
-            """Private method to save the singleton to file."""
-            if path := self.filepath():
-                path.parent.mkdir(parents=True, exist_ok=True)
-                if (ext := path.suffix[1:].lower()) == FileFormat.TOML.value:
-                    with path.open(mode="wb") as fptr:
-                        tomli_w.dump(asdict(self), fptr)
-                elif ext == FileFormat.JSON.value:
-                    with path.open(mode="w") as fptr:
-                        json.dump(asdict(self), fptr)
-                else:
-                    print(f"Unknown file format {ext} given in {path}.")
-            else:
-                # This situation can occur if no valid path was given as an argument, and
-                # the default path is set to None.
-                raise RuntimeError(
-                    f"No path specified for {self.kind_string().lower()} file, cannot be saved."
-                )
-            return self
+                print(f"Unknown file format {ext} given in {path}.")
+        else:
+            # This situation can occur if no valid path was given as an argument, and
+            # the default path is set to None.
+            raise RuntimeError(
+                f"No path specified for {self.kind_string().lower()} file, cannot be saved."
+            )
+        return self
 
     @classmethod
     def _get_saved_data(cls) -> dict[str, Any]:
