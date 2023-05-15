@@ -105,7 +105,7 @@ class ContainerBase(ContainerSectionBase, ABC):
         return _ALL_PATHS.get(id(cls), cls.default_filepath())
 
     @classmethod
-    def get(cls: type[Self], reload: bool = False) -> Self:  # type: ignore[misc, unused-ignore]
+    def get(cls: type[Self], reload: bool = False) -> Self:  # type: ignore[misc]
         """Get the singleton; if not existing, create it."""
 
         if (_the_container_or_none := cls._get()) is None or reload:
@@ -115,19 +115,19 @@ class ContainerBase(ContainerSectionBase, ABC):
         return _the_container_or_none
 
     @classmethod
-    def update(cls: type[Self], changes: dict[str, dict[str, Any]]) -> Self:  # type: ignore[misc, unused-ignore]
+    def update(cls: type[Self], changes: dict[str, dict[str, Any]]) -> Self:  # type: ignore[misc]
         "Update and save the settings with data specified in changes; not meant for config"
         return cls.get()._update(changes)  # pylint: disable=protected-access
 
     @classmethod
-    def _get(cls: type[Self]) -> Optional[Self]:  # type: ignore[misc, unused-ignore]    # pylint: disable=consider-alternative-union-syntax
+    def _get(cls: type[Self]) -> Optional[Self]:  # type: ignore[misc]    # pylint: disable=consider-alternative-union-syntax
         """Get the singleton."""
         if the_container := _ALL_CONTAINERS.get(id(cls)):
             return cast(Self, the_container)
         return None
 
     @classmethod
-    def _create_instance(cls: type[Self]) -> Self:  # type: ignore[misc, unused-ignore]
+    def _create_instance(cls: type[Self]) -> Self:  # type: ignore[misc]
         """Load stored data, instantiate the Container with it, store it in the singleton and return it."""
 
         # get whatever is stored in the config/settings file
