@@ -22,6 +22,19 @@ else:
     import tomli as tomllib
 
     Self = TypeVar("Self", bound="ContainerBase")
+    if sys.version_info == (3, 10):
+        from typing import TypeAlias
+
+        SelfOpt: TypeAlias = Self | None
+    else:
+        # sys.version_info == (3, 9)
+        from typing import Union
+
+        from typing_extensions import TypeAlias
+
+        SelfOpt: TypeAlias = Union[  # pylint: disable=consider-alternative-union-syntax, useless-suppression
+            Path, None
+        ]
 
 
 @unique
@@ -185,24 +198,12 @@ class ContainerBase(ContainerSectionBase, ABC):
             "Update and save the settings with data specified in changes; not meant for config"
             return cls.get()._update(changes)  # pylint: disable=protected-access
 
-        if sys.version_info < (3, 10):
-            from typing import Union  # pylint: disable=import-outside-toplevel
-
-            @classmethod
-            def _get(cls: type[Self]) -> Union[Self, None]:
-                """Get the singleton."""
-                if the_container := _ALL_CONTAINERS.get(id(cls)):
-                    return cast(Self, the_container)
-                return None
-
-        else:
-
-            @classmethod
-            def _get(cls: type[Self]) -> Self | None:
-                """Get the singleton."""
-                if the_container := _ALL_CONTAINERS.get(id(cls)):
-                    return cast(Self, the_container)
-                return None
+        @classmethod
+        def _get(cls: type[Self]) -> SelfOpt:
+            """Get the singleton."""
+            if the_container := _ALL_CONTAINERS.get(id(cls)):
+                return cast(Self, the_container)
+            return None
 
         @classmethod
         def _create_instance(cls: type[Self]) -> Self:
