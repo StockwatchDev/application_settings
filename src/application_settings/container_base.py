@@ -6,7 +6,7 @@ from dataclasses import asdict
 from enum import Enum, unique
 from pathlib import Path
 from re import sub
-from typing import Any, Literal, Optional, TypeVar, cast
+from typing import Any, Literal, Optional, cast
 
 import tomli_w
 from pathvalidate import is_valid_filepath
@@ -20,8 +20,7 @@ if sys.version_info >= (3, 11):
     from typing import Self
 else:
     import tomli as tomllib
-
-    Self = TypeVar("Self", bound="ContainerBase")
+    from typing_extensions import Self
 
 
 @unique
@@ -105,7 +104,7 @@ class ContainerBase(ContainerSectionBase, ABC):
         return _ALL_PATHS.get(id(cls), cls.default_filepath())
 
     @classmethod
-    def get(cls: type[Self], reload: bool = False) -> Self:  # type: ignore[misc]
+    def get(cls, reload: bool = False) -> Self:
         """Get the singleton; if not existing, create it."""
 
         if (_the_container_or_none := cls._get()) is None or reload:
@@ -115,19 +114,21 @@ class ContainerBase(ContainerSectionBase, ABC):
         return _the_container_or_none
 
     @classmethod
-    def update(cls: type[Self], changes: dict[str, dict[str, Any]]) -> Self:  # type: ignore[misc]
+    def update(cls, changes: dict[str, dict[str, Any]]) -> Self:
         "Update and save the settings with data specified in changes; not meant for config"
         return cls.get()._update(changes)  # pylint: disable=protected-access
 
     @classmethod
-    def _get(cls: type[Self]) -> Optional[Self]:  # type: ignore[misc]    # pylint: disable=consider-alternative-union-syntax
+    def _get(
+        cls,
+    ) -> Optional[Self]:  # pylint: disable=consider-alternative-union-syntax
         """Get the singleton."""
         if the_container := _ALL_CONTAINERS.get(id(cls)):
             return cast(Self, the_container)
         return None
 
     @classmethod
-    def _create_instance(cls: type[Self]) -> Self:  # type: ignore[misc]
+    def _create_instance(cls) -> Self:
         """Load stored data, instantiate the Container with it, store it in the singleton and return it."""
 
         # get whatever is stored in the config/settings file
@@ -135,18 +136,18 @@ class ContainerBase(ContainerSectionBase, ABC):
         # instantiate and store the Container with the stored data
         return cls(**data_stored)._set()
 
-    def _update(self: Self, changes: dict[str, dict[str, Any]]) -> Self:
+    def _update(self, changes: dict[str, dict[str, Any]]) -> Self:
         "Update and save the settings with data specified in changes; not meant for config"
         new_container = super()._update(changes)
         new_container._set()._save()  # pylint: disable=protected-access,no-member
         return new_container
 
-    def _set(self: Self) -> Self:
+    def _set(self) -> Self:
         """Store the singleton."""
         _ALL_CONTAINERS[id(self.__class__)] = self
         return self
 
-    def _save(self: Self) -> Self:
+    def _save(self) -> Self:
         """Private method to save the singleton to file."""
         if path := self.filepath():
             path.parent.mkdir(parents=True, exist_ok=True)
