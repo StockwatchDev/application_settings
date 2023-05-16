@@ -177,7 +177,7 @@ isolated_build = true
 envlist =
     py{39,310,311}
     style
-    typing
+    py{39,310,311}-typing
 
 [testenv]
 allowlist_externals = poetry
@@ -195,7 +195,7 @@ commands =
     poetry run isort --check --diff ./src
     poetry run pylint --recursive=y ./src
 
-[testenv:typing]
+[testenv:py{39,310,311}-typing]
 skip_install = true
 commands_pre =
     poetry install --with typing -v
