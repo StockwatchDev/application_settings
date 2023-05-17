@@ -98,6 +98,10 @@ def ini_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
     return file_path
 
 
+def test_section_singleton() -> None:
+    assert AnExample1ConfigSection.get().field1 == "field1"
+
+
 def test_paths(toml_file: Path) -> None:
     # default_filepath:
     if the_path := Config.default_filepath():
@@ -301,6 +305,7 @@ def test_attributes_no_default(
 
 def test_update() -> None:
     with pytest.raises(TypeError):
+        # a Config cannot be updated
         _ = AnExample1Config.get().update(
             {"section1": {"setting1": "new s1", "setting2": 222}}
         )
