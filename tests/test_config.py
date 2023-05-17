@@ -101,10 +101,7 @@ def ini_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
 def test_section_singleton(capfd: pytest.CaptureFixture[str]) -> None:
     assert AnExample1ConfigSection.get().field1 == "field1"
     captured = capfd.readouterr()
-    assert (
-        " accessed before data has been set by the application."
-        in captured.out
-    )
+    assert " accessed before data has been set by the application." in captured.out
 
 
 def test_paths(toml_file: Path) -> None:

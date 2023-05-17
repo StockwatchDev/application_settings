@@ -50,14 +50,17 @@ class ContainerSectionBase:
         # This situation can occur if get() is called on a Section but the application
         # has not yet created or loaded a config.
         print(
-            f"Section {cls.__name__} accessed before data has been set by the application.")
+            f"Section {cls.__name__} accessed before data has been set by the application."
+        )
         return cls().set({})
 
     def _set(self) -> Self:
         """Store the singleton."""
         _ALL_CONTAINER_SECTION_SINGLETONS[id(self.__class__)] = self
         subsections = [
-            attr for attr in vars(self).values() if isinstance(attr, ContainerSectionBase)
+            attr
+            for attr in vars(self).values()
+            if isinstance(attr, ContainerSectionBase)
         ]
         for subsec in subsections:
             subsec._set()  # pylint: disable=protected-access
