@@ -62,6 +62,7 @@ def test_update(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     assert AnExample1Settings.get().section1.setting1 == "setting1"
     assert AnExample1Settings.get().section1.setting2 == 2
     with pytest.raises(RuntimeError):
+        # no path specified and attempting to save, that will raise a runtime error
         new_settings = AnExample1Settings.update(
             {"section1": {"setting1": "new s1", "setting2": 222}}
         )
