@@ -98,6 +98,10 @@ def ini_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
     return file_path
 
 
+def test_kind_string() -> None:
+    assert AnExample1ConfigSection.kind_string() == "Config"
+
+
 def test_section_singleton(capfd: pytest.CaptureFixture[str]) -> None:
     assert AnExample1ConfigSection.get().field1 == "field1"
     captured = capfd.readouterr()

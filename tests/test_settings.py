@@ -36,6 +36,10 @@ class AnExample1Settings(SettingsBase):
     section1: AnExample1SettingsSection = AnExample1SettingsSection()
 
 
+def test_kind_string() -> None:
+    assert AnExample1SettingsSection.kind_string() == "Settings"
+
+
 def test_paths() -> None:
     # default_filepath:
     if the_path := AnExample1Settings.default_filepath():
