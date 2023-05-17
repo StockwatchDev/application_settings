@@ -1,7 +1,8 @@
 """Base class for sections to be added to containers and container sections for configuration and settings."""
 import sys
+from abc import ABC, abstractmethod
 from dataclasses import replace
-from typing import Any, Optional, cast
+from typing import Any, Literal, Optional, cast
 
 from pydantic.dataclasses import dataclass
 
@@ -11,9 +12,17 @@ else:
     from typing_extensions import Self
 
 
+SectionTypeStr = Literal["Config", "Settings"]
+
+
 @dataclass(frozen=True)
-class ContainerSectionBase:
+class ContainerSectionBase(ABC):
     """Base class for all ContainerSection classes"""
+
+    @classmethod
+    @abstractmethod
+    def kind_string(cls) -> SectionTypeStr:
+        "Return either 'Config' or 'Settings'"
 
     @classmethod
     def get(cls) -> Self:

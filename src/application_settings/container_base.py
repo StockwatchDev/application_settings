@@ -6,7 +6,7 @@ from dataclasses import asdict
 from enum import Enum, unique
 from pathlib import Path
 from re import sub
-from typing import Any, Literal
+from typing import Any
 
 import tomli_w
 from pathvalidate import is_valid_filepath
@@ -30,17 +30,9 @@ class FileFormat(Enum):
     JSON = "json"
 
 
-ContainerTypeStr = Literal["Config", "Settings"]
-
-
 @dataclass(frozen=True)
 class ContainerBase(ContainerSectionBase, ABC):
     """Base class for Config and Settings container classes"""
-
-    @classmethod
-    @abstractmethod
-    def kind_string(cls) -> ContainerTypeStr:
-        "Return either 'Config' or 'Settings'"
 
     @classmethod
     @abstractmethod
