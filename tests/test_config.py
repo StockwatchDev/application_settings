@@ -163,6 +163,8 @@ def test_set_filepath_after_get(
     AnExample1Config.set_filepath(toml_file, reload=True)
     assert AnExample1Config.get().section1.field1 == "f1"
     assert AnExample1Config.get().section1.subsec.field3[1] == "no"
+    # test if the subsection singleton is properly registered
+    assert AnExampleConfigSubSection.get().field3[1] == "no"
     AnExample1Config.set_filepath("", reload=False)
     captured = capfd.readouterr()
     assert "file is not loaded into the Config." in captured.out
