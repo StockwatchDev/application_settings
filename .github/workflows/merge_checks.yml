@@ -17,16 +17,26 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Style check with py310-ubuntu
-            python: '3.10'
+          - name: Style check with py311-ubuntu
+            python: '3.11'
             arch: x64
             os: ubuntu-latest
             toxenv: style
+          - name: Type check with py39-ubuntu
+            python: '3.9'
+            arch: x64
+            os: ubuntu-latest
+            toxenv: py39-typing
           - name: Type check with py310-ubuntu
             python: '3.10'
             arch: x64
             os: ubuntu-latest
-            toxenv: typing
+            toxenv: py310-typing
+          - name: Type check with py311-ubuntu
+            python: '3.11'
+            arch: x64
+            os: ubuntu-latest
+            toxenv: py311-typing
           - name: Test suite with py39-ubuntu
             python: '3.9'
             arch: x64

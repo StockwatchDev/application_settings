@@ -14,11 +14,19 @@ if sys.version_info < (3, 10):
 
 
 @dataclass(frozen=True)
+class AnExample1SettingsSubSection(SettingsSectionBase):
+    """Example 1 of a Settings section"""
+
+    setting3: float = 3.3
+
+
+@dataclass(frozen=True)
 class AnExample1SettingsSection(SettingsSectionBase):
     """Example 1 of a Settings section"""
 
     setting1: str = "setting1"
     setting2: int = 2
+    subsec: AnExample1SettingsSubSection = AnExample1SettingsSubSection()
 
 
 @dataclass(frozen=True)
@@ -123,13 +131,13 @@ def test_update_toml(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     )
     AnExample1Settings.set_filepath(tmp_filepath)
     new_settings = AnExample1Settings.update(
-        {"section1": {"setting1": "new s1b", "setting2": 444}}
+        {"section1": {"subsec": {"setting3": 4.44, "extra thing": True}}}
     )
 
-    assert new_settings.section1.setting1 == "new s1b"
-    assert AnExample1Settings.get().section1.setting2 == 444
-    assert AnExample1Settings.get(reload=True).section1.setting1 == "new s1b"
-    assert AnExample1Settings.get().section1.setting2 == 444
+    assert new_settings.section1.subsec.setting3 == 4.44
+    assert AnExample1Settings.get().section1.subsec.setting3 == 4.44
+    assert AnExample1Settings.get(reload=True).section1.subsec.setting3 == 4.44
+    assert AnExample1Settings.get().section1.subsec.setting3 == 4.44
 
 
 def test_update_ini(

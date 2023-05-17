@@ -8,12 +8,14 @@ is raised. Consider the case where you would use the following config file for
 the `MyExampleConfig` defined before:
 
 ```toml
+name = true
 [section1]
-field1 = true
+field1 = 4
 field2 = "22"
 ```
 
-The `bool` specified for `field1` will be coerced into a `str` value of `"true"`.
+The `bool` specified for `name` will be coerced into a `str` value of `"true"`.
+The `int` specified for `field1` will be coerced into a `float` value of `4.0`.
 The `str` specified for `field2` will be coerced into an `int` value of `22`.
 
 ### When your parameter file does not contain all specified attributes

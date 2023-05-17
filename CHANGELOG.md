@@ -11,10 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Documentation extended and multiple versions served on Github Pages
 - You can now request a reload when setting the filepath
+- Support for parameters in the main container (Issue [#20](https://github.com/StockwatchDev/application_settings/issues/20))
+- Support for subsections (arbitrary depth) (Issue [#5](https://github.com/StockwatchDev/application_settings/issues/5))
 
 ### Changed
 
 - The method `update` now is a class method (breaking).
+
+## Fixed
+
+- Default folder name no longer just a dot if container class is called Config or Settings
 
 ## [0.2.0] - 2023-03-19
 
