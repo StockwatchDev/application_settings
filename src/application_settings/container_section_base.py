@@ -46,10 +46,8 @@ class ContainerSectionBase:
 
     @classmethod
     def _create_instance(cls) -> Self:
-        """Instantiate the ContainerSection, store it in the singleton and return it. Likely that this is wrong."""
-
-        # instantiate and store the ContainerSection with default values
-        return cls()._set()
+        """Create a new ContainerSection with default values. Likely that this is wrong."""
+        return cls().set({})
 
     def _set(self) -> Self:
         """Store the singleton."""
