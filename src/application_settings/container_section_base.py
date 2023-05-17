@@ -47,6 +47,10 @@ class ContainerSectionBase:
     @classmethod
     def _create_instance(cls) -> Self:
         """Create a new ContainerSection with default values. Likely that this is wrong."""
+        # This situation can occur if get() is called on a Section but the application
+        # has not yet created or loaded a config.
+        print(
+            f"Section {cls.__name__} accessed before data has been set by the application.")
         return cls().set({})
 
     def _set(self) -> Self:
