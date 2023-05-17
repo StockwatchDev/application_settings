@@ -1,4 +1,4 @@
-"""Module for loading and retrieving configuration."""
+"""Module for loading and retrieving parameters for configuration and settings."""
 
 from importlib.metadata import version
 
