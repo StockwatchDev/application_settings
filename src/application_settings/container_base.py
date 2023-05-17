@@ -6,7 +6,7 @@ from dataclasses import asdict
 from enum import Enum, unique
 from pathlib import Path
 from re import sub
-from typing import Any, Literal, TypeVar
+from typing import Any, Literal
 
 import tomli_w
 from pathvalidate import is_valid_filepath
@@ -20,8 +20,7 @@ if sys.version_info >= (3, 11):
     from typing import Self
 else:
     import tomli as tomllib
-
-    Self = TypeVar("Self", bound="ContainerBase")
+    from typing_extensions import Self
 
 
 @unique
@@ -104,93 +103,47 @@ class ContainerBase(ContainerSectionBase, ABC):
         """Return the path for the file that holds the config / settings."""
         return _ALL_PATHS.get(id(cls), cls.default_filepath())
 
-    if sys.version_info >= (3, 11):
+    @classmethod
+    def reload(cls) -> Self:
+        """Create a new singleton"""
+        return cls._create_instance()
 
-        @classmethod
-        def reload(cls) -> Self:
-            """Create a new singleton"""
-            return cls._create_instance()
+    @classmethod
+    def _create_instance(cls) -> Self:
+        """Load stored data, instantiate the Container with it, store it in the singleton and return it."""
 
-        @classmethod
-        def _create_instance(cls) -> Self:
-            """Load stored data, instantiate the Container with it, store it in the singleton and return it."""
+        # get whatever is stored in the config/settings file
+        data_stored = cls._get_saved_data()
+        # instantiate and store the Container with the stored data
+        return cls.set(data_stored)
 
-            # get whatever is stored in the config/settings file
-            data_stored = cls._get_saved_data()
-            # instantiate and store the Container with the stored data
-            return cls.set(data_stored)
+    def _update(self, changes: dict[str, dict[str, Any]]) -> Self:
+        "Update and save the settings with data specified in changes; not meant for config"
+        return (
+            super()  # pylint: disable=protected-access,no-member
+            ._update(changes)
+            ._save()
+        )
 
-        def _update(self, changes: dict[str, dict[str, Any]]) -> Self:
-            "Update and save the settings with data specified in changes; not meant for config"
-            return (
-                super()  # pylint: disable=protected-access,no-member
-                ._update(changes)
-                ._save()
-            )
-
-        def _save(self) -> Self:
-            """Private method to save the singleton to file."""
-            if path := self.filepath():
-                path.parent.mkdir(parents=True, exist_ok=True)
-                if (ext := path.suffix[1:].lower()) == FileFormat.TOML.value:
-                    with path.open(mode="wb") as fptr:
-                        tomli_w.dump(asdict(self), fptr)
-                elif ext == FileFormat.JSON.value:
-                    with path.open(mode="w") as fptr:
-                        json.dump(asdict(self), fptr)
-                else:
-                    print(f"Unknown file format {ext} given in {path}.")
+    def _save(self) -> Self:
+        """Private method to save the singleton to file."""
+        if path := self.filepath():
+            path.parent.mkdir(parents=True, exist_ok=True)
+            if (ext := path.suffix[1:].lower()) == FileFormat.TOML.value:
+                with path.open(mode="wb") as fptr:
+                    tomli_w.dump(asdict(self), fptr)
+            elif ext == FileFormat.JSON.value:
+                with path.open(mode="w") as fptr:
+                    json.dump(asdict(self), fptr)
             else:
-                # This situation can occur if no valid path was given as an argument, and
-                # the default path is set to None.
-                raise RuntimeError(
-                    f"No path specified for {self.kind_string().lower()} file, cannot be saved."
-                )
-            return self
-
-    else:
-
-        @classmethod
-        def reload(cls: type[Self]) -> Self:
-            """Create a new singleton"""
-            return cls._create_instance()
-
-        @classmethod
-        def _create_instance(cls: type[Self]) -> Self:
-            """Load stored data, instantiate the Container with it, store it in the singleton and return it."""
-
-            # get whatever is stored in the config/settings file
-            data_stored = cls._get_saved_data()
-            # instantiate and store the Container with the stored data
-            return cls.set(data_stored)
-
-        def _update(self: Self, changes: dict[str, dict[str, Any]]) -> Self:
-            "Update and save the settings with data specified in changes; not meant for config"
-            return (
-                super()  # pylint: disable=protected-access,no-member
-                ._update(changes)
-                ._save()
+                print(f"Unknown file format {ext} given in {path}.")
+        else:
+            # This situation can occur if no valid path was given as an argument, and
+            # the default path is set to None.
+            raise RuntimeError(
+                f"No path specified for {self.kind_string().lower()} file, cannot be saved."
             )
-
-        def _save(self: Self) -> Self:
-            """Private method to save the singleton to file."""
-            if path := self.filepath():
-                path.parent.mkdir(parents=True, exist_ok=True)
-                if (ext := path.suffix[1:].lower()) == FileFormat.TOML.value:
-                    with path.open(mode="wb") as fptr:
-                        tomli_w.dump(asdict(self), fptr)
-                elif ext == FileFormat.JSON.value:
-                    with path.open(mode="w") as fptr:
-                        json.dump(asdict(self), fptr)
-                else:
-                    print(f"Unknown file format {ext} given in {path}.")
-            else:
-                # This situation can occur if no valid path was given as an argument, and
-                # the default path is set to None.
-                raise RuntimeError(
-                    f"No path specified for {self.kind_string().lower()} file, cannot be saved."
-                )
-            return self
+        return self
 
     @classmethod
     def _get_saved_data(cls) -> dict[str, Any]:

@@ -34,6 +34,7 @@ pathvalidate = "^2.5"
 pydantic = "^1.10"
 tomli = { version = "^2.0", python = "<3.11" }
 tomli-w = "^1.0"
+typing-extensions = { version = "^4.5.0", python = "<3.11" }
 
 [tool.poetry.group.testing]
 optional = true
@@ -177,7 +178,7 @@ isolated_build = true
 envlist =
     py{39,310,311}
     style
-    typing
+    py{39,310,311}-typing
 
 [testenv]
 allowlist_externals = poetry
@@ -195,7 +196,7 @@ commands =
     poetry run isort --check --diff ./src
     poetry run pylint --recursive=y ./src
 
-[testenv:typing]
+[testenv:py{39,310,311}-typing]
 skip_install = true
 commands_pre =
     poetry install --with typing -v

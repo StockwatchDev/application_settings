@@ -1,6 +1,13 @@
+This package lets you define parameters for configuration and settings. The difference
+between configuration and settings is as follows. `Config` is for parameters that do not
+change during runtime and are read from file. `Settings` are parameters that can change
+programmatically during runtime and are read from and saved to file for persistancy over
+sessions. During definition, they differ only in terms of the base classes that are used. 
+
 The intended structure is that parameters are defined in section classes. Sections can be
 nested. There should be one special root section for the application, referred to as the
-container, that handles file storage.
+container, that handles file storage. Config sections and Settings sections should never
+be mixed (i.e., do not nest a Settings section in a Config section and vice versa).
 
 ## Defining non-container section(s)
 
@@ -15,9 +22,7 @@ value for the parameter of concern is not found in the parameter file.
 
 Nested sections are obtained by defining fields in a section that are type hinted with 
 the appropriate contained section class(es) and instantiated (possible only when all
-parameters of the nested section have default values). Config sections and Settings
-sections should never be mixed (i.e., do not nest a Settings section in a Config section
-and vice versa).
+parameters of the nested section have default values).
 
 ## Defining the container
 
