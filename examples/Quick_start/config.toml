@@ -1,0 +1,9 @@
+# The nice thing about toml is that you can add comments for explanation
+# A config is read-only, so they will not be overwritten by your application
+# (unlike for settings)
+
+name = "the real thing"
+
+[section1]
+field1 = -0.5
+field2 = 22

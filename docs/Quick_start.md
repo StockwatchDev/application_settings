@@ -95,17 +95,28 @@ By default, the following files are expected for the dataclasses defined above:
 
 === "Configuration"
     ```python
-    # the first invocation of get() will create the singleton instance of MyExampleConfig
-    a_variable = MyExampleConfig.get().section1.field1  # a_variable == -0.5
-    another_variable = MyExampleConfig.get().section1.field2  # another_variable == 22
+    # One of the first things to do in an application is loading the config
+    MyExampleConfig.load()
+    # Now you can access parameters via get()
+    # If you get() MyExampleConfig before load(), it will be loaded automatically
+    a_variable = MyExampleConfig.get().section1.field1
+    print(f"a_variable == {a_variable}")  # a_variable == -0.5
+    # You can also directly get() a section; but remember that the config should
+    # be loaded already then (get() on a section does not automatically load())
+    another_variable = MyExampleConfigSection.get().field2
+    print(f"another_variable == {another_variable}")  # another_variable == 22
 
     # The only way to modify a config parameter is by editing the config file
     # or by changing the default value in the definition
-    # Suppose that we edited the config file, changed name to "new name" and removed field2
+    # Suppose that we edited the config file, changed the value for name to "new name"
+    # and removed field2
 
-    # you can reload a config
-    new_variable = MyExampleConfig.get().name  # new_variable == "new name"
-    another_new_variable = MyExampleConfig.get().section1.field2  # another_new_variable == 2
+    # You can reload a config
+    MyExampleConfig.load()
+    new_variable = MyExampleConfig.get().name
+    print(f"new_variable == {new_variable}")  # new_variable == "new name"
+    another_new_variable = MyExampleConfigSection.get().field2
+    print(f"another_new_variable == {another_new_variable}")  # another_new_variable == 2
     ```
 
 === "Settings"

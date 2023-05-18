@@ -25,6 +25,7 @@ include = [
     { path = "LICENSE" },
     { path = "README.md" },
     { path = "tests", format = "sdist" },
+    { path = "examples", format = "sdist" },
 ]
 
 
