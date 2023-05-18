@@ -121,18 +121,31 @@ By default, the following files are expected for the dataclasses defined above:
 
 === "Settings"
     ```python
-    # the first invocation of get() will create the singleton instance of MyExampleSettings
-    a_variable: str = MyExampleSettings.get().name  # a_variable == "the stored name"
-    another_variable: int = MyExampleConfig.get().basics.totals  # another_variable == 3
+    # One of the first things to do in an application is loading the parameters
+    MyExampleSettings.load()
+    # Now you can access parameters via get()
+    # If you get() MyExampleSettings before load(), it will be loaded automatically
+    a_variable = MyExampleSettings.get().name
+    print(f"a_variable == '{a_variable}'")  # a_variable == 'the stored name'
+    # You can also directly get() a section; but remember that the settings should
+    # be loaded already then (get() on a section does not automatically load())
+    another_variable = BasicSettingsSection.get().totals
+    print(f"another_variable == {another_variable}")  # another_variable == 3
 
     # You can update the settings:
     MyExampleSettings.update({"basics": {"totals": 33}})
     # The updated values will be written to the settings file automatically and the
     # singleton is replaced by a new instance of MyExampleSettings with the updated values
+    refreshed_totals = BasicSettingsSection.get().totals
+    print(f"refreshed_totals == {refreshed_totals}")  # refreshed_totals == 33
 
-    # you can also edit the settings file and reload:
+    # You can also edit the settings file. Suppose that we changed the value for name to
+    # "updated name"
+
+    # You can reload a setting
+    MyExampleSettings.load()
     refreshed_name = MyExampleSettings.get().name
-
+    print(f"refreshed_name == '{refreshed_name}'")  # refreshed_name == 'updated name'
     ```
 
 These are the basics; a more detailed description is found in the next section (Usage)

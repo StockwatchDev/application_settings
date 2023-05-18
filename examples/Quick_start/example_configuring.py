@@ -25,7 +25,7 @@ class MyExampleConfig(ConfigBase):
 
 def main1() -> None:
     """example how to use the module application_settings"""
-    # One of the first things to do in an application is loading the config
+    # One of the first things to do in an application is loading the parameters
     MyExampleConfig.load()
     # Now you can access parameters via get()
     # If you get() MyExampleConfig before load(), it will be loaded automatically
