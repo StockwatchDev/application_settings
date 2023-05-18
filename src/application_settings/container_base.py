@@ -12,8 +12,8 @@ import tomli_w
 from pathvalidate import is_valid_filepath
 from pydantic.dataclasses import dataclass
 
-from .container_section_base import ContainerSectionBase
-from .type_notation_helper import PathOpt, PathOrStr
+from application_settings.container_section_base import ContainerSectionBase
+from application_settings.type_notation_helper import PathOpt, PathOrStr
 
 if sys.version_info >= (3, 11):
     import tomllib
