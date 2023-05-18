@@ -63,7 +63,7 @@ class ContainerBase(ContainerSectionBase, ABC):
         return Path.home() / cls.default_foldername() / cls.default_filename()
 
     @classmethod
-    def set_filepath(cls, file_path: PathOrStr = "", reload: bool = False) -> None:
+    def set_filepath(cls, file_path: PathOrStr = "", load: bool = False) -> None:
         """Set the path for the file (a singleton)."""
 
         path: PathOpt = None
@@ -82,8 +82,8 @@ class ContainerBase(ContainerSectionBase, ABC):
         else:
             _ALL_PATHS.pop(id(cls), None)
 
-        if reload:
-            cls.reload()
+        if load:
+            cls.load()
         else:
             if cls._get() is not None:
                 print(
@@ -96,7 +96,7 @@ class ContainerBase(ContainerSectionBase, ABC):
         return _ALL_PATHS.get(id(cls), cls.default_filepath())
 
     @classmethod
-    def reload(cls) -> Self:
+    def load(cls) -> Self:
         """Create a new singleton"""
         return cls._create_instance()
 

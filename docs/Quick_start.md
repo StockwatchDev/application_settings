@@ -104,7 +104,7 @@ By default, the following files are expected for the dataclasses defined above:
     # Suppose that we edited the config file, changed name to "new name" and removed field2
 
     # you can reload a config
-    new_variable = MyExampleConfig.get(reload=True).name  # new_variable == "new name"
+    new_variable = MyExampleConfig.get().name  # new_variable == "new name"
     another_new_variable = MyExampleConfig.get().section1.field2  # another_new_variable == 2
     ```
 
@@ -120,7 +120,7 @@ By default, the following files are expected for the dataclasses defined above:
     # singleton is replaced by a new instance of MyExampleSettings with the updated values
 
     # you can also edit the settings file and reload:
-    refreshed_name = MyExampleSettings.get(reload=True).name
+    refreshed_name = MyExampleSettings.get().name
 
     ```
 

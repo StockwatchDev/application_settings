@@ -51,7 +51,7 @@ reloading will return the changed parameter values.
     field2_var: int = MyExampleConfig.get().section1.field2  # field2_var == 22
 
     # if you have edited the config file, you can reload it (which will create a new instance)
-    field1_var = MyExampleConfig.get(reload=True).section1.field1
+    field1_var = MyExampleConfig.get().section1.field1
 
     # you cannot programmatically change config parameters
 
@@ -70,13 +70,13 @@ reloading will return the changed parameter values.
     totals_var: int = MyExampleSettings.get().basics.totals  # totals_var == 3
 
     # if you have edited the settings file, you can reload it (which will create a new instance)
-    name_var = MyExampleSettings.get(reload=True).name
+    name_var = MyExampleSettings.get().name
 
     # change settings parameters programmatically using update
     MyExampleSettings.update({"name": "new and shiny name", "basics": {"totals": 33}})
     print(MyExampleSettings.get().name)  # new and shiny name
     print(MyExampleSettings.get().basics.totals)  # 33
     # the update has been written to file as well
-    print(MyExampleSettings.get(reload=True).name)  # new and shiny name
+    print(MyExampleSettings.get().name)  # new and shiny name
 
     ```

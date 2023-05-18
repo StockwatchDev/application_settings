@@ -80,9 +80,9 @@ the Container class `MyExampleConfig` by default will store its config in
 If you want the files to be stored in a different location and/or have a different name
 and/or change the format, then you can use the method `set_filepath`. If you invoke this
 method but you have already instantiated the parameters via `get()`, then you most likely
-want to reload them. You can do so by setting an argument `reload=True` in `set_filepath`.
+want to reload them. You can do so by setting an argument `load=True` in `set_filepath`.
 If you invoke this function after parameters have been instantiated and do not set
-`reload`, then a warning is printed. Example:
+`load`, then a warning is printed. Example:
 
 ```python
 # the next statement sets the location, name and format of the settings file
@@ -91,7 +91,7 @@ MyExampleSettings.set_filepath(r"C:\ProgramData\testsettings.toml")
 # the next statement loads the settings
 MyExampleSettings.get()
 # the next statement sets a new name for the settings file and reloads it
-MyExampleConfig.set_filepath(r"C:\ProgramData\productionsettings.toml", reload=True)
+MyExampleConfig.set_filepath(r"C:\ProgramData\productionsettings.toml", load=True)
 ```
 
 The extension of the file is used to select the format for parsing and hence has to be
