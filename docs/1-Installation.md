@@ -17,10 +17,10 @@ can install from our repo.
     poetry add application_settings
 
     # From the repo with pip:
-    py -m pip install git+git://github.com/StockwatchDev/application_settings@develop#egg=application_settings
+    py -m pip install git+https://github.com/StockwatchDev/application_settings#develop
 
     # From the repo with poetry:
-    poetry add git+git://github.com/StockwatchDev/application_settings@develop#egg=application_settings
+    poetry add git+https://github.com/StockwatchDev/application_settings#develop
     ```
 
 === "Linux"
@@ -32,10 +32,10 @@ can install from our repo.
     poetry add application_settings
 
     # From the repo with pip:
-    python -m pip install git+git://github.com/StockwatchDev/application_settings@develop#egg=application_settings
+    python -m pip install git+https://github.com/StockwatchDev/application_settings#develop
 
     # From the repo with poetry:
-    poetry add git+git://github.com/StockwatchDev/application_settings@develop#egg=application_settings
+    poetry add git+https://github.com/StockwatchDev/application_settings#develop
     ```
 
 We have direct dependencies on the following packages:
@@ -44,3 +44,4 @@ We have direct dependencies on the following packages:
 - [pydantic](https://pypi.org/project/pydantic/)
 - [tomli](https://pypi.org/project/tomli/) (for python versions below 3.11)
 - [tomli-w](https://pypi.org/project/tomli-w/)
+- [typing-extensions](https://pypi.org/project/typing-extensions/) (for python versions below 3.11)
