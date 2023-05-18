@@ -1,9 +1,7 @@
-# The nice thing about toml is that you can add comments for explanation
-# A config is read-only, so they will not be overwritten by your application
-# (unlike for settings)
-
+# Use this file to set the config that you prefer by editing the file
 name = "the real thing"
-
 [section1]
+# field1 has default value 0.5
 field1 = -0.5
+# field2 has default value 2
 field2 = 22
