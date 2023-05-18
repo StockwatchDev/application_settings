@@ -1,10 +1,9 @@
 """Example for configuration."""
 from pathlib import Path
-from application_settings import (
-    ConfigBase,
-    ConfigSectionBase,
-)
+
 from pydantic.dataclasses import dataclass
+
+from application_settings import ConfigBase, ConfigSectionBase
 
 
 @dataclass(frozen=True)
@@ -36,6 +35,7 @@ def main1() -> None:
     another_variable = MyExampleConfigSection.get().field2
     print(f"another_variable == {another_variable}")  # another_variable == 22
 
+
 def main2() -> None:
     """continued example how to use the module application_settings"""
     # The only way to modify a config parameter is by editing the config file
@@ -48,30 +48,34 @@ def main2() -> None:
     new_variable = MyExampleConfig.get().name
     print(f"new_variable == {new_variable}")  # new_variable == "new name"
     another_new_variable = MyExampleConfigSection.get().field2
-    print(f"another_new_variable == {another_new_variable}")  # another_new_variable == 2
+    print(
+        f"another_new_variable == {another_new_variable}"
+    )  # another_new_variable == 2
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # Set the filepath to the default filename, but then in the local folder
-    local_filepath = Path(__file__).parent.absolute() / MyExampleConfig.default_filename()
+    local_filepath = (
+        Path(__file__).parent.absolute() / MyExampleConfig.default_filename()
+    )
     MyExampleConfig.set_filepath(local_filepath)
 
     main1()
 
     # Edit the config file
-    with local_filepath.open('r') as file :
+    with local_filepath.open("r") as file:
         filedata = file.read()
     filedata = filedata.replace('"the real thing"', '"new name"')
-    filedata = filedata.replace('field2 = 22', '# field2 = 22')
-    with local_filepath.open('w') as file:
+    filedata = filedata.replace("field2 = 22", "# field2 = 22")
+    with local_filepath.open("w") as file:
         file.write(filedata)
 
     main2()
 
     # Restore the original config file
-    with local_filepath.open('r') as file :
+    with local_filepath.open("r") as file:
         filedata = file.read()
     filedata = filedata.replace('"new name"', '"the real thing"')
-    filedata = filedata.replace('# field2 = 22', 'field2 = 22')
-    with local_filepath.open('w') as file:
+    filedata = filedata.replace("# field2 = 22", "field2 = 22")
+    with local_filepath.open("w") as file:
         file.write(filedata)
-

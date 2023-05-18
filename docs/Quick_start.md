@@ -12,11 +12,9 @@ terms of the base classes that are used. Example:
 
 === "Configuration"
     ```python
-    from application_settings import (
-        ConfigBase,
-        ConfigSectionBase,
-    )
     from pydantic.dataclasses import dataclass
+
+    from application_settings import ConfigBase, ConfigSectionBase
 
 
     @dataclass(frozen=True)
@@ -38,11 +36,9 @@ terms of the base classes that are used. Example:
 
 === "Settings"
     ```python
-    from application_settings import (
-        SettingsBase,
-        SettingsSectionBase,
-    )
     from pydantic.dataclasses import dataclass
+
+    from application_settings import SettingsBase, SettingsSectionBase
 
 
     @dataclass(frozen=True)
@@ -58,6 +54,7 @@ terms of the base classes that are used. Example:
 
         name: str = "nice name"
         basics: BasicSettingsSection = BasicSettingsSection()
+
 
     ```
 
@@ -95,7 +92,7 @@ By default, the following files are expected for the dataclasses defined above:
 
 === "Configuration"
     ```python
-    # One of the first things to do in an application is loading the config
+    # One of the first things to do in an application is loading the parameters
     MyExampleConfig.load()
     # Now you can access parameters via get()
     # If you get() MyExampleConfig before load(), it will be loaded automatically
@@ -116,7 +113,10 @@ By default, the following files are expected for the dataclasses defined above:
     new_variable = MyExampleConfig.get().name
     print(f"new_variable == {new_variable}")  # new_variable == "new name"
     another_new_variable = MyExampleConfigSection.get().field2
-    print(f"another_new_variable == {another_new_variable}")  # another_new_variable == 2
+    print(
+        f"another_new_variable == {another_new_variable}"
+    )  # another_new_variable == 2
+
     ```
 
 === "Settings"

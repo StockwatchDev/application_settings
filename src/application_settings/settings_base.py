@@ -2,7 +2,10 @@
 from pydantic.dataclasses import dataclass
 
 from application_settings.container_base import ContainerBase, FileFormat
-from application_settings.container_section_base import ContainerSectionBase, SectionTypeStr
+from application_settings.container_section_base import (
+    ContainerSectionBase,
+    SectionTypeStr,
+)
 
 
 @dataclass(frozen=True)

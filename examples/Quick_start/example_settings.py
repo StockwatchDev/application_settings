@@ -1,10 +1,9 @@
 """Example for settings."""
 from pathlib import Path
-from application_settings import (
-    SettingsBase,
-    SettingsSectionBase,
-)
+
 from pydantic.dataclasses import dataclass
+
+from application_settings import SettingsBase, SettingsSectionBase
 
 
 @dataclass(frozen=True)
@@ -42,6 +41,7 @@ def main1() -> None:
     refreshed_totals = BasicSettingsSection.get().totals
     print(f"refreshed_totals == {refreshed_totals}")  # refreshed_totals == 33
 
+
 def main2() -> None:
     """continued example how to use the module application_settings"""
     # You can also edit the settings file. Suppose that we changed the value for name to
@@ -52,27 +52,29 @@ def main2() -> None:
     refreshed_name = MyExampleSettings.get().name
     print(f"refreshed_name == '{refreshed_name}'")  # refreshed_name == 'updated name'
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # Set the filepath to the default filename, but then in the local folder
-    local_filepath = Path(__file__).parent.absolute() / MyExampleSettings.default_filename()
+    local_filepath = (
+        Path(__file__).parent.absolute() / MyExampleSettings.default_filename()
+    )
     MyExampleSettings.set_filepath(local_filepath)
 
     main1()
 
     # Edit the config file
-    with local_filepath.open('r') as file :
+    with local_filepath.open("r") as file:
         filedata = file.read()
     filedata = filedata.replace('"the stored name"', '"updated name"')
-    with local_filepath.open('w') as file:
+    with local_filepath.open("w") as file:
         file.write(filedata)
 
     main2()
 
     # Restore the original config file
-    with local_filepath.open('r') as file :
+    with local_filepath.open("r") as file:
         filedata = file.read()
     filedata = filedata.replace('"updated name"', '"the stored name"')
-    filedata = filedata.replace('33', '3')
-    with local_filepath.open('w') as file:
+    filedata = filedata.replace("33", "3")
+    with local_filepath.open("w") as file:
         file.write(filedata)
-
