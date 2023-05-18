@@ -38,11 +38,9 @@ the settings container and -sections (see also the example section below).
 
 === "Configuration"
     ```python
-    from application_settings import (
-        ConfigBase,
-        ConfigSectionBase,
-    )
     from pydantic.dataclasses import dataclass
+
+    from application_settings import ConfigBase, ConfigSectionBase
 
 
     @dataclass(frozen=True)
@@ -64,11 +62,9 @@ the settings container and -sections (see also the example section below).
 
 === "Settings"
     ```python
-    from application_settings import (
-        SettingsBase,
-        SettingsSectionBase,
-    )
     from pydantic.dataclasses import dataclass
+
+    from application_settings import SettingsBase, SettingsSectionBase
 
 
     @dataclass(frozen=True)
@@ -84,5 +80,6 @@ the settings container and -sections (see also the example section below).
 
         name: str = "nice name"
         basics: BasicSettingsSection = BasicSettingsSection()
+
 
     ```
