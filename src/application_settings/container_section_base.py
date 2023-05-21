@@ -54,7 +54,9 @@ class ContainerSectionBase(ABC):
         return None
 
     @classmethod
-    def _create_instance(cls) -> Self:
+    def _create_instance(
+        cls, throw_if_file_not_found: bool = False  # pylint: disable=unused-argument
+    ) -> Self:
         """Create a new ContainerSection with default values. Likely that this is wrong."""
         # This situation can occur if get() is called on a Section but the application
         # has not yet created or loaded a config.
