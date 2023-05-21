@@ -137,7 +137,7 @@ def test_paths(toml_file: Path) -> None:
 
     # raising of FileNotFoundError:
     with pytest.raises(FileNotFoundError):
-        _ = AnExample1Config.get().section1.field1
+        AnExample1Config.load(throw_if_file_not_found=True)
 
     # raising in case of invalid path:
     with pytest.raises(ValueError):
@@ -158,9 +158,12 @@ def test_get_defaults(
     assert AnExample1Config.get().section1.subsec.field3[1] == "yes"
     captured = capfd.readouterr()
     assert (
-        "No path specified for config file; trying with defaults, but this may not work."
+        "No path specified for config file. Trying with defaults, but this may not work."
         in captured.out
     )
+    # raising of FileNotFoundError:
+    with pytest.raises(FileNotFoundError):
+        AnExample1Config.load(throw_if_file_not_found=True)
 
 
 def test_set_filepath_after_get(

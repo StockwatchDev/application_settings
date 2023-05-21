@@ -96,16 +96,16 @@ class ContainerBase(ContainerSectionBase, ABC):
         return _ALL_PATHS.get(id(cls), cls.default_filepath())
 
     @classmethod
-    def load(cls) -> Self:
+    def load(cls, throw_if_file_not_found: bool = False) -> Self:
         """Create a new singleton"""
-        return cls._create_instance()
+        return cls._create_instance(throw_if_file_not_found)
 
     @classmethod
-    def _create_instance(cls) -> Self:
+    def _create_instance(cls, throw_if_file_not_found: bool = False) -> Self:
         """Load stored data, instantiate the Container with it, store it in the singleton and return it."""
 
         # get whatever is stored in the config/settings file
-        data_stored = cls._get_saved_data()
+        data_stored = cls._get_saved_data(throw_if_file_not_found)
         # instantiate and store the Container with the stored data
         return cls.set(data_stored)
 
@@ -138,25 +138,28 @@ class ContainerBase(ContainerSectionBase, ABC):
         return self
 
     @classmethod
-    def _get_saved_data(cls) -> dict[str, Any]:
+    def _get_saved_data(cls, throw_if_file_not_found: bool = False) -> dict[str, Any]:
         """Get the data stored in the parameter file"""
         data_stored: dict[str, Any] = {}
 
         if path := cls.filepath():
-            if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
-                with path.open(mode="rb") as fptr:
-                    data_stored = tomllib.load(fptr)
-            elif ext == str(FileFormat.JSON.value):
-                with path.open(mode="r") as fptr:
-                    data_stored = json.load(fptr)
-            else:
-                print(f"Unknown file format {ext} given in {path}.")
+            if throw_if_file_not_found or path.is_file():
+                if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
+                    with path.open(mode="rb") as fptr:
+                        data_stored = tomllib.load(fptr)
+                elif ext == str(FileFormat.JSON.value):
+                    with path.open(mode="r") as fptr:
+                        data_stored = json.load(fptr)
+                else:
+                    print(f"Unknown file format {ext} given in {path}.")
         else:
-            # This situation can occur if no valid path was given as an argument, and
+            # This situation can occur if no valid path was set, and
             # the default path is set to None.
-            print(
-                f"No path specified for {cls.kind_string().lower()} file; trying with defaults, but this may not work."
-            )
+            mess = f"No path specified for {cls.kind_string().lower()} file."
+            if throw_if_file_not_found:
+                raise FileNotFoundError(mess)
+
+            print(mess, "Trying with defaults, but this may not work.")
         return data_stored
 
 
