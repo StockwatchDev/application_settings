@@ -67,7 +67,7 @@ by silently.
 
 Fields or complete sections defined in the classes can be absent in the files as long as
 default values have been specified for all fields that have been left out. For more info
-on data validation [click here](./5-Handling_deviations.md)
+on data validation [click here](./6-Handling_deviations.md)
 
 ## Location, name and type of the file
 

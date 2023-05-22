@@ -1,4 +1,4 @@
-# application_settings - version [version spec]
+# application_settings - version develop
 
 [![pypi](https://img.shields.io/pypi/v/application-settings.svg)](https://pypi.python.org/pypi/application-settings)
 [![versions](https://img.shields.io/pypi/pyversions/application-settings.svg)](https://github.com/StockwatchDev/application_settings)
@@ -37,12 +37,10 @@ Parsing is done once before or during first access and the resulting set of para
 stored as a singleton.
 
 Interested? Then have a look at our
-[quick start](https://stockwatchdev.github.io/application_settings/[versin spec]/docs/Quick_start/).
+[quick start](https://stockwatchdev.github.io/application_settings/develop/docs/Quick_start/).
 
-[//]: # (Change link to published quick start)
+[//]: # (Change version in header and link to published quick start)
 
 ## License
 
 This project is licensed under the terms of the MIT license.
-
-[version spec]: develop
