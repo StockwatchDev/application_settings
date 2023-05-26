@@ -11,7 +11,13 @@ import tomli_w
 from pydantic import ValidationError
 from pydantic.dataclasses import dataclass
 
-from application_settings import ConfigBase, ConfigSectionBase, PathOpt, __version__
+from application_settings import (
+    ConfigBase,
+    ConfigSectionBase,
+    PathOpt,
+    __version__,
+    config_filepath_from_commandline_option,
+)
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -142,6 +148,12 @@ def test_paths(toml_file: Path) -> None:
     # raising in case of invalid path:
     with pytest.raises(ValueError):
         AnExample1Config.set_filepath('fi:\0\\l*e/p"a?t>h|.t<xt')
+
+
+def test_config_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(sys, "argv", ["bla", "-k", r"C:\ProgramData\test\config.toml"])
+    config_filepath_from_commandline_option(AnExample1Config, short_option="-k")
+    assert str(AnExample1Config.filepath()) == r"C:\ProgramData\test\config.toml"
 
 
 def test_get_defaults(

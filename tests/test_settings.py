@@ -7,7 +7,11 @@ from pathlib import Path
 import pytest
 from pydantic.dataclasses import dataclass
 
-from application_settings import SettingsBase, SettingsSectionBase
+from application_settings import (
+    SettingsBase,
+    SettingsSectionBase,
+    settings_filepath_from_commandline_option,
+)
 
 if sys.version_info < (3, 10):
     from typing import Union
@@ -47,6 +51,14 @@ def test_paths() -> None:
         assert the_path.parts[-2] == ".an_example1"
     else:
         assert False
+
+
+def test_settings_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(
+        sys, "argv", ["bla", "-g", r"C:\ProgramData\test\settings.json"]
+    )
+    settings_filepath_from_commandline_option(AnExample1Settings, short_option="-g")
+    assert str(AnExample1Settings.filepath()) == r"C:\ProgramData\test\settings.json"
 
 
 def test_update(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
