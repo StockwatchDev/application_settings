@@ -1,4 +1,6 @@
 """Module for handling settings."""
+from typing import TypeVar
+
 from pydantic.dataclasses import dataclass
 
 from application_settings.container_base import ContainerBase, FileFormat
@@ -6,6 +8,9 @@ from application_settings.container_section_base import (
     ContainerSectionBase,
     SectionTypeStr,
 )
+
+SettingsT = TypeVar("SettingsT", bound="SettingsBase")
+SettingsT.__doc__ = "Represents SettingsBase and all subclasses"
 
 
 @dataclass(frozen=True)
