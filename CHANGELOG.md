@@ -22,16 +22,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   via their own Section (Issue 
   [#46](https://github.com/StockwatchDev/application_settings/issues/46)).
 - Literal SectionTypeStr exported.
+- Convenience functions to specify filepath for config and settings
+  [[#53](https://github.com/StockwatchDev/application_settings/issues/53)]
 
 ### Changed
 
 - The method `update` now is a class method (breaking).
 - You cannot request a reload via method `get` anymore, use separate method `load`
   (breaking).
-- Useless TypeVars no longer exported (breaking).
 - A Container now is a specialization of a ContainerSection.
 
-## Fixed
+### Fixed
 
 - Default folder name no longer just a dot if container class is called Config or
   Settings.
