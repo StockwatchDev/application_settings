@@ -75,9 +75,9 @@ class ContainerSectionBase(ABC):
             subsec._set()  # pylint: disable=protected-access
         return self
 
-    def _update(self, changes: dict[str, dict[str, Any]]) -> Self:
+    def _update(self, changes: dict[str, Any]) -> Self:
         "Update parameters and sections with data specified in changes; not meant for config"
         return replace(self, **changes)
 
 
-_ALL_CONTAINER_SECTION_SINGLETONS: dict[int, Any] = {}
+_ALL_CONTAINER_SECTION_SINGLETONS: dict[int, ContainerSectionBase] = {}

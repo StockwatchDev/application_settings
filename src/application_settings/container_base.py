@@ -109,7 +109,7 @@ class ContainerBase(ContainerSectionBase, ABC):
         # instantiate and store the Container with the stored data
         return cls.set(data_stored)
 
-    def _update(self, changes: dict[str, dict[str, Any]]) -> Self:
+    def _update(self, changes: dict[str, Any]) -> Self:
         "Update and save the settings with data specified in changes; not meant for config"
         return (
             super()  # pylint: disable=protected-access,no-member
