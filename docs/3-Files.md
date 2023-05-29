@@ -111,8 +111,8 @@ file is not found in the location that has been specified:
   catched by `application_settings`, an error message is generated and program flow is
   continued by trying to instantiate the config / settings using default values. If you
   have defined parameters without default values, a TypeError exception will be raised.
-- if you `load(throw_if_file_not_found = True)`, then the `FileNotFoundError` is thrown
-  and the application can decide how this situation should be handled.
+- if you `load(throw_if_file_not_found = True)`, then the `FileNotFoundError` exception
+  is thrown and the application can decide how this situation should be handled.
 
 The default value for `throw_if_file_not_found` is `False`, hence `load()` will not throw
 an exception when the parameter file is not found. Note that if you do not explicitly
