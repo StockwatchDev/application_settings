@@ -151,9 +151,10 @@ def test_paths(toml_file: Path) -> None:
 
 
 def test_config_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(sys, "argv", ["bla", "-k", r"C:\ProgramData\test\config.toml"])
+    some_path = Path.home() / "ProgramData" / "test" / "config.toml"
+    monkeypatch.setattr(sys, "argv", ["bla", "-k", str(some_path)])
     config_filepath_from_commandline_option(AnExample1Config, short_option="-k")
-    assert str(AnExample1Config.filepath()) == r"C:\ProgramData\test\config.toml"
+    assert str(AnExample1Config.filepath()) == str(some_path)
 
 
 def test_get_defaults(
