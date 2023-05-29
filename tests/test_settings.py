@@ -54,11 +54,12 @@ def test_paths() -> None:
 
 
 def test_settings_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
+    some_path = Path.home() / "ProgramData" / "test" / "config.toml"
     monkeypatch.setattr(
-        sys, "argv", ["bla", "-g", r"C:\ProgramData\test\settings.json"]
+        sys, "argv", ["bla", "-g", str(some_path)]
     )
     settings_filepath_from_commandline_option(AnExample1Settings, short_option="-g")
-    assert str(AnExample1Settings.filepath()) == r"C:\ProgramData\test\settings.json"
+    assert str(AnExample1Settings.filepath()) == str(some_path)
 
 
 def test_update(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
