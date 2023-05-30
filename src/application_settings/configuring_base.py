@@ -1,18 +1,23 @@
 """Module for handling configuration."""
-from typing import Any, TypeVar
+from typing import Any
 
 from pydantic.dataclasses import dataclass
 
-from .container_base import ContainerBase, ContainerTypeStr, FileFormat
-from .container_section_base import ContainerSectionBase
-
-ConfigT = TypeVar("ConfigT", bound="ConfigBase")
-ConfigSectionT = TypeVar("ConfigSectionT", bound="ConfigSectionBase")
+from application_settings.container_base import ContainerBase, FileFormat
+from application_settings.container_section_base import (
+    ContainerSectionBase,
+    SectionTypeStr,
+)
 
 
 @dataclass(frozen=True)
 class ConfigSectionBase(ContainerSectionBase):
     """Base class for all ConfigSection classes (so that we can bound a TypeVar)"""
+
+    @classmethod
+    def kind_string(cls) -> SectionTypeStr:
+        "Return 'Config'"
+        return "Config"
 
 
 @dataclass(frozen=True)
@@ -20,12 +25,12 @@ class ConfigBase(ContainerBase):
     """Base class for main Config class"""
 
     @classmethod
-    def kind_string(cls: type[ConfigT]) -> ContainerTypeStr:
+    def kind_string(cls) -> SectionTypeStr:
         "Return 'Config'"
         return "Config"
 
     @classmethod
-    def default_file_format(cls: type[ConfigT]) -> FileFormat:
+    def default_file_format(cls) -> FileFormat:
         "Return the default file format"
         return FileFormat.TOML
 

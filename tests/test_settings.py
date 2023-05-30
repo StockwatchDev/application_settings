@@ -36,6 +36,10 @@ class AnExample1Settings(SettingsBase):
     section1: AnExample1SettingsSection = AnExample1SettingsSection()
 
 
+def test_kind_string() -> None:
+    assert AnExample1SettingsSection.kind_string() == "Settings"
+
+
 def test_paths() -> None:
     # default_filepath:
     if the_path := AnExample1Settings.default_filepath():
@@ -58,9 +62,11 @@ def test_update(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
 
     monkeypatch.setattr(AnExample1Settings, "default_filepath", mock_default_filepath)
     AnExample1Settings.set_filepath("")
-    assert AnExample1Settings.get(reload=True).section1.setting1 == "setting1"
+    AnExample1Settings.load()
+    assert AnExample1Settings.get().section1.setting1 == "setting1"
     assert AnExample1Settings.get().section1.setting2 == 2
     with pytest.raises(RuntimeError):
+        # no path specified and attempting to save, that will raise a runtime error
         new_settings = AnExample1Settings.update(
             {"section1": {"setting1": "new s1", "setting2": 222}}
         )
@@ -91,7 +97,8 @@ def test_update_json(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
 
     monkeypatch.setattr(AnExample1Settings, "default_filepath", mock_default_filepath)
     AnExample1Settings.set_filepath("")
-    assert AnExample1Settings.get(reload=True).section1.setting1 == "setting1"
+    AnExample1Settings.load()
+    assert AnExample1Settings.get().section1.setting1 == "setting1"
     assert AnExample1Settings.get().section1.setting2 == 2
     tmp_filepath = (
         tmp_path
@@ -105,7 +112,8 @@ def test_update_json(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
 
     assert new_settings.section1.setting1 == "new s1a"
     assert AnExample1Settings.get().section1.setting2 == 333
-    assert AnExample1Settings.get(reload=True).section1.setting1 == "new s1a"
+    AnExample1Settings.load()
+    assert AnExample1Settings.get().section1.setting1 == "new s1a"
     assert AnExample1Settings.get().section1.setting2 == 333
 
 
@@ -122,7 +130,8 @@ def test_update_toml(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
 
     monkeypatch.setattr(AnExample1Settings, "default_filepath", mock_default_filepath)
     AnExample1Settings.set_filepath("")
-    assert AnExample1Settings.get(reload=True).section1.setting1 == "setting1"
+    AnExample1Settings.load()
+    assert AnExample1Settings.get().section1.setting1 == "setting1"
     assert AnExample1Settings.get().section1.setting2 == 2
     tmp_filepath = (
         tmp_path
@@ -136,7 +145,8 @@ def test_update_toml(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
 
     assert new_settings.section1.subsec.setting3 == 4.44
     assert AnExample1Settings.get().section1.subsec.setting3 == 4.44
-    assert AnExample1Settings.get(reload=True).section1.subsec.setting3 == 4.44
+    AnExample1Settings.load()
+    assert AnExample1Settings.get().section1.subsec.setting3 == 4.44
     assert AnExample1Settings.get().section1.subsec.setting3 == 4.44
 
 
@@ -155,7 +165,8 @@ def test_update_ini(
 
     monkeypatch.setattr(AnExample1Settings, "default_filepath", mock_default_filepath)
     AnExample1Settings.set_filepath("")
-    assert AnExample1Settings.get(reload=True).section1.setting1 == "setting1"
+    AnExample1Settings.load()
+    assert AnExample1Settings.get().section1.setting1 == "setting1"
     assert AnExample1Settings.get().section1.setting2 == 2
     tmp_filepath = (
         tmp_path
@@ -172,5 +183,6 @@ def test_update_ini(
     assert AnExample1Settings.get().section1.setting2 == 333
     captured = capfd.readouterr()
     assert "Unknown file format ini given in" in captured.out
-    assert AnExample1Settings.get(reload=True).section1.setting1 == "setting1"
+    AnExample1Settings.load()
+    assert AnExample1Settings.get().section1.setting1 == "setting1"
     assert AnExample1Settings.get().section1.setting2 == 2

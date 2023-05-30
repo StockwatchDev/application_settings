@@ -25,6 +25,7 @@ include = [
     { path = "LICENSE" },
     { path = "README.md" },
     { path = "tests", format = "sdist" },
+    { path = "examples", format = "sdist" },
 ]
 
 
@@ -165,7 +166,10 @@ Home = "README.md"
 "4. Using parameters" = "docs/4-Using_parameters.md"
 
 [[tool.portray.mkdocs.nav.Usage]]
-"5. Handling deviations" = "docs/5-Handling_deviations.md"
+"5. Usage in a library package" = "docs/5-Usage_in_a_library_package.md"
+
+[[tool.portray.mkdocs.nav.Usage]]
+"6. Handling deviations" = "docs/6-Handling_deviations.md"
 
 [[tool.portray.mkdocs.nav]]
 Changelog = "CHANGELOG.md"

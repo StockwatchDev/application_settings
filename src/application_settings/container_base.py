@@ -6,14 +6,14 @@ from dataclasses import asdict
 from enum import Enum, unique
 from pathlib import Path
 from re import sub
-from typing import Any, Literal, Optional, cast
+from typing import Any
 
 import tomli_w
 from pathvalidate import is_valid_filepath
 from pydantic.dataclasses import dataclass
 
-from .container_section_base import ContainerSectionBase
-from .type_notation_helper import PathOpt, PathOrStr
+from application_settings.container_section_base import ContainerSectionBase
+from application_settings.type_notation_helper import PathOpt, PathOrStr
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -30,17 +30,9 @@ class FileFormat(Enum):
     JSON = "json"
 
 
-ContainerTypeStr = Literal["Config", "Settings"]
-
-
 @dataclass(frozen=True)
 class ContainerBase(ContainerSectionBase, ABC):
     """Base class for Config and Settings container classes"""
-
-    @classmethod
-    @abstractmethod
-    def kind_string(cls) -> ContainerTypeStr:
-        "Return either 'Config' or 'Settings'"
 
     @classmethod
     @abstractmethod
@@ -71,7 +63,7 @@ class ContainerBase(ContainerSectionBase, ABC):
         return Path.home() / cls.default_foldername() / cls.default_filename()
 
     @classmethod
-    def set_filepath(cls, file_path: PathOrStr = "", reload: bool = False) -> None:
+    def set_filepath(cls, file_path: PathOrStr = "", load: bool = False) -> None:
         """Set the path for the file (a singleton)."""
 
         path: PathOpt = None
@@ -90,8 +82,8 @@ class ContainerBase(ContainerSectionBase, ABC):
         else:
             _ALL_PATHS.pop(id(cls), None)
 
-        if reload:
-            cls.get(reload=True)
+        if load:
+            cls.load()
         else:
             if cls._get() is not None:
                 print(
@@ -104,28 +96,9 @@ class ContainerBase(ContainerSectionBase, ABC):
         return _ALL_PATHS.get(id(cls), cls.default_filepath())
 
     @classmethod
-    def get(cls, reload: bool = False) -> Self:
-        """Get the singleton; if not existing, create it."""
-
-        if (_the_container_or_none := cls._get()) is None or reload:
-            # no config has been made yet or it needs to be reloaded,
-            # so let's instantiate one and keep it in the global store
-            return cls._create_instance()
-        return _the_container_or_none
-
-    @classmethod
-    def update(cls, changes: dict[str, dict[str, Any]]) -> Self:
-        "Update and save the settings with data specified in changes; not meant for config"
-        return cls.get()._update(changes)  # pylint: disable=protected-access
-
-    @classmethod
-    def _get(
-        cls,
-    ) -> Optional[Self]:  # pylint: disable=consider-alternative-union-syntax
-        """Get the singleton."""
-        if the_container := _ALL_CONTAINERS.get(id(cls)):
-            return cast(Self, the_container)
-        return None
+    def load(cls) -> Self:
+        """Create a new singleton"""
+        return cls._create_instance()
 
     @classmethod
     def _create_instance(cls) -> Self:
@@ -134,18 +107,15 @@ class ContainerBase(ContainerSectionBase, ABC):
         # get whatever is stored in the config/settings file
         data_stored = cls._get_saved_data()
         # instantiate and store the Container with the stored data
-        return cls(**data_stored)._set()
+        return cls.set(data_stored)
 
-    def _update(self, changes: dict[str, dict[str, Any]]) -> Self:
+    def _update(self, changes: dict[str, Any]) -> Self:
         "Update and save the settings with data specified in changes; not meant for config"
-        new_container = super()._update(changes)
-        new_container._set()._save()  # pylint: disable=protected-access,no-member
-        return new_container
-
-    def _set(self) -> Self:
-        """Store the singleton."""
-        _ALL_CONTAINERS[id(self.__class__)] = self
-        return self
+        return (
+            super()  # pylint: disable=protected-access,no-member
+            ._update(changes)
+            ._save()
+        )
 
     def _save(self) -> Self:
         """Private method to save the singleton to file."""
@@ -190,5 +160,4 @@ class ContainerBase(ContainerSectionBase, ABC):
         return data_stored
 
 
-_ALL_CONTAINERS: dict[int, Any] = {}
 _ALL_PATHS: dict[int, PathOpt] = {}
