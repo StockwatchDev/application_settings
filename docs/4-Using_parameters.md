@@ -16,7 +16,7 @@ globally for the application. Therefore, implementation has been done as follows
 - A parameter container should not be instantiated directly by client code (although it
   is possible to do so, e.g. for testing purposes);
 - If needed, you can set the path for the parameter file before the first invocation of
-  `get()` (see [section on files](./3-Files.md)).
+  `get()` (see [chapter on files](./3-Files.md)).
 
 ## Changing parameter values
 

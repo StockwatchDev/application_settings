@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - You can now request a (re-) load when setting the filepath or via a method `load`.
 - You can choose whether or not to throw a `FileNotFoundError` during `load`
   when the parameter file is not found in the expected location
-  (Issue [[#51](https://github.com/StockwatchDev/application_settings/issues/51)])
+  (Issue [#51](https://github.com/StockwatchDev/application_settings/issues/51))
 - Support for parameters in the main container (Issue
   [#20](https://github.com/StockwatchDev/application_settings/issues/20)).
 - Support for subsections (arbitrary depth) (Issue
