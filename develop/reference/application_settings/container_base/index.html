@@ -321,8 +321,22 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/5-Handling_deviations/" class="md-nav__link">
-        5. Handling deviations
+      <a href="../../../docs/5-Usage_in_a_library_package/" class="md-nav__link">
+        5. Usage in a library package
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../docs/6-Handling_deviations/" class="md-nav__link">
+        6. Handling deviations
       </a>
     </li>
   
@@ -462,13 +476,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#variables" class="md-nav__link">
-    Variables
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#classes" class="md-nav__link">
     Classes
   </a>
@@ -555,6 +562,20 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#load" class="md-nav__link">
+    load
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set" class="md-nav__link">
+    set
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#set_filepath" class="md-nav__link">
     set_filepath
   </a>
@@ -564,26 +585,6 @@
           <li class="md-nav__item">
   <a href="#update" class="md-nav__link">
     update
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#containersectionbase" class="md-nav__link">
-    ContainerSectionBase
-  </a>
-  
-    <nav class="md-nav" aria-label="ContainerSectionBase">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#descendants_1" class="md-nav__link">
-    Descendants
   </a>
   
 </li>
@@ -629,6 +630,20 @@
   
 </nav>
       
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../container_section_base/" class="md-nav__link">
+        Container Section Base
+      </a>
     </li>
   
 
@@ -716,13 +731,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#variables" class="md-nav__link">
-    Variables
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#classes" class="md-nav__link">
     Classes
   </a>
@@ -809,6 +817,20 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#load" class="md-nav__link">
+    load
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set" class="md-nav__link">
+    set
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#set_filepath" class="md-nav__link">
     set_filepath
   </a>
@@ -818,26 +840,6 @@
           <li class="md-nav__item">
   <a href="#update" class="md-nav__link">
     update
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#containersectionbase" class="md-nav__link">
-    ContainerSectionBase
-  </a>
-  
-    <nav class="md-nav" aria-label="ContainerSectionBase">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#descendants_1" class="md-nav__link">
-    Descendants
   </a>
   
 </li>
@@ -900,18 +902,16 @@
 
 
 <h1 id="module-application_settingscontainer_base">Module application_settings.container_base</h1>
-<p>Base classes for containers and sections for configuration and settings.</p>
+<p>Base class for a container (= root section) for configuration and settings.</p>
 <p>??? example "View Source"
-        # pylint: disable=consider-alternative-union-syntax</p>
-<div class="highlight"><pre><span></span><code>    &quot;&quot;&quot;Base classes for containers and sections for configuration and settings.&quot;&quot;&quot;
-
-    import json
+        """Base class for a container (= root section) for configuration and settings."""</p>
+<div class="highlight"><pre><span></span><code>    import json
 
     import sys
 
     from abc import ABC, abstractmethod
 
-    from dataclasses import asdict, fields, replace
+    from dataclasses import asdict
 
     from enum import Enum, unique
 
@@ -919,7 +919,7 @@
 
     from re import sub
 
-    from typing import Any, Literal, Optional, TypeVar
+    from typing import Any
 
     import tomli_w
 
@@ -927,27 +927,21 @@
 
     from pydantic.dataclasses import dataclass
 
-    from .type_notation_helper import PathOpt, PathOrStr
+    from application_settings.container_section_base import ContainerSectionBase
+
+    from application_settings.type_notation_helper import PathOpt, PathOrStr
 
     if sys.version_info &gt;= (3, 11):
 
         import tomllib
 
+        from typing import Self
+
     else:
 
         import tomli as tomllib
 
-
-
-    _ContainerT = TypeVar(&quot;_ContainerT&quot;, bound=&quot;ContainerBase&quot;)
-
-    _ContainerSectionT = TypeVar(&quot;_ContainerSectionT&quot;, bound=&quot;ContainerSectionBase&quot;)
-
-
-
-    _ALL_CONTAINERS: dict[int, Any] = {}
-
-    _ALL_PATHS: dict[int, PathOpt] = {}
+        from typing_extensions import Self
 
 
 
@@ -955,7 +949,7 @@
 
     class FileFormat(Enum):
 
-        &quot;File formats that are supported&quot;
+        &quot;File formats that are supported by application_settings&quot;
 
         TOML = &quot;toml&quot;
 
@@ -963,47 +957,29 @@
 
 
 
-    ContainerTypeStr = Literal[&quot;Config&quot;, &quot;Settings&quot;]
-
-
-
     @dataclass(frozen=True)
 
-    class ContainerSectionBase:
+    class ContainerBase(ContainerSectionBase, ABC):
 
-        &quot;&quot;&quot;Base class for all ContainerSection classes (so that we can bound a TypeVar)&quot;&quot;&quot;
-
-
-
-    @dataclass(frozen=True)
-
-    class ContainerBase(ABC):
-
-        &quot;&quot;&quot;Base class for Config and Settings classes&quot;&quot;&quot;
+        &quot;&quot;&quot;Base class for Config and Settings container classes&quot;&quot;&quot;
 
         @classmethod
 
         @abstractmethod
 
-        def kind_string(cls: type[_ContainerT]) -&gt; ContainerTypeStr:
-
-            &quot;Return either &#39;Config&#39; or &#39;Settings&#39;&quot;
-
-        @classmethod
-
-        @abstractmethod
-
-        def default_file_format(cls: type[_ContainerT]) -&gt; FileFormat:
+        def default_file_format(cls) -&gt; FileFormat:
 
             &quot;Return the default file format&quot;
 
         @classmethod
 
-        def default_foldername(cls: type[_ContainerT]) -&gt; str:
+        def default_foldername(cls) -&gt; str:
 
             &quot;&quot;&quot;Return the class name without kind_string, lowercase, with a preceding dot and underscores to seperate words.&quot;&quot;&quot;
 
-            kind_str = cls.kind_string()
+            if (kind_str := cls.kind_string()) == cls.__name__:
+
+                return f&quot;.{kind_str.lower()}&quot;
 
             return (
 
@@ -1015,7 +991,7 @@
 
         @classmethod
 
-        def default_filename(cls: type[_ContainerT]) -&gt; str:
+        def default_filename(cls) -&gt; str:
 
             &quot;&quot;&quot;Return the kind_string, lowercase, with the extension that fits the file_format.&quot;&quot;&quot;
 
@@ -1023,19 +999,21 @@
 
         @classmethod
 
-        def default_filepath(cls: type[_ContainerT]) -&gt; PathOpt:
+        def default_filepath(cls) -&gt; PathOpt:
 
-            &quot;&quot;&quot;Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml&quot;&quot;&quot;
+            &quot;&quot;&quot;
+
+            Return the fully qualified default path for the config/settingsfile: e.g. ~/.example/config.toml.
+
+            If you prefer to not have a default path then overwrite this method and return None.
+
+            &quot;&quot;&quot;
 
             return Path.home() / cls.default_foldername() / cls.default_filename()
 
         @classmethod
 
-        def set_filepath(
-
-            cls: type[_ContainerT], file_path: PathOrStr = &quot;&quot;, reload: bool = False
-
-        ) -&gt; None:
+        def set_filepath(cls, file_path: PathOrStr = &quot;&quot;, load: bool = False) -&gt; None:
 
             &quot;&quot;&quot;Set the path for the file (a singleton).&quot;&quot;&quot;
 
@@ -1067,9 +1045,9 @@
 
                 _ALL_PATHS.pop(id(cls), None)
 
-            if reload:
+            if load:
 
-                cls.get(reload=True)
+                cls.load()
 
             else:
 
@@ -1091,193 +1069,41 @@
 
         @classmethod
 
-        def _get(cls: type[_ContainerT]) -&gt; Optional[_ContainerT]:
+        def load(cls) -&gt; Self:
 
-            &quot;&quot;&quot;Private getter for the singleton.&quot;&quot;&quot;
+            &quot;&quot;&quot;Create a new singleton&quot;&quot;&quot;
 
-            return _ALL_CONTAINERS.get(id(cls))
-
-        @classmethod
-
-        def get(cls: type[_ContainerT], reload: bool = False) -&gt; _ContainerT:
-
-            &quot;&quot;&quot;Access method for the singleton.&quot;&quot;&quot;
-
-            if (_the_container_or_none := cls._get()) is None or reload:
-
-                # no config has been made yet or it needs to be reloaded,
-
-                # so let&#39;s instantiate one and keep it in the global store
-
-                _the_config = cls._create_instance()
-
-                _the_config._set()
-
-            else:
-
-                _the_config = _the_container_or_none
-
-            return _the_config
+            return cls._create_instance()
 
         @classmethod
 
-        def update(
+        def _create_instance(cls) -&gt; Self:
 
-            cls: type[_ContainerT], changes: dict[str, dict[str, Any]]
-
-        ) -&gt; _ContainerT:
-
-            &quot;Update and save the settings with data specified in changes; not meant for config&quot;
-
-            return cls.get()._update(changes)  # pylint: disable=protected-access
-
-        def _update(self: _ContainerT, changes: dict[str, dict[str, Any]]) -&gt; _ContainerT:
-
-            &quot;Update and save the settings with data specified in changes; not meant for config&quot;
-
-            # filter out fields that are both in changes and an attribute of the SettingsContainer
-
-            _sections_to_update = {
-
-                fld for fld in fields(self) if fld.init and fld.name in changes.keys()
-
-            }
-
-            # update the sections and keep them in a dict
-
-            # actually sections: dict[str, _ContainerSectionT]
-
-            # but MyPy doesn&#39;t swallow that
-
-            updated_sections: dict[str, Any] = {
-
-                fld.name: _update_section(getattr(self, fld.name), changes[fld.name])
-
-                for fld in _sections_to_update
-
-            }
-
-            new_settings = replace(self, **updated_sections)
-
-            new_settings._set()  # pylint: disable=protected-access
-
-            new_settings._save()  # pylint: disable=protected-access
-
-            return new_settings
-
-        @classmethod
-
-        def _create_instance(cls: type[_ContainerT]) -&gt; _ContainerT:
-
-            &quot;&quot;&quot;Instantiate the Container.&quot;&quot;&quot;
+            &quot;&quot;&quot;Load stored data, instantiate the Container with it, store it in the singleton and return it.&quot;&quot;&quot;
 
             # get whatever is stored in the config/settings file
 
-            data_stored = cls._get_stored_data()
+            data_stored = cls._get_saved_data()
 
-            # filter out fields that are both stored and an attribute of the Container
+            # instantiate and store the Container with the stored data
 
-            _data_fields = {
+            return cls.set(data_stored)
 
-                fld for fld in fields(cls) if fld.init and fld.name in data_stored.keys()
+        def _update(self, changes: dict[str, Any]) -&gt; Self:
 
-            }
+            &quot;Update and save the settings with data specified in changes; not meant for config&quot;
 
-            # instantiate the sections and keep them in a dict
+            return (
 
-            # actually sections: dict[str, _ContainerSectionT]
+                super()  # pylint: disable=protected-access,no-member
 
-            # but MyPy doesn&#39;t swallow that
+                ._update(changes)
 
-            sections: dict[str, Any] = {
-
-                fld.name: cls._instantiate_section(fld.type, data_stored[fld.name])
-
-                for fld in _data_fields
-
-            }
-
-            # instantiate the Container with the sections
-
-            return cls(**sections)
-
-        @classmethod
-
-        def _get_stored_data(cls) -&gt; dict[str, Any]:
-
-            &quot;&quot;&quot;Get the data stored in the toml file&quot;&quot;&quot;
-
-            data_stored: dict[str, Any] = {}
-
-            if path := cls.filepath():
-
-                if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
-
-                    with path.open(mode=&quot;rb&quot;) as fptr:
-
-                        data_stored = tomllib.load(fptr)
-
-                elif ext == str(FileFormat.JSON.value):
-
-                    with path.open(mode=&quot;r&quot;) as fptr:
-
-                        data_stored = json.load(fptr)
-
-                else:
-
-                    print(f&quot;Unknown file format {ext} given in {path}.&quot;)
-
-            else:
-
-                # This situation can occur if no valid path was given as an argument, and
-
-                # the default path is set to None.
-
-                print(
-
-                    f&quot;No path specified for {cls.kind_string().lower()} file; trying with defaults, but this may not work.&quot;
-
-                )
-
-            return data_stored
-
-        @classmethod
-
-        def _instantiate_section(
-
-            cls: type[_ContainerT],
-
-            class_to_instantiate: type[_ContainerSectionT],
-
-            arg_dict: dict[str, Any],
-
-        ) -&gt; _ContainerSectionT:
-
-            &quot;&quot;&quot;Return an instance of class_to_instantiate, properly initialized&quot;&quot;&quot;
-
-            # pre-condition: class_to_instantiate is the class of an initializable field of cls
-
-            assert (
-
-                len([f for f in fields(cls) if f.init and f.type == class_to_instantiate])
-
-                &gt; 0
+                ._save()
 
             )
 
-            field_set = {f.name for f in fields(class_to_instantiate) if f.init}
-
-            filtered_arg_dict = {k: v for k, v in arg_dict.items() if k in field_set}
-
-            return class_to_instantiate(**filtered_arg_dict)
-
-        def _set(self) -&gt; None:
-
-            &quot;&quot;&quot;Private method to store the singleton.&quot;&quot;&quot;
-
-            _ALL_CONTAINERS[id(self.__class__)] = self
-
-        def _save(self) -&gt; None:
+        def _save(self) -&gt; Self:
 
             &quot;&quot;&quot;Private method to save the singleton to file.&quot;&quot;&quot;
 
@@ -1313,22 +1139,51 @@
 
                 )
 
+            return self
+
+        @classmethod
+
+        def _get_saved_data(cls) -&gt; dict[str, Any]:
+
+            &quot;&quot;&quot;Get the data stored in the parameter file&quot;&quot;&quot;
+
+            data_stored: dict[str, Any] = {}
+
+            if path := cls.filepath():
+
+                if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
+
+                    with path.open(mode=&quot;rb&quot;) as fptr:
+
+                        data_stored = tomllib.load(fptr)
+
+                elif ext == str(FileFormat.JSON.value):
+
+                    with path.open(mode=&quot;r&quot;) as fptr:
+
+                        data_stored = json.load(fptr)
+
+                else:
+
+                    print(f&quot;Unknown file format {ext} given in {path}.&quot;)
+
+            else:
+
+                # This situation can occur if no valid path was given as an argument, and
+
+                # the default path is set to None.
+
+                print(
+
+                    f&quot;No path specified for {cls.kind_string().lower()} file; trying with defaults, but this may not work.&quot;
+
+                )
+
+            return data_stored
 
 
-    def _update_section(
 
-        section: _ContainerSectionT, changes: dict[str, Any]
-
-    ) -&gt; _ContainerSectionT:
-
-        &quot;Update the settings section with data specified in changes; not meant for config&quot;
-
-        # filter out fields that are both in changes and an attribute of the SettingsSection
-
-        return replace(section, **changes)
-</code></pre></div>
-<h2 id="variables">Variables</h2>
-<div class="highlight"><pre><span></span><code><span class="n">ContainerTypeStr</span>
+    _ALL_PATHS: dict[int, PathOpt] = {}
 </code></pre></div>
 <h2 id="classes">Classes</h2>
 <h3 id="containerbase">ContainerBase</h3>
@@ -1336,36 +1191,30 @@
 
 <span class="p">)</span>
 </code></pre></div>
-<p>Base class for Config and Settings classes</p>
+<p>Base class for Config and Settings container classes</p>
 <p>??? example "View Source"
         @dataclass(frozen=True)</p>
-<div class="highlight"><pre><span></span><code>    class ContainerBase(ABC):
+<div class="highlight"><pre><span></span><code>    class ContainerBase(ContainerSectionBase, ABC):
 
-        &quot;&quot;&quot;Base class for Config and Settings classes&quot;&quot;&quot;
-
-        @classmethod
-
-        @abstractmethod
-
-        def kind_string(cls: type[_ContainerT]) -&gt; ContainerTypeStr:
-
-            &quot;Return either &#39;Config&#39; or &#39;Settings&#39;&quot;
+        &quot;&quot;&quot;Base class for Config and Settings container classes&quot;&quot;&quot;
 
         @classmethod
 
         @abstractmethod
 
-        def default_file_format(cls: type[_ContainerT]) -&gt; FileFormat:
+        def default_file_format(cls) -&gt; FileFormat:
 
             &quot;Return the default file format&quot;
 
         @classmethod
 
-        def default_foldername(cls: type[_ContainerT]) -&gt; str:
+        def default_foldername(cls) -&gt; str:
 
             &quot;&quot;&quot;Return the class name without kind_string, lowercase, with a preceding dot and underscores to seperate words.&quot;&quot;&quot;
 
-            kind_str = cls.kind_string()
+            if (kind_str := cls.kind_string()) == cls.__name__:
+
+                return f&quot;.{kind_str.lower()}&quot;
 
             return (
 
@@ -1377,7 +1226,7 @@
 
         @classmethod
 
-        def default_filename(cls: type[_ContainerT]) -&gt; str:
+        def default_filename(cls) -&gt; str:
 
             &quot;&quot;&quot;Return the kind_string, lowercase, with the extension that fits the file_format.&quot;&quot;&quot;
 
@@ -1385,19 +1234,21 @@
 
         @classmethod
 
-        def default_filepath(cls: type[_ContainerT]) -&gt; PathOpt:
+        def default_filepath(cls) -&gt; PathOpt:
 
-            &quot;&quot;&quot;Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml&quot;&quot;&quot;
+            &quot;&quot;&quot;
+
+            Return the fully qualified default path for the config/settingsfile: e.g. ~/.example/config.toml.
+
+            If you prefer to not have a default path then overwrite this method and return None.
+
+            &quot;&quot;&quot;
 
             return Path.home() / cls.default_foldername() / cls.default_filename()
 
         @classmethod
 
-        def set_filepath(
-
-            cls: type[_ContainerT], file_path: PathOrStr = &quot;&quot;, reload: bool = False
-
-        ) -&gt; None:
+        def set_filepath(cls, file_path: PathOrStr = &quot;&quot;, load: bool = False) -&gt; None:
 
             &quot;&quot;&quot;Set the path for the file (a singleton).&quot;&quot;&quot;
 
@@ -1429,9 +1280,9 @@
 
                 _ALL_PATHS.pop(id(cls), None)
 
-            if reload:
+            if load:
 
-                cls.get(reload=True)
+                cls.load()
 
             else:
 
@@ -1453,193 +1304,41 @@
 
         @classmethod
 
-        def _get(cls: type[_ContainerT]) -&gt; Optional[_ContainerT]:
+        def load(cls) -&gt; Self:
 
-            &quot;&quot;&quot;Private getter for the singleton.&quot;&quot;&quot;
+            &quot;&quot;&quot;Create a new singleton&quot;&quot;&quot;
 
-            return _ALL_CONTAINERS.get(id(cls))
-
-        @classmethod
-
-        def get(cls: type[_ContainerT], reload: bool = False) -&gt; _ContainerT:
-
-            &quot;&quot;&quot;Access method for the singleton.&quot;&quot;&quot;
-
-            if (_the_container_or_none := cls._get()) is None or reload:
-
-                # no config has been made yet or it needs to be reloaded,
-
-                # so let&#39;s instantiate one and keep it in the global store
-
-                _the_config = cls._create_instance()
-
-                _the_config._set()
-
-            else:
-
-                _the_config = _the_container_or_none
-
-            return _the_config
+            return cls._create_instance()
 
         @classmethod
 
-        def update(
+        def _create_instance(cls) -&gt; Self:
 
-            cls: type[_ContainerT], changes: dict[str, dict[str, Any]]
-
-        ) -&gt; _ContainerT:
-
-            &quot;Update and save the settings with data specified in changes; not meant for config&quot;
-
-            return cls.get()._update(changes)  # pylint: disable=protected-access
-
-        def _update(self: _ContainerT, changes: dict[str, dict[str, Any]]) -&gt; _ContainerT:
-
-            &quot;Update and save the settings with data specified in changes; not meant for config&quot;
-
-            # filter out fields that are both in changes and an attribute of the SettingsContainer
-
-            _sections_to_update = {
-
-                fld for fld in fields(self) if fld.init and fld.name in changes.keys()
-
-            }
-
-            # update the sections and keep them in a dict
-
-            # actually sections: dict[str, _ContainerSectionT]
-
-            # but MyPy doesn&#39;t swallow that
-
-            updated_sections: dict[str, Any] = {
-
-                fld.name: _update_section(getattr(self, fld.name), changes[fld.name])
-
-                for fld in _sections_to_update
-
-            }
-
-            new_settings = replace(self, **updated_sections)
-
-            new_settings._set()  # pylint: disable=protected-access
-
-            new_settings._save()  # pylint: disable=protected-access
-
-            return new_settings
-
-        @classmethod
-
-        def _create_instance(cls: type[_ContainerT]) -&gt; _ContainerT:
-
-            &quot;&quot;&quot;Instantiate the Container.&quot;&quot;&quot;
+            &quot;&quot;&quot;Load stored data, instantiate the Container with it, store it in the singleton and return it.&quot;&quot;&quot;
 
             # get whatever is stored in the config/settings file
 
-            data_stored = cls._get_stored_data()
+            data_stored = cls._get_saved_data()
 
-            # filter out fields that are both stored and an attribute of the Container
+            # instantiate and store the Container with the stored data
 
-            _data_fields = {
+            return cls.set(data_stored)
 
-                fld for fld in fields(cls) if fld.init and fld.name in data_stored.keys()
+        def _update(self, changes: dict[str, Any]) -&gt; Self:
 
-            }
+            &quot;Update and save the settings with data specified in changes; not meant for config&quot;
 
-            # instantiate the sections and keep them in a dict
+            return (
 
-            # actually sections: dict[str, _ContainerSectionT]
+                super()  # pylint: disable=protected-access,no-member
 
-            # but MyPy doesn&#39;t swallow that
+                ._update(changes)
 
-            sections: dict[str, Any] = {
-
-                fld.name: cls._instantiate_section(fld.type, data_stored[fld.name])
-
-                for fld in _data_fields
-
-            }
-
-            # instantiate the Container with the sections
-
-            return cls(**sections)
-
-        @classmethod
-
-        def _get_stored_data(cls) -&gt; dict[str, Any]:
-
-            &quot;&quot;&quot;Get the data stored in the toml file&quot;&quot;&quot;
-
-            data_stored: dict[str, Any] = {}
-
-            if path := cls.filepath():
-
-                if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
-
-                    with path.open(mode=&quot;rb&quot;) as fptr:
-
-                        data_stored = tomllib.load(fptr)
-
-                elif ext == str(FileFormat.JSON.value):
-
-                    with path.open(mode=&quot;r&quot;) as fptr:
-
-                        data_stored = json.load(fptr)
-
-                else:
-
-                    print(f&quot;Unknown file format {ext} given in {path}.&quot;)
-
-            else:
-
-                # This situation can occur if no valid path was given as an argument, and
-
-                # the default path is set to None.
-
-                print(
-
-                    f&quot;No path specified for {cls.kind_string().lower()} file; trying with defaults, but this may not work.&quot;
-
-                )
-
-            return data_stored
-
-        @classmethod
-
-        def _instantiate_section(
-
-            cls: type[_ContainerT],
-
-            class_to_instantiate: type[_ContainerSectionT],
-
-            arg_dict: dict[str, Any],
-
-        ) -&gt; _ContainerSectionT:
-
-            &quot;&quot;&quot;Return an instance of class_to_instantiate, properly initialized&quot;&quot;&quot;
-
-            # pre-condition: class_to_instantiate is the class of an initializable field of cls
-
-            assert (
-
-                len([f for f in fields(cls) if f.init and f.type == class_to_instantiate])
-
-                &gt; 0
+                ._save()
 
             )
 
-            field_set = {f.name for f in fields(class_to_instantiate) if f.init}
-
-            filtered_arg_dict = {k: v for k, v in arg_dict.items() if k in field_set}
-
-            return class_to_instantiate(**filtered_arg_dict)
-
-        def _set(self) -&gt; None:
-
-            &quot;&quot;&quot;Private method to store the singleton.&quot;&quot;&quot;
-
-            _ALL_CONTAINERS[id(self.__class__)] = self
-
-        def _save(self) -&gt; None:
+        def _save(self) -&gt; Self:
 
             &quot;&quot;&quot;Private method to save the singleton to file.&quot;&quot;&quot;
 
@@ -1674,10 +1373,53 @@
                     f&quot;No path specified for {self.kind_string().lower()} file, cannot be saved.&quot;
 
                 )
+
+            return self
+
+        @classmethod
+
+        def _get_saved_data(cls) -&gt; dict[str, Any]:
+
+            &quot;&quot;&quot;Get the data stored in the parameter file&quot;&quot;&quot;
+
+            data_stored: dict[str, Any] = {}
+
+            if path := cls.filepath():
+
+                if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
+
+                    with path.open(mode=&quot;rb&quot;) as fptr:
+
+                        data_stored = tomllib.load(fptr)
+
+                elif ext == str(FileFormat.JSON.value):
+
+                    with path.open(mode=&quot;r&quot;) as fptr:
+
+                        data_stored = json.load(fptr)
+
+                else:
+
+                    print(f&quot;Unknown file format {ext} given in {path}.&quot;)
+
+            else:
+
+                # This situation can occur if no valid path was given as an argument, and
+
+                # the default path is set to None.
+
+                print(
+
+                    f&quot;No path specified for {cls.kind_string().lower()} file; trying with defaults, but this may not work.&quot;
+
+                )
+
+            return data_stored
 </code></pre></div>
 <hr />
 <h4 id="ancestors-in-mro">Ancestors (in MRO)</h4>
 <ul>
+<li>application_settings.container_section_base.ContainerSectionBase</li>
 <li>abc.ABC</li>
 </ul>
 <h4 id="descendants">Descendants</h4>
@@ -1696,7 +1438,7 @@
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        @abstractmethod
 
-        def default_file_format(cls: type[_ContainerT]) -&gt; FileFormat:
+        def default_file_format(cls) -&gt; FileFormat:
 
             &quot;Return the default file format&quot;
 </code></pre></div>
@@ -1708,7 +1450,7 @@
 <p>Return the kind_string, lowercase, with the extension that fits the file_format.</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def default_filename(cls: type[_ContainerT]) -&gt; str:
+<div class="highlight"><pre><span></span><code>        def default_filename(cls) -&gt; str:
 
             &quot;&quot;&quot;Return the kind_string, lowercase, with the extension that fits the file_format.&quot;&quot;&quot;
 
@@ -1719,12 +1461,19 @@
 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span>
 </code></pre></div>
-<p>Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml</p>
+<p>Return the fully qualified default path for the config/settingsfile: e.g. ~/.example/config.toml.</p>
+<p>If you prefer to not have a default path then overwrite this method and return None.</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def default_filepath(cls: type[_ContainerT]) -&gt; PathOpt:
+<div class="highlight"><pre><span></span><code>        def default_filepath(cls) -&gt; PathOpt:
 
-            &quot;&quot;&quot;Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml&quot;&quot;&quot;
+            &quot;&quot;&quot;
+
+            Return the fully qualified default path for the config/settingsfile: e.g. ~/.example/config.toml.
+
+            If you prefer to not have a default path then overwrite this method and return None.
+
+            &quot;&quot;&quot;
 
             return Path.home() / cls.default_foldername() / cls.default_filename()
 </code></pre></div>
@@ -1736,11 +1485,13 @@
 <p>Return the class name without kind_string, lowercase, with a preceding dot and underscores to seperate words.</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def default_foldername(cls: type[_ContainerT]) -&gt; str:
+<div class="highlight"><pre><span></span><code>        def default_foldername(cls) -&gt; str:
 
             &quot;&quot;&quot;Return the class name without kind_string, lowercase, with a preceding dot and underscores to seperate words.&quot;&quot;&quot;
 
-            kind_str = cls.kind_string()
+            if (kind_str := cls.kind_string()) == cls.__name__:
+
+                return f&quot;.{kind_str.lower()}&quot;
 
             return (
 
@@ -1766,31 +1517,25 @@
 </code></pre></div>
 <h4 id="get">get</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get</span><span class="p">(</span>
-    <span class="n">reload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="o">~</span><span class="n">_ContainerT</span>
+
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Access method for the singleton.</p>
+<p>Get the singleton; if not existing, create it. Reloading only useful for a container.</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def get(cls: type[_ContainerT], reload: bool = False) -&gt; _ContainerT:
+<div class="highlight"><pre><span></span><code>        def get(cls) -&gt; Self:
 
-            &quot;&quot;&quot;Access method for the singleton.&quot;&quot;&quot;
+            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reloading only useful for a container.&quot;&quot;&quot;
 
-            if (_the_container_or_none := cls._get()) is None or reload:
+            if (_the_container_or_none := cls._get()) is None:
 
-                # no config has been made yet or it needs to be reloaded,
+                # no config section has been made yet,
 
                 # so let&#39;s instantiate one and keep it in the global store
 
-                _the_config = cls._create_instance()
+                return cls._create_instance()
 
-                _the_config._set()
-
-            else:
-
-                _the_config = _the_container_or_none
-
-            return _the_config
+            return _the_container_or_none
 </code></pre></div>
 <h4 id="kind_string">kind_string</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">kind_string</span><span class="p">(</span>
@@ -1802,24 +1547,48 @@
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        @abstractmethod
 
-        def kind_string(cls: type[_ContainerT]) -&gt; ContainerTypeStr:
+        def kind_string(cls) -&gt; SectionTypeStr:
 
             &quot;Return either &#39;Config&#39; or &#39;Settings&#39;&quot;
+</code></pre></div>
+<h4 id="load">load</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">load</span><span class="p">(</span>
+
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
+</code></pre></div>
+<p>Create a new singleton</p>
+<p>??? example "View Source"
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def load(cls) -&gt; Self:
+
+            &quot;&quot;&quot;Create a new singleton&quot;&quot;&quot;
+
+            return cls._create_instance()
+</code></pre></div>
+<h4 id="set">set</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
+</code></pre></div>
+<p>Create a new dataclass instance using data and set the singleton.</p>
+<p>??? example "View Source"
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def set(cls, data: dict[str, Any]) -&gt; Self:
+
+            &quot;&quot;&quot;Create a new dataclass instance using data and set the singleton.&quot;&quot;&quot;
+
+            return cls(**data)._set()
 </code></pre></div>
 <h4 id="set_filepath">set_filepath</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_filepath</span><span class="p">(</span>
     <span class="n">file_path</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-    <span class="n">reload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">load</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
 </code></pre></div>
 <p>Set the path for the file (a singleton).</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def set_filepath(
-
-            cls: type[_ContainerT], file_path: PathOrStr = &quot;&quot;, reload: bool = False
-
-        ) -&gt; None:
+<div class="highlight"><pre><span></span><code>        def set_filepath(cls, file_path: PathOrStr = &quot;&quot;, load: bool = False) -&gt; None:
 
             &quot;&quot;&quot;Set the path for the file (a singleton).&quot;&quot;&quot;
 
@@ -1851,9 +1620,9 @@
 
                 _ALL_PATHS.pop(id(cls), None)
 
-            if reload:
+            if load:
 
-                cls.get(reload=True)
+                cls.load()
 
             else:
 
@@ -1867,52 +1636,30 @@
 </code></pre></div>
 <h4 id="update">update</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">update</span><span class="p">(</span>
-    <span class="n">changes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]]</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="o">~</span><span class="n">_ContainerT</span>
+    <span class="n">changes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Update and save the settings with data specified in changes; not meant for config</p>
+<p>Update the settings with data specified in changes; not meant for config</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def update(
+<div class="highlight"><pre><span></span><code>        def update(cls, changes: dict[str, Any]) -&gt; Self:
 
-            cls: type[_ContainerT], changes: dict[str, dict[str, Any]]
+            &quot;Update the settings with data specified in changes; not meant for config&quot;
 
-        ) -&gt; _ContainerT:
-
-            &quot;Update and save the settings with data specified in changes; not meant for config&quot;
-
-            return cls.get()._update(changes)  # pylint: disable=protected-access
+            return cls.get()._update(changes)._set()  # pylint: disable=protected-access
 </code></pre></div>
-<h3 id="containersectionbase">ContainerSectionBase</h3>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ContainerSectionBase</span><span class="p">(</span>
-
-<span class="p">)</span>
-</code></pre></div>
-<p>Base class for all ContainerSection classes (so that we can bound a TypeVar)</p>
-<p>??? example "View Source"
-        @dataclass(frozen=True)</p>
-<div class="highlight"><pre><span></span><code>    class ContainerSectionBase:
-
-        &quot;&quot;&quot;Base class for all ContainerSection classes (so that we can bound a TypeVar)&quot;&quot;&quot;
-</code></pre></div>
-<hr />
-<h4 id="descendants_1">Descendants</h4>
-<ul>
-<li>application_settings.configuring_base.ConfigSectionBase</li>
-<li>application_settings.settings_base.SettingsSectionBase</li>
-</ul>
 <h3 id="fileformat">FileFormat</h3>
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">FileFormat</span><span class="p">(</span>
     <span class="o">*</span><span class="n">args</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwds</span>
 <span class="p">)</span>
 </code></pre></div>
-<p>File formats that are supported</p>
+<p>File formats that are supported by application_settings</p>
 <p>??? example "View Source"
         @unique</p>
 <div class="highlight"><pre><span></span><code>    class FileFormat(Enum):
 
-        &quot;File formats that are supported&quot;
+        &quot;File formats that are supported by application_settings&quot;
 
         TOML = &quot;toml&quot;
 
@@ -1968,13 +1715,13 @@
         
         
           
-          <a href="../" class="md-footer__link md-footer__link--next" aria-label="Next: Index" rel="next">
+          <a href="../container_section_base/" class="md-footer__link md-footer__link--next" aria-label="Next: Container Section Base" rel="next">
             <div class="md-footer__title">
               <div class="md-ellipsis">
                 <span class="md-footer__direction">
                   Next
                 </span>
-                Index
+                Container Section Base
               </div>
             </div>
             <div class="md-footer__button md-icon">

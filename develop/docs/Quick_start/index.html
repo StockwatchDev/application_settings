@@ -383,8 +383,22 @@
   
   
     <li class="md-nav__item">
-      <a href="../5-Handling_deviations/" class="md-nav__link">
-        5. Handling deviations
+      <a href="../5-Usage_in_a_library_package/" class="md-nav__link">
+        5. Usage in a library package
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6-Handling_deviations/" class="md-nav__link">
+        6. Handling deviations
       </a>
     </li>
   
@@ -488,6 +502,20 @@
     <li class="md-nav__item">
       <a href="../../reference/application_settings/container_base/" class="md-nav__link">
         Container Base
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/application_settings/container_section_base/" class="md-nav__link">
+        Container Section Base
       </a>
     </li>
   
@@ -633,18 +661,16 @@ terms of the base classes that are used. Example:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Configuration</label><label for="__tabbed_1_2">Settings</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">ConfigBase</span><span class="p">,</span>
-    <span class="n">ConfigSectionBase</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="kn">from</span> <span class="nn">pydantic.dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pydantic.dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="n">ConfigBase</span><span class="p">,</span> <span class="n">ConfigSectionBase</span>
 
 
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">MyExampleConfigSection</span><span class="p">(</span><span class="n">ConfigSectionBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Config section for an example&quot;&quot;&quot;</span>
 
-    <span class="n">field1</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;field1&quot;</span>
+    <span class="n">field1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span>
     <span class="n">field2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
 
 
@@ -652,22 +678,20 @@ terms of the base classes that are used. Example:</p>
 <span class="k">class</span> <span class="nc">MyExampleConfig</span><span class="p">(</span><span class="n">ConfigBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Config for an example&quot;&quot;&quot;</span>
 
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nice example&quot;</span>
     <span class="n">section1</span><span class="p">:</span> <span class="n">MyExampleConfigSection</span> <span class="o">=</span> <span class="n">MyExampleConfigSection</span><span class="p">()</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">SettingsBase</span><span class="p">,</span>
-    <span class="n">SettingsSectionBase</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="kn">from</span> <span class="nn">pydantic.dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pydantic.dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="n">SettingsBase</span><span class="p">,</span> <span class="n">SettingsSectionBase</span>
 
 
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">BasicSettingsSection</span><span class="p">(</span><span class="n">SettingsSectionBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Settings section for the basics&quot;&quot;&quot;</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;the name&quot;</span>
     <span class="n">totals</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
 
 
@@ -675,6 +699,7 @@ terms of the base classes that are used. Example:</p>
 <span class="k">class</span> <span class="nc">MyExampleSettings</span><span class="p">(</span><span class="n">SettingsBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Settings for an example&quot;&quot;&quot;</span>
 
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nice name&quot;</span>
     <span class="n">basics</span><span class="p">:</span> <span class="n">BasicSettingsSection</span> <span class="o">=</span> <span class="n">BasicSettingsSection</span><span class="p">()</span>
 </code></pre></div>
 </div>
@@ -685,18 +710,19 @@ terms of the base classes that are used. Example:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1"><code>~/.my_example/config.toml</code></label><label for="__tabbed_2_2"><code>~/.my_example/settings.json</code></label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="c1"># The nice thing about toml is that you can add comments for explanation</span>
-<span class="c1"># A config is read-only, so they will not be overwritten by your application</span>
-<span class="c1"># (unlike for settings)</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Use this file to set the config that you prefer by editing the file</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;the real thing&quot;</span>
 <span class="k">[section1]</span>
-<span class="n">field1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;my own version of the first field&quot;</span>
+<span class="c1"># field1 has default value 0.5</span>
+<span class="n">field1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-0</span><span class="mf">.5</span>
+<span class="c1"># field2 has default value 2</span>
 <span class="n">field2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">22</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the stored name&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">&quot;basics&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the stored name&quot;</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">&quot;totals&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
@@ -708,31 +734,58 @@ terms of the base classes that are used. Example:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Configuration</label><label for="__tabbed_3_2">Settings</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="c1"># the first invocation of get() will create the singleton instance of MyExampleConfig</span>
-<span class="n">a_variable</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>  <span class="c1"># a_variable == &quot;my own version of field1&quot;</span>
-<span class="n">another_variable</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field2</span>  <span class="c1"># another_variable == 22</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># One of the first things to do in an application is loading the parameters</span>
+<span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="c1"># Now you can access parameters via get()</span>
+<span class="c1"># If you get() MyExampleConfig before load(), it will be loaded automatically</span>
+<span class="n">a_variable</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;a_variable == </span><span class="si">{</span><span class="n">a_variable</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># a_variable == -0.5</span>
+<span class="c1"># You can also directly get() a section; but remember that the config should</span>
+<span class="c1"># be loaded already then (get() on a section does not automatically load())</span>
+<span class="n">another_variable</span> <span class="o">=</span> <span class="n">MyExampleConfigSection</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">field2</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;another_variable == </span><span class="si">{</span><span class="n">another_variable</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># another_variable == 22</span>
 
 <span class="c1"># The only way to modify a config parameter is by editing the config file</span>
 <span class="c1"># or by changing the default value in the definition</span>
-<span class="c1"># Suppose that we edited the config file, changed field1 to &quot;new field 1&quot; and removed field2</span>
+<span class="c1"># Suppose that we edited the config file, changed the value for name to &quot;new name&quot;</span>
+<span class="c1"># and removed field2</span>
 
-<span class="c1"># you can reload a config</span>
-<span class="n">new_variable</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>  <span class="c1"># new_variable == &quot;new field 1&quot;</span>
-<span class="n">another_new_variable</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field2</span>  <span class="c1"># another_new_variable == 2</span>
+<span class="c1"># You can reload a config</span>
+<span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="n">new_variable</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;new_variable == </span><span class="si">{</span><span class="n">new_variable</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># new_variable == &quot;new name&quot;</span>
+<span class="n">another_new_variable</span> <span class="o">=</span> <span class="n">MyExampleConfigSection</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">field2</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;another_new_variable == </span><span class="si">{</span><span class="n">another_new_variable</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="p">)</span>  <span class="c1"># another_new_variable == 2</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="c1"># the first invocation of get() will create the singleton instance of MyExampleSettings</span>
-<span class="n">a_variable</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">name</span>  <span class="c1"># a_variable == &quot;the stored name&quot;</span>
-<span class="n">another_variable</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">totals</span>  <span class="c1"># another_variable == 3</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># One of the first things to do in an application is loading the parameters</span>
+<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="c1"># Now you can access parameters via get()</span>
+<span class="c1"># If you get() MyExampleSettings before load(), it will be loaded automatically</span>
+<span class="n">a_variable</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;a_variable == &#39;</span><span class="si">{</span><span class="n">a_variable</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>  <span class="c1"># a_variable == &#39;the stored name&#39;</span>
+<span class="c1"># You can also directly get() a section; but remember that the settings should</span>
+<span class="c1"># be loaded already then (get() on a section does not automatically load())</span>
+<span class="n">another_variable</span> <span class="o">=</span> <span class="n">BasicSettingsSection</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">totals</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;another_variable == </span><span class="si">{</span><span class="n">another_variable</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># another_variable == 3</span>
 
 <span class="c1"># You can update the settings:</span>
 <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;basics&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;totals&quot;</span><span class="p">:</span> <span class="mi">33</span><span class="p">}})</span>
 <span class="c1"># The updated values will be written to the settings file automatically and the</span>
 <span class="c1"># singleton is replaced by a new instance of MyExampleSettings with the updated values</span>
+<span class="n">refreshed_totals</span> <span class="o">=</span> <span class="n">BasicSettingsSection</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">totals</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;refreshed_totals == </span><span class="si">{</span><span class="n">refreshed_totals</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># refreshed_totals == 33</span>
 
-<span class="c1"># you can also edit the settings file and reload:</span>
-<span class="n">refreshed_name</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">name</span>
+<span class="c1"># You can also edit the settings file. Suppose that we changed the value for name to</span>
+<span class="c1"># &quot;updated name&quot;</span>
+
+<span class="c1"># You can reload a setting</span>
+<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="n">refreshed_name</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;refreshed_name == &#39;</span><span class="si">{</span><span class="n">refreshed_name</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>  <span class="c1"># refreshed_name == &#39;updated name&#39;</span>
 </code></pre></div>
 </div>
 </div>

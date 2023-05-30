@@ -321,8 +321,22 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/5-Handling_deviations/" class="md-nav__link">
-        5. Handling deviations
+      <a href="../../../docs/5-Usage_in_a_library_package/" class="md-nav__link">
+        5. Usage in a library package
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../docs/6-Handling_deviations/" class="md-nav__link">
+        6. Handling deviations
       </a>
     </li>
   
@@ -442,6 +456,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../container_section_base/" class="md-nav__link">
+        Container Section Base
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../" class="md-nav__link">
         Index
       </a>
@@ -488,13 +516,6 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#variables" class="md-nav__link">
-    Variables
-  </a>
-  
-</li>
       
         <li class="md-nav__item">
   <a href="#classes" class="md-nav__link">
@@ -576,6 +597,20 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#load" class="md-nav__link">
+    load
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set" class="md-nav__link">
+    set
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#set_filepath" class="md-nav__link">
     set_filepath
   </a>
@@ -605,6 +640,41 @@
           <li class="md-nav__item">
   <a href="#ancestors-in-mro_1" class="md-nav__link">
     Ancestors (in MRO)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#static-methods_1" class="md-nav__link">
+    Static methods
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_1" class="md-nav__link">
+    get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kind_string_1" class="md-nav__link">
+    kind_string
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set_1" class="md-nav__link">
+    set
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update_1" class="md-nav__link">
+    update
   </a>
   
 </li>
@@ -682,13 +752,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#variables" class="md-nav__link">
-    Variables
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#classes" class="md-nav__link">
     Classes
   </a>
@@ -768,6 +831,20 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#load" class="md-nav__link">
+    load
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set" class="md-nav__link">
+    set
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#set_filepath" class="md-nav__link">
     set_filepath
   </a>
@@ -797,6 +874,41 @@
           <li class="md-nav__item">
   <a href="#ancestors-in-mro_1" class="md-nav__link">
     Ancestors (in MRO)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#static-methods_1" class="md-nav__link">
+    Static methods
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_1" class="md-nav__link">
+    get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kind_string_1" class="md-nav__link">
+    kind_string
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set_1" class="md-nav__link">
+    set
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update_1" class="md-nav__link">
+    update
   </a>
   
 </li>
@@ -835,25 +947,17 @@
 <p>Module for handling settings.</p>
 <p>??? example "View Source"
         """Module for handling settings."""</p>
-<div class="highlight"><pre><span></span><code>    from typing import TypeVar
+<div class="highlight"><pre><span></span><code>    from pydantic.dataclasses import dataclass
 
-    from pydantic.dataclasses import dataclass
+    from application_settings.container_base import ContainerBase, FileFormat
 
-    from .container_base import (
-
-        ContainerBase,
+    from application_settings.container_section_base import (
 
         ContainerSectionBase,
 
-        ContainerTypeStr,
-
-        FileFormat,
+        SectionTypeStr,
 
     )
-
-    SettingsT = TypeVar(&quot;SettingsT&quot;, bound=&quot;SettingsBase&quot;)
-
-    SettingsSectionT = TypeVar(&quot;SettingsSectionT&quot;, bound=&quot;SettingsSectionBase&quot;)
 
 
 
@@ -862,6 +966,14 @@
     class SettingsSectionBase(ContainerSectionBase):
 
         &quot;&quot;&quot;Base class for all SettingsSection classes (so that we can bound a TypeVar)&quot;&quot;&quot;
+
+        @classmethod
+
+        def kind_string(cls) -&gt; SectionTypeStr:
+
+            &quot;Return &#39;Settings&#39;&quot;
+
+            return &quot;Settings&quot;
 
 
 
@@ -873,7 +985,7 @@
 
         @classmethod
 
-        def kind_string(cls: type[SettingsT]) -&gt; ContainerTypeStr:
+        def kind_string(cls) -&gt; SectionTypeStr:
 
             &quot;Return &#39;Settings&#39;&quot;
 
@@ -881,16 +993,11 @@
 
         @classmethod
 
-        def default_file_format(cls: type[SettingsT]) -&gt; FileFormat:
+        def default_file_format(cls) -&gt; FileFormat:
 
             &quot;Return the default file format&quot;
 
             return FileFormat.JSON
-</code></pre></div>
-<h2 id="variables">Variables</h2>
-<div class="highlight"><pre><span></span><code><span class="n">SettingsSectionT</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">SettingsT</span>
 </code></pre></div>
 <h2 id="classes">Classes</h2>
 <h3 id="settingsbase">SettingsBase</h3>
@@ -907,7 +1014,7 @@
 
         @classmethod
 
-        def kind_string(cls: type[SettingsT]) -&gt; ContainerTypeStr:
+        def kind_string(cls) -&gt; SectionTypeStr:
 
             &quot;Return &#39;Settings&#39;&quot;
 
@@ -915,7 +1022,7 @@
 
         @classmethod
 
-        def default_file_format(cls: type[SettingsT]) -&gt; FileFormat:
+        def default_file_format(cls) -&gt; FileFormat:
 
             &quot;Return the default file format&quot;
 
@@ -925,6 +1032,7 @@
 <h4 id="ancestors-in-mro">Ancestors (in MRO)</h4>
 <ul>
 <li>application_settings.container_base.ContainerBase</li>
+<li>application_settings.container_section_base.ContainerSectionBase</li>
 <li>abc.ABC</li>
 </ul>
 <h4 id="static-methods">Static methods</h4>
@@ -936,7 +1044,7 @@
 <p>Return the default file format</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def default_file_format(cls: type[SettingsT]) -&gt; FileFormat:
+<div class="highlight"><pre><span></span><code>        def default_file_format(cls) -&gt; FileFormat:
 
             &quot;Return the default file format&quot;
 
@@ -950,7 +1058,7 @@
 <p>Return the kind_string, lowercase, with the extension that fits the file_format.</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def default_filename(cls: type[_ContainerT]) -&gt; str:
+<div class="highlight"><pre><span></span><code>        def default_filename(cls) -&gt; str:
 
             &quot;&quot;&quot;Return the kind_string, lowercase, with the extension that fits the file_format.&quot;&quot;&quot;
 
@@ -961,12 +1069,19 @@
 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span>
 </code></pre></div>
-<p>Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml</p>
+<p>Return the fully qualified default path for the config/settingsfile: e.g. ~/.example/config.toml.</p>
+<p>If you prefer to not have a default path then overwrite this method and return None.</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def default_filepath(cls: type[_ContainerT]) -&gt; PathOpt:
+<div class="highlight"><pre><span></span><code>        def default_filepath(cls) -&gt; PathOpt:
 
-            &quot;&quot;&quot;Return the fully qualified path for the config/settingsfile: e.g. ~/.example/config.toml&quot;&quot;&quot;
+            &quot;&quot;&quot;
+
+            Return the fully qualified default path for the config/settingsfile: e.g. ~/.example/config.toml.
+
+            If you prefer to not have a default path then overwrite this method and return None.
+
+            &quot;&quot;&quot;
 
             return Path.home() / cls.default_foldername() / cls.default_filename()
 </code></pre></div>
@@ -978,11 +1093,13 @@
 <p>Return the class name without kind_string, lowercase, with a preceding dot and underscores to seperate words.</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def default_foldername(cls: type[_ContainerT]) -&gt; str:
+<div class="highlight"><pre><span></span><code>        def default_foldername(cls) -&gt; str:
 
             &quot;&quot;&quot;Return the class name without kind_string, lowercase, with a preceding dot and underscores to seperate words.&quot;&quot;&quot;
 
-            kind_str = cls.kind_string()
+            if (kind_str := cls.kind_string()) == cls.__name__:
+
+                return f&quot;.{kind_str.lower()}&quot;
 
             return (
 
@@ -1008,31 +1125,25 @@
 </code></pre></div>
 <h4 id="get">get</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get</span><span class="p">(</span>
-    <span class="n">reload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="o">~</span><span class="n">_ContainerT</span>
+
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Access method for the singleton.</p>
+<p>Get the singleton; if not existing, create it. Reloading only useful for a container.</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def get(cls: type[_ContainerT], reload: bool = False) -&gt; _ContainerT:
+<div class="highlight"><pre><span></span><code>        def get(cls) -&gt; Self:
 
-            &quot;&quot;&quot;Access method for the singleton.&quot;&quot;&quot;
+            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reloading only useful for a container.&quot;&quot;&quot;
 
-            if (_the_container_or_none := cls._get()) is None or reload:
+            if (_the_container_or_none := cls._get()) is None:
 
-                # no config has been made yet or it needs to be reloaded,
+                # no config section has been made yet,
 
                 # so let&#39;s instantiate one and keep it in the global store
 
-                _the_config = cls._create_instance()
+                return cls._create_instance()
 
-                _the_config._set()
-
-            else:
-
-                _the_config = _the_container_or_none
-
-            return _the_config
+            return _the_container_or_none
 </code></pre></div>
 <h4 id="kind_string">kind_string</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">kind_string</span><span class="p">(</span>
@@ -1042,26 +1153,50 @@
 <p>Return 'Settings'</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def kind_string(cls: type[SettingsT]) -&gt; ContainerTypeStr:
+<div class="highlight"><pre><span></span><code>        def kind_string(cls) -&gt; SectionTypeStr:
 
             &quot;Return &#39;Settings&#39;&quot;
 
             return &quot;Settings&quot;
 </code></pre></div>
+<h4 id="load">load</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">load</span><span class="p">(</span>
+
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
+</code></pre></div>
+<p>Create a new singleton</p>
+<p>??? example "View Source"
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def load(cls) -&gt; Self:
+
+            &quot;&quot;&quot;Create a new singleton&quot;&quot;&quot;
+
+            return cls._create_instance()
+</code></pre></div>
+<h4 id="set">set</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
+</code></pre></div>
+<p>Create a new dataclass instance using data and set the singleton.</p>
+<p>??? example "View Source"
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def set(cls, data: dict[str, Any]) -&gt; Self:
+
+            &quot;&quot;&quot;Create a new dataclass instance using data and set the singleton.&quot;&quot;&quot;
+
+            return cls(**data)._set()
+</code></pre></div>
 <h4 id="set_filepath">set_filepath</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_filepath</span><span class="p">(</span>
     <span class="n">file_path</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-    <span class="n">reload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">load</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
 </code></pre></div>
 <p>Set the path for the file (a singleton).</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def set_filepath(
-
-            cls: type[_ContainerT], file_path: PathOrStr = &quot;&quot;, reload: bool = False
-
-        ) -&gt; None:
+<div class="highlight"><pre><span></span><code>        def set_filepath(cls, file_path: PathOrStr = &quot;&quot;, load: bool = False) -&gt; None:
 
             &quot;&quot;&quot;Set the path for the file (a singleton).&quot;&quot;&quot;
 
@@ -1093,9 +1228,9 @@
 
                 _ALL_PATHS.pop(id(cls), None)
 
-            if reload:
+            if load:
 
-                cls.get(reload=True)
+                cls.load()
 
             else:
 
@@ -1109,21 +1244,17 @@
 </code></pre></div>
 <h4 id="update">update</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">update</span><span class="p">(</span>
-    <span class="n">changes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]]</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="o">~</span><span class="n">_ContainerT</span>
+    <span class="n">changes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Update and save the settings with data specified in changes; not meant for config</p>
+<p>Update the settings with data specified in changes; not meant for config</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def update(
+<div class="highlight"><pre><span></span><code>        def update(cls, changes: dict[str, Any]) -&gt; Self:
 
-            cls: type[_ContainerT], changes: dict[str, dict[str, Any]]
+            &quot;Update the settings with data specified in changes; not meant for config&quot;
 
-        ) -&gt; _ContainerT:
-
-            &quot;Update and save the settings with data specified in changes; not meant for config&quot;
-
-            return cls.get()._update(changes)  # pylint: disable=protected-access
+            return cls.get()._update(changes)._set()  # pylint: disable=protected-access
 </code></pre></div>
 <h3 id="settingssectionbase">SettingsSectionBase</h3>
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">SettingsSectionBase</span><span class="p">(</span>
@@ -1136,12 +1267,86 @@
 <div class="highlight"><pre><span></span><code>    class SettingsSectionBase(ContainerSectionBase):
 
         &quot;&quot;&quot;Base class for all SettingsSection classes (so that we can bound a TypeVar)&quot;&quot;&quot;
+
+        @classmethod
+
+        def kind_string(cls) -&gt; SectionTypeStr:
+
+            &quot;Return &#39;Settings&#39;&quot;
+
+            return &quot;Settings&quot;
 </code></pre></div>
 <hr />
 <h4 id="ancestors-in-mro_1">Ancestors (in MRO)</h4>
 <ul>
-<li>application_settings.container_base.ContainerSectionBase</li>
+<li>application_settings.container_section_base.ContainerSectionBase</li>
+<li>abc.ABC</li>
 </ul>
+<h4 id="static-methods_1">Static methods</h4>
+<h4 id="get_1">get</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get</span><span class="p">(</span>
+
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
+</code></pre></div>
+<p>Get the singleton; if not existing, create it. Reloading only useful for a container.</p>
+<p>??? example "View Source"
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def get(cls) -&gt; Self:
+
+            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reloading only useful for a container.&quot;&quot;&quot;
+
+            if (_the_container_or_none := cls._get()) is None:
+
+                # no config section has been made yet,
+
+                # so let&#39;s instantiate one and keep it in the global store
+
+                return cls._create_instance()
+
+            return _the_container_or_none
+</code></pre></div>
+<h4 id="kind_string_1">kind_string</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">kind_string</span><span class="p">(</span>
+
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;Config&#39;</span><span class="p">,</span> <span class="s1">&#39;Settings&#39;</span><span class="p">]</span>
+</code></pre></div>
+<p>Return 'Settings'</p>
+<p>??? example "View Source"
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def kind_string(cls) -&gt; SectionTypeStr:
+
+            &quot;Return &#39;Settings&#39;&quot;
+
+            return &quot;Settings&quot;
+</code></pre></div>
+<h4 id="set_1">set</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
+</code></pre></div>
+<p>Create a new dataclass instance using data and set the singleton.</p>
+<p>??? example "View Source"
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def set(cls, data: dict[str, Any]) -&gt; Self:
+
+            &quot;&quot;&quot;Create a new dataclass instance using data and set the singleton.&quot;&quot;&quot;
+
+            return cls(**data)._set()
+</code></pre></div>
+<h4 id="update_1">update</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">update</span><span class="p">(</span>
+    <span class="n">changes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
+</code></pre></div>
+<p>Update the settings with data specified in changes; not meant for config</p>
+<p>??? example "View Source"
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def update(cls, changes: dict[str, Any]) -&gt; Self:
+
+            &quot;Update the settings with data specified in changes; not meant for config&quot;
+
+            return cls.get()._update(changes)._set()  # pylint: disable=protected-access
+</code></pre></div>
 
 
 

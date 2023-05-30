@@ -367,8 +367,22 @@
   
   
     <li class="md-nav__item">
-      <a href="../5-Handling_deviations/" class="md-nav__link">
-        5. Handling deviations
+      <a href="../5-Usage_in_a_library_package/" class="md-nav__link">
+        5. Usage in a library package
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6-Handling_deviations/" class="md-nav__link">
+        6. Handling deviations
       </a>
     </li>
   
@@ -472,6 +486,20 @@
     <li class="md-nav__item">
       <a href="../../reference/application_settings/container_base/" class="md-nav__link">
         Container Base
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/application_settings/container_section_base/" class="md-nav__link">
+        Container Section Base
       </a>
     </li>
   
@@ -594,6 +622,8 @@
   <h1>3. Files and file location</h1>
 
 <h2 id="files-for-storing-parameters">Files for storing parameters</h2>
+<p>A Container class defines a root section and provides for behavior to load parameter
+values from files and, in case of settings, store updated values to files.</p>
 <p>Currently, two formats are supported for persistent storage of parameters: 
 <a href="https://toml.io/en/"><code>toml</code></a> and <a href="https://www.json.org/"><code>json</code></a>.</p>
 <p>The <code>toml</code> format is human-oriented, flexible, standardardized and not overly complex.
@@ -611,23 +641,24 @@ format, which makes it less human-oriented than <code>toml</code>, but it is use
 interchange between automated systems. Because of this, the default format for storing
 settings parameters is <code>json</code>. The name of a settings file equals <code>settings.json</code> by
 default.</p>
-<p>The examples introduced in the previous section can for example be initialized with the
+<p>The examples introduced in the previous chapter can for example be initialized with the
 following files.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1"><code>config.toml</code> file for the configuration example</label><label for="__tabbed_1_2"><code>settings.json</code> file for the settings example</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="k">[section1]</span>
-<span class="c1"># Use this section to set the config that you prefer by editing the file</span>
-<span class="c1"># field1 has default value &#39;field1&#39;</span>
-<span class="n">field1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;my own version of the first field&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Use this file to set the config that you prefer by editing the file</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;application specific name&quot;</span>
+<span class="k">[section1]</span>
+<span class="c1"># field1 has default value 0.5</span>
+<span class="n">field1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-0</span><span class="mf">.5</span>
 <span class="c1"># field2 has default value 2</span>
 <span class="n">field2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">22</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the stored name&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">&quot;basics&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the stored name&quot;</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">&quot;totals&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
@@ -635,14 +666,14 @@ following files.</p>
 </div>
 </div>
 </div>
-<p>The fieldnames of a Container class are found as:</p>
+<p>The field names of a Container class are found as:</p>
 <ul>
-<li>the section names in the <code>toml</code> file</li>
+<li>the root parameter names and the section names in the <code>toml</code> file</li>
 <li>the member names of the root object in the <code>json</code> file</li>
 </ul>
-<p>The fieldnames of a Section class are found as:</p>
+<p>The field names of a Section class are found as:</p>
 <ul>
-<li>the fieldnames inside the corresponding section in the <code>toml</code> file</li>
+<li>the parameter names inside the corresponding section in the <code>toml</code> file</li>
 <li>the member names of the object that is the value of the name that represents the
   section in the <code>json</code> file</li>
 </ul>
@@ -652,9 +683,9 @@ in which fields have been specified in the Container - or Section classes.</p>
 by silently.</p>
 <p>Fields or complete sections defined in the classes can be absent in the files as long as
 default values have been specified for all fields that have been left out. For more info
-on data validation <a href="../5-Handling_deviations/">click here</a></p>
+on data validation <a href="./5-Handling_deviations.md">click here</a></p>
 <h2 id="location-name-and-type-of-the-file">Location, name and type of the file</h2>
-<p>By default, the config and settings file are located in a subfolder of the home folder of
+<p>By default, the config and settings files are located in a subfolder of the home folder of
 the user running the application. The default name of that subfolder is provided by the
 <code>default_foldername()</code> method and consists of a dot, followed by a name derived from your
 container class: the word <code>Config</code>/<code>Settings</code> is removed, underscores are put in front of
@@ -665,15 +696,16 @@ the Container class <code>MyExampleConfig</code> by default will store its confi
 <p>If you want the files to be stored in a different location and/or have a different name
 and/or change the format, then you can use the method <code>set_filepath</code>. If you invoke this
 method but you have already instantiated the parameters via <code>get()</code>, then you most likely
-want to reload them. You can do so by setting an argument <code>reload=True</code> in <code>set_filepath</code>.
+want to reload them. You can do so by setting an argument <code>load=True</code> in <code>set_filepath</code>.
 If you invoke this function after parameters have been instantiated and do not set
-<code>reload</code>, then a warning is printed. Example:</p>
+<code>load</code>, then a warning is printed. Example:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># the next statement sets the location, name and format of the settings file</span>
 <span class="c1"># the argument can be eiter a string or a Path</span>
 <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\ProgramData\testsettings.toml&quot;</span><span class="p">)</span>
 <span class="c1"># the next statement loads the settings</span>
 <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\ProgramData\productionsettings.toml&quot;</span><span class="p">,</span> <span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># the next statement sets a new name for the settings file and reloads it</span>
+<span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\ProgramData\productionsettings.toml&quot;</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 <p>The extension of the file is used to select the format for parsing and hence has to be
 either <code>json</code>, <code>JSON</code>, <code>toml</code> or <code>TOML</code>.</p>

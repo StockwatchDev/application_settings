@@ -374,8 +374,22 @@
   
   
     <li class="md-nav__item">
-      <a href="../5-Handling_deviations/" class="md-nav__link">
-        5. Handling deviations
+      <a href="../5-Usage_in_a_library_package/" class="md-nav__link">
+        5. Usage in a library package
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6-Handling_deviations/" class="md-nav__link">
+        6. Handling deviations
       </a>
     </li>
   
@@ -479,6 +493,20 @@
     <li class="md-nav__item">
       <a href="../../reference/application_settings/container_base/" class="md-nav__link">
         Container Base
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/application_settings/container_section_base/" class="md-nav__link">
+        Container Section Base
       </a>
     </li>
   
@@ -608,19 +636,23 @@
   <h1>4. Using parameters</h1>
 
 <h2 id="use-parameters-in-your-code">Use parameters in your code</h2>
-<p>Parameter containers are meant to be instantiated just once and be available globally for
-the application. Therefore, implementation has been done as follows:</p>
+<p>Parameter sections and containers are meant to be instantiated just once and be available
+globally for the application. Therefore, implementation has been done as follows:</p>
 <ul>
-<li>The instance of a parameter container is accessed via a class method <code>get()</code>;</li>
-<li>The parameter value is then obtained by chaining with the section name and the
+<li>By in voking method <code>load()</code> on a parameter container class, the container and all
+  contained (nested) sections are instantiated with data values read
+  from the parameter file. The instances are stored for future access in a private module
+  global (a dictionary with the class id as key);</li>
+<li>The instance of a parameter container or section is accessed via a class method <code>get()</code>;</li>
+<li>The parameter value is then obtained by chaining with (the section name(s) and) the
   parameter name;</li>
-<li>The first invocation of <code>get()</code> will create the container instance, try to read values
-  from file and store it for future access in a private module global (a dictionary with
-  the class id as key);</li>
+<li>If a container has not been loaded, the first invocation of <code>get()</code> will do that
+  automatically. This is not the case for a section - if <code>get()</code> is invoked on a section
+  before any loading has been done, it will be instantiated with default values;</li>
 <li>A parameter container should not be instantiated directly by client code (although it
   is possible to do so, e.g. for testing purposes);</li>
 <li>If needed, you can set the path for the parameter file before the first invocation of
-  <code>get()</code>.</li>
+  <code>get()</code> (see <a href="../3-Files/">section on files</a>).</li>
 </ul>
 <h2 id="changing-parameter-values">Changing parameter values</h2>
 <p>Parameters are defined as fields of frozen dataclasses. Hence, changing parameter values
@@ -632,8 +664,10 @@ container.</p>
 restarting the application or reloading the settings container. In addition to that,
 settings can be changed programmatically by calling a class method 
 <code>update(changes: dict[str, dict[str, Any])</code>, where the argument <code>changes</code> is a dictionary
-of dictionaries that specifies the sections (keys of the outer dict) and fields (keys of
-the inner dicts) that are changed. The method <code>update</code> will replace the stored settings
+in which each key is the name of a parameter that is to be updated. For updating a nested
+section, the key needs to hold the section name and the value should hold a dictionary
+with str-type keys again, etc. </p>
+<p>The method <code>update</code> will replace the stored settings
 in the private module global with an updated instance and the settings file will be
 updated as well. So the invocation of <code>get()</code> after <code>update</code> or application restart or
 reloading will return the changed parameter values.</p>
@@ -643,16 +677,17 @@ reloading will return the changed parameter values.</p>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">MyExampleConfig</span>
 
-<span class="c1"># if the config file is not in the default location, then set the path first</span>
+<span class="c1"># If the config file is not in the default location, then set the path first</span>
 <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\ProgramData\MyApp\config.toml&quot;</span><span class="p">)</span>
 
-<span class="c1"># the next statement will create the config</span>
-<span class="n">field1_var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>  <span class="c1"># field1_var == &quot;my own version of the first field&quot;</span>
-<span class="c1"># the next statement just gets that same instance</span>
+<span class="c1"># The next statement will create the config</span>
+<span class="n">field1_var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>  <span class="c1"># field1_var == -0.5</span>
+<span class="c1"># The next statement just gets that same instance</span>
 <span class="n">field2_var</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field2</span>  <span class="c1"># field2_var == 22</span>
 
-<span class="c1"># if you have edited the config file, you can reload it (which will create a new instance)</span>
-<span class="n">field1_var</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>
+<span class="c1"># After edited the config file, you can reload it (which will create a new instance)</span>
+<span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="n">field1_var</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>
 
 <span class="c1"># you cannot programmatically change config parameters</span>
 </code></pre></div>
@@ -660,23 +695,25 @@ reloading will return the changed parameter values.</p>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">MyExampleSettings</span>
 
-<span class="c1"># if the settings file is not in the default location, then set the path first</span>
+<span class="c1"># If the settings file is not in the default location, then set the path first</span>
 <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\ProgramData\MyApp\settings.json&quot;</span><span class="p">)</span>
 
-<span class="c1"># the next statement will create the settings</span>
-<span class="n">name_var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">name</span>  <span class="c1"># name_var == &quot;the name&quot;</span>
-<span class="c1"># the next statement just gets that same instance</span>
-<span class="n">totals_var</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">totals</span>  <span class="c1"># totals_var == 2</span>
+<span class="c1"># The next statement will create the settings</span>
+<span class="n">name_var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>  <span class="c1"># name_var == &quot;the stored name&quot;</span>
+<span class="c1"># The next statement just gets that same instance</span>
+<span class="n">totals_var</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">totals</span>  <span class="c1"># totals_var == 3</span>
 
-<span class="c1"># if you have edited the settings file, you can reload it (which will create a new instance)</span>
-<span class="n">name_var</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">name</span>
+<span class="c1"># After edited the settings file, you can reload it (which will create a new instance)</span>
+<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="n">name_var</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
 
 <span class="c1"># change settings parameters programmatically using update</span>
-<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;basics&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;new and shiny name&quot;</span><span class="p">}})</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># new and shiny name</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">totals</span><span class="p">)</span>  <span class="c1"># 2</span>
+<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;updated name&quot;</span><span class="p">,</span> <span class="s2">&quot;basics&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;totals&quot;</span><span class="p">:</span> <span class="mi">33</span><span class="p">}})</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># updated name</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">totals</span><span class="p">)</span>  <span class="c1"># 33</span>
 <span class="c1"># the update has been written to file as well</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># new and shiny name</span>
+<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># updated name</span>
 </code></pre></div>
 </div>
 </div>
@@ -717,13 +754,13 @@ reloading will return the changed parameter values.</p>
         
         
           
-          <a href="../5-Handling_deviations/" class="md-footer__link md-footer__link--next" aria-label="Next: 5. Handling deviations" rel="next">
+          <a href="../5-Usage_in_a_library_package/" class="md-footer__link md-footer__link--next" aria-label="Next: 5. Usage in a library package" rel="next">
             <div class="md-footer__title">
               <div class="md-ellipsis">
                 <span class="md-footer__direction">
                   Next
                 </span>
-                5. Handling deviations
+                5. Usage in a library package
               </div>
             </div>
             <div class="md-footer__button md-icon">

@@ -321,8 +321,22 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/5-Handling_deviations/" class="md-nav__link">
-        5. Handling deviations
+      <a href="../../../docs/5-Usage_in_a_library_package/" class="md-nav__link">
+        5. Usage in a library package
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../docs/6-Handling_deviations/" class="md-nav__link">
+        6. Handling deviations
       </a>
     </li>
   
@@ -442,6 +456,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../container_section_base/" class="md-nav__link">
+        Container Section Base
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../" class="md-nav__link">
         Index
       </a>
@@ -542,7 +570,7 @@
 <h1 id="module-application_settingstype_notation_helper">Module application_settings.type_notation_helper</h1>
 <p>Defines type aliasses that handle notational differences between python versions.</p>
 <p>??? example "View Source"
-        # pylint: disable=consider-alternative-union-syntax</p>
+        # pylint: disable=consider-alternative-union-syntax, useless-suppression</p>
 <div class="highlight"><pre><span></span><code>    &quot;&quot;&quot;Defines type aliasses that handle notational differences between python versions.&quot;&quot;&quot;
 
     import sys
@@ -559,13 +587,13 @@
 
     else:
 
-        from typing import Optional, Union
+        from typing import Union
 
         from typing_extensions import TypeAlias
 
         PathOrStr: TypeAlias = Union[Path, str]
 
-        PathOpt: TypeAlias = Optional[Path]
+        PathOpt: TypeAlias = Union[Path, None]
 </code></pre></div>
 
 
