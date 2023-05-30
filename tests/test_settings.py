@@ -55,9 +55,7 @@ def test_paths() -> None:
 
 def test_settings_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
     some_path = Path.home() / "ProgramData" / "test" / "config.toml"
-    monkeypatch.setattr(
-        sys, "argv", ["bla", "-g", str(some_path)]
-    )
+    monkeypatch.setattr(sys, "argv", ["bla", "-g", str(some_path)])
     settings_filepath_from_commandline_option(AnExample1Settings, short_option="-g")
     assert str(AnExample1Settings.filepath()) == str(some_path)
 

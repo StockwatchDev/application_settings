@@ -29,12 +29,12 @@ def config_filepath_from_commandline_option(
         if "conflicting option string" in the_error.message:
             if "--config_filepath" in the_error.message:
                 print(
-                        "Warning: commandline option '--config_filepath' has been set already."
-                    )
+                    "Warning: commandline option '--config_filepath' has been set already."
+                )
             if short_option in the_error.message:
                 print(
-                        f"Warning: commandline option '{short_option}' has been set already."
-                    )
+                    f"Warning: commandline option '{short_option}' has been set already."
+                )
         else:
             raise the_error
     args = parser.parse_args()

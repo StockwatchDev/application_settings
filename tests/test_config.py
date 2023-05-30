@@ -145,7 +145,9 @@ def test_paths(toml_file: Path) -> None:
     with pytest.raises(FileNotFoundError):
         AnExample1Config.load(throw_if_file_not_found=True)
 
-    AnExample1Config.set_filepath(str(Path.home() / "ProgramData" / "test" / "config.toml"))
+    AnExample1Config.set_filepath(
+        str(Path.home() / "ProgramData" / "test" / "config.toml")
+    )
     # raising in case of invalid path:
     with pytest.raises(ValueError):
         AnExample1Config.set_filepath('fi:\0\\l*e/p"a?t>h|.t<xt')
