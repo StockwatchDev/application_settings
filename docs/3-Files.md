@@ -102,6 +102,10 @@ MyExampleConfig.set_filepath("")
 The extension of the file is used to select the format for parsing and hence has to be
 either `json`, `JSON`, `toml` or `TOML`.
 
+## Setting the filepath via commandline arguments
+
+
+
 ## Handling FileNotFoundError
 
 When loading a parameter file, you have a choice what should happen when the parameter

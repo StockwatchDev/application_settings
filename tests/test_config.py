@@ -145,12 +145,17 @@ def test_paths(toml_file: Path) -> None:
     with pytest.raises(FileNotFoundError):
         AnExample1Config.load(throw_if_file_not_found=True)
 
+    AnExample1Config.set_filepath(str(Path.home() / "ProgramData" / "test" / "config.toml"))
     # raising in case of invalid path:
     with pytest.raises(ValueError):
         AnExample1Config.set_filepath('fi:\0\\l*e/p"a?t>h|.t<xt')
 
 
 def test_config_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
+    # test without commandline arguments
+    monkeypatch.setattr(sys, "argv", ["bla"])
+    config_filepath_from_commandline_option(Config, short_option="-k")
+    assert Config.filepath() == Config.default_filepath()
     some_path = Path.home() / "ProgramData" / "test" / "config.toml"
     monkeypatch.setattr(sys, "argv", ["bla", "-k", str(some_path)])
     config_filepath_from_commandline_option(AnExample1Config, short_option="-k")
