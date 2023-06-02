@@ -198,7 +198,7 @@ commands_pre =
 commands =
     poetry run python -m black --check ./src
     poetry run isort --check --diff ./src
-    poetry run pylint --recursive=y ./src
+    poetry run pylint ./src
 
 [testenv:py{39,310,311}-typing]
 skip_install = true

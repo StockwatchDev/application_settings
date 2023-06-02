@@ -54,7 +54,12 @@ def test_paths() -> None:
 
 
 def test_settings_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
-    some_path = Path.home() / "ProgramData" / "test" / "config.toml"
+    # test without commandline arguments
+    # - this works, but not together with the last 4 lines
+    # monkeypatch.setattr(sys, "argv", ["bla"])
+    # settings_filepath_from_commandline_option(AnExample1Settings, short_option="-k")
+    # assert AnExample1Settings.filepath() == AnExample1Settings.default_filepath()
+    some_path = Path.home() / "ProgramData" / "test" / "settings.json"
     monkeypatch.setattr(sys, "argv", ["bla", "-g", str(some_path)])
     settings_filepath_from_commandline_option(AnExample1Settings, short_option="-g")
     assert str(AnExample1Settings.filepath()) == str(some_path)
