@@ -1,3 +1,4 @@
+# pylint: disable=duplicate-code
 """Example for settings."""
 from pathlib import Path
 
@@ -62,7 +63,7 @@ if __name__ == "__main__":
 
     main1()
 
-    # Edit the config file
+    # Edit the settings file
     with local_filepath.open("r") as file:
         filedata = file.read()
     filedata = filedata.replace('"the stored name"', '"updated name"')
@@ -71,7 +72,7 @@ if __name__ == "__main__":
 
     main2()
 
-    # Restore the original config file
+    # Restore the original settings file
     with local_filepath.open("r") as file:
         filedata = file.read()
     filedata = filedata.replace('"updated name"', '"the stored name"')
