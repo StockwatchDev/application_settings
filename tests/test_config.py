@@ -16,7 +16,7 @@ from application_settings import (
     ConfigSectionBase,
     PathOpt,
     __version__,
-    config_filepath_from_commandline_option,
+    config_filepath_from_cli,
 )
 
 if sys.version_info >= (3, 11):
@@ -157,11 +157,11 @@ def test_config_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
     # test without commandline arguments
     # - this works, but not together with the last 4 lines
     # monkeypatch.setattr(sys, "argv", ["bla"])
-    # config_filepath_from_commandline_option(Config, short_option="-k")
+    # config_filepath_from_cli(Config, short_option="-k")
     # assert Config.filepath() == Config.default_filepath()
     some_path = Path.home() / "ProgramData" / "test" / "config.toml"
     monkeypatch.setattr(sys, "argv", ["bla", "-k", str(some_path)])
-    config_filepath_from_commandline_option(AnExample1Config, short_option="-k")
+    config_filepath_from_cli(AnExample1Config, short_option="-k")
     assert str(AnExample1Config.filepath()) == str(some_path)
 
 

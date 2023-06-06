@@ -5,8 +5,9 @@ from importlib.metadata import version
 from application_settings.configuring_base import ConfigBase, ConfigSectionBase, ConfigT
 from application_settings.container_section_base import SectionTypeStr
 from application_settings.convenience import (
-    config_filepath_from_commandline_option,
-    settings_filepath_from_commandline_option,
+    config_filepath_from_cli,
+    parameters_folderpath_from_cli,
+    settings_filepath_from_cli,
 )
 from application_settings.settings_base import (
     SettingsBase,
@@ -27,6 +28,7 @@ __all__ = [
     "SettingsSectionBase",
     "SettingsBase",
     "SettingsT",
-    "config_filepath_from_commandline_option",
-    "settings_filepath_from_commandline_option",
+    "config_filepath_from_cli",
+    "settings_filepath_from_cli",
+    "parameters_folderpath_from_cli",
 ]

@@ -8,9 +8,11 @@ import pytest
 from pydantic.dataclasses import dataclass
 
 from application_settings import (
+    ConfigBase,
     SettingsBase,
     SettingsSectionBase,
-    settings_filepath_from_commandline_option,
+    parameters_folderpath_from_cli,
+    settings_filepath_from_cli,
 )
 
 if sys.version_info < (3, 10):
@@ -40,6 +42,11 @@ class AnExample1Settings(SettingsBase):
     section1: AnExample1SettingsSection = AnExample1SettingsSection()
 
 
+@dataclass(frozen=True)
+class Config(ConfigBase):
+    """Config class def"""
+
+
 def test_kind_string() -> None:
     assert AnExample1SettingsSection.kind_string() == "Settings"
 
@@ -57,12 +64,26 @@ def test_settings_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
     # test without commandline arguments
     # - this works, but not together with the last 4 lines
     # monkeypatch.setattr(sys, "argv", ["bla"])
-    # settings_filepath_from_commandline_option(AnExample1Settings, short_option="-k")
+    # settings_filepath_from_cli(AnExample1Settings, short_option="-k")
     # assert AnExample1Settings.filepath() == AnExample1Settings.default_filepath()
     some_path = Path.home() / "ProgramData" / "test" / "settings.json"
     monkeypatch.setattr(sys, "argv", ["bla", "-g", str(some_path)])
-    settings_filepath_from_commandline_option(AnExample1Settings, short_option="-g")
+    settings_filepath_from_cli(AnExample1Settings, short_option="-g")
     assert str(AnExample1Settings.filepath()) == str(some_path)
+
+
+def test_parameters_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
+    # test without commandline arguments
+    # - this works, but not together with the last 4 lines
+    # monkeypatch.setattr(sys, "argv", ["bla"])
+    # parameters_folderpath_from_cli(Config, AnExample1Settings)
+    # assert Config.filepath() == Config.default_filepath()
+    # assert AnExample1Settings.filepath() == AnExample1Settings.default_filepath()
+    some_path = Path.home() / "ProgramData" / "test"
+    monkeypatch.setattr(sys, "argv", ["bla", "-y", str(some_path)])
+    parameters_folderpath_from_cli(Config, AnExample1Settings, short_option="-y")
+    assert str(Config.filepath()) == str(some_path / "config.toml")
+    assert str(AnExample1Settings.filepath()) == str(some_path / "settings.json")
 
 
 def test_update(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
