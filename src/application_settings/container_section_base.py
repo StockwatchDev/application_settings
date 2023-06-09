@@ -26,7 +26,7 @@ class ContainerSectionBase(ABC):
 
     @classmethod
     def get(cls) -> Self:
-        """Get the singleton; if not existing, create it. Reloading only useful for a container."""
+        """Get the singleton; if not existing, create it. Reading file only done for a container."""
 
         if (_the_container_or_none := cls._get()) is None:
             # no config section has been made yet,
