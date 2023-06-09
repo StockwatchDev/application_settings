@@ -30,10 +30,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The method `update` now is a class method (breaking).
 - You cannot request a reload via method `get` anymore, use separate method `load`
   (breaking).
-- Useless TypeVars no longer exported (breaking).
 - A Container now is a specialization of a ContainerSection.
 
-## Fixed
+### Fixed
 
 - Default folder name no longer just a dot if container class is called Config or
   Settings.
