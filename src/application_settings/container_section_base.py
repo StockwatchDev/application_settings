@@ -44,8 +44,9 @@ class ContainerSectionBase(ABC):
         """Update the settings with data specified in changes; not meant for config.
 
         Raises:
-            TypeError: if update is called upon a Config class
-            RuntimeError: if filepath() == None
+
+        * TypeError: if update is called upon a Config class
+        * RuntimeError: if filepath() == None
         """
         return cls.get()._update(changes)._set()  # pylint: disable=protected-access
 
