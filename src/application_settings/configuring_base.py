@@ -42,7 +42,7 @@ class ConfigBase(ContainerBase):
         cls: type["ConfigBase"], changes: dict[str, dict[str, Any]]
     ) -> "ConfigBase":
         """Update and save the settings with data specified in changes
-        
+
         Raises:
             TypeError: update not applicable for a Config class
         """

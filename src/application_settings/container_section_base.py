@@ -42,7 +42,7 @@ class ContainerSectionBase(ABC):
     @classmethod
     def update(cls, changes: dict[str, Any]) -> Self:
         """Update the settings with data specified in changes; not meant for config.
-        
+
         Raises:
             TypeError: if update is called upon a Config class
             RuntimeError: if filepath() == None
