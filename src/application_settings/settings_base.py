@@ -19,7 +19,7 @@ class SettingsSectionBase(ContainerSectionBase):
 
     @classmethod
     def kind_string(cls) -> SectionTypeStr:
-        "Return 'Settings'"
+        """Return 'Settings'"""
         return "Settings"
 
 
@@ -29,10 +29,10 @@ class SettingsBase(ContainerBase):
 
     @classmethod
     def kind_string(cls) -> SectionTypeStr:
-        "Return 'Settings'"
+        """Return 'Settings'"""
         return "Settings"
 
     @classmethod
     def default_file_format(cls) -> FileFormat:
-        "Return the default file format"
+        """Return the default file format"""
         return FileFormat.JSON
