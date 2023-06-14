@@ -64,7 +64,11 @@ class ContainerBase(ContainerSectionBase, ABC):
 
     @classmethod
     def set_filepath(cls, file_path: PathOrStr = "", load: bool = False) -> None:
-        """Set the path for the file (a singleton)."""
+        """Set the path for the file (a singleton).
+        
+        Raises:
+            ValueError: if file_path is not a valid path for the OS running the code
+        """
 
         path: PathOpt = None
         if isinstance(file_path, Path):
@@ -97,7 +101,14 @@ class ContainerBase(ContainerSectionBase, ABC):
 
     @classmethod
     def load(cls, throw_if_file_not_found: bool = False) -> Self:
-        """Create a new singleton"""
+        """Create a new singleton, try to load parameter values from file.
+        
+        Raises:
+            FileNotFoundError: if throw_if_file_not_found == True and filepath() cannot be resolved
+            TOMLDecodeError: if FileFormat == TOML and the file is not a valid toml document
+            JSONDecodeError: if FileFormat == JSON and the file is not a valid json document
+            ValidationError: if the parameter value in the file cannot be coerced into the specified parameter type
+        """
         return cls._create_instance(throw_if_file_not_found)
 
     @classmethod
