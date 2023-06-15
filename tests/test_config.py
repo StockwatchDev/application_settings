@@ -158,7 +158,7 @@ def test_get_defaults(
     assert AnExample1Config.get().section1.subsec.field3[1] == "yes"
     captured = capfd.readouterr()
     assert (
-        "No path specified for config file. Trying with defaults, but this may not work."
+        "Path None not valid for config file. Trying with defaults, but this may not work."
         in captured.out
     )
     # raising of FileNotFoundError:
