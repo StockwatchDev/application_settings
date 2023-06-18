@@ -67,7 +67,7 @@ by silently.
 
 Fields or complete sections defined in the classes can be absent in the files as long as
 default values have been specified for all fields that have been left out. For more info
-on data validation [click here](./5-Handling_deviations.md)
+on data validation [click here](./6-Handling_deviations.md)
 
 ## Location, name and type of the file
 
@@ -82,20 +82,39 @@ the Container class `MyExampleConfig` by default will store its config in
 
 If you want the files to be stored in a different location and/or have a different name
 and/or change the format, then you can use the method `set_filepath`. If you invoke this
-method but you have already instantiated the parameters via `get()`, then you most likely
-want to reload them. You can do so by setting an argument `load=True` in `set_filepath`.
-If you invoke this function after parameters have been instantiated and do not set
-`load`, then a warning is printed. Example:
+method but you have already instantiated the parameters via `load()` or `get()`, then you
+most likely want to reload them. You can do so by setting an argument `load=True` in
+`set_filepath`. If you invoke this function after parameters have been instantiated and
+do not set `load=True`, then a warning is printed. Example:
 
 ```python
 # the next statement sets the location, name and format of the settings file
 # the argument can be eiter a string or a Path
 MyExampleSettings.set_filepath(r"C:\ProgramData\testsettings.toml")
 # the next statement loads the settings
-MyExampleSettings.get()
+MyExampleSettings.load()
 # the next statement sets a new name for the settings file and reloads it
 MyExampleConfig.set_filepath(r"C:\ProgramData\productionsettings.toml", load=True)
+# the next statement resets the filepath to the default, doesn't load but generates a warning
+MyExampleConfig.set_filepath("")
 ```
 
 The extension of the file is used to select the format for parsing and hence has to be
 either `json`, `JSON`, `toml` or `TOML`.
+
+## Handling FileNotFoundError
+
+When loading a parameter file, you have a choice what should happen when the parameter
+file is not found in the location that has been specified:
+
+- if you `load(throw_if_file_not_found = False)`, then the `FileNotFoundError` is
+  catched by `application_settings`, an error message is generated and program flow is
+  continued by trying to instantiate the config / settings using default values. If you
+  have defined parameters without default values, a TypeError exception will be raised.
+- if you `load(throw_if_file_not_found = True)`, then the `FileNotFoundError` is thrown
+  and the application can decide how this situation should be handled.
+
+The default value for `throw_if_file_not_found` is `False`, hence `load()` will not throw
+an exception when the parameter file is not found. Note that if you do not explicitly
+use `load` but rather implicitly call it via `get()`, then this default behavior will
+also be obtained.
