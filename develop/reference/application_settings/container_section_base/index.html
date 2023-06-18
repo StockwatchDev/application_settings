@@ -855,7 +855,11 @@
 
         @classmethod
 
-        def _create_instance(cls) -&gt; Self:
+        def _create_instance(
+
+            cls, throw_if_file_not_found: bool = False  # pylint: disable=unused-argument
+
+        ) -&gt; Self:
 
             &quot;&quot;&quot;Create a new ContainerSection with default values. Likely that this is wrong.&quot;&quot;&quot;
 
@@ -977,7 +981,11 @@
 
         @classmethod
 
-        def _create_instance(cls) -&gt; Self:
+        def _create_instance(
+
+            cls, throw_if_file_not_found: bool = False  # pylint: disable=unused-argument
+
+        ) -&gt; Self:
 
             &quot;&quot;&quot;Create a new ContainerSection with default values. Likely that this is wrong.&quot;&quot;&quot;
 

@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#application_settings" class="md-skip">
+        <a href="#application_settings-version-develop" class="md-skip">
           Skip to content
         </a>
       
@@ -623,7 +623,7 @@
   </a>
 
 
-<h1 id="application_settings">application_settings</h1>
+<h1 id="application_settings-version-develop">application_settings - version develop</h1>
 <p><a href="https://pypi.python.org/pypi/application-settings"><img alt="pypi" src="https://img.shields.io/pypi/v/application-settings.svg" /></a>
 <a href="https://github.com/StockwatchDev/application_settings"><img alt="versions" src="https://img.shields.io/pypi/pyversions/application-settings.svg" /></a>
 <a href="https://github.com/StockwatchDev/application_settings/actions"><img alt="Build Status" src="https://github.com/StockwatchDev/application_settings/actions/workflows/merge_checks.yml/badge.svg?branch=develop" /></a>
@@ -636,12 +636,12 @@
 <p>"You write the dataclasses to define parameters for configuration and settings, 
 application_settings takes care of the logic."</p>
 <h2 id="what-and-why">What and why</h2>
-<p>Application_settings is a package for providing a python application with parameters for
-configuration and settings. It uses <a href="https://toml.io/en/">toml</a> or 
+<p>Application_settings is a package for providing a python application or library with
+parameters for configuration and settings. It uses <a href="https://toml.io/en/">toml</a> or 
 <a href="https://www.json.org/">json</a> files that are parsed
 into dataclasses. This brings some benefits:</p>
 <ul>
-<li>Minimal work for the application designer</li>
+<li>Minimal work for the developer of the application / library</li>
 <li>Parameters are typed, which allows for improved static code analyses.</li>
 <li>IDEs will provide helpful hints and completion when using the parameters.</li>
 <li>More control over what happens when a file contains mistakes
@@ -654,8 +654,8 @@ into dataclasses. This brings some benefits:</p>
   application); we recommend (and support) use <code>json</code> for this, an established
   standardized machine-oriented format.</li>
 </ul>
-<p>Parsing is done once during first access and the resulting set of parameters is stored
-as a singleton.</p>
+<p>Parsing is done once before or during first access and the resulting set of parameters is
+stored as a singleton.</p>
 <p>Interested? Then have a look at our
 <a href="https://stockwatchdev.github.io/application_settings/develop/docs/Quick_start/">quick start</a>.</p>
 <h2 id="license">License</h2>

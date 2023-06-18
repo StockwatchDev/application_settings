@@ -1161,17 +1161,17 @@
 </code></pre></div>
 <h4 id="load">load</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">load</span><span class="p">(</span>
-
+    <span class="n">throw_if_file_not_found</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
 <p>Create a new singleton</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def load(cls) -&gt; Self:
+<div class="highlight"><pre><span></span><code>        def load(cls, throw_if_file_not_found: bool = False) -&gt; Self:
 
             &quot;&quot;&quot;Create a new singleton&quot;&quot;&quot;
 
-            return cls._create_instance()
+            return cls._create_instance(throw_if_file_not_found)
 </code></pre></div>
 <h4 id="set">set</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set</span><span class="p">(</span>

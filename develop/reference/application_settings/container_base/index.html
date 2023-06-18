@@ -1069,21 +1069,21 @@
 
         @classmethod
 
-        def load(cls) -&gt; Self:
+        def load(cls, throw_if_file_not_found: bool = False) -&gt; Self:
 
             &quot;&quot;&quot;Create a new singleton&quot;&quot;&quot;
 
-            return cls._create_instance()
+            return cls._create_instance(throw_if_file_not_found)
 
         @classmethod
 
-        def _create_instance(cls) -&gt; Self:
+        def _create_instance(cls, throw_if_file_not_found: bool = False) -&gt; Self:
 
             &quot;&quot;&quot;Load stored data, instantiate the Container with it, store it in the singleton and return it.&quot;&quot;&quot;
 
             # get whatever is stored in the config/settings file
 
-            data_stored = cls._get_saved_data()
+            data_stored = cls._get_saved_data(throw_if_file_not_found)
 
             # instantiate and store the Container with the stored data
 
@@ -1143,41 +1143,45 @@
 
         @classmethod
 
-        def _get_saved_data(cls) -&gt; dict[str, Any]:
+        def _get_saved_data(cls, throw_if_file_not_found: bool = False) -&gt; dict[str, Any]:
 
             &quot;&quot;&quot;Get the data stored in the parameter file&quot;&quot;&quot;
 
             data_stored: dict[str, Any] = {}
 
-            if path := cls.filepath():
+            path = cls.filepath()
 
-                if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
+            if path is None or not path.is_file():
 
-                    with path.open(mode=&quot;rb&quot;) as fptr:
+                err_mess = (
 
-                        data_stored = tomllib.load(fptr)
+                    f&quot;Path {str(path)} not valid for {cls.kind_string().lower()} file.&quot;
 
-                elif ext == str(FileFormat.JSON.value):
+                )
 
-                    with path.open(mode=&quot;r&quot;) as fptr:
+                if throw_if_file_not_found:
 
-                        data_stored = json.load(fptr)
+                    raise FileNotFoundError(err_mess)
 
-                else:
+                print(err_mess, &quot;Trying with defaults, but this may not work.&quot;)
 
-                    print(f&quot;Unknown file format {ext} given in {path}.&quot;)
+                return {}
+
+            if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
+
+                with path.open(mode=&quot;rb&quot;) as fptr:
+
+                    data_stored = tomllib.load(fptr)
+
+            elif ext == str(FileFormat.JSON.value):
+
+                with path.open(mode=&quot;r&quot;) as fptr:
+
+                    data_stored = json.load(fptr)
 
             else:
 
-                # This situation can occur if no valid path was given as an argument, and
-
-                # the default path is set to None.
-
-                print(
-
-                    f&quot;No path specified for {cls.kind_string().lower()} file; trying with defaults, but this may not work.&quot;
-
-                )
+                print(f&quot;Unknown file format {ext} given in {path}.&quot;)
 
             return data_stored
 
@@ -1304,21 +1308,21 @@
 
         @classmethod
 
-        def load(cls) -&gt; Self:
+        def load(cls, throw_if_file_not_found: bool = False) -&gt; Self:
 
             &quot;&quot;&quot;Create a new singleton&quot;&quot;&quot;
 
-            return cls._create_instance()
+            return cls._create_instance(throw_if_file_not_found)
 
         @classmethod
 
-        def _create_instance(cls) -&gt; Self:
+        def _create_instance(cls, throw_if_file_not_found: bool = False) -&gt; Self:
 
             &quot;&quot;&quot;Load stored data, instantiate the Container with it, store it in the singleton and return it.&quot;&quot;&quot;
 
             # get whatever is stored in the config/settings file
 
-            data_stored = cls._get_saved_data()
+            data_stored = cls._get_saved_data(throw_if_file_not_found)
 
             # instantiate and store the Container with the stored data
 
@@ -1378,41 +1382,45 @@
 
         @classmethod
 
-        def _get_saved_data(cls) -&gt; dict[str, Any]:
+        def _get_saved_data(cls, throw_if_file_not_found: bool = False) -&gt; dict[str, Any]:
 
             &quot;&quot;&quot;Get the data stored in the parameter file&quot;&quot;&quot;
 
             data_stored: dict[str, Any] = {}
 
-            if path := cls.filepath():
+            path = cls.filepath()
 
-                if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
+            if path is None or not path.is_file():
 
-                    with path.open(mode=&quot;rb&quot;) as fptr:
+                err_mess = (
 
-                        data_stored = tomllib.load(fptr)
+                    f&quot;Path {str(path)} not valid for {cls.kind_string().lower()} file.&quot;
 
-                elif ext == str(FileFormat.JSON.value):
+                )
 
-                    with path.open(mode=&quot;r&quot;) as fptr:
+                if throw_if_file_not_found:
 
-                        data_stored = json.load(fptr)
+                    raise FileNotFoundError(err_mess)
 
-                else:
+                print(err_mess, &quot;Trying with defaults, but this may not work.&quot;)
 
-                    print(f&quot;Unknown file format {ext} given in {path}.&quot;)
+                return {}
+
+            if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
+
+                with path.open(mode=&quot;rb&quot;) as fptr:
+
+                    data_stored = tomllib.load(fptr)
+
+            elif ext == str(FileFormat.JSON.value):
+
+                with path.open(mode=&quot;r&quot;) as fptr:
+
+                    data_stored = json.load(fptr)
 
             else:
 
-                # This situation can occur if no valid path was given as an argument, and
-
-                # the default path is set to None.
-
-                print(
-
-                    f&quot;No path specified for {cls.kind_string().lower()} file; trying with defaults, but this may not work.&quot;
-
-                )
+                print(f&quot;Unknown file format {ext} given in {path}.&quot;)
 
             return data_stored
 </code></pre></div>
@@ -1553,17 +1561,17 @@
 </code></pre></div>
 <h4 id="load">load</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">load</span><span class="p">(</span>
-
+    <span class="n">throw_if_file_not_found</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
 <p>Create a new singleton</p>
 <p>??? example "View Source"
             @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def load(cls) -&gt; Self:
+<div class="highlight"><pre><span></span><code>        def load(cls, throw_if_file_not_found: bool = False) -&gt; Self:
 
             &quot;&quot;&quot;Create a new singleton&quot;&quot;&quot;
 
-            return cls._create_instance()
+            return cls._create_instance(throw_if_file_not_found)
 </code></pre></div>
 <h4 id="set">set</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set</span><span class="p">(</span>

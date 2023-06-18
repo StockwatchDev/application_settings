@@ -338,6 +338,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#handling-filenotfounderror" class="md-nav__link">
+    Handling FileNotFoundError
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -599,6 +606,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#handling-filenotfounderror" class="md-nav__link">
+    Handling FileNotFoundError
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -683,7 +697,7 @@ in which fields have been specified in the Container - or Section classes.</p>
 by silently.</p>
 <p>Fields or complete sections defined in the classes can be absent in the files as long as
 default values have been specified for all fields that have been left out. For more info
-on data validation <a href="./5-Handling_deviations.md">click here</a></p>
+on data validation <a href="../6-Handling_deviations/">click here</a></p>
 <h2 id="location-name-and-type-of-the-file">Location, name and type of the file</h2>
 <p>By default, the config and settings files are located in a subfolder of the home folder of
 the user running the application. The default name of that subfolder is provided by the
@@ -695,20 +709,37 @@ the Container class <code>MyExampleConfig</code> by default will store its confi
 <code>~/.my_example/settings.json</code>.</p>
 <p>If you want the files to be stored in a different location and/or have a different name
 and/or change the format, then you can use the method <code>set_filepath</code>. If you invoke this
-method but you have already instantiated the parameters via <code>get()</code>, then you most likely
-want to reload them. You can do so by setting an argument <code>load=True</code> in <code>set_filepath</code>.
-If you invoke this function after parameters have been instantiated and do not set
-<code>load</code>, then a warning is printed. Example:</p>
+method but you have already instantiated the parameters via <code>load()</code> or <code>get()</code>, then you
+most likely want to reload them. You can do so by setting an argument <code>load=True</code> in
+<code>set_filepath</code>. If you invoke this function after parameters have been instantiated and
+do not set <code>load=True</code>, then a warning is printed. Example:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># the next statement sets the location, name and format of the settings file</span>
 <span class="c1"># the argument can be eiter a string or a Path</span>
 <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\ProgramData\testsettings.toml&quot;</span><span class="p">)</span>
 <span class="c1"># the next statement loads the settings</span>
-<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 <span class="c1"># the next statement sets a new name for the settings file and reloads it</span>
 <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\ProgramData\productionsettings.toml&quot;</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># the next statement resets the filepath to the default, doesn&#39;t load but generates a warning</span>
+<span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>The extension of the file is used to select the format for parsing and hence has to be
 either <code>json</code>, <code>JSON</code>, <code>toml</code> or <code>TOML</code>.</p>
+<h2 id="handling-filenotfounderror">Handling FileNotFoundError</h2>
+<p>When loading a parameter file, you have a choice what should happen when the parameter
+file is not found in the location that has been specified:</p>
+<ul>
+<li>if you <code>load(throw_if_file_not_found = False)</code>, then the <code>FileNotFoundError</code> is
+  catched by <code>application_settings</code>, an error message is generated and program flow is
+  continued by trying to instantiate the config / settings using default values. If you
+  have defined parameters without default values, a TypeError exception will be raised.</li>
+<li>if you <code>load(throw_if_file_not_found = True)</code>, then the <code>FileNotFoundError</code> is thrown
+  and the application can decide how this situation should be handled.</li>
+</ul>
+<p>The default value for <code>throw_if_file_not_found</code> is <code>False</code>, hence <code>load()</code> will not throw
+an exception when the parameter file is not found. Note that if you do not explicitly
+use <code>load</code> but rather implicitly call it via <code>get()</code>, then this default behavior will
+also be obtained.</p>
 
 
 

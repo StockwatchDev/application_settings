@@ -766,22 +766,30 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <ul>
 <li>Multiple versions of documentation served on Github Pages.</li>
 <li>You can now request a (re-) load when setting the filepath or via a method <code>load</code>.</li>
-<li>Support for parameters in the main container (Issue <a href="https://github.com/StockwatchDev/application_settings/issues/20">#20</a>).</li>
-<li>Support for subsections (arbitrary depth) (Issue <a href="https://github.com/StockwatchDev/application_settings/issues/5">#5</a>).</li>
+<li>You can choose whether or not to throw a <code>FileNotFoundError</code> during <code>load</code>
+  when the parameter file is not found in the expected location
+  (Issue <a href="https://github.com/StockwatchDev/application_settings/issues/51">#51</a>)</li>
+<li>Support for parameters in the main container (Issue
+  <a href="https://github.com/StockwatchDev/application_settings/issues/20">#20</a>).</li>
+<li>Support for subsections (arbitrary depth) (Issue
+  <a href="https://github.com/StockwatchDev/application_settings/issues/5">#5</a>).</li>
 <li>Sections also stored as a singleton, so that libs can define and access parameters
-  via their own Section (Issue <a href="https://github.com/StockwatchDev/application_settings/issues/46">#46</a>).</li>
+  via their own Section (Issue 
+  <a href="https://github.com/StockwatchDev/application_settings/issues/46">#46</a>).</li>
 <li>Literal SectionTypeStr exported.</li>
 </ul>
 <h3 id="changed">Changed</h3>
 <ul>
 <li>The method <code>update</code> now is a class method (breaking).</li>
-<li>You cannot request a reload via method <code>get</code> anymore, use separate method <code>load</code> (breaking).</li>
+<li>You cannot request a reload via method <code>get</code> anymore, use separate method <code>load</code>
+  (breaking).</li>
 <li>Useless TypeVars no longer exported (breaking).</li>
 <li>A Container now is a specialization of a ContainerSection.</li>
 </ul>
 <h2 id="fixed">Fixed</h2>
 <ul>
-<li>Default folder name no longer just a dot if container class is called Config or Settings.</li>
+<li>Default folder name no longer just a dot if container class is called Config or
+  Settings.</li>
 </ul>
 <h2 id="020-2023-03-19">[0.2.0] - 2023-03-19</h2>
 <h3 id="added_1">Added</h3>
