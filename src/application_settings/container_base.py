@@ -25,7 +25,8 @@ else:
 
 @unique
 class FileFormat(Enum):
-    "File formats that are supported by application_settings"
+    """File formats that are supported by application_settings"""
+
     TOML = "toml"
     JSON = "json"
 
@@ -37,7 +38,7 @@ class ContainerBase(ContainerSectionBase, ABC):
     @classmethod
     @abstractmethod
     def default_file_format(cls) -> FileFormat:
-        "Return the default file format"
+        """Return the default file format"""
 
     @classmethod
     def default_foldername(cls) -> str:
@@ -46,7 +47,7 @@ class ContainerBase(ContainerSectionBase, ABC):
             return f".{kind_str.lower()}"
         return (
             "."
-            + sub("(?<!^)(?=[A-Z])", "_", cls.__name__.replace(kind_str, "")).lower()
+            + sub(r"(?<!^)(?=[A-Z])", "_", cls.__name__.replace(kind_str, "")).lower()
         )
 
     @classmethod
@@ -56,8 +57,9 @@ class ContainerBase(ContainerSectionBase, ABC):
 
     @classmethod
     def default_filepath(cls) -> PathOpt:
-        """
-        Return the fully qualified default path for the config/settingsfile: e.g. ~/.example/config.toml.
+        """Return the fully qualified default path for the config/settingsfile
+
+        E.g. ~/.example/config.toml.
         If you prefer to not have a default path then overwrite this method and return None.
         """
         return Path.home() / cls.default_foldername() / cls.default_filename()
@@ -109,7 +111,7 @@ class ContainerBase(ContainerSectionBase, ABC):
         * FileNotFoundError: if throw_if_file_not_found == True and filepath() cannot be resolved
         * TOMLDecodeError: if FileFormat == TOML and the file is not a valid toml document
         * JSONDecodeError: if FileFormat == JSON and the file is not a valid json document
-        * ValidationError: if the parameter value in the file cannot be coerced into the specified parameter type
+        * ValidationError: if a parameter value in the file cannot be coerced into the specified parameter type
         """
         return cls._create_instance(throw_if_file_not_found)
 
@@ -123,7 +125,7 @@ class ContainerBase(ContainerSectionBase, ABC):
         return cls.set(data_stored)
 
     def _update(self, changes: dict[str, Any]) -> Self:
-        "Update and save the settings with data specified in changes; not meant for config"
+        """Update and save the settings with data specified in changes; not meant for config"""
         return (
             super()  # pylint: disable=protected-access,no-member
             ._update(changes)
