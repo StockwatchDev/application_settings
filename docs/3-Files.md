@@ -109,28 +109,31 @@ the config file and/or settings file as argument(s). Convenience functions are a
 to support this using the [argparse](https://docs.python.org/3/library/argparse.html)
 module from the standard library:
 
-- a function `config_filepath_from_cli` is available that will define a long optional
-  argument `--config_filepath` that takes exactly one additional argument, namely the
-  config filepath. You have to specify the Config class when calling this function, and
-  you may pass a parser (default: the main argument parser) and your own short option
-  (default: `"-c"`) and you may set `load=True` (default: `False`). If the option is
+- a function `config_filepath_from_cli` is available that will define a command line
+  argument that takes exactly one additional argument, namely the config filepath. 
+  You have to specify the Config class when calling this function, and you may
+  pass a parser (default: the main argument parser) and your own short option
+  (default: `"-c"`) and long option (default:  `--config_filepath`) and you may
+  set `load=True` (default: `False`). If the option is
   indeed supplied when the application is launched, then the config filepath is set using
   `set_filepath` and the value for `load` is passed into this function.
-- a function `settings_filepath_from_cli` is available that will define a long optional
-  argument `--settings_filepath` that takes exactly one additional argument, namely the
+- a function `settings_filepath_from_cli` is available that will define a command line
+  argument that takes exactly one additional argument, namely the
   settings filepath. You have to specify the Settings class when calling this function,
   and you may pass a parser (default: the main argument parser) and your own short option
-  (default: `"-s"`) and you may set `load=True` (default: `False`). If the option is
+  (default: `"-s"`) and long option (default:  `--settings_filepath`) and you may set
+  `load=True` (default: `False`). If the option is
   indeed supplied when the application is launched, then the config filepath is set using
   `set_filepath` and the value for `load` is passed into this function.
 - a function `parameters_folderpath_from_cli` is also available and comes in handy when
   you have a config file and a settings file in the same folder. This function will
-  define a long optional argument `--parameters_folderpath` that takes exactly one
+  define a command line argument that takes exactly one
   additional argument, namely the path of the _folder_ that holds both files. Note that
   this implies that the config- and settings file have to have the default filename. You
   have to specify both the Settings class and the Config class when calling this function,
   and you may pass a parser (default: the main argument parser) and your own short option
-  (default: `"-p"`) and you may set `load=True` (default: `False`). If the option is
+  (default: `"-p"`) and long option (default:  `--parameters_folderpath`) and you may
+  set `load=True` (default: `False`). If the option is
   indeed supplied when the application is launched, then the config and the settings
   filepath are set using `set_filepath` and the value for `load` is passed into these
   functions.
