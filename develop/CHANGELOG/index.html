@@ -412,15 +412,15 @@
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
+          <li class="md-nav__item">
   <a href="#fixed" class="md-nav__link">
     Fixed
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -581,6 +581,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../reference/application_settings/convenience/" class="md-nav__link">
+        Convenience
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../reference/application_settings/" class="md-nav__link">
         Index
       </a>
@@ -678,15 +692,15 @@
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
+          <li class="md-nav__item">
   <a href="#fixed" class="md-nav__link">
     Fixed
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -777,16 +791,17 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
   via their own Section (Issue 
   <a href="https://github.com/StockwatchDev/application_settings/issues/46">#46</a>).</li>
 <li>Literal SectionTypeStr exported.</li>
+<li>Convenience functions to specify filepath for config and settings via command line
+  [<a href="https://github.com/StockwatchDev/application_settings/issues/53">#53</a>]</li>
 </ul>
 <h3 id="changed">Changed</h3>
 <ul>
 <li>The method <code>update</code> now is a class method (breaking).</li>
 <li>You cannot request a reload via method <code>get</code> anymore, use separate method <code>load</code>
   (breaking).</li>
-<li>Useless TypeVars no longer exported (breaking).</li>
 <li>A Container now is a specialization of a ContainerSection.</li>
 </ul>
-<h2 id="fixed">Fixed</h2>
+<h3 id="fixed">Fixed</h3>
 <ul>
 <li>Default folder name no longer just a dot if container class is called Config or
   Settings.</li>

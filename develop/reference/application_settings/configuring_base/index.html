@@ -462,6 +462,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    Variables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#classes" class="md-nav__link">
     Classes
   </a>
@@ -676,6 +683,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../convenience/" class="md-nav__link">
+        Convenience
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../" class="md-nav__link">
         Index
       </a>
@@ -750,6 +771,13 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    Variables
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#classes" class="md-nav__link">
@@ -947,7 +975,7 @@
 <p>Module for handling configuration.</p>
 <p>??? example "View Source"
         """Module for handling configuration."""</p>
-<div class="highlight"><pre><span></span><code>    from typing import Any
+<div class="highlight"><pre><span></span><code>    from typing import Any, TypeVar
 
     from pydantic.dataclasses import dataclass
 
@@ -960,6 +988,10 @@
         SectionTypeStr,
 
     )
+
+    ConfigT = TypeVar(&quot;ConfigT&quot;, bound=&quot;ConfigBase&quot;)
+
+    ConfigT.__doc__ = &quot;Represents ConfigBase and all subclasses&quot;
 
 
 
@@ -1016,6 +1048,9 @@
                 &quot;Configs should not be updated runtime; consider converting to settings.&quot;
 
             )
+</code></pre></div>
+<h2 id="variables">Variables</h2>
+<div class="highlight"><pre><span></span><code><span class="n">ConfigT</span>
 </code></pre></div>
 <h2 id="classes">Classes</h2>
 <h3 id="configbase">ConfigBase</h3>
@@ -1162,12 +1197,12 @@
 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Get the singleton; if not existing, create it. Reloading only useful for a container.</p>
+<p>Get the singleton; if not existing, create it. Reading file only done for a container.</p>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def get(cls) -&gt; Self:
 
-            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reloading only useful for a container.&quot;&quot;&quot;
+            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reading file only done for a container.&quot;&quot;&quot;
 
             if (_the_container_or_none := cls._get()) is None:
 
@@ -1330,12 +1365,12 @@
 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Get the singleton; if not existing, create it. Reloading only useful for a container.</p>
+<p>Get the singleton; if not existing, create it. Reading file only done for a container.</p>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def get(cls) -&gt; Self:
 
-            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reloading only useful for a container.&quot;&quot;&quot;
+            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reading file only done for a container.&quot;&quot;&quot;
 
             if (_the_container_or_none := cls._get()) is None:
 

@@ -468,6 +468,20 @@
               
   
   
+  
+    <li class="md-nav__item">
+      <a href="convenience/" class="md-nav__link">
+        Convenience
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
     
   
   
@@ -514,6 +528,40 @@
   <a href="#variables" class="md-nav__link">
     Variables
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav" aria-label="Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#config_filepath_from_cli" class="md-nav__link">
+    config_filepath_from_cli
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters_folderpath_from_cli" class="md-nav__link">
+    parameters_folderpath_from_cli
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#settings_filepath_from_cli" class="md-nav__link">
+    settings_filepath_from_cli
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -939,6 +987,40 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav" aria-label="Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#config_filepath_from_cli" class="md-nav__link">
+    config_filepath_from_cli
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters_folderpath_from_cli" class="md-nav__link">
+    parameters_folderpath_from_cli
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#settings_filepath_from_cli" class="md-nav__link">
+    settings_filepath_from_cli
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#classes" class="md-nav__link">
     Classes
   </a>
@@ -1295,11 +1377,29 @@
         """Module for loading and retrieving parameters for configuration and settings."""</p>
 <div class="highlight"><pre><span></span><code>    from importlib.metadata import version
 
-    from application_settings.configuring_base import ConfigBase, ConfigSectionBase
+    from application_settings.configuring_base import ConfigBase, ConfigSectionBase, ConfigT
 
     from application_settings.container_section_base import SectionTypeStr
 
-    from application_settings.settings_base import SettingsBase, SettingsSectionBase
+    from application_settings.convenience import (
+
+        config_filepath_from_cli,
+
+        parameters_folderpath_from_cli,
+
+        settings_filepath_from_cli,
+
+    )
+
+    from application_settings.settings_base import (
+
+        SettingsBase,
+
+        SettingsSectionBase,
+
+        SettingsT,
+
+    )
 
     from application_settings.type_notation_helper import PathOpt, PathOrStr
 
@@ -1311,15 +1411,25 @@
 
         &quot;ConfigBase&quot;,
 
+        &quot;ConfigT&quot;,
+
         &quot;PathOpt&quot;,
 
         &quot;PathOrStr&quot;,
+
+        &quot;SectionTypeStr&quot;,
 
         &quot;SettingsSectionBase&quot;,
 
         &quot;SettingsBase&quot;,
 
-        &quot;SectionTypeStr&quot;,
+        &quot;SettingsT&quot;,
+
+        &quot;config_filepath_from_cli&quot;,
+
+        &quot;settings_filepath_from_cli&quot;,
+
+        &quot;parameters_folderpath_from_cli&quot;,
 
     ]
 </code></pre></div>
@@ -1328,15 +1438,165 @@
 <li><a href="configuring_base/">application_settings.configuring_base</a></li>
 <li><a href="container_base/">application_settings.container_base</a></li>
 <li><a href="container_section_base/">application_settings.container_section_base</a></li>
+<li><a href="convenience/">application_settings.convenience</a></li>
 <li><a href="settings_base/">application_settings.settings_base</a></li>
 <li><a href="type_notation_helper/">application_settings.type_notation_helper</a></li>
 </ul>
 <h2 id="variables">Variables</h2>
+<div class="highlight"><pre><span></span><code><span class="n">ConfigT</span>
+</code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="n">PathOpt</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="n">PathOrStr</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="n">SectionTypeStr</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">SettingsT</span>
+</code></pre></div>
+<h2 id="functions">Functions</h2>
+<h3 id="config_filepath_from_cli">config_filepath_from_cli</h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">config_filepath_from_cli</span><span class="p">(</span>
+    <span class="n">config_class</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="o">~</span><span class="n">ConfigT</span><span class="p">],</span>
+    <span class="n">parser</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;portray&#39;</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">formatter_class</span><span class="o">=&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">argparse</span><span class="o">.</span><span class="n">HelpFormatter</span><span class="s1">&#39;&gt;, conflict_handler=&#39;</span><span class="n">error</span><span class="s1">&#39;, add_help=True),</span>
+    <span class="n">short_option</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;-c&#39;</span><span class="p">,</span>
+    <span class="n">long_option</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;--config_filepath&#39;</span><span class="p">,</span>
+    <span class="n">load</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span>
+</code></pre></div>
+<p>Add a commandline option for the config file and set filepath if it is given</p>
+<p>??? example "View Source"
+        def config_filepath_from_cli(</p>
+<div class="highlight"><pre><span></span><code>        config_class: type[ConfigT],
+
+        parser: ArgumentParser = ArgumentParser(),
+
+        short_option: str = &quot;-c&quot;,
+
+        long_option: str = &quot;--config_filepath&quot;,
+
+        load: bool = False,
+
+    ) -&gt; ArgumentParser:
+
+        &quot;&quot;&quot;Add a commandline option for the config file and set filepath if it is given&quot;&quot;&quot;
+
+        helptext: str = &quot;Path of the configuration file&quot;
+
+        return _parameters_filepath_from_cli(
+
+            config_class=config_class,
+
+            settings_class=None,
+
+            parser=parser,
+
+            short_option=short_option,
+
+            long_option=long_option,
+
+            helptext=helptext,
+
+            load=load,
+
+        )
+</code></pre></div>
+<h3 id="parameters_folderpath_from_cli">parameters_folderpath_from_cli</h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">parameters_folderpath_from_cli</span><span class="p">(</span>
+    <span class="n">config_class</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="o">~</span><span class="n">ConfigT</span><span class="p">],</span>
+    <span class="n">settings_class</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="o">~</span><span class="n">SettingsT</span><span class="p">],</span>
+    <span class="n">parser</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;portray&#39;</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">formatter_class</span><span class="o">=&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">argparse</span><span class="o">.</span><span class="n">HelpFormatter</span><span class="s1">&#39;&gt;, conflict_handler=&#39;</span><span class="n">error</span><span class="s1">&#39;, add_help=True),</span>
+    <span class="n">short_option</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;-p&#39;</span><span class="p">,</span>
+    <span class="n">long_option</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;--parameters_folderpath&#39;</span><span class="p">,</span>
+    <span class="n">load</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span>
+</code></pre></div>
+<p>Add a commandline option '--parameters_folderpath' for the common config and settings folder and set filepaths if it is given.</p>
+<p>Default filenames will be appended to the folderpath for config and settings.</p>
+<p>??? example "View Source"
+        def parameters_folderpath_from_cli(  # pylint: disable=too-many-arguments</p>
+<div class="highlight"><pre><span></span><code>        config_class: type[ConfigT],
+
+        settings_class: type[SettingsT],
+
+        parser: ArgumentParser = ArgumentParser(),
+
+        short_option: str = &quot;-p&quot;,
+
+        long_option: str = &quot;--parameters_folderpath&quot;,
+
+        load: bool = False,
+
+    ) -&gt; ArgumentParser:
+
+        &quot;&quot;&quot;Add a commandline option &#39;--parameters_folderpath&#39; for the common config and settings folder and set filepaths if it is given.
+
+        Default filenames will be appended to the folderpath for config and settings.&quot;&quot;&quot;
+
+        helptext: str = &quot;Common path of the config file and settings file&quot;
+
+        return _parameters_filepath_from_cli(
+
+            config_class=config_class,
+
+            settings_class=settings_class,
+
+            parser=parser,
+
+            short_option=short_option,
+
+            long_option=long_option,
+
+            helptext=helptext,
+
+            load=load,
+
+        )
+</code></pre></div>
+<h3 id="settings_filepath_from_cli">settings_filepath_from_cli</h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">settings_filepath_from_cli</span><span class="p">(</span>
+    <span class="n">settings_class</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="o">~</span><span class="n">SettingsT</span><span class="p">],</span>
+    <span class="n">parser</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span> <span class="o">=</span> <span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;portray&#39;</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">formatter_class</span><span class="o">=&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">argparse</span><span class="o">.</span><span class="n">HelpFormatter</span><span class="s1">&#39;&gt;, conflict_handler=&#39;</span><span class="n">error</span><span class="s1">&#39;, add_help=True),</span>
+    <span class="n">short_option</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;-s&#39;</span><span class="p">,</span>
+    <span class="n">long_option</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;--settings_filepath&#39;</span><span class="p">,</span>
+    <span class="n">load</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span>
+</code></pre></div>
+<p>Add a commandline option for the settings file and set filepath if it is given</p>
+<p>??? example "View Source"
+        def settings_filepath_from_cli(</p>
+<div class="highlight"><pre><span></span><code>        settings_class: type[SettingsT],
+
+        parser: ArgumentParser = ArgumentParser(),
+
+        short_option: str = &quot;-s&quot;,
+
+        long_option: str = &quot;--settings_filepath&quot;,
+
+        load: bool = False,
+
+    ) -&gt; ArgumentParser:
+
+        &quot;&quot;&quot;Add a commandline option for the settings file and set filepath if it is given&quot;&quot;&quot;
+
+        helptext: str = &quot;Path of the settings file&quot;
+
+        return _parameters_filepath_from_cli(
+
+            config_class=None,
+
+            settings_class=settings_class,
+
+            parser=parser,
+
+            short_option=short_option,
+
+            long_option=long_option,
+
+            helptext=helptext,
+
+            load=load,
+
+        )
 </code></pre></div>
 <h2 id="classes">Classes</h2>
 <h3 id="configbase">ConfigBase</h3>
@@ -1483,12 +1743,12 @@
 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Get the singleton; if not existing, create it. Reloading only useful for a container.</p>
+<p>Get the singleton; if not existing, create it. Reading file only done for a container.</p>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def get(cls) -&gt; Self:
 
-            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reloading only useful for a container.&quot;&quot;&quot;
+            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reading file only done for a container.&quot;&quot;&quot;
 
             if (_the_container_or_none := cls._get()) is None:
 
@@ -1651,12 +1911,12 @@
 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Get the singleton; if not existing, create it. Reloading only useful for a container.</p>
+<p>Get the singleton; if not existing, create it. Reading file only done for a container.</p>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def get(cls) -&gt; Self:
 
-            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reloading only useful for a container.&quot;&quot;&quot;
+            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reading file only done for a container.&quot;&quot;&quot;
 
             if (_the_container_or_none := cls._get()) is None:
 
@@ -1838,12 +2098,12 @@
 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Get the singleton; if not existing, create it. Reloading only useful for a container.</p>
+<p>Get the singleton; if not existing, create it. Reading file only done for a container.</p>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def get(cls) -&gt; Self:
 
-            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reloading only useful for a container.&quot;&quot;&quot;
+            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reading file only done for a container.&quot;&quot;&quot;
 
             if (_the_container_or_none := cls._get()) is None:
 
@@ -1998,12 +2258,12 @@
 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Get the singleton; if not existing, create it. Reloading only useful for a container.</p>
+<p>Get the singleton; if not existing, create it. Reading file only done for a container.</p>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def get(cls) -&gt; Self:
 
-            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reloading only useful for a container.&quot;&quot;&quot;
+            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reading file only done for a container.&quot;&quot;&quot;
 
             if (_the_container_or_none := cls._get()) is None:
 
@@ -2077,7 +2337,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer">
         
           
-          <a href="container_section_base/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Container Section Base" rel="prev">
+          <a href="convenience/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Convenience" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -2086,7 +2346,7 @@
                 <span class="md-footer__direction">
                   Previous
                 </span>
-                Container Section Base
+                Convenience
               </div>
             </div>
           </a>

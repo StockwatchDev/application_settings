@@ -339,6 +339,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#setting-the-filepath-via-command-line-arguments" class="md-nav__link">
+    Setting the filepath via command-line arguments
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#handling-filenotfounderror" class="md-nav__link">
     Handling FileNotFoundError
   </a>
@@ -519,6 +526,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/application_settings/convenience/" class="md-nav__link">
+        Convenience
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/application_settings/" class="md-nav__link">
         Index
       </a>
@@ -602,6 +623,13 @@
         <li class="md-nav__item">
   <a href="#location-name-and-type-of-the-file" class="md-nav__link">
     Location, name and type of the file
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setting-the-filepath-via-command-line-arguments" class="md-nav__link">
+    Setting the filepath via command-line arguments
   </a>
   
 </li>
@@ -719,12 +747,81 @@ do not set <code>load=True</code>, then a warning is printed. Example:</p>
 <span class="c1"># the next statement loads the settings</span>
 <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 <span class="c1"># the next statement sets a new name for the settings file and reloads it</span>
-<span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\ProgramData\productionsettings.toml&quot;</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\ProgramData\productionsettings.toml&quot;</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="c1"># the next statement resets the filepath to the default, doesn&#39;t load but generates a warning</span>
-<span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>The extension of the file is used to select the format for parsing and hence has to be
 either <code>json</code>, <code>JSON</code>, <code>toml</code> or <code>TOML</code>.</p>
+<h2 id="setting-the-filepath-via-command-line-arguments">Setting the filepath via command-line arguments</h2>
+<p>A quite common scenario is to launch an application from the command-line and to specify
+the config file and/or settings file as argument(s). Convenience functions are available
+to support this using the <a href="https://docs.python.org/3/library/argparse.html">argparse</a>
+module from the standard library:</p>
+<ul>
+<li>a function <code>config_filepath_from_cli</code> is available that will define a command-line
+  argument that takes exactly one additional argument, namely the config filepath. 
+  You have to specify the Config class when calling this function, and you may
+  pass a parser (default: the main argument parser) and your own short option
+  (default: <code>"-c"</code>) and long option (default:  <code>"--config_filepath"</code>) and you may
+  set <code>load=True</code> (default: <code>False</code>). If the option is
+  indeed supplied when the application is launched, then the config filepath is set using
+  <code>set_filepath</code> and the value for <code>load</code> is passed into this function.</li>
+<li>a function <code>settings_filepath_from_cli</code> is available that will define a command-line
+  argument that takes exactly one additional argument, namely the
+  settings filepath. You have to specify the Settings class when calling this function,
+  and you may pass a parser (default: the main argument parser) and your own short option
+  (default: <code>"-s"</code>) and long option (default:  <code>"--settings_filepath"</code>) and you may set
+  <code>load=True</code> (default: <code>False</code>). If the option is
+  indeed supplied when the application is launched, then the config filepath is set using
+  <code>set_filepath</code> and the value for <code>load</code> is passed into this function.</li>
+<li>a function <code>parameters_folderpath_from_cli</code> is also available and comes in handy when
+  you have a config file and a settings file in the same folder. This function will
+  define a command-line argument that takes exactly one
+  additional argument, namely the path of the <em>folder</em> that holds both files. Note that
+  this implies that the config- and settings file have to have the default filename. You
+  have to specify both the Settings class and the Config class when calling this function,
+  and you may pass a parser (default: the main argument parser) and your own short option
+  (default: <code>"-p"</code>) and long option (default:  <code>"--parameters_folderpath"</code>) and you may
+  set <code>load=True</code> (default: <code>False</code>). If the option is
+  indeed supplied when the application is launched, then the config and the settings
+  filepath are set using <code>set_filepath</code> and the value for <code>load</code> is passed into these
+  functions.</li>
+</ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">CLI for config filepath</label><label for="__tabbed_2_2">CLI for settings filepath</label><label for="__tabbed_2_3">CLI for common config and settings folder</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="n">config_filepath_from_cli</span>
+
+<span class="c1"># The next line defines a cli argument &quot;-c&quot; and &quot;--config_filepath&quot;</span>
+<span class="c1"># and specifies that the config should be loaded when it is specified</span>
+<span class="n">config_filepath_from_cli</span><span class="p">(</span><span class="n">MyExampleConfig</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># the application launch with config file spec could be something like:</span>
+<span class="c1"># application_name -c C:\ProgramData\productionconfig.toml</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="n">settings_filepath_from_cli</span>
+
+<span class="c1"># The next line defines a cli argument &quot;-s&quot; and &quot;--settings_filepath&quot;</span>
+<span class="c1"># and specifies that the settings should be loaded when it is specified</span>
+<span class="n">settings_filepath_from_cli</span><span class="p">(</span><span class="n">MyExampleSettings</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># the application launch with settings file spec could be something like:</span>
+<span class="c1"># application_name -s C:\ProgramData\productionsettings.json</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="n">parameters_folderpath_from_cli</span>
+
+<span class="c1"># The next line defines a cli argument &quot;-p&quot; and &quot;--parameters_folderpath&quot;</span>
+<span class="c1"># and specifies that the config and settings should be loaded when it is specified</span>
+<span class="n">parameters_folderpath_from_cli</span><span class="p">(</span><span class="n">MyExampleConfig</span><span class="p">,</span> <span class="n">MyExampleSettings</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># the application launch with folder spec could be something like:</span>
+<span class="c1"># application_name -p C:\ProgramData</span>
+</code></pre></div>
+</div>
+</div>
+</div>
 <h2 id="handling-filenotfounderror">Handling FileNotFoundError</h2>
 <p>When loading a parameter file, you have a choice what should happen when the parameter
 file is not found in the location that has been specified:</p>
@@ -733,13 +830,13 @@ file is not found in the location that has been specified:</p>
   catched by <code>application_settings</code>, an error message is generated and program flow is
   continued by trying to instantiate the config / settings using default values. If you
   have defined parameters without default values, a TypeError exception will be raised.</li>
-<li>if you <code>load(throw_if_file_not_found = True)</code>, then the <code>FileNotFoundError</code> is thrown
-  and the application can decide how this situation should be handled.</li>
+<li>if you <code>load(throw_if_file_not_found = True)</code>, then the <code>FileNotFoundError</code> exception
+  is thrown and the application can decide how this situation should be handled.</li>
 </ul>
 <p>The default value for <code>throw_if_file_not_found</code> is <code>False</code>, hence <code>load()</code> will not throw
 an exception when the parameter file is not found. Note that if you do not explicitly
-use <code>load</code> but rather implicitly call it via <code>get()</code>, then this default behavior will
-also be obtained.</p>
+use <code>load</code> but rather implicitly call it via <code>get()</code> or <code>set_filepath()</code>, then this
+default behavior will also be obtained.</p>
 
 
 
