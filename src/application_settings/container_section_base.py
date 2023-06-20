@@ -84,7 +84,7 @@ class ContainerSectionBase(ABC):
         return self
 
     def _update(self, changes: dict[str, Any]) -> Self:
-        "Update parameters and sections with data specified in changes; not meant for config"
+        """Update parameters and sections with data specified in changes; not meant for config"""
         return replace(self, **changes)
 
 
