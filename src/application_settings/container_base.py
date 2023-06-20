@@ -154,25 +154,24 @@ class ContainerBase(ContainerSectionBase, ABC):
     def _get_saved_data(cls, throw_if_file_not_found: bool = False) -> dict[str, Any]:
         """Get the data stored in the parameter file"""
         data_stored: dict[str, Any] = {}
-
-        if path := cls.filepath():
-            if throw_if_file_not_found or path.is_file():
-                if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
-                    with path.open(mode="rb") as fptr:
-                        data_stored = tomllib.load(fptr)
-                elif ext == str(FileFormat.JSON.value):
-                    with path.open(mode="r") as fptr:
-                        data_stored = json.load(fptr)
-                else:
-                    print(f"Unknown file format {ext} given in {path}.")
-        else:
-            # This situation can occur if no valid path was set, and
-            # the default path is set to None.
-            mess = f"No path specified for {cls.kind_string().lower()} file."
+        path = cls.filepath()
+        if path is None or not path.is_file():
+            err_mess = (
+                f"Path {str(path)} not valid for {cls.kind_string().lower()} file."
+            )
             if throw_if_file_not_found:
-                raise FileNotFoundError(mess)
+                raise FileNotFoundError(err_mess)
+            print(err_mess, "Trying with defaults, but this may not work.")
+            return {}
 
-            print(mess, "Trying with defaults, but this may not work.")
+        if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
+            with path.open(mode="rb") as fptr:
+                data_stored = tomllib.load(fptr)
+        elif ext == str(FileFormat.JSON.value):
+            with path.open(mode="r") as fptr:
+                data_stored = json.load(fptr)
+        else:
+            print(f"Unknown file format {ext} given in {path}.")
         return data_stored
 
 
