@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   via their own Section (Issue 
   [#46](https://github.com/StockwatchDev/application_settings/issues/46)).
 - Literal SectionTypeStr exported.
-- Convenience functions to specify filepath for config and settings
+- Convenience functions to specify filepath for config and settings via command line
   [[#53](https://github.com/StockwatchDev/application_settings/issues/53)]
 
 ### Changed
