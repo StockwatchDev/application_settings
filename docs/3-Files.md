@@ -94,13 +94,83 @@ MyExampleSettings.set_filepath(r"C:\ProgramData\testsettings.toml")
 # the next statement loads the settings
 MyExampleSettings.load()
 # the next statement sets a new name for the settings file and reloads it
-MyExampleConfig.set_filepath(r"C:\ProgramData\productionsettings.toml", load=True)
+MyExampleSettings.set_filepath(r"C:\ProgramData\productionsettings.toml", load=True)
 # the next statement resets the filepath to the default, doesn't load but generates a warning
-MyExampleConfig.set_filepath("")
+MyExampleSettings.set_filepath("")
 ```
 
 The extension of the file is used to select the format for parsing and hence has to be
 either `json`, `JSON`, `toml` or `TOML`.
+
+## Setting the filepath via command-line arguments
+
+A quite common scenario is to launch an application from the command-line and to specify
+the config file and/or settings file as argument(s). Convenience functions are available
+to support this using the [argparse](https://docs.python.org/3/library/argparse.html)
+module from the standard library:
+
+- a function `config_filepath_from_cli` is available that will define a command-line
+  argument that takes exactly one additional argument, namely the config filepath. 
+  You have to specify the Config class when calling this function, and you may
+  pass a parser (default: the main argument parser) and your own short option
+  (default: `"-c"`) and long option (default:  `"--config_filepath"`) and you may
+  set `load=True` (default: `False`). If the option is
+  indeed supplied when the application is launched, then the config filepath is set using
+  `set_filepath` and the value for `load` is passed into this function.
+- a function `settings_filepath_from_cli` is available that will define a command-line
+  argument that takes exactly one additional argument, namely the
+  settings filepath. You have to specify the Settings class when calling this function,
+  and you may pass a parser (default: the main argument parser) and your own short option
+  (default: `"-s"`) and long option (default:  `"--settings_filepath"`) and you may set
+  `load=True` (default: `False`). If the option is
+  indeed supplied when the application is launched, then the config filepath is set using
+  `set_filepath` and the value for `load` is passed into this function.
+- a function `parameters_folderpath_from_cli` is also available and comes in handy when
+  you have a config file and a settings file in the same folder. This function will
+  define a command-line argument that takes exactly one
+  additional argument, namely the path of the _folder_ that holds both files. Note that
+  this implies that the config- and settings file have to have the default filename. You
+  have to specify both the Settings class and the Config class when calling this function,
+  and you may pass a parser (default: the main argument parser) and your own short option
+  (default: `"-p"`) and long option (default:  `"--parameters_folderpath"`) and you may
+  set `load=True` (default: `False`). If the option is
+  indeed supplied when the application is launched, then the config and the settings
+  filepath are set using `set_filepath` and the value for `load` is passed into these
+  functions.
+
+=== "CLI for config filepath"
+    ```python
+    from application_settings import config_filepath_from_cli
+
+    # The next line defines a cli argument "-c" and "--config_filepath"
+    # and specifies that the config should be loaded when it is specified
+    config_filepath_from_cli(MyExampleConfig, load=True)
+    # the application launch with config file spec could be something like:
+    # application_name -c C:\ProgramData\productionconfig.toml
+    ```
+
+=== "CLI for settings filepath"
+    ```python
+    from application_settings import settings_filepath_from_cli
+
+    # The next line defines a cli argument "-s" and "--settings_filepath"
+    # and specifies that the settings should be loaded when it is specified
+    settings_filepath_from_cli(MyExampleSettings, load=True)
+    # the application launch with settings file spec could be something like:
+    # application_name -s C:\ProgramData\productionsettings.json
+    ```
+
+=== "CLI for common config and settings folder"
+    ```python
+    from application_settings import parameters_folderpath_from_cli
+
+    # The next line defines a cli argument "-p" and "--parameters_folderpath"
+    # and specifies that the config and settings should be loaded when it is specified
+    parameters_folderpath_from_cli(MyExampleConfig, MyExampleSettings, load=True)
+    # the application launch with folder spec could be something like:
+    # application_name -p C:\ProgramData
+    ```
+
 
 ## Handling FileNotFoundError
 
@@ -111,10 +181,10 @@ file is not found in the location that has been specified:
   catched by `application_settings`, an error message is generated and program flow is
   continued by trying to instantiate the config / settings using default values. If you
   have defined parameters without default values, a TypeError exception will be raised.
-- if you `load(throw_if_file_not_found = True)`, then the `FileNotFoundError` is thrown
-  and the application can decide how this situation should be handled.
+- if you `load(throw_if_file_not_found = True)`, then the `FileNotFoundError` exception
+  is thrown and the application can decide how this situation should be handled.
 
 The default value for `throw_if_file_not_found` is `False`, hence `load()` will not throw
 an exception when the parameter file is not found. Note that if you do not explicitly
-use `load` but rather implicitly call it via `get()`, then this default behavior will
-also be obtained.
+use `load` but rather implicitly call it via `get()` or `set_filepath()`, then this
+default behavior will also be obtained.
