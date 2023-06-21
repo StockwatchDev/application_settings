@@ -11,7 +11,13 @@ import tomli_w
 from pydantic import ValidationError
 from pydantic.dataclasses import dataclass
 
-from application_settings import ConfigBase, ConfigSectionBase, PathOpt, __version__
+from application_settings import (
+    ConfigBase,
+    ConfigSectionBase,
+    PathOpt,
+    __version__,
+    config_filepath_from_cli,
+)
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -20,18 +26,32 @@ else:
 
 
 @dataclass(frozen=True)
+class AnExampleConfigSubSection(ConfigSectionBase):
+    """Example of a Config subsection"""
+
+    field3: tuple[int, str] = (3, "yes")
+
+
+@dataclass(frozen=True)
 class AnExample1ConfigSection(ConfigSectionBase):
     """Example 1 of a Config section"""
 
     field1: str = "field1"
     field2: int = 2
+    subsec: AnExampleConfigSubSection = AnExampleConfigSubSection()
 
 
 @dataclass(frozen=True)
 class AnExample1Config(ConfigBase):
     """Example Config"""
 
+    field0: float = 2.2
     section1: AnExample1ConfigSection = AnExample1ConfigSection()
+
+
+@dataclass(frozen=True)
+class Config(ConfigBase):
+    """Config class def"""
 
 
 @pytest.fixture(scope="session")
@@ -41,7 +61,17 @@ def toml_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
         / AnExample1Config.default_filename()
     )
     with file_path.open(mode="wb") as fptr:
-        tomli_w.dump({"section1": {"field1": "f1", "field2": 22}}, fptr)
+        tomli_w.dump(
+            {
+                "field0": 33.33,
+                "section1": {
+                    "field1": "f1",
+                    "field2": 22,
+                    "subsec": {"field3": (-3, "no")},
+                },
+            },
+            fptr,
+        )
     return file_path
 
 
@@ -51,7 +81,16 @@ def json_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
         AnExample1Config.default_foldername()
     ) / AnExample1Config.default_filename().replace("toml", "json")
     with file_path.open(mode="w") as fptr:
-        json.dump({"section1": {"field1": "f2", "field2": 33}}, fptr)
+        json.dump(
+            {
+                "section1": {
+                    "field1": "f2",
+                    "field2": 33,
+                    "subsec": {"field3": (-4, "maybe")},
+                }
+            },
+            fptr,
+        )
     return file_path
 
 
@@ -65,12 +104,23 @@ def ini_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
     return file_path
 
 
-def test_version() -> None:
-    assert __version__ == "0.2.1"
+def test_kind_string() -> None:
+    assert AnExample1ConfigSection.kind_string() == "Config"
+
+
+def test_section_singleton(capfd: pytest.CaptureFixture[str]) -> None:
+    assert AnExample1ConfigSection.get().field1 == "field1"
+    captured = capfd.readouterr()
+    assert " accessed before data has been set by the application." in captured.out
 
 
 def test_paths(toml_file: Path) -> None:
     # default_filepath:
+    if the_path := Config.default_filepath():
+        assert the_path.parts[-2] == ".config"
+    else:
+        assert False
+
     if the_path := AnExample1Config.default_filepath():
         assert the_path.parts[-1] == "config.toml"
         assert the_path.parts[-2] == ".an_example1"
@@ -93,11 +143,26 @@ def test_paths(toml_file: Path) -> None:
 
     # raising of FileNotFoundError:
     with pytest.raises(FileNotFoundError):
-        _ = AnExample1Config.get().section1.field1
+        AnExample1Config.load(throw_if_file_not_found=True)
 
+    AnExample1Config.set_filepath(
+        str(Path.home() / "ProgramData" / "test" / "config.toml")
+    )
     # raising in case of invalid path:
     with pytest.raises(ValueError):
         AnExample1Config.set_filepath('fi:\0\\l*e/p"a?t>h|.t<xt')
+
+
+def test_config_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
+    # test without commandline arguments
+    # - this works, but not together with the last 4 lines
+    # monkeypatch.setattr(sys, "argv", ["bla"])
+    # config_filepath_from_cli(Config, short_option="-k")
+    # assert Config.filepath() == Config.default_filepath()
+    some_path = Path.home() / "ProgramData" / "test" / "config.toml"
+    monkeypatch.setattr(sys, "argv", ["bla", "-k", str(some_path)])
+    config_filepath_from_cli(AnExample1Config, short_option="-k")
+    assert str(AnExample1Config.filepath()) == str(some_path)
 
 
 def test_get_defaults(
@@ -107,19 +172,39 @@ def test_get_defaults(
         return None
 
     monkeypatch.setattr(AnExample1Config, "default_filepath", mock_default_filepath)
-    AnExample1Config.set_filepath("")
-    assert AnExample1Config.get(reload=True).section1.field1 == "field1"
+    AnExample1Config.set_filepath("", load=True)
+    assert AnExample1Config.get().section1.field1 == "field1"
+    AnExample1Config.set_filepath("", load=True)
     assert AnExample1Config.get().section1.field2 == 2
+    assert AnExample1Config.get().section1.subsec.field3[1] == "yes"
     captured = capfd.readouterr()
     assert (
-        "No path specified for config file; trying with defaults, but this may not work."
+        "Path None not valid for config file. Trying with defaults, but this may not work."
         in captured.out
     )
+    # raising of FileNotFoundError:
+    with pytest.raises(FileNotFoundError):
+        AnExample1Config.load(throw_if_file_not_found=True)
+
+
+def test_set_filepath_after_get(
+    toml_file: Path, capfd: pytest.CaptureFixture[str]
+) -> None:
+    AnExample1Config.set_filepath(toml_file, load=True)
+    assert AnExample1Config.get().section1.field1 == "f1"
+    assert AnExample1Config.get().section1.subsec.field3[1] == "no"
+    # test if the subsection singleton is properly registered
+    assert AnExampleConfigSubSection.get().field3[1] == "no"
+    AnExample1Config.set_filepath("", load=False)
+    captured = capfd.readouterr()
+    assert "file is not loaded into the Config." in captured.out
 
 
 def test_get(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
     AnExample1Config.set_filepath(toml_file)
-    assert AnExample1Config.get(reload=True).section1.field1 == "f1"
+    AnExample1Config.load()
+    assert AnExample1Config.get().field0 == 33.33
+    assert AnExample1Config.get().section1.field1 == "f1"
     assert AnExample1Config.get().section1.field2 == 22
 
     # test that by default it is not reloaded
@@ -132,18 +217,22 @@ def test_get(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
     assert AnExample1Config.get().section1.field2 == 22
 
     # and now test reload
-    assert AnExample1Config.get(reload=True).section1.field2 == 222
+    AnExample1Config.load()
+    assert AnExample1Config.get().field0 == 2.2
+    assert AnExample1Config.get().section1.field2 == 222
 
 
 def test_get_json(json_file: Path) -> None:
     AnExample1Config.set_filepath(json_file)
-    assert AnExample1Config.get(reload=True).section1.field1 == "f2"
+    AnExample1Config.load()
+    assert AnExample1Config.get().section1.field1 == "f2"
     assert AnExample1Config.get().section1.field2 == 33
 
 
 def test_get_ini(ini_file: Path, capfd: pytest.CaptureFixture[str]) -> None:
     AnExample1Config.set_filepath(ini_file)
-    assert AnExample1Config.get(reload=True).section1.field1 == "field1"
+    AnExample1Config.load()
+    assert AnExample1Config.get().section1.field1 == "field1"
     assert AnExample1Config.get().section1.field2 == 2
     captured = capfd.readouterr()
     assert "Unknown file format ini given in" in captured.out
@@ -157,7 +246,8 @@ def test_type_coercion(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
     AnExample1Config.set_filepath(toml_file)
-    test_config = AnExample1Config.get(reload=True)
+    AnExample1Config.load()
+    test_config = AnExample1Config.get()
     assert isinstance(test_config.section1.field1, str)
     assert test_config.section1.field1 == "True"
     assert isinstance(test_config.section1.field2, int)
@@ -174,7 +264,8 @@ def test_wrong_type(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
 
     AnExample1Config.set_filepath(toml_file)
     with pytest.raises(ValidationError) as excinfo:
-        _ = AnExample1Config.get(reload=True)
+        AnExample1Config.load()
+        _ = AnExample1Config.get()
     assert "2 validation errors" in str(excinfo.value)
     assert "str type expected" in str(excinfo.value)
     assert "none is not an allowed value" in str(excinfo.value)
@@ -191,7 +282,8 @@ def test_missing_extra_attributes(
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
 
     AnExample1Config.set_filepath(toml_file)
-    test_config = AnExample1Config.get(reload=True)
+    AnExample1Config.load()
+    test_config = AnExample1Config.get()
     assert test_config.section1.field2 == 2
     with pytest.raises(AttributeError):
         assert test_config.section1.field3 == 22  # type: ignore[attr-defined]
@@ -225,8 +317,9 @@ def test_attributes_no_default(
     monkeypatch: pytest.MonkeyPatch, toml_file: Path
 ) -> None:
     Example2Config.set_filepath(toml_file)
-    with pytest.raises(TypeError):
-        _ = Example2Config.get(reload=True)
+    with pytest.raises(ValidationError):
+        AnExample1Config.load()
+        _ = Example2Config.get()
 
     def mock_tomllib_load2(
         fptr: Any,  # pylint: disable=unused-argument
@@ -235,7 +328,8 @@ def test_attributes_no_default(
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load2)
 
-    test_config = Example2Config.get(reload=True)
+    AnExample1Config.load()
+    test_config = Example2Config.get()
     assert test_config.section1.field3 == 1.1
     assert test_config.section1.field4 == 0.5
     assert test_config.section2.field1 == "field1"
@@ -243,6 +337,7 @@ def test_attributes_no_default(
 
 def test_update() -> None:
     with pytest.raises(TypeError):
+        # a Config cannot be updated
         _ = AnExample1Config.get().update(
             {"section1": {"setting1": "new s1", "setting2": 222}}
         )

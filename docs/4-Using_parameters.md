@@ -1,18 +1,22 @@
 ## Use parameters in your code
 
-Parameter containers are meant to be instantiated just once and be available globally for
-the application. Therefore, implementation has been done as follows:
+Parameter sections and containers are meant to be instantiated just once and be available
+globally for the application. Therefore, implementation has been done as follows:
 
-- The instance of a parameter container is accessed via a class method `get()`;
-- The parameter value is then obtained by chaining with the section name and the
+- By in voking method `load()` on a parameter container class, the container and all
+  contained (nested) sections are instantiated with data values read
+  from the parameter file. The instances are stored for future access in a private module
+  global (a dictionary with the class id as key);
+- The instance of a parameter container or section is accessed via a class method `get()`;
+- The parameter value is then obtained by chaining with (the section name(s) and) the
   parameter name;
-- The first invocation of `get()` will create the container instance, try to read values
-  from file and store it for future access in a private module global (a dictionary with
-  the class id as key);
+- If a container has not been loaded, the first invocation of `get()` will do that
+  automatically. This is not the case for a section - if `get()` is invoked on a section
+  before any loading has been done, it will be instantiated with default values;
 - A parameter container should not be instantiated directly by client code (although it
   is possible to do so, e.g. for testing purposes);
 - If needed, you can set the path for the parameter file before the first invocation of
-  `get()`.
+  `get()` (see [chapter on files](./3-Files.md)).
 
 ## Changing parameter values
 
@@ -27,8 +31,11 @@ Obviously, settings parameters can also be changed by editing the settings file 
 restarting the application or reloading the settings container. In addition to that,
 settings can be changed programmatically by calling a class method 
 `update(changes: dict[str, dict[str, Any])`, where the argument `changes` is a dictionary
-of dictionaries that specifies the sections (keys of the outer dict) and fields (keys of
-the inner dicts) that are changed. The method `update` will replace the stored settings
+in which each key is the name of a parameter that is to be updated. For updating a nested
+section, the key needs to hold the section name and the value should hold a dictionary
+with str-type keys again, etc. 
+
+The method `update` will replace the stored settings
 in the private module global with an updated instance and the settings file will be
 updated as well. So the invocation of `get()` after `update` or application restart or
 reloading will return the changed parameter values.
@@ -39,16 +46,17 @@ reloading will return the changed parameter values.
     ```python
     import MyExampleConfig
 
-    # if the config file is not in the default location, then set the path first
+    # If the config file is not in the default location, then set the path first
     MyExampleConfig.set_filepath(r"C:\ProgramData\MyApp\config.toml")
 
-    # the next statement will create the config
-    field1_var: str = MyExampleConfig.get().section1.field1  # field1_var == "my own version of the first field"
-    # the next statement just gets that same instance
+    # The next statement will create the config
+    field1_var: str = MyExampleConfig.get().section1.field1  # field1_var == -0.5
+    # The next statement just gets that same instance
     field2_var: int = MyExampleConfig.get().section1.field2  # field2_var == 22
 
-    # if you have edited the config file, you can reload it (which will create a new instance)
-    field1_var = MyExampleConfig.get(reload=True).section1.field1
+    # After edited the config file, you can reload it (which will create a new instance)
+    MyExampleConfig.load()
+    field1_var = MyExampleConfig.get().section1.field1
 
     # you cannot programmatically change config parameters
 
@@ -58,20 +66,24 @@ reloading will return the changed parameter values.
     ```python
     import MyExampleSettings
 
-    # if the settings file is not in the default location, then set the path first
+    # If the settings file is not in the default location, then set the path first
     MyExampleSettings.set_filepath(r"C:\ProgramData\MyApp\settings.json")
 
-    # the next statement will create the settings
-    name_var: str = MyExampleSettings.get().basics.name  # name_var == "the name"
-    # the next statement just gets that same instance
-    totals_var: int = MyExampleSettings.get().basics.totals  # totals_var == 2
+    # The next statement will create the settings
+    name_var: str = MyExampleSettings.get().name  # name_var == "the stored name"
+    # The next statement just gets that same instance
+    totals_var: int = MyExampleSettings.get().basics.totals  # totals_var == 3
 
-    # if you have edited the settings file, you can reload it (which will create a new instance)
-    name_var = MyExampleSettings.get(reload=True).basics.name
+    # After edited the settings file, you can reload it (which will create a new instance)
+    MyExampleSettings.load()
+    name_var = MyExampleSettings.get().name
 
     # change settings parameters programmatically using update
-    MyExampleSettings.update({"basics": {"name": "new and shiny name", "totals": 222}})
-    print(MyExampleSettings.get().basics.totals)  # 222
-    print(MyExampleSettings.get(reload=True).basics.name)  # new and shiny name
+    MyExampleSettings.update({"name": "updated name", "basics": {"totals": 33}})
+    print(MyExampleSettings.get().name)  # updated name
+    print(MyExampleSettings.get().basics.totals)  # 33
+    # the update has been written to file as well
+    MyExampleSettings.load()
+    print(MyExampleSettings.get().name)  # updated name
 
     ```

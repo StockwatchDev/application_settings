@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "application_settings"
-version = "0.2.1"
+version = "0.3.0"
 description = "For providing a python application with configuration and/or settings"
 authors = ["Stockwatchdevs <stockwatchdevs@gmail.com>"]
 license = "MIT"
@@ -25,15 +25,17 @@ include = [
     { path = "LICENSE" },
     { path = "README.md" },
     { path = "tests", format = "sdist" },
+    { path = "examples", format = "sdist" },
 ]
 
 
 [tool.poetry.dependencies]
 python = "^3.9"
-pathvalidate = "^2.5"
+pathvalidate = ">=2.5,<4.0"
 pydantic = "^1.10"
 tomli = { version = "^2.0", python = "<3.11" }
 tomli-w = "^1.0"
+typing-extensions = { version = "^4.5.0", python = "<3.11" }
 
 [tool.poetry.group.testing]
 optional = true
@@ -46,7 +48,8 @@ pytest-cov = "^4.0"
 optional = true
 
 [tool.poetry.group.typing.dependencies]
-mypy = ">=0.942"
+mypy = "^1.1"
+lxml = "^4.9"
 
 [tool.poetry.group.style]
 optional = true
@@ -163,7 +166,10 @@ Home = "README.md"
 "4. Using parameters" = "docs/4-Using_parameters.md"
 
 [[tool.portray.mkdocs.nav.Usage]]
-"5. Handling deviations" = "docs/5-Handling_deviations.md"
+"5. Usage in a library package" = "docs/5-Usage_in_a_library_package.md"
+
+[[tool.portray.mkdocs.nav.Usage]]
+"6. Handling deviations" = "docs/6-Handling_deviations.md"
 
 [[tool.portray.mkdocs.nav]]
 Changelog = "CHANGELOG.md"
@@ -176,7 +182,7 @@ isolated_build = true
 envlist =
     py{39,310,311}
     style
-    typing
+    py{39,310,311}-typing
 
 [testenv]
 allowlist_externals = poetry
@@ -192,9 +198,9 @@ commands_pre =
 commands =
     poetry run python -m black --check ./src
     poetry run isort --check --diff ./src
-    poetry run pylint --recursive=y ./src
+    poetry run pylint ./src
 
-[testenv:typing]
+[testenv:py{39,310,311}-typing]
 skip_install = true
 commands_pre =
     poetry install --with typing -v

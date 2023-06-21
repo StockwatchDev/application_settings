@@ -1,7 +1,15 @@
-The expected way of work is that parameters are defined in section classes and sections
-are gathered in a container.
+This package lets you define parameters for configuration and settings. The difference
+between configuration and settings is as follows. `Config` is for parameters that do not
+change during runtime and are read from file. `Settings` are parameters that can change
+programmatically during runtime and are read from and saved to file for persistancy over
+sessions. During definition, they differ only in terms of the base classes that are used. 
 
-## Defining section(s)
+The intended structure is that parameters are defined in section classes. Sections can be
+nested. There should be one special root section for the application, referred to as the
+container, that handles file storage. Config sections and Settings sections should never
+be mixed (i.e., do not nest a Settings section in a Config section and vice versa).
+
+## Defining non-container section(s)
 
 A section is defined by subclassing the relevant base class (ConfigSectionBase for
 config, SettingsSectionBase for settings) and decorating it with
@@ -12,33 +20,34 @@ using [pydantic dataclasses](https://docs.pydantic.dev/usage/dataclasses/)). If 
 specify a default value as well, then you prevent the occurance of an exception if the
 value for the parameter of concern is not found in the parameter file.
 
+Nested sections are obtained by defining fields in a section that are type hinted with 
+the appropriate contained section class(es) and instantiated (possible only when all
+parameters of the nested section have default values).
+
 ## Defining the container
 
-Likewise, the container is defined by subclassing the relevant base class (ConfigBase for
-config, SettingsBase for settings) and decorating it with `@dataclass(frozen=True)`.
-Sections are now defined as fields of this dataclass, type hinted with the appropriate
-section class and instantiated (possible only when all parameters of the section have
-default values).
+The container is a special section that is to be the root for parametrisation of an
+application. It is defined likewise: by subclassing the relevant base class (ConfigBase
+for config, SettingsBase for settings), decorating it with `@dataclass(frozen=True)`,
+defining fields for parameters and nested non-root sections.
 
 Note that albeit settings can be changed programmatically, we still set `frozen=True` for
-the settings container and -sections (see also the section below).
+the settings container and -sections (see also the example section below).
 
 ## Example
 
 === "Configuration"
     ```python
-    from application_settings import (
-        ConfigBase,
-        ConfigSectionBase,
-    )
     from pydantic.dataclasses import dataclass
+
+    from application_settings import ConfigBase, ConfigSectionBase
 
 
     @dataclass(frozen=True)
     class MyExampleConfigSection(ConfigSectionBase):
         """Config section for an example"""
 
-        field1: str = "field1"
+        field1: float = 0.5
         field2: int = 2
 
 
@@ -46,24 +55,22 @@ the settings container and -sections (see also the section below).
     class MyExampleConfig(ConfigBase):
         """Config for an example"""
 
+        name: str = "nice example"
         section1: MyExampleConfigSection = MyExampleConfigSection()
 
     ```
 
 === "Settings"
     ```python
-    from application_settings import (
-        SettingsBase,
-        SettingsSectionBase,
-    )
     from pydantic.dataclasses import dataclass
+
+    from application_settings import SettingsBase, SettingsSectionBase
 
 
     @dataclass(frozen=True)
     class BasicSettingsSection(SettingsSectionBase):
         """Settings section for the basics"""
 
-        name: str = "the name"
         totals: int = 2
 
 
@@ -71,6 +78,8 @@ the settings container and -sections (see also the section below).
     class MyExampleSettings(SettingsBase):
         """Settings for an example"""
 
+        name: str = "nice name"
         basics: BasicSettingsSection = BasicSettingsSection()
+
 
     ```
