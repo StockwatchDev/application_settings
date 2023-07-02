@@ -5,7 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - 2023-xx-yy
+## [Unreleased]
+
+### Added
+
+### Changed
+
+### Fixed
+
+## [0.3.0] - 2023-06-21
 
 ### Added
 
@@ -22,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   via their own Section (Issue 
   [#46](https://github.com/StockwatchDev/application_settings/issues/46)).
 - Literal SectionTypeStr exported.
-- Convenience functions to specify filepath for config and settings
+- Convenience functions to specify filepath for config and settings via command-line
   [[#53](https://github.com/StockwatchDev/application_settings/issues/53)]
 
 ### Changed

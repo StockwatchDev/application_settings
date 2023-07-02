@@ -11,10 +11,10 @@ def config_filepath_from_cli(
     config_class: type[ConfigT],
     parser: ArgumentParser = ArgumentParser(),
     short_option: str = "-c",
+    long_option: str = "--config_filepath",
     load: bool = False,
 ) -> ArgumentParser:
-    """Add a commandline option '--config_filepath' for the config file and set filepath if it is given"""
-    long_option: str = "--config_filepath"
+    """Add a commandline option for the config file and set filepath if it is given"""
     helptext: str = "Path of the configuration file"
     return _parameters_filepath_from_cli(
         config_class=config_class,
@@ -31,10 +31,10 @@ def settings_filepath_from_cli(
     settings_class: type[SettingsT],
     parser: ArgumentParser = ArgumentParser(),
     short_option: str = "-s",
+    long_option: str = "--settings_filepath",
     load: bool = False,
 ) -> ArgumentParser:
-    """Add a commandline option '--settings_filepath' for the settings file and set filepath if it is given"""
-    long_option: str = "--settings_filepath"
+    """Add a commandline option for the settings file and set filepath if it is given"""
     helptext: str = "Path of the settings file"
     return _parameters_filepath_from_cli(
         config_class=None,
@@ -47,17 +47,17 @@ def settings_filepath_from_cli(
     )
 
 
-def parameters_folderpath_from_cli(
+def parameters_folderpath_from_cli(  # pylint: disable=too-many-arguments
     config_class: type[ConfigT],
     settings_class: type[SettingsT],
     parser: ArgumentParser = ArgumentParser(),
     short_option: str = "-p",
+    long_option: str = "--parameters_folderpath",
     load: bool = False,
 ) -> ArgumentParser:
     """Add a commandline option '--parameters_folderpath' for the common config and settings folder and set filepaths if it is given.
 
     Default filenames will be appended to the folderpath for config and settings."""
-    long_option: str = "--parameters_folderpath"
     helptext: str = "Common path of the config file and settings file"
     return _parameters_filepath_from_cli(
         config_class=config_class,
