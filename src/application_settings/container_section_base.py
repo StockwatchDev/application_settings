@@ -69,7 +69,7 @@ class ContainerSectionBase(ABC):
         print(
             f"Section {cls.__name__} accessed before data has been set by the application."
         )
-        return cls().set({})
+        return cls.set({})
 
     def _set(self) -> Self:
         """Store the singleton."""
