@@ -5,12 +5,12 @@ import sys
 from pathlib import Path
 
 import pytest
-from pydantic.dataclasses import dataclass
 
 from application_settings import (
     ConfigBase,
     SettingsBase,
     SettingsSectionBase,
+    dataclass,
     parameters_folderpath_from_cli,
     settings_filepath_from_cli,
 )

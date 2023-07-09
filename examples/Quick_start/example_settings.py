@@ -2,9 +2,7 @@
 """Example for settings."""
 from pathlib import Path
 
-from pydantic.dataclasses import dataclass
-
-from application_settings import SettingsBase, SettingsSectionBase
+from application_settings import SettingsBase, SettingsSectionBase, dataclass
 
 
 @dataclass(frozen=True)

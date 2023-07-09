@@ -1,9 +1,7 @@
 """Example for configuration."""
 from pathlib import Path
 
-from pydantic.dataclasses import dataclass
-
-from application_settings import ConfigBase, ConfigSectionBase
+from application_settings import ConfigBase, ConfigSectionBase, dataclass
 
 
 @dataclass(frozen=True)
@@ -46,7 +44,7 @@ def main2() -> None:
     # You can reload a config
     MyExampleConfig.load()
     new_variable = MyExampleConfig.get().name
-    print(f"new_variable == {new_variable}")  # new_variable == "new name"
+    print(f"new_variable == '{new_variable}'")  # new_variable == 'new name'
     another_new_variable = MyExampleConfigSection.get().field2
     print(
         f"another_new_variable == {another_new_variable}"

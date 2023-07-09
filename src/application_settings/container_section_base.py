@@ -19,11 +19,11 @@ class ContainerSectionBase(ABC):
     @classmethod
     @abstractmethod
     def kind_string(cls) -> SectionTypeStr:
-        "Return either 'Config' or 'Settings'"
+        """Return either 'Config' or 'Settings'"""
 
     @classmethod
     def get(cls) -> Self:
-        """Get the singleton; if not existing, create it. Reading file only done for a container."""
+        """Get the singleton; if not existing, create it. Loading from file only done for a container."""
 
         if (_the_container_or_none := cls._get()) is None:
             # no config section has been made yet,
@@ -38,7 +38,13 @@ class ContainerSectionBase(ABC):
 
     @classmethod
     def update(cls, changes: dict[str, Any]) -> Self:
-        "Update the settings with data specified in changes; not meant for config"
+        """Update the settings with data specified in changes; not meant for config.
+
+        Raises:
+
+        * TypeError: if update is called upon a Config class
+        * RuntimeError: if filepath() == None
+        """
         return cls.get()._update(changes)._set()  # pylint: disable=protected-access
 
     @classmethod
@@ -60,7 +66,7 @@ class ContainerSectionBase(ABC):
         print(
             f"Section {cls.__name__} accessed before data has been set by the application."
         )
-        return cls().set({})
+        return cls.set({})
 
     def _set(self) -> Self:
         """Store the singleton."""
