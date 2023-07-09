@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Check for presence of the dataclass decorator
+  (Issue [#76](https://github.com/StockwatchDev/application_settings/issues/76))
+
 ### Changed
 
 ### Fixed

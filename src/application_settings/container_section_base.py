@@ -1,10 +1,8 @@
 """Base class for sections to be added to containers and container sections for configuration and settings."""
 import sys
 from abc import ABC, abstractmethod
-from dataclasses import replace
+from dataclasses import is_dataclass, replace
 from typing import Any, Literal, Optional, cast
-
-from pydantic.dataclasses import dataclass
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -15,7 +13,6 @@ else:
 SectionTypeStr = Literal["Config", "Settings"]
 
 
-@dataclass(frozen=True)
 class ContainerSectionBase(ABC):
     """Base class for all ContainerSection classes"""
 
@@ -67,6 +64,7 @@ class ContainerSectionBase(ABC):
 
     def _set(self) -> Self:
         """Store the singleton."""
+        _check_dataclass_decorator(self)
         _ALL_CONTAINER_SECTION_SINGLETONS[id(self.__class__)] = self
         subsections = [
             attr
@@ -79,7 +77,16 @@ class ContainerSectionBase(ABC):
 
     def _update(self, changes: dict[str, Any]) -> Self:
         "Update parameters and sections with data specified in changes; not meant for config"
-        return replace(self, **changes)
+        # in self._set(), which normally is always executed, we ensured that
+        # self is a dataclass instance
+        return replace(self, **changes)  # type: ignore[type-var]
+
+
+def _check_dataclass_decorator(obj: Any) -> None:
+    if not (is_dataclass(obj)):
+        raise TypeError(
+            f"{obj} is not a dataclass; did you forget to add '@dataclass(frozen=True)' when you defined {obj.__class__}?."
+        )
 
 
 _ALL_CONTAINER_SECTION_SINGLETONS: dict[int, ContainerSectionBase] = {}

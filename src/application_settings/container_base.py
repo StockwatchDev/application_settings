@@ -10,7 +10,6 @@ from typing import Any
 
 import tomli_w
 from pathvalidate import is_valid_filepath
-from pydantic.dataclasses import dataclass
 
 from application_settings.container_section_base import ContainerSectionBase
 from application_settings.type_notation_helper import PathOpt, PathOrStr
@@ -30,7 +29,6 @@ class FileFormat(Enum):
     JSON = "json"
 
 
-@dataclass(frozen=True)
 class ContainerBase(ContainerSectionBase, ABC):
     """Base class for Config and Settings container classes"""
 
@@ -123,10 +121,14 @@ class ContainerBase(ContainerSectionBase, ABC):
             path.parent.mkdir(parents=True, exist_ok=True)
             if (ext := path.suffix[1:].lower()) == FileFormat.TOML.value:
                 with path.open(mode="wb") as fptr:
-                    tomli_w.dump(asdict(self), fptr)
+                    # in self._set(), which normally is always executed, we ensured that
+                    # self is a dataclass instance
+                    tomli_w.dump(asdict(self), fptr)  # type: ignore[call-overload]
             elif ext == FileFormat.JSON.value:
                 with path.open(mode="w") as fptr:
-                    json.dump(asdict(self), fptr)
+                    # in self._set(), which normally is always executed, we ensured that
+                    # self is a dataclass instance
+                    json.dump(asdict(self), fptr)  # type: ignore[call-overload]
             else:
                 print(f"Unknown file format {ext} given in {path}.")
         else:

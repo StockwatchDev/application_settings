@@ -54,6 +54,10 @@ class Config(ConfigBase):
     """Config class def"""
 
 
+class ConfigNoDataclass(ConfigBase):
+    """Config class def, without dataclass decorator"""
+
+
 @pytest.fixture(scope="session")
 def toml_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
     file_path = (
@@ -151,6 +155,12 @@ def test_paths(toml_file: Path) -> None:
     # raising in case of invalid path:
     with pytest.raises(ValueError):
         AnExample1Config.set_filepath('fi:\0\\l*e/p"a?t>h|.t<xt')
+
+
+def test_no_decorator() -> None:
+    # raising of TypeError:
+    with pytest.raises(TypeError):
+        ConfigNoDataclass.load()
 
 
 def test_config_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
