@@ -939,8 +939,6 @@
 
     from pathvalidate import is_valid_filepath
 
-    from pydantic.dataclasses import dataclass
-
     from application_settings.container_section_base import ContainerSectionBase
 
     from application_settings.type_notation_helper import PathOpt, PathOrStr
@@ -970,8 +968,6 @@
         JSON = &quot;json&quot;
 
 
-
-    @dataclass(frozen=True)
 
     class ContainerBase(ContainerSectionBase, ABC):
 
@@ -1147,13 +1143,21 @@
 
                     with path.open(mode=&quot;wb&quot;) as fptr:
 
-                        tomli_w.dump(asdict(self), fptr)
+                        # in self._set(), which normally is always executed, we ensured that
+
+                        # self is a dataclass instance
+
+                        tomli_w.dump(asdict(self), fptr)  # type: ignore[call-overload]
 
                 elif ext == FileFormat.JSON.value:
 
                     with path.open(mode=&quot;w&quot;) as fptr:
 
-                        json.dump(asdict(self), fptr)
+                        # in self._set(), which normally is always executed, we ensured that
+
+                        # self is a dataclass instance
+
+                        json.dump(asdict(self), fptr)  # type: ignore[call-overload]
 
                 else:
 
@@ -1224,15 +1228,15 @@
 <h2 id="classes">Classes</h2>
 <h3 id="containerbase">ContainerBase</h3>
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ContainerBase</span><span class="p">(</span>
-
+    <span class="o">/</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">)</span>
 </code></pre></div>
 <p>Base class for Config and Settings container classes</p>
 <p>??? example "View Source"
-        @dataclass(frozen=True)</p>
-<div class="highlight"><pre><span></span><code>    class ContainerBase(ContainerSectionBase, ABC):
-
-        &quot;&quot;&quot;Base class for Config and Settings container classes&quot;&quot;&quot;
+        class ContainerBase(ContainerSectionBase, ABC):</p>
+<div class="highlight"><pre><span></span><code>        &quot;&quot;&quot;Base class for Config and Settings container classes&quot;&quot;&quot;
 
         @classmethod
 
@@ -1404,13 +1408,21 @@
 
                     with path.open(mode=&quot;wb&quot;) as fptr:
 
-                        tomli_w.dump(asdict(self), fptr)
+                        # in self._set(), which normally is always executed, we ensured that
+
+                        # self is a dataclass instance
+
+                        tomli_w.dump(asdict(self), fptr)  # type: ignore[call-overload]
 
                 elif ext == FileFormat.JSON.value:
 
                     with path.open(mode=&quot;w&quot;) as fptr:
 
-                        json.dump(asdict(self), fptr)
+                        # in self._set(), which normally is always executed, we ensured that
+
+                        # self is a dataclass instance
+
+                        json.dump(asdict(self), fptr)  # type: ignore[call-overload]
 
                 else:
 

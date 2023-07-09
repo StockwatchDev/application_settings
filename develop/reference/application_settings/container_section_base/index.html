@@ -785,11 +785,9 @@
 
     from abc import ABC, abstractmethod
 
-    from dataclasses import replace
+    from dataclasses import is_dataclass, replace
 
     from typing import Any, Literal, Optional, cast
-
-    from pydantic.dataclasses import dataclass
 
     if sys.version_info &gt;= (3, 11):
 
@@ -804,8 +802,6 @@
     SectionTypeStr = Literal[&quot;Config&quot;, &quot;Settings&quot;]
 
 
-
-    @dataclass(frozen=True)
 
     class ContainerSectionBase(ABC):
 
@@ -901,6 +897,8 @@
 
             &quot;&quot;&quot;Store the singleton.&quot;&quot;&quot;
 
+            _check_dataclass_decorator(self)
+
             _ALL_CONTAINER_SECTION_SINGLETONS[id(self.__class__)] = self
 
             subsections = [
@@ -921,9 +919,37 @@
 
         def _update(self, changes: dict[str, Any]) -&gt; Self:
 
-            &quot;&quot;&quot;Update parameters and sections with data specified in changes; not meant for config&quot;&quot;&quot;
+            &quot;Update parameters and sections with data specified in changes; not meant for config&quot;
 
-            return replace(self, **changes)
+            # in self._set(), which normally is always executed, we ensured that
+
+            # self is a dataclass instance
+
+            return replace(self, **changes)  # type: ignore[type-var]
+
+
+
+    def _check_dataclass_decorator(obj: Any) -&gt; None:
+
+        if not (is_dataclass(obj)):
+
+            raise TypeError(
+
+                f&quot;{obj} is not a dataclass instance; did you forget to add &quot;
+
+                f&quot;&#39;@dataclass(frozen=True)&#39; when you defined {obj.__class__}?.&quot;
+
+            )
+
+        if not obj.__class__.__dataclass_params__.frozen:
+
+            raise TypeError(
+
+                f&quot;{obj} is not a frozen dataclass instance; did you forget &quot;
+
+                f&quot;to add &#39;(frozen=True)&#39; when you defined {obj.__class__}?.&quot;
+
+            )
 
 
 
@@ -935,15 +961,15 @@
 <h2 id="classes">Classes</h2>
 <h3 id="containersectionbase">ContainerSectionBase</h3>
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ContainerSectionBase</span><span class="p">(</span>
-
+    <span class="o">/</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">)</span>
 </code></pre></div>
 <p>Base class for all ContainerSection classes</p>
 <p>??? example "View Source"
-        @dataclass(frozen=True)</p>
-<div class="highlight"><pre><span></span><code>    class ContainerSectionBase(ABC):
-
-        &quot;&quot;&quot;Base class for all ContainerSection classes&quot;&quot;&quot;
+        class ContainerSectionBase(ABC):</p>
+<div class="highlight"><pre><span></span><code>        &quot;&quot;&quot;Base class for all ContainerSection classes&quot;&quot;&quot;
 
         @classmethod
 
@@ -1035,6 +1061,8 @@
 
             &quot;&quot;&quot;Store the singleton.&quot;&quot;&quot;
 
+            _check_dataclass_decorator(self)
+
             _ALL_CONTAINER_SECTION_SINGLETONS[id(self.__class__)] = self
 
             subsections = [
@@ -1055,9 +1083,13 @@
 
         def _update(self, changes: dict[str, Any]) -&gt; Self:
 
-            &quot;&quot;&quot;Update parameters and sections with data specified in changes; not meant for config&quot;&quot;&quot;
+            &quot;Update parameters and sections with data specified in changes; not meant for config&quot;
 
-            return replace(self, **changes)
+            # in self._set(), which normally is always executed, we ensured that
+
+            # self is a dataclass instance
+
+            return replace(self, **changes)  # type: ignore[type-var]
 </code></pre></div>
 <hr />
 <h4 id="ancestors-in-mro">Ancestors (in MRO)</h4>

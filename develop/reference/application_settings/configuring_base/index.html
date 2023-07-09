@@ -977,8 +977,6 @@
         """Module for handling configuration."""</p>
 <div class="highlight"><pre><span></span><code>    from typing import Any, TypeVar
 
-    from pydantic.dataclasses import dataclass
-
     from application_settings.container_base import ContainerBase, FileFormat
 
     from application_settings.container_section_base import (
@@ -995,8 +993,6 @@
 
 
 
-    @dataclass(frozen=True)
-
     class ConfigSectionBase(ContainerSectionBase):
 
         &quot;&quot;&quot;Base class for all ConfigSection classes (so that we can bound a TypeVar)&quot;&quot;&quot;
@@ -1010,8 +1006,6 @@
             return &quot;Config&quot;
 
 
-
-    @dataclass(frozen=True)
 
     class ConfigBase(ContainerBase):
 
@@ -1061,15 +1055,15 @@
 <h2 id="classes">Classes</h2>
 <h3 id="configbase">ConfigBase</h3>
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ConfigBase</span><span class="p">(</span>
-
+    <span class="o">/</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">)</span>
 </code></pre></div>
 <p>Base class for main Config class</p>
 <p>??? example "View Source"
-        @dataclass(frozen=True)</p>
-<div class="highlight"><pre><span></span><code>    class ConfigBase(ContainerBase):
-
-        &quot;&quot;&quot;Base class for main Config class&quot;&quot;&quot;
+        class ConfigBase(ContainerBase):</p>
+<div class="highlight"><pre><span></span><code>        &quot;&quot;&quot;Base class for main Config class&quot;&quot;&quot;
 
         @classmethod
 
@@ -1387,15 +1381,15 @@ If you prefer to not have a default path then overwrite this method and return N
 </code></pre></div>
 <h3 id="configsectionbase">ConfigSectionBase</h3>
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ConfigSectionBase</span><span class="p">(</span>
-
+    <span class="o">/</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">)</span>
 </code></pre></div>
 <p>Base class for all ConfigSection classes (so that we can bound a TypeVar)</p>
 <p>??? example "View Source"
-        @dataclass(frozen=True)</p>
-<div class="highlight"><pre><span></span><code>    class ConfigSectionBase(ContainerSectionBase):
-
-        &quot;&quot;&quot;Base class for all ConfigSection classes (so that we can bound a TypeVar)&quot;&quot;&quot;
+        class ConfigSectionBase(ContainerSectionBase):</p>
+<div class="highlight"><pre><span></span><code>        &quot;&quot;&quot;Base class for all ConfigSection classes (so that we can bound a TypeVar)&quot;&quot;&quot;
 
         @classmethod
 
