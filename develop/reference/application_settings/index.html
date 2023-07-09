@@ -547,6 +547,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#dataclass" class="md-nav__link">
+    dataclass
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#parameters_folderpath_from_cli" class="md-nav__link">
     parameters_folderpath_from_cli
   </a>
@@ -882,6 +889,75 @@
           <li class="md-nav__item">
   <a href="#update_3" class="md-nav__link">
     update
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validationerror" class="md-nav__link">
+    ValidationError
+  </a>
+  
+    <nav class="md-nav" aria-label="ValidationError">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ancestors-in-mro_4" class="md-nav__link">
+    Ancestors (in MRO)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-variables" class="md-nav__link">
+    Class variables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instance-variables" class="md-nav__link">
+    Instance variables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    Methods
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add_note" class="md-nav__link">
+    add_note
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#errors" class="md-nav__link">
+    errors
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json" class="md-nav__link">
+    json
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#with_traceback" class="md-nav__link">
+    with_traceback
   </a>
   
 </li>
@@ -1002,6 +1078,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#dataclass" class="md-nav__link">
+    dataclass
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#parameters_folderpath_from_cli" class="md-nav__link">
     parameters_folderpath_from_cli
   </a>
@@ -1346,6 +1429,75 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#validationerror" class="md-nav__link">
+    ValidationError
+  </a>
+  
+    <nav class="md-nav" aria-label="ValidationError">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ancestors-in-mro_4" class="md-nav__link">
+    Ancestors (in MRO)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-variables" class="md-nav__link">
+    Class variables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instance-variables" class="md-nav__link">
+    Instance variables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    Methods
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add_note" class="md-nav__link">
+    add_note
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#errors" class="md-nav__link">
+    errors
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json" class="md-nav__link">
+    json
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#with_traceback" class="md-nav__link">
+    with_traceback
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1376,6 +1528,10 @@
 <p>??? example "View Source"
         """Module for loading and retrieving parameters for configuration and settings."""</p>
 <div class="highlight"><pre><span></span><code>    from importlib.metadata import version
+
+    from pydantic import ValidationError
+
+    from pydantic.dataclasses import dataclass
 
     from application_settings.configuring_base import ConfigBase, ConfigSectionBase, ConfigT
 
@@ -1425,7 +1581,11 @@
 
         &quot;SettingsT&quot;,
 
+        &quot;ValidationError&quot;,
+
         &quot;config_filepath_from_cli&quot;,
+
+        &quot;dataclass&quot;,
 
         &quot;settings_filepath_from_cli&quot;,
 
@@ -1500,6 +1660,26 @@
 
         )
 </code></pre></div>
+<h3 id="dataclass">dataclass</h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">dataclass</span><span class="p">(</span>
+    <span class="n">_cls</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="o">~</span><span class="n">_T</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">init</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="nb">repr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">eq</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">order</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">unsafe_hash</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">frozen</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="nb">object</span><span class="p">],</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">validate_on_init</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">use_proxy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">kw_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Type</span><span class="p">[</span><span class="o">~</span><span class="n">_T</span><span class="p">]],</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;DataclassClassOrWrapper&#39;</span><span class="p">)],</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;DataclassClassOrWrapper&#39;</span><span class="p">)]</span>
+</code></pre></div>
+<p>Like the python standard lib dataclasses but with type validation.</p>
+<p>The result is either a pydantic dataclass that will validate input data
+or a wrapper that will trigger validation around a stdlib dataclass
+to avoid modifying it directly</p>
 <h3 id="parameters_folderpath_from_cli">parameters_folderpath_from_cli</h3>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">parameters_folderpath_from_cli</span><span class="p">(</span>
     <span class="n">config_class</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="o">~</span><span class="n">ConfigT</span><span class="p">],</span>
@@ -1615,7 +1795,7 @@
 
         def kind_string(cls) -&gt; SectionTypeStr:
 
-            &quot;Return &#39;Config&#39;&quot;
+            &quot;&quot;&quot;Return &#39;Config&#39;&quot;&quot;&quot;
 
             return &quot;Config&quot;
 
@@ -1623,7 +1803,7 @@
 
         def default_file_format(cls) -&gt; FileFormat:
 
-            &quot;Return the default file format&quot;
+            &quot;&quot;&quot;Return the default file format&quot;&quot;&quot;
 
             return FileFormat.TOML
 
@@ -1635,7 +1815,13 @@
 
         ) -&gt; &quot;ConfigBase&quot;:
 
-            &quot;Update and save the settings with data specified in changes; not meant for config&quot;
+            &quot;&quot;&quot;Update and save the settings with data specified in changes
+
+            Raises:
+
+            * TypeError: update not applicable for a Config class
+
+            &quot;&quot;&quot;
 
             raise TypeError(
 
@@ -1661,7 +1847,7 @@
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def default_file_format(cls) -&gt; FileFormat:
 
-            &quot;Return the default file format&quot;
+            &quot;&quot;&quot;Return the default file format&quot;&quot;&quot;
 
             return FileFormat.TOML
 </code></pre></div>
@@ -1684,15 +1870,16 @@
 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span>
 </code></pre></div>
-<p>Return the fully qualified default path for the config/settingsfile: e.g. ~/.example/config.toml.</p>
-<p>If you prefer to not have a default path then overwrite this method and return None.</p>
+<p>Return the fully qualified default path for the config/settingsfile</p>
+<p>E.g. ~/.example/config.toml.
+If you prefer to not have a default path then overwrite this method and return None.</p>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def default_filepath(cls) -&gt; PathOpt:
 
-            &quot;&quot;&quot;
+            &quot;&quot;&quot;Return the fully qualified default path for the config/settingsfile
 
-            Return the fully qualified default path for the config/settingsfile: e.g. ~/.example/config.toml.
+            E.g. ~/.example/config.toml.
 
             If you prefer to not have a default path then overwrite this method and return None.
 
@@ -1720,7 +1907,7 @@
 
                 &quot;.&quot;
 
-                + sub(&quot;(?&lt;!^)(?=[A-Z])&quot;, &quot;_&quot;, cls.__name__.replace(kind_str, &quot;&quot;)).lower()
+                + sub(r&quot;(?&lt;!^)(?=[A-Z])&quot;, &quot;_&quot;, cls.__name__.replace(kind_str, &quot;&quot;)).lower()
 
             )
 </code></pre></div>
@@ -1743,12 +1930,12 @@
 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Get the singleton; if not existing, create it. Reading file only done for a container.</p>
+<p>Get the singleton; if not existing, create it. Loading from file only done for a container.</p>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def get(cls) -&gt; Self:
 
-            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reading file only done for a container.&quot;&quot;&quot;
+            &quot;&quot;&quot;Get the singleton; if not existing, create it. Loading from file only done for a container.&quot;&quot;&quot;
 
             if (_the_container_or_none := cls._get()) is None:
 
@@ -1770,7 +1957,7 @@
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def kind_string(cls) -&gt; SectionTypeStr:
 
-            &quot;Return &#39;Config&#39;&quot;
+            &quot;&quot;&quot;Return &#39;Config&#39;&quot;&quot;&quot;
 
             return &quot;Config&quot;
 </code></pre></div>
@@ -1779,12 +1966,31 @@
     <span class="n">throw_if_file_not_found</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Create a new singleton</p>
+<p>Create a new singleton, try to load parameter values from file.</p>
+<p>Raises:</p>
+<ul>
+<li>FileNotFoundError: if throw_if_file_not_found == True and filepath() cannot be resolved</li>
+<li>TOMLDecodeError: if FileFormat == TOML and the file is not a valid toml document</li>
+<li>JSONDecodeError: if FileFormat == JSON and the file is not a valid json document</li>
+<li>ValidationError: if a parameter value in the file cannot be coerced into the specified parameter type</li>
+</ul>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def load(cls, throw_if_file_not_found: bool = False) -&gt; Self:
 
-            &quot;&quot;&quot;Create a new singleton&quot;&quot;&quot;
+            &quot;&quot;&quot;Create a new singleton, try to load parameter values from file.
+
+            Raises:
+
+            * FileNotFoundError: if throw_if_file_not_found == True and filepath() cannot be resolved
+
+            * TOMLDecodeError: if FileFormat == TOML and the file is not a valid toml document
+
+            * JSONDecodeError: if FileFormat == JSON and the file is not a valid json document
+
+            * ValidationError: if a parameter value in the file cannot be coerced into the specified parameter type
+
+            &quot;&quot;&quot;
 
             return cls._create_instance(throw_if_file_not_found)
 </code></pre></div>
@@ -1809,11 +2015,21 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
 </code></pre></div>
 <p>Set the path for the file (a singleton).</p>
+<p>Raises:</p>
+<ul>
+<li>ValueError: if file_path is not a valid path for the OS running the code</li>
+</ul>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def set_filepath(cls, file_path: PathOrStr = &quot;&quot;, load: bool = False) -&gt; None:
 
-            &quot;&quot;&quot;Set the path for the file (a singleton).&quot;&quot;&quot;
+            &quot;&quot;&quot;Set the path for the file (a singleton).
+
+            Raises:
+
+            * ValueError: if file_path is not a valid path for the OS running the code
+
+            &quot;&quot;&quot;
 
             path: PathOpt = None
 
@@ -1862,7 +2078,11 @@
     <span class="n">changes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;ConfigBase&#39;</span>
 </code></pre></div>
-<p>Update and save the settings with data specified in changes; not meant for config</p>
+<p>Update and save the settings with data specified in changes</p>
+<p>Raises:</p>
+<ul>
+<li>TypeError: update not applicable for a Config class</li>
+</ul>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def update(
@@ -1871,7 +2091,13 @@
 
         ) -&gt; &quot;ConfigBase&quot;:
 
-            &quot;Update and save the settings with data specified in changes; not meant for config&quot;
+            &quot;&quot;&quot;Update and save the settings with data specified in changes
+
+            Raises:
+
+            * TypeError: update not applicable for a Config class
+
+            &quot;&quot;&quot;
 
             raise TypeError(
 
@@ -1895,7 +2121,7 @@
 
         def kind_string(cls) -&gt; SectionTypeStr:
 
-            &quot;Return &#39;Config&#39;&quot;
+            &quot;&quot;&quot;Return &#39;Config&#39;&quot;&quot;&quot;
 
             return &quot;Config&quot;
 </code></pre></div>
@@ -1911,12 +2137,12 @@
 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Get the singleton; if not existing, create it. Reading file only done for a container.</p>
+<p>Get the singleton; if not existing, create it. Loading from file only done for a container.</p>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def get(cls) -&gt; Self:
 
-            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reading file only done for a container.&quot;&quot;&quot;
+            &quot;&quot;&quot;Get the singleton; if not existing, create it. Loading from file only done for a container.&quot;&quot;&quot;
 
             if (_the_container_or_none := cls._get()) is None:
 
@@ -1938,7 +2164,7 @@
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def kind_string(cls) -&gt; SectionTypeStr:
 
-            &quot;Return &#39;Config&#39;&quot;
+            &quot;&quot;&quot;Return &#39;Config&#39;&quot;&quot;&quot;
 
             return &quot;Config&quot;
 </code></pre></div>
@@ -1961,12 +2187,25 @@
     <span class="n">changes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Update the settings with data specified in changes; not meant for config</p>
+<p>Update the settings with data specified in changes; not meant for config.</p>
+<p>Raises:</p>
+<ul>
+<li>TypeError: if update is called upon a Config class</li>
+<li>RuntimeError: if filepath() == None</li>
+</ul>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def update(cls, changes: dict[str, Any]) -&gt; Self:
 
-            &quot;Update the settings with data specified in changes; not meant for config&quot;
+            &quot;&quot;&quot;Update the settings with data specified in changes; not meant for config.
+
+            Raises:
+
+            * TypeError: if update is called upon a Config class
+
+            * RuntimeError: if filepath() == None
+
+            &quot;&quot;&quot;
 
             return cls.get()._update(changes)._set()  # pylint: disable=protected-access
 </code></pre></div>
@@ -1986,7 +2225,7 @@
 
         def kind_string(cls) -&gt; SectionTypeStr:
 
-            &quot;Return &#39;Settings&#39;&quot;
+            &quot;&quot;&quot;Return &#39;Settings&#39;&quot;&quot;&quot;
 
             return &quot;Settings&quot;
 
@@ -1994,7 +2233,7 @@
 
         def default_file_format(cls) -&gt; FileFormat:
 
-            &quot;Return the default file format&quot;
+            &quot;&quot;&quot;Return the default file format&quot;&quot;&quot;
 
             return FileFormat.JSON
 </code></pre></div>
@@ -2016,7 +2255,7 @@
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def default_file_format(cls) -&gt; FileFormat:
 
-            &quot;Return the default file format&quot;
+            &quot;&quot;&quot;Return the default file format&quot;&quot;&quot;
 
             return FileFormat.JSON
 </code></pre></div>
@@ -2039,15 +2278,16 @@
 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span>
 </code></pre></div>
-<p>Return the fully qualified default path for the config/settingsfile: e.g. ~/.example/config.toml.</p>
-<p>If you prefer to not have a default path then overwrite this method and return None.</p>
+<p>Return the fully qualified default path for the config/settingsfile</p>
+<p>E.g. ~/.example/config.toml.
+If you prefer to not have a default path then overwrite this method and return None.</p>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def default_filepath(cls) -&gt; PathOpt:
 
-            &quot;&quot;&quot;
+            &quot;&quot;&quot;Return the fully qualified default path for the config/settingsfile
 
-            Return the fully qualified default path for the config/settingsfile: e.g. ~/.example/config.toml.
+            E.g. ~/.example/config.toml.
 
             If you prefer to not have a default path then overwrite this method and return None.
 
@@ -2075,7 +2315,7 @@
 
                 &quot;.&quot;
 
-                + sub(&quot;(?&lt;!^)(?=[A-Z])&quot;, &quot;_&quot;, cls.__name__.replace(kind_str, &quot;&quot;)).lower()
+                + sub(r&quot;(?&lt;!^)(?=[A-Z])&quot;, &quot;_&quot;, cls.__name__.replace(kind_str, &quot;&quot;)).lower()
 
             )
 </code></pre></div>
@@ -2098,12 +2338,12 @@
 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Get the singleton; if not existing, create it. Reading file only done for a container.</p>
+<p>Get the singleton; if not existing, create it. Loading from file only done for a container.</p>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def get(cls) -&gt; Self:
 
-            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reading file only done for a container.&quot;&quot;&quot;
+            &quot;&quot;&quot;Get the singleton; if not existing, create it. Loading from file only done for a container.&quot;&quot;&quot;
 
             if (_the_container_or_none := cls._get()) is None:
 
@@ -2125,7 +2365,7 @@
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def kind_string(cls) -&gt; SectionTypeStr:
 
-            &quot;Return &#39;Settings&#39;&quot;
+            &quot;&quot;&quot;Return &#39;Settings&#39;&quot;&quot;&quot;
 
             return &quot;Settings&quot;
 </code></pre></div>
@@ -2134,12 +2374,31 @@
     <span class="n">throw_if_file_not_found</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Create a new singleton</p>
+<p>Create a new singleton, try to load parameter values from file.</p>
+<p>Raises:</p>
+<ul>
+<li>FileNotFoundError: if throw_if_file_not_found == True and filepath() cannot be resolved</li>
+<li>TOMLDecodeError: if FileFormat == TOML and the file is not a valid toml document</li>
+<li>JSONDecodeError: if FileFormat == JSON and the file is not a valid json document</li>
+<li>ValidationError: if a parameter value in the file cannot be coerced into the specified parameter type</li>
+</ul>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def load(cls, throw_if_file_not_found: bool = False) -&gt; Self:
 
-            &quot;&quot;&quot;Create a new singleton&quot;&quot;&quot;
+            &quot;&quot;&quot;Create a new singleton, try to load parameter values from file.
+
+            Raises:
+
+            * FileNotFoundError: if throw_if_file_not_found == True and filepath() cannot be resolved
+
+            * TOMLDecodeError: if FileFormat == TOML and the file is not a valid toml document
+
+            * JSONDecodeError: if FileFormat == JSON and the file is not a valid json document
+
+            * ValidationError: if a parameter value in the file cannot be coerced into the specified parameter type
+
+            &quot;&quot;&quot;
 
             return cls._create_instance(throw_if_file_not_found)
 </code></pre></div>
@@ -2164,11 +2423,21 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
 </code></pre></div>
 <p>Set the path for the file (a singleton).</p>
+<p>Raises:</p>
+<ul>
+<li>ValueError: if file_path is not a valid path for the OS running the code</li>
+</ul>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def set_filepath(cls, file_path: PathOrStr = &quot;&quot;, load: bool = False) -&gt; None:
 
-            &quot;&quot;&quot;Set the path for the file (a singleton).&quot;&quot;&quot;
+            &quot;&quot;&quot;Set the path for the file (a singleton).
+
+            Raises:
+
+            * ValueError: if file_path is not a valid path for the OS running the code
+
+            &quot;&quot;&quot;
 
             path: PathOpt = None
 
@@ -2217,12 +2486,25 @@
     <span class="n">changes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Update the settings with data specified in changes; not meant for config</p>
+<p>Update the settings with data specified in changes; not meant for config.</p>
+<p>Raises:</p>
+<ul>
+<li>TypeError: if update is called upon a Config class</li>
+<li>RuntimeError: if filepath() == None</li>
+</ul>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def update(cls, changes: dict[str, Any]) -&gt; Self:
 
-            &quot;Update the settings with data specified in changes; not meant for config&quot;
+            &quot;&quot;&quot;Update the settings with data specified in changes; not meant for config.
+
+            Raises:
+
+            * TypeError: if update is called upon a Config class
+
+            * RuntimeError: if filepath() == None
+
+            &quot;&quot;&quot;
 
             return cls.get()._update(changes)._set()  # pylint: disable=protected-access
 </code></pre></div>
@@ -2242,7 +2524,7 @@
 
         def kind_string(cls) -&gt; SectionTypeStr:
 
-            &quot;Return &#39;Settings&#39;&quot;
+            &quot;&quot;&quot;Return &#39;Settings&#39;&quot;&quot;&quot;
 
             return &quot;Settings&quot;
 </code></pre></div>
@@ -2258,12 +2540,12 @@
 
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Get the singleton; if not existing, create it. Reading file only done for a container.</p>
+<p>Get the singleton; if not existing, create it. Loading from file only done for a container.</p>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def get(cls) -&gt; Self:
 
-            &quot;&quot;&quot;Get the singleton; if not existing, create it. Reading file only done for a container.&quot;&quot;&quot;
+            &quot;&quot;&quot;Get the singleton; if not existing, create it. Loading from file only done for a container.&quot;&quot;&quot;
 
             if (_the_container_or_none := cls._get()) is None:
 
@@ -2285,7 +2567,7 @@
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def kind_string(cls) -&gt; SectionTypeStr:
 
-            &quot;Return &#39;Settings&#39;&quot;
+            &quot;&quot;&quot;Return &#39;Settings&#39;&quot;&quot;&quot;
 
             return &quot;Settings&quot;
 </code></pre></div>
@@ -2308,15 +2590,79 @@
     <span class="n">changes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Update the settings with data specified in changes; not meant for config</p>
+<p>Update the settings with data specified in changes; not meant for config.</p>
+<p>Raises:</p>
+<ul>
+<li>TypeError: if update is called upon a Config class</li>
+<li>RuntimeError: if filepath() == None</li>
+</ul>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def update(cls, changes: dict[str, Any]) -&gt; Self:
 
-            &quot;Update the settings with data specified in changes; not meant for config&quot;
+            &quot;&quot;&quot;Update the settings with data specified in changes; not meant for config.
+
+            Raises:
+
+            * TypeError: if update is called upon a Config class
+
+            * RuntimeError: if filepath() == None
+
+            &quot;&quot;&quot;
 
             return cls.get()._update(changes)._set()  # pylint: disable=protected-access
 </code></pre></div>
+<h3 id="validationerror">ValidationError</h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ValidationError</span><span class="p">(</span>
+    <span class="n">errors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">error_wrappers</span><span class="o">.</span><span class="n">ErrorWrapper</span><span class="p">]],</span>
+    <span class="n">model</span><span class="p">:</span> <span class="s1">&#39;ModelOrDc&#39;</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>Mixin to provide <strong>str</strong>, <strong>repr</strong>, and <strong>pretty</strong> methods. See #884 for more details.</p>
+<p><strong>pretty</strong> is used by <a href="https://python-devtools.helpmanual.io/">devtools</a> to provide human readable representations
+of objects.</p>
+<h4 id="ancestors-in-mro_4">Ancestors (in MRO)</h4>
+<ul>
+<li>pydantic.utils.Representation</li>
+<li>builtins.ValueError</li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+<h4 id="class-variables">Class variables</h4>
+<div class="highlight"><pre><span></span><code><span class="n">args</span>
+</code></pre></div>
+<h4 id="instance-variables">Instance variables</h4>
+<div class="highlight"><pre><span></span><code><span class="n">model</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">raw_errors</span>
+</code></pre></div>
+<h4 id="methods">Methods</h4>
+<h4 id="add_note">add_note</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add_note</span><span class="p">(</span>
+    <span class="o">...</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>Exception.add_note(note) --</p>
+<p>add a note to the exception</p>
+<h4 id="errors">errors</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">errors</span><span class="p">(</span>
+    <span class="bp">self</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;ErrorDict&#39;</span><span class="p">)]</span>
+</code></pre></div>
+<h4 id="json">json</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">json</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">indent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">NoneType</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;unicode&#39;</span>
+</code></pre></div>
+<h4 id="with_traceback">with_traceback</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">with_traceback</span><span class="p">(</span>
+    <span class="o">...</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>Exception.with_traceback(tb) --</p>
+<p>set self.<strong>traceback</strong> to tb and return self.</p>
 
 
 

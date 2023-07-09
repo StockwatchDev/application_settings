@@ -659,21 +659,25 @@ nested. There should be one special root section for the application, referred t
 container, that handles file storage. Config sections and Settings sections should never
 be mixed (i.e., do not nest a Settings section in a Config section and vice versa).</p>
 <h2 id="defining-non-container-sections">Defining non-container section(s)</h2>
-<p>A section is defined by subclassing the relevant base class (ConfigSectionBase for
-config, SettingsSectionBase for settings) and decorating it with
+<p>A section is defined by subclassing the relevant base class (<code>ConfigSectionBase</code> for
+config, <code>SettingsSectionBase</code> for settings) and decorating it with
 <code>@dataclass(frozen=True)</code>. Parameters are defined as fields of the dataclass. For a 
 dataclass, it is mandatory to add a type hint for each field. These type hints are used
-also to validate the data that is read from the parameter file (because we are
-using <a href="https://docs.pydantic.dev/usage/dataclasses/">pydantic dataclasses</a>). If you
+also to validate the data that is read from the parameter file. If you
 specify a default value as well, then you prevent the occurance of an exception if the
 value for the parameter of concern is not found in the parameter file.</p>
+<p>The <code>dataclass</code> decorator provided by <code>application_settings</code> is actually an exported
+<a href="https://docs.pydantic.dev/usage/dataclasses/"><code>pydantic.dataclasses.dataclass</code></a>, which
+is a drop-in replacement for a <code>dataclass</code> from the standard python library, enhanced
+with data validation. If you need additional dataclass functionality such as <code>fields</code>
+etc., you can import those from the standard library.</p>
 <p>Nested sections are obtained by defining fields in a section that are type hinted with 
 the appropriate contained section class(es) and instantiated (possible only when all
 parameters of the nested section have default values).</p>
 <h2 id="defining-the-container">Defining the container</h2>
 <p>The container is a special section that is to be the root for parametrisation of an
-application. It is defined likewise: by subclassing the relevant base class (ConfigBase
-for config, SettingsBase for settings), decorating it with <code>@dataclass(frozen=True)</code>,
+application. It is defined likewise: by subclassing the relevant base class (<code>ConfigBase</code>
+for config, <code>SettingsBase</code> for settings), decorating it with <code>@dataclass(frozen=True)</code>,
 defining fields for parameters and nested non-root sections.</p>
 <p>Note that albeit settings can be changed programmatically, we still set <code>frozen=True</code> for
 the settings container and -sections (see also the example section below).</p>
@@ -681,9 +685,7 @@ the settings container and -sections (see also the example section below).</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Configuration</label><label for="__tabbed_1_2">Settings</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pydantic.dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-
-<span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="n">ConfigBase</span><span class="p">,</span> <span class="n">ConfigSectionBase</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="n">ConfigBase</span><span class="p">,</span> <span class="n">ConfigSectionBase</span><span class="p">,</span> <span class="n">dataclass</span>
 
 
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -703,9 +705,7 @@ the settings container and -sections (see also the example section below).</p>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pydantic.dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-
-<span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="n">SettingsBase</span><span class="p">,</span> <span class="n">SettingsSectionBase</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="n">SettingsBase</span><span class="p">,</span> <span class="n">SettingsSectionBase</span><span class="p">,</span> <span class="n">dataclass</span>
 
 
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
