@@ -12,9 +12,7 @@ terms of the base classes that are used. Example:
 
 === "Configuration"
     ```python
-    from pydantic.dataclasses import dataclass
-
-    from application_settings import ConfigBase, ConfigSectionBase
+    from application_settings import ConfigBase, ConfigSectionBase, dataclass
 
 
     @dataclass(frozen=True)
@@ -36,9 +34,7 @@ terms of the base classes that are used. Example:
 
 === "Settings"
     ```python
-    from pydantic.dataclasses import dataclass
-
-    from application_settings import SettingsBase, SettingsSectionBase
+    from application_settings import SettingsBase, SettingsSectionBase, dataclass
 
 
     @dataclass(frozen=True)

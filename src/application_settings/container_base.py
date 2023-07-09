@@ -10,7 +10,6 @@ from typing import Any
 
 import tomli_w
 from pathvalidate import is_valid_filepath
-from pydantic.dataclasses import dataclass
 
 from application_settings.container_section_base import ContainerSectionBase
 from application_settings.type_notation_helper import PathOpt, PathOrStr
@@ -25,19 +24,19 @@ else:
 
 @unique
 class FileFormat(Enum):
-    "File formats that are supported by application_settings"
+    """File formats that are supported by application_settings"""
+
     TOML = "toml"
     JSON = "json"
 
 
-@dataclass(frozen=True)
 class ContainerBase(ContainerSectionBase, ABC):
     """Base class for Config and Settings container classes"""
 
     @classmethod
     @abstractmethod
     def default_file_format(cls) -> FileFormat:
-        "Return the default file format"
+        """Return the default file format"""
 
     @classmethod
     def default_foldername(cls) -> str:
@@ -46,7 +45,7 @@ class ContainerBase(ContainerSectionBase, ABC):
             return f".{kind_str.lower()}"
         return (
             "."
-            + sub("(?<!^)(?=[A-Z])", "_", cls.__name__.replace(kind_str, "")).lower()
+            + sub(r"(?<!^)(?=[A-Z])", "_", cls.__name__.replace(kind_str, "")).lower()
         )
 
     @classmethod
@@ -56,15 +55,21 @@ class ContainerBase(ContainerSectionBase, ABC):
 
     @classmethod
     def default_filepath(cls) -> PathOpt:
-        """
-        Return the fully qualified default path for the config/settingsfile: e.g. ~/.example/config.toml.
+        """Return the fully qualified default path for the config/settingsfile
+
+        E.g. ~/.example/config.toml.
         If you prefer to not have a default path then overwrite this method and return None.
         """
         return Path.home() / cls.default_foldername() / cls.default_filename()
 
     @classmethod
     def set_filepath(cls, file_path: PathOrStr = "", load: bool = False) -> None:
-        """Set the path for the file (a singleton)."""
+        """Set the path for the file (a singleton).
+
+        Raises:
+
+        * ValueError: if file_path is not a valid path for the OS running the code
+        """
 
         path: PathOpt = None
         if isinstance(file_path, Path):
@@ -97,7 +102,15 @@ class ContainerBase(ContainerSectionBase, ABC):
 
     @classmethod
     def load(cls, throw_if_file_not_found: bool = False) -> Self:
-        """Create a new singleton"""
+        """Create a new singleton, try to load parameter values from file.
+
+        Raises:
+
+        * FileNotFoundError: if throw_if_file_not_found == True and filepath() cannot be resolved
+        * TOMLDecodeError: if FileFormat == TOML and the file is not a valid toml document
+        * JSONDecodeError: if FileFormat == JSON and the file is not a valid json document
+        * ValidationError: if a parameter value in the file cannot be coerced into the specified parameter type
+        """
         return cls._create_instance(throw_if_file_not_found)
 
     @classmethod
@@ -110,7 +123,7 @@ class ContainerBase(ContainerSectionBase, ABC):
         return cls.set(data_stored)
 
     def _update(self, changes: dict[str, Any]) -> Self:
-        "Update and save the settings with data specified in changes; not meant for config"
+        """Update and save the settings with data specified in changes; not meant for config"""
         return (
             super()  # pylint: disable=protected-access,no-member
             ._update(changes)
@@ -123,10 +136,14 @@ class ContainerBase(ContainerSectionBase, ABC):
             path.parent.mkdir(parents=True, exist_ok=True)
             if (ext := path.suffix[1:].lower()) == FileFormat.TOML.value:
                 with path.open(mode="wb") as fptr:
-                    tomli_w.dump(asdict(self), fptr)
+                    # in self._set(), which normally is always executed, we ensured that
+                    # self is a dataclass instance
+                    tomli_w.dump(asdict(self), fptr)  # type: ignore[call-overload]
             elif ext == FileFormat.JSON.value:
                 with path.open(mode="w") as fptr:
-                    json.dump(asdict(self), fptr)
+                    # in self._set(), which normally is always executed, we ensured that
+                    # self is a dataclass instance
+                    json.dump(asdict(self), fptr)  # type: ignore[call-overload]
             else:
                 print(f"Unknown file format {ext} given in {path}.")
         else:

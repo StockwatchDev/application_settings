@@ -8,15 +8,15 @@ from typing import Any
 
 import pytest
 import tomli_w
-from pydantic import ValidationError
-from pydantic.dataclasses import dataclass
 
 from application_settings import (
     ConfigBase,
     ConfigSectionBase,
     PathOpt,
+    ValidationError,
     __version__,
     config_filepath_from_cli,
+    dataclass,
 )
 
 if sys.version_info >= (3, 11):
@@ -52,6 +52,15 @@ class AnExample1Config(ConfigBase):
 @dataclass(frozen=True)
 class Config(ConfigBase):
     """Config class def"""
+
+
+class ConfigNoDataclass(ConfigBase):
+    """Config class def, without dataclass decorator"""
+
+
+@dataclass
+class ConfigUnfrozenDataclass(ConfigBase):
+    """Config class def, without dataclass decorator"""
 
 
 @pytest.fixture(scope="session")
@@ -151,6 +160,14 @@ def test_paths(toml_file: Path) -> None:
     # raising in case of invalid path:
     with pytest.raises(ValueError):
         AnExample1Config.set_filepath('fi:\0\\l*e/p"a?t>h|.t<xt')
+
+
+def test_decorator() -> None:
+    # raising of TypeError:
+    with pytest.raises(TypeError):
+        ConfigNoDataclass.load()
+    with pytest.raises(TypeError):
+        ConfigUnfrozenDataclass.load()
 
 
 def test_config_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
