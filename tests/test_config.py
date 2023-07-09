@@ -8,15 +8,15 @@ from typing import Any
 
 import pytest
 import tomli_w
-from pydantic import ValidationError
-from pydantic.dataclasses import dataclass
 
 from application_settings import (
     ConfigBase,
     ConfigSectionBase,
     PathOpt,
+    ValidationError,
     __version__,
     config_filepath_from_cli,
+    dataclass,
 )
 
 if sys.version_info >= (3, 11):

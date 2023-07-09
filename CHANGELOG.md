@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- pydantic.dataclasses.dataclass and pydantic.ValidationError now exported from our
+  namespace (Issue [[#36](https://github.com/StockwatchDev/application_settings/issues/36)])
+- Exceptions added to docstrings (Issue 
+  [[#16](https://github.com/StockwatchDev/application_settings/issues/16)])
+
 ### Fixed
 
 ## [0.3.0] - 2023-06-21
