@@ -10,13 +10,11 @@ that has been exported from our namespace). Consider the case where you would us
 following config file for the `MyExampleConfig` defined before:
 
 ```toml
-name = true
 [section1]
 field1 = 4
 field2 = "22"
 ```
 
-The `bool` specified for `name` will be coerced into a `str` value of `"true"`.
 The `int` specified for `field1` will be coerced into a `float` value of `4.0`.
 The `str` specified for `field2` will be coerced into an `int` value of `22`.
 
@@ -39,7 +37,9 @@ will simply be ignored silently.
 
 ## More advanced typing and validation with pydantic
 
-- Non-standard types useful for configuration or settings, such as network addresses,
-  are offered, see [pydantic types](https://docs.pydantic.dev/usage/types/#pydantic-types)
-- The value of numerous common types can be restricted using
-  [pydantic constrained types](https://docs.pydantic.dev/usage/types/#constrained-types)
+- Non-standard types useful for configuration or settings, such as FilePath,
+  are offered, see [pydantic types](https://docs.pydantic.dev/latest/api/types/)
+- In addition, a [network module](https://docs.pydantic.dev/latest/api/networks/) is
+  provided by pydantic that contains types for common network-related fields
+- The value of numeric types can be restricted using
+  [pydantic constrained types](https://docs.pydantic.dev/latest/usage/types/number_types/#constrained-types)

@@ -259,14 +259,12 @@ def test_type_coercion(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None
     def mock_tomllib_load(
         fptr: Any,  # pylint: disable=unused-argument
     ) -> dict[str, dict[str, Any]]:
-        return {"section1": {"field1": True, "field2": "22"}}
+        return {"section1": {"field2": "22"}}
 
     monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
     AnExample1Config.set_filepath(toml_file)
     AnExample1Config.load()
     test_config = AnExample1Config.get()
-    assert isinstance(test_config.section1.field1, str)
-    assert test_config.section1.field1 == "True"
     assert isinstance(test_config.section1.field2, int)
     assert test_config.section1.field2 == 22
 
@@ -284,8 +282,8 @@ def test_wrong_type(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
         AnExample1Config.load()
         _ = AnExample1Config.get()
     assert "2 validation errors" in str(excinfo.value)
-    assert "str type expected" in str(excinfo.value)
-    assert "none is not an allowed value" in str(excinfo.value)
+    assert "Input should be a valid string" in str(excinfo.value)
+    assert "Input should be a valid integer" in str(excinfo.value)
 
 
 def test_missing_extra_attributes(
