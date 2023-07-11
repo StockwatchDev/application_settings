@@ -85,6 +85,65 @@ def toml_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
 
 
 @pytest.fixture(scope="session")
+def toml_file_inc1(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    tmp_folder = tmp_path_factory.mktemp(AnExample1Config.default_foldername())
+    file_path = tmp_folder / "conf_inc.toml"
+    with file_path.open(mode="wb") as fptr:
+        tomli_w.dump(
+            {
+                "section1": {
+                    "field1": "f1",
+                    "field2": 22,
+                    "subsec": {"field3": (-3, "no")},
+                },
+            },
+            fptr,
+        )
+    file_path = tmp_folder / "conf_main.toml"
+    with file_path.open(mode="wb") as fptr:
+        tomli_w.dump(
+            {
+                "field0": 33.33,
+                "__include__": "./conf_inc.toml",
+            },
+            fptr,
+        )
+    return file_path
+
+
+@pytest.fixture(scope="session")
+def toml_file_inc2(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    tmp_folder = tmp_path_factory.mktemp(AnExample1Config.default_foldername())
+    file_path = tmp_folder / "conf_inc1.toml"
+    with file_path.open(mode="wb") as fptr:
+        tomli_w.dump(
+            {
+                "section1": {
+                    "field1": "f1",
+                    "field2": 22,
+                    "subsec": {"field3": (-33, "no")},
+                },
+            },
+            fptr,
+        )
+    file_path = tmp_folder / "conf_inc2.toml"
+    with file_path.open(mode="wb") as fptr:
+        tomli_w.dump(
+            {
+                "field0": 333.33,
+            },
+            fptr,
+        )
+    file_path = tmp_folder / "conf_main.toml"
+    with file_path.open(mode="wb") as fptr:
+        tomli_w.dump(
+            {"field0": 33.33, "__include__": ["./conf_inc1.toml", "./conf_inc2.toml"]},
+            fptr,
+        )
+    return file_path
+
+
+@pytest.fixture(scope="session")
 def json_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
     file_path = tmp_path_factory.mktemp(
         AnExample1Config.default_foldername()
@@ -358,3 +417,15 @@ def test_update() -> None:
         _ = AnExample1Config.get().update(
             {"section1": {"setting1": "new s1", "setting2": 222}}
         )
+
+
+def test_include_1(toml_file_inc1: Path, capfd: pytest.CaptureFixture[str]) -> None:
+    AnExample1Config.set_filepath(toml_file_inc1, load=True)
+    assert AnExample1Config.get().section1.field1 == "f1"
+    assert AnExample1Config.get().section1.subsec.field3[1] == "no"
+
+
+def test_include_2(toml_file_inc2: Path, capfd: pytest.CaptureFixture[str]) -> None:
+    AnExample1Config.set_filepath(toml_file_inc2, load=True)
+    assert AnExample1Config.get().field0 == 333.33
+    assert AnExample1Config.get().section1.subsec.field3[0] == -33

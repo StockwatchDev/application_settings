@@ -184,14 +184,14 @@ def _load_toml_with_includes(
     with path.open(mode="rb") as fptr:
         data_stored = tomllib.load(fptr)
     if included_files := data_stored.get("__include__", None):
-        if isinstance(str, included_files):
+        if isinstance(included_files, str):
             included_files = [included_files]
         for included_file in included_files:
             # TODO: create a function for this path checking
             if is_valid_filepath(included_file, platform="auto"):
                 included_file_path = Path(included_file)
                 if not included_file_path.is_absolute():
-                    included_file_path = path / included_file_path
+                    included_file_path = path.parents[0] / included_file_path
                 included_file_path.resolve()
                 if not included_file_path.is_file():
                     err_mess = (
