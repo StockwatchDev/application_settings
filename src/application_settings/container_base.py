@@ -169,14 +169,44 @@ class ContainerBase(ContainerSectionBase, ABC):
             return {}
 
         if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
-            with path.open(mode="rb") as fptr:
-                data_stored = tomllib.load(fptr)
+            data_stored = _load_toml_with_includes(path, throw_if_file_not_found)
         elif ext == str(FileFormat.JSON.value):
             with path.open(mode="r") as fptr:
                 data_stored = json.load(fptr)
         else:
             print(f"Unknown file format {ext} given in {path}.")
         return data_stored
+
+
+def _load_toml_with_includes(
+    path: Path, throw_if_file_not_found: bool
+) -> dict[str, Any]:
+    with path.open(mode="rb") as fptr:
+        data_stored = tomllib.load(fptr)
+    if included_files := data_stored.get("__include__", None):
+        if isinstance(str, included_files):
+            included_files = [included_files]
+        for included_file in included_files:
+            if is_valid_filepath(included_file, platform="auto"):
+                included_file_path = Path(included_file)
+                if not included_file_path.is_absolute():
+                    included_file_path = path / included_file_path
+                included_file_path.resolve()
+                if not included_file_path.is_file():
+                    err_mess = (
+                        f"Path {str(included_file_path)} not valid for toml file."
+                    )
+                    if throw_if_file_not_found:
+                        raise FileNotFoundError(err_mess)
+                    print(err_mess, "Trying with defaults, but this may not work.")
+                else:
+                    with included_file_path.open(mode="rb") as fptr:
+                        data_stored = data_stored | tomllib.load(fptr)
+            else:
+                raise ValueError(
+                    f"Given path: '{included_file}' is not a valid path for this OS"
+                )
+    return data_stored
 
 
 _ALL_PATHS: dict[int, PathOpt] = {}
