@@ -201,8 +201,9 @@ def _load_toml_with_includes(
                         raise FileNotFoundError(err_mess)
                     print(err_mess, "Trying with defaults, but this may not work.")
                 else:
-                    with included_file_path.open(mode="rb") as fptr:
-                        data_stored = data_stored | tomllib.load(fptr)
+                    data_stored = data_stored | _load_toml_with_includes(
+                        included_file_path, throw_if_file_not_found
+                    )
             else:
                 raise ValueError(
                     f"Given path: '{included_file}' is not a valid path for this OS"
