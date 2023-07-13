@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Check for presence of the dataclass decorator
   (Issue [#76](https://github.com/StockwatchDev/application_settings/issues/76))
+- Enable file inclusion for toml config files
+  (Issue [#67](https://github.com/StockwatchDev/application_settings/issues/67))
 
 ### Changed
 
