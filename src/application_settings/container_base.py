@@ -6,7 +6,7 @@ from dataclasses import asdict
 from enum import Enum, unique
 from pathlib import Path
 from re import sub
-from typing import Any
+from typing import Any, cast
 
 import tomli_w
 from pathvalidate import is_valid_filepath
@@ -159,23 +159,34 @@ class ContainerBase(ContainerSectionBase, ABC):
         """Get the data stored in the parameter file"""
         data_stored: dict[str, Any] = {}
         path = cls.filepath()
-        if path is None or not path.is_file():
-            err_mess = (
-                f"Path {str(path)} not valid for {cls.kind_string().lower()} file."
-            )
-            if throw_if_file_not_found:
-                raise FileNotFoundError(err_mess)
-            print(err_mess, "Trying with defaults, but this may not work.")
-            return {}
-
-        if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
-            data_stored = _load_toml_with_includes(path, throw_if_file_not_found)
-        elif ext == str(FileFormat.JSON.value):
-            with path.open(mode="r") as fptr:
-                data_stored = json.load(fptr)
-        else:
-            print(f"Unknown file format {ext} given in {path}.")
+        if _check_filepath(path, cls.kind_string().lower(), throw_if_file_not_found):
+            real_path = cast(Path, path)
+            if real_path.suffix[1:].lower() == str(FileFormat.TOML.value):
+                data_stored = _load_toml_with_includes(
+                    real_path, throw_if_file_not_found
+                )
+            if real_path.suffix[1:].lower() == str(FileFormat.JSON.value):
+                with real_path.open(mode="r") as fptr:
+                    data_stored = json.load(fptr)
         return data_stored
+
+
+def _check_filepath(
+    path: PathOpt, file_kind: str, throw_if_file_not_found: bool
+) -> bool:
+    if path is None or not path.is_file():
+        err_mess = f"Path {str(path)} not valid for {file_kind} file."
+        if throw_if_file_not_found:
+            raise FileNotFoundError(err_mess)
+        print(err_mess, "Trying with defaults, but this may not work.")
+        return False
+    ext = path.suffix[1:].lower()
+    try:
+        FileFormat(ext)
+    except ValueError:
+        print(f"Unknown file format {ext} given in {path}.")
+        return False
+    return True
 
 
 def _load_toml_with_includes(
@@ -193,16 +204,12 @@ def _load_toml_with_includes(
                 if not included_file_path.is_absolute():
                     included_file_path = path.parents[0] / included_file_path
                 included_file_path.resolve()
-                if not included_file_path.is_file():
-                    err_mess = (
-                        f"Path {str(included_file_path)} not valid for toml file."
-                    )
-                    if throw_if_file_not_found:
-                        raise FileNotFoundError(err_mess)
-                    print(err_mess, "Trying with defaults, but this may not work.")
-                else:
-                    data_stored = data_stored | _load_toml_with_includes(
-                        included_file_path, throw_if_file_not_found
+                if _check_filepath(included_file_path, "toml", throw_if_file_not_found):
+                    data_stored = (
+                        _load_toml_with_includes(
+                            included_file_path, throw_if_file_not_found
+                        )
+                        | data_stored
                     )
             else:
                 raise ValueError(
