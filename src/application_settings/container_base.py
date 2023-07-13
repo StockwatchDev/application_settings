@@ -162,12 +162,14 @@ class ContainerBase(ContainerSectionBase, ABC):
         if _check_filepath(path, cls.kind_string().lower(), throw_if_file_not_found):
             real_path = cast(Path, path)
             if real_path.suffix[1:].lower() == str(FileFormat.TOML.value):
-                data_stored = _load_toml_with_includes(
-                    real_path, throw_if_file_not_found
-                )
+                if cls.kind_string() == "Config":
+                    data_stored = _load_toml_with_includes(
+                        real_path, throw_if_file_not_found
+                    )
+                else:
+                    data_stored = _load_toml(real_path)
             if real_path.suffix[1:].lower() == str(FileFormat.JSON.value):
-                with real_path.open(mode="r") as fptr:
-                    data_stored = json.load(fptr)
+                data_stored = _load_json(real_path)
         return data_stored
 
 
@@ -189,11 +191,24 @@ def _check_filepath(
     return True
 
 
+def _load_toml(path: Path) -> dict[str, Any]:
+    data_stored: dict[str, Any] = {}
+    with path.open(mode="rb") as fptr:
+        data_stored = tomllib.load(fptr)
+    return data_stored
+
+
+def _load_json(path: Path) -> dict[str, Any]:
+    data_stored: dict[str, Any] = {}
+    with path.open(mode="r") as fptr:
+        data_stored = json.load(fptr)
+    return data_stored
+
+
 def _load_toml_with_includes(
     path: Path, throw_if_file_not_found: bool
 ) -> dict[str, Any]:
-    with path.open(mode="rb") as fptr:
-        data_stored = tomllib.load(fptr)
+    data_stored = _load_toml(path)
     if included_files := data_stored.get("__include__", None):
         if isinstance(included_files, str):
             included_files = [included_files]
