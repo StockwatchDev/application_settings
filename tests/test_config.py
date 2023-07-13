@@ -174,6 +174,21 @@ def toml_file_inc3(tmp_path_factory: pytest.TempPathFactory) -> Path:
 
 
 @pytest.fixture(scope="session")
+def toml_file_inc4(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    tmp_folder = tmp_path_factory.mktemp(AnExample1Config.default_foldername())
+    file_path = tmp_folder / "conf_main.toml"
+    with file_path.open(mode="wb") as fptr:
+        tomli_w.dump(
+            {
+                "field0": 33.33,
+                "__include__": 'fi:\0\\l*e/p"a?t>h|.t<xt',
+            },
+            fptr,
+        )
+    return file_path
+
+
+@pytest.fixture(scope="session")
 def json_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
     file_path = tmp_path_factory.mktemp(
         AnExample1Config.default_foldername()
@@ -457,10 +472,16 @@ def test_include_1(toml_file_inc1: Path) -> None:
 
 def test_include_2(toml_file_inc2: Path) -> None:
     AnExample1Config.set_filepath(toml_file_inc2, load=True)
-    assert AnExample1Config.get().field0 == 333.33
+    assert AnExample1Config.get().field0 == 33.33
     assert AnExample1Config.get().section1.subsec.field3[0] == -33
 
 
 def test_include_3(toml_file_inc3: Path) -> None:
     AnExample1Config.set_filepath(toml_file_inc3, load=True)
     assert AnExample1Config.get().section1.subsec.field3[0] == -333
+
+
+def test_include_4(toml_file_inc4: Path) -> None:
+    # raising in case of invalid path:
+    with pytest.raises(ValueError):
+        AnExample1Config.set_filepath(toml_file_inc4, load=True)
