@@ -198,7 +198,6 @@ def _load_toml_with_includes(
         if isinstance(included_files, str):
             included_files = [included_files]
         for included_file in included_files:
-            # TODO: create a function for this path checking
             if is_valid_filepath(included_file, platform="auto"):
                 included_file_path = Path(included_file)
                 if not included_file_path.is_absolute():
