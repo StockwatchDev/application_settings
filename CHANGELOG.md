@@ -15,9 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - pydantic.dataclasses.dataclass and pydantic.ValidationError now exported from our
-  namespace (Issue [[#36](https://github.com/StockwatchDev/application_settings/issues/36)])
+  namespace (Issue [#36](https://github.com/StockwatchDev/application_settings/issues/36))
 - Exceptions added to docstrings (Issue 
-  [[#16](https://github.com/StockwatchDev/application_settings/issues/16)])
+  [#16](https://github.com/StockwatchDev/application_settings/issues/16))
+- Upgraded pydantic to version 2.0, which has a different way of doing type conversion,
+  see the [conversion table](https://docs.pydantic.dev/2.0/usage/conversion_table/)
+  (Issue [#75](https://github.com/StockwatchDev/application_settings/issues/75))
 
 ### Fixed
 
