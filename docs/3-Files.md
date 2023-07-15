@@ -188,3 +188,47 @@ The default value for `throw_if_file_not_found` is `False`, hence `load()` will 
 an exception when the parameter file is not found. Note that if you do not explicitly
 use `load` but rather implicitly call it via `get()` or `set_filepath()`, then this
 default behavior will also be obtained.
+
+
+## Sharing parameters over different configs via file inclusion with toml
+
+Another common scenario is that you work with different configurations for your
+application but these different configurations are partially the same. To prevent
+inconsistencies and config duplication, it is desirable to be able to share the common
+part. For this purpose, `application_settings` provides a file inclusion mechanism
+for `toml` configuration files.
+
+Above, an example of such a config file was given. Suppose now that you want to create
+several configurations that have a varying `name` but they will share the parametrization
+`section1`. Then we can put that part in a file `config_common.toml` and include that
+file from the different configurations.
+
+=== "`config.toml` file for the configuration example"
+    ```toml
+    # Use this file to set the config that you prefer by editing the file
+    name = "application specific name"
+    __include__ = "./config_common.toml"
+    ```
+
+=== "`config_common.toml` (in the same folder)"
+    ```toml
+    [section1]
+    # field1 has default value 0.5
+    field1 = -0.5
+    # field2 has default value 2
+    field2 = 22
+    ```
+
+The file inclusion mechanism has been kept simple; the following rules apply:
+
+- The key to use for specifying a file to include is `__include__`; hence, this key is
+  to be treated as a keyword and is not available as field name.
+- The value can be either a single path string or an array of path strings.
+- File inclusion can only be specified at the top level, not inside a section.
+- File inclusion is only available for configuration, not for settings, and only for the
+  `toml` format.
+- File inclusion can be nested, i.e., in the included `toml` file one can again specify
+  another file to include (albeit at the top level only).
+- If the included file specifies a key that was already specified in the file that does
+  the inclusion, then it is disregarded and the key-value pair of the latter file is
+  kept.
