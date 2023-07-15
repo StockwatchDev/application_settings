@@ -933,7 +933,7 @@
 
     from re import sub
 
-    from typing import Any
+    from typing import Any, cast
 
     import tomli_w
 
@@ -1187,39 +1187,141 @@
 
             path = cls.filepath()
 
-            if path is None or not path.is_file():
+            if _check_filepath(path, cls.kind_string().lower(), throw_if_file_not_found):
 
-                err_mess = (
+                real_path = cast(Path, path)
 
-                    f&quot;Path {str(path)} not valid for {cls.kind_string().lower()} file.&quot;
+                if real_path.suffix[1:].lower() == str(FileFormat.TOML.value):
 
-                )
+                    if cls.kind_string() == &quot;Config&quot;:
 
-                if throw_if_file_not_found:
+                        data_stored = _load_toml_with_includes(
 
-                    raise FileNotFoundError(err_mess)
+                            real_path, throw_if_file_not_found
 
-                print(err_mess, &quot;Trying with defaults, but this may not work.&quot;)
+                        )
 
-                return {}
+                    else:
 
-            if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
+                        data_stored = _load_toml(real_path)
 
-                with path.open(mode=&quot;rb&quot;) as fptr:
+                if real_path.suffix[1:].lower() == str(FileFormat.JSON.value):
 
-                    data_stored = tomllib.load(fptr)
-
-            elif ext == str(FileFormat.JSON.value):
-
-                with path.open(mode=&quot;r&quot;) as fptr:
-
-                    data_stored = json.load(fptr)
-
-            else:
-
-                print(f&quot;Unknown file format {ext} given in {path}.&quot;)
+                    data_stored = _load_json(real_path)
 
             return data_stored
+
+
+
+    def _check_filepath(
+
+        path: PathOpt, file_kind: str, throw_if_file_not_found: bool
+
+    ) -&gt; bool:
+
+        if path is None or not path.is_file():
+
+            err_mess = f&quot;Path {str(path)} not valid for {file_kind} file.&quot;
+
+            if throw_if_file_not_found:
+
+                raise FileNotFoundError(err_mess)
+
+            print(err_mess, &quot;Trying with defaults, but this may not work.&quot;)
+
+            return False
+
+        ext = path.suffix[1:].lower()
+
+        try:
+
+            FileFormat(ext)
+
+        except ValueError:
+
+            print(f&quot;Unknown file format {ext} given in {path}.&quot;)
+
+            print(&quot;Trying with defaults, but this may not work.&quot;)
+
+            return False
+
+        return True
+
+
+
+    def _load_toml(path: Path) -&gt; dict[str, Any]:
+
+        data_stored: dict[str, Any] = {}
+
+        with path.open(mode=&quot;rb&quot;) as fptr:
+
+            data_stored = tomllib.load(fptr)
+
+        return data_stored
+
+
+
+    def _load_json(path: Path) -&gt; dict[str, Any]:
+
+        data_stored: dict[str, Any] = {}
+
+        with path.open(mode=&quot;r&quot;) as fptr:
+
+            data_stored = json.load(fptr)
+
+        return data_stored
+
+
+
+    def _load_toml_with_includes(
+
+        path: Path, throw_if_file_not_found: bool
+
+    ) -&gt; dict[str, Any]:
+
+        data_stored = _load_toml(path)
+
+        if included_files := data_stored.get(&quot;__include__&quot;):
+
+            if not isinstance(included_files, list):
+
+                included_files = [included_files]
+
+            for included_file in included_files:
+
+                if is_valid_filepath(included_file, platform=&quot;auto&quot;):
+
+                    included_file_path = Path(included_file)
+
+                    if not included_file_path.is_absolute():
+
+                        included_file_path = path.parents[0] / included_file_path
+
+                    included_file_path.resolve()
+
+                    if _check_filepath(included_file_path, &quot;toml&quot;, throw_if_file_not_found):
+
+                        data_stored = (
+
+                            _load_toml_with_includes(
+
+                                included_file_path, throw_if_file_not_found
+
+                            )
+
+                            | data_stored
+
+                        )
+
+                else:
+
+                    raise ValueError(
+
+                        f&quot;Given path: &#39;{included_file}&#39; is not a valid path for this OS&quot;
+
+                    )
+
+        return data_stored
 
 
 
@@ -1452,37 +1554,27 @@
 
             path = cls.filepath()
 
-            if path is None or not path.is_file():
+            if _check_filepath(path, cls.kind_string().lower(), throw_if_file_not_found):
 
-                err_mess = (
+                real_path = cast(Path, path)
 
-                    f&quot;Path {str(path)} not valid for {cls.kind_string().lower()} file.&quot;
+                if real_path.suffix[1:].lower() == str(FileFormat.TOML.value):
 
-                )
+                    if cls.kind_string() == &quot;Config&quot;:
 
-                if throw_if_file_not_found:
+                        data_stored = _load_toml_with_includes(
 
-                    raise FileNotFoundError(err_mess)
+                            real_path, throw_if_file_not_found
 
-                print(err_mess, &quot;Trying with defaults, but this may not work.&quot;)
+                        )
 
-                return {}
+                    else:
 
-            if (ext := path.suffix[1:].lower()) == str(FileFormat.TOML.value):
+                        data_stored = _load_toml(real_path)
 
-                with path.open(mode=&quot;rb&quot;) as fptr:
+                if real_path.suffix[1:].lower() == str(FileFormat.JSON.value):
 
-                    data_stored = tomllib.load(fptr)
-
-            elif ext == str(FileFormat.JSON.value):
-
-                with path.open(mode=&quot;r&quot;) as fptr:
-
-                    data_stored = json.load(fptr)
-
-            else:
-
-                print(f&quot;Unknown file format {ext} given in {path}.&quot;)
+                    data_stored = _load_json(real_path)
 
             return data_stored
 </code></pre></div>

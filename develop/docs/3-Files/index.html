@@ -352,6 +352,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sharing-parameters-over-different-configs-via-file-inclusion-with-toml" class="md-nav__link">
+    Sharing parameters over different configs via file inclusion with toml
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -641,6 +648,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sharing-parameters-over-different-configs-via-file-inclusion-with-toml" class="md-nav__link">
+    Sharing parameters over different configs via file inclusion with toml
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -837,6 +851,48 @@ file is not found in the location that has been specified:</p>
 an exception when the parameter file is not found. Note that if you do not explicitly
 use <code>load</code> but rather implicitly call it via <code>get()</code> or <code>set_filepath()</code>, then this
 default behavior will also be obtained.</p>
+<h2 id="sharing-parameters-over-different-configs-via-file-inclusion-with-toml">Sharing parameters over different configs via file inclusion with toml</h2>
+<p>Another common scenario is that you work with different configurations for your
+application but these different configurations are partially the same. To prevent
+inconsistencies and config duplication, it is desirable to be able to share the common
+part. For this purpose, <code>application_settings</code> provides a file inclusion mechanism
+for <code>toml</code> configuration files.</p>
+<p>Above, an example of such a config file was given. Suppose now that you want to create
+several configurations that have a varying <code>name</code> but they will share the parametrization
+<code>section1</code>. Then we can put that part in a file <code>config_common.toml</code> and include that
+file from the different configurations.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1"><code>config.toml</code> file for the configuration example</label><label for="__tabbed_3_2"><code>config_common.toml</code> (in the same folder)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="c1"># Use this file to set the config that you prefer by editing the file</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;application specific name&quot;</span>
+<span class="n">__include__</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;./config_common.toml&quot;</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">[section1]</span>
+<span class="c1"># field1 has default value 0.5</span>
+<span class="n">field1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-0</span><span class="mf">.5</span>
+<span class="c1"># field2 has default value 2</span>
+<span class="n">field2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">22</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>The file inclusion mechanism has been kept simple; the following rules apply:</p>
+<ul>
+<li>The key to use for specifying a file to include is <code>__include__</code>; hence, this key is
+  to be treated as a keyword and is not available as field name.</li>
+<li>The value can be either a single path string or an array of path strings.</li>
+<li>File inclusion can only be specified at the top level, not inside a section.</li>
+<li>File inclusion is only available for configuration, not for settings, and only for the
+  <code>toml</code> format.</li>
+<li>File inclusion can be nested, i.e., in the included <code>toml</code> file one can again specify
+  another file to include (albeit at the top level only).</li>
+<li>If the included file specifies a key that was already specified in the file that does
+  the inclusion, then it is disregarded and the key-value pair of the latter file is
+  kept.</li>
+</ul>
 
 
 
