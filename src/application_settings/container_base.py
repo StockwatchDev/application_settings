@@ -187,6 +187,7 @@ def _check_filepath(
         FileFormat(ext)
     except ValueError:
         print(f"Unknown file format {ext} given in {path}.")
+        print("Trying with defaults, but this may not work.")
         return False
     return True
 
@@ -209,8 +210,8 @@ def _load_toml_with_includes(
     path: Path, throw_if_file_not_found: bool
 ) -> dict[str, Any]:
     data_stored = _load_toml(path)
-    if included_files := data_stored.get("__include__", None):
-        if isinstance(included_files, str):
+    if included_files := data_stored.get("__include__"):
+        if not isinstance(included_files, list):
             included_files = [included_files]
         for included_file in included_files:
             if is_valid_filepath(included_file, platform="auto"):
