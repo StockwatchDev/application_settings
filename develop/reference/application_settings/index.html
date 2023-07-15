@@ -921,8 +921,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#instance-variables" class="md-nav__link">
-    Instance variables
+  <a href="#static-methods_4" class="md-nav__link">
+    Static methods
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from_exception_data" class="md-nav__link">
+    from_exception_data
   </a>
   
 </li>
@@ -937,6 +944,13 @@
           <li class="md-nav__item">
   <a href="#add_note" class="md-nav__link">
     add_note
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error_count" class="md-nav__link">
+    error_count
   </a>
   
 </li>
@@ -1452,8 +1466,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#instance-variables" class="md-nav__link">
-    Instance variables
+  <a href="#static-methods_4" class="md-nav__link">
+    Static methods
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from_exception_data" class="md-nav__link">
+    from_exception_data
   </a>
   
 </li>
@@ -1468,6 +1489,13 @@
           <li class="md-nav__item">
   <a href="#add_note" class="md-nav__link">
     add_note
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error_count" class="md-nav__link">
+    error_count
   </a>
   
 </li>
@@ -1662,24 +1690,332 @@
 </code></pre></div>
 <h3 id="dataclass">dataclass</h3>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">dataclass</span><span class="p">(</span>
-    <span class="n">_cls</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="o">~</span><span class="n">_T</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">_cls</span><span class="p">:</span> <span class="s1">&#39;type[_T] | None&#39;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">init</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="nb">repr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">eq</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">order</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">unsafe_hash</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">frozen</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="nb">object</span><span class="p">],</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">validate_on_init</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">use_proxy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">kw_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Type</span><span class="p">[</span><span class="o">~</span><span class="n">_T</span><span class="p">]],</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;DataclassClassOrWrapper&#39;</span><span class="p">)],</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;DataclassClassOrWrapper&#39;</span><span class="p">)]</span>
+    <span class="n">init</span><span class="p">:</span> <span class="s1">&#39;Literal[False]&#39;</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="nb">repr</span><span class="p">:</span> <span class="s1">&#39;bool&#39;</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">eq</span><span class="p">:</span> <span class="s1">&#39;bool&#39;</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">order</span><span class="p">:</span> <span class="s1">&#39;bool&#39;</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">unsafe_hash</span><span class="p">:</span> <span class="s1">&#39;bool&#39;</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">frozen</span><span class="p">:</span> <span class="s1">&#39;bool&#39;</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">config</span><span class="p">:</span> <span class="s1">&#39;ConfigDict | type[object] | None&#39;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">validate_on_init</span><span class="p">:</span> <span class="s1">&#39;bool | None&#39;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">kw_only</span><span class="p">:</span> <span class="s1">&#39;bool&#39;</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">slots</span><span class="p">:</span> <span class="s1">&#39;bool&#39;</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Callable[[type[_T]], type[PydanticDataclass]] | type[PydanticDataclass]&#39;</span>
 </code></pre></div>
-<p>Like the python standard lib dataclasses but with type validation.</p>
-<p>The result is either a pydantic dataclass that will validate input data
-or a wrapper that will trigger validation around a stdlib dataclass
-to avoid modifying it directly</p>
+<p>A decorator used to create a Pydantic-enhanced dataclass, similar to the standard Python <code>dataclasses</code>,</p>
+<p>but with added validation.</p>
+<p>This function should be used similarly to <code>dataclasses.dataclass</code>.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_cls</td>
+<td>None</td>
+<td>The target dataclass.</td>
+<td>None</td>
+</tr>
+<tr>
+<td>init</td>
+<td>None</td>
+<td>Included for signature compatibility with <code>dataclasses.dataclass</code>, and is passed through to<br><code>dataclasses.dataclass</code> when appropriate. If specified, must be set to <code>False</code>, as pydantic inserts its<br>own  <code>__init__</code> function.</td>
+<td>None</td>
+</tr>
+<tr>
+<td>repr</td>
+<td>None</td>
+<td>A boolean indicating whether or not to include the field in the <strong>repr</strong> output.</td>
+<td>None</td>
+</tr>
+<tr>
+<td>eq</td>
+<td>None</td>
+<td>Determines if a <code>__eq__</code> should be generated for the class.</td>
+<td>None</td>
+</tr>
+<tr>
+<td>order</td>
+<td>None</td>
+<td>Determines if comparison magic methods should be generated, such as<code>__lt__</code>, but not <code>__eq__</code>.</td>
+<td>None</td>
+</tr>
+<tr>
+<td>unsafe_hash</td>
+<td>None</td>
+<td>Determines if an unsafe hashing function should be included in the class.</td>
+<td>None</td>
+</tr>
+<tr>
+<td>frozen</td>
+<td>None</td>
+<td>Determines if the generated class should be a 'frozen' dataclass, which does not allow its<br>attributes to be modified from its constructor.</td>
+<td>None</td>
+</tr>
+<tr>
+<td>config</td>
+<td>None</td>
+<td>A configuration for the dataclass generation.</td>
+<td>None</td>
+</tr>
+<tr>
+<td>validate_on_init</td>
+<td>None</td>
+<td>A deprecated parameter included for backwards compatibility; in V2, all pydantic dataclasses<br>are validated on init.</td>
+<td>None</td>
+</tr>
+<tr>
+<td>kw_only</td>
+<td>None</td>
+<td>Determines if <code>__init__</code> method parameters must be specified by keyword only. Defaults to <code>False</code>.</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td>slots</td>
+<td>None</td>
+<td>Determines if the generated class should be a 'slots' dataclass, which does not allow the addition of<br>new attributes after instantiation.</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>None</td>
+<td>A decorator that accepts a class as its argument and returns a Pydantic dataclass.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Raises:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AssertionError</td>
+<td>Raised if <code>init</code> is not <code>False</code> or <code>validate_on_init</code> is <code>False</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>??? example "View Source"
+        @dataclass_transform(field_specifiers=(dataclasses.field, Field))</p>
+<div class="highlight"><pre><span></span><code>    def dataclass(
+
+        _cls: type[_T] | None = None,
+
+        *,
+
+        init: Literal[False] = False,
+
+        repr: bool = True,
+
+        eq: bool = True,
+
+        order: bool = False,
+
+        unsafe_hash: bool = False,
+
+        frozen: bool = False,
+
+        config: ConfigDict | type[object] | None = None,
+
+        validate_on_init: bool | None = None,
+
+        kw_only: bool = False,
+
+        slots: bool = False,
+
+    ) -&gt; Callable[[type[_T]], type[PydanticDataclass]] | type[PydanticDataclass]:
+
+        &quot;&quot;&quot;A decorator used to create a Pydantic-enhanced dataclass, similar to the standard Python `dataclasses`,
+
+        but with added validation.
+
+        This function should be used similarly to `dataclasses.dataclass`.
+
+        Args:
+
+            _cls: The target dataclass.
+
+            init: Included for signature compatibility with `dataclasses.dataclass`, and is passed through to
+
+                `dataclasses.dataclass` when appropriate. If specified, must be set to `False`, as pydantic inserts its
+
+                own  `__init__` function.
+
+            repr: A boolean indicating whether or not to include the field in the __repr__ output.
+
+            eq: Determines if a `__eq__` should be generated for the class.
+
+            order: Determines if comparison magic methods should be generated, such as` __lt__`, but not `__eq__`.
+
+            unsafe_hash: Determines if an unsafe hashing function should be included in the class.
+
+            frozen: Determines if the generated class should be a &#39;frozen&#39; dataclass, which does not allow its
+
+                attributes to be modified from its constructor.
+
+            config: A configuration for the dataclass generation.
+
+            validate_on_init: A deprecated parameter included for backwards compatibility; in V2, all pydantic dataclasses
+
+                are validated on init.
+
+            kw_only: Determines if `__init__` method parameters must be specified by keyword only. Defaults to `False`.
+
+            slots: Determines if the generated class should be a &#39;slots&#39; dataclass, which does not allow the addition of
+
+                new attributes after instantiation.
+
+        Returns:
+
+            A decorator that accepts a class as its argument and returns a Pydantic dataclass.
+
+        Raises:
+
+            AssertionError: Raised if `init` is not `False` or `validate_on_init` is `False`.
+
+        &quot;&quot;&quot;
+
+        assert init is False, &#39;pydantic.dataclasses.dataclass only supports init=False&#39;
+
+        assert validate_on_init is not False, &#39;validate_on_init=False is no longer supported&#39;
+
+        if sys.version_info &gt;= (3, 10):
+
+            kwargs = dict(kw_only=kw_only, slots=slots)
+
+        else:
+
+            kwargs = {}
+
+        def create_dataclass(cls: type[Any]) -&gt; type[PydanticDataclass]:
+
+            &quot;&quot;&quot;Create a Pydantic dataclass from a regular dataclass.
+
+            Args:
+
+                cls: The class to create the Pydantic dataclass from.
+
+            Returns:
+
+                A Pydantic dataclass.
+
+            &quot;&quot;&quot;
+
+            original_cls = cls
+
+            config_dict = config
+
+            if config_dict is None:
+
+                # if not explicitly provided, read from the type
+
+                cls_config = getattr(cls, &#39;__pydantic_config__&#39;, None)
+
+                if cls_config is not None:
+
+                    config_dict = cls_config
+
+            config_wrapper = _config.ConfigWrapper(config_dict)
+
+            decorators = _decorators.DecoratorInfos.build(cls)
+
+            # Keep track of the original __doc__ so that we can restore it after applying the dataclasses decorator
+
+            # Otherwise, classes with no __doc__ will have their signature added into the JSON schema description,
+
+            # since dataclasses.dataclass will set this as the __doc__
+
+            original_doc = cls.__doc__
+
+            if _pydantic_dataclasses.is_builtin_dataclass(cls):
+
+                # Don&#39;t preserve the docstring for vanilla dataclasses, as it may include the signature
+
+                # This matches v1 behavior, and there was an explicit test for it
+
+                original_doc = None
+
+                # We don&#39;t want to add validation to the existing std lib dataclass, so we will subclass it
+
+                #   If the class is generic, we need to make sure the subclass also inherits from Generic
+
+                #   with all the same parameters.
+
+                bases = (cls,)
+
+                if issubclass(cls, Generic):  # type: ignore
+
+                    generic_base = Generic[cls.__parameters__]  # type: ignore
+
+                    bases = bases + (generic_base,)
+
+                cls = types.new_class(cls.__name__, bases)
+
+            cls = dataclasses.dataclass(  # type: ignore[call-overload]
+
+                cls,
+
+                init=init,
+
+                repr=repr,
+
+                eq=eq,
+
+                order=order,
+
+                unsafe_hash=unsafe_hash,
+
+                frozen=frozen,
+
+                **kwargs,
+
+            )
+
+            cls.__pydantic_decorators__ = decorators  # type: ignore
+
+            cls.__doc__ = original_doc
+
+            cls.__module__ = original_cls.__module__
+
+            cls.__qualname__ = original_cls.__qualname__
+
+            pydantic_complete = _pydantic_dataclasses.complete_dataclass(
+
+                cls, config_wrapper, raise_errors=False, types_namespace=None
+
+            )
+
+            cls.__pydantic_complete__ = pydantic_complete  # type: ignore
+
+            return cls
+
+        if _cls is None:
+
+            return create_dataclass
+
+        return create_dataclass(_cls)
+</code></pre></div>
 <h3 id="parameters_folderpath_from_cli">parameters_folderpath_from_cli</h3>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">parameters_folderpath_from_cli</span><span class="p">(</span>
     <span class="n">config_class</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="o">~</span><span class="n">ConfigT</span><span class="p">],</span>
@@ -2614,16 +2950,14 @@ If you prefer to not have a default path then overwrite this method and return N
 </code></pre></div>
 <h3 id="validationerror">ValidationError</h3>
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ValidationError</span><span class="p">(</span>
-    <span class="n">errors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">error_wrappers</span><span class="o">.</span><span class="n">ErrorWrapper</span><span class="p">]],</span>
-    <span class="n">model</span><span class="p">:</span> <span class="s1">&#39;ModelOrDc&#39;</span>
+    <span class="o">/</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">)</span>
 </code></pre></div>
-<p>Mixin to provide <strong>str</strong>, <strong>repr</strong>, and <strong>pretty</strong> methods. See #884 for more details.</p>
-<p><strong>pretty</strong> is used by <a href="https://python-devtools.helpmanual.io/">devtools</a> to provide human readable representations
-of objects.</p>
+<p>Inappropriate argument value (of correct type).</p>
 <h4 id="ancestors-in-mro_4">Ancestors (in MRO)</h4>
 <ul>
-<li>pydantic.utils.Representation</li>
 <li>builtins.ValueError</li>
 <li>builtins.Exception</li>
 <li>builtins.BaseException</li>
@@ -2631,10 +2965,16 @@ of objects.</p>
 <h4 id="class-variables">Class variables</h4>
 <div class="highlight"><pre><span></span><code><span class="n">args</span>
 </code></pre></div>
-<h4 id="instance-variables">Instance variables</h4>
-<div class="highlight"><pre><span></span><code><span class="n">model</span>
+<div class="highlight"><pre><span></span><code><span class="n">title</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">raw_errors</span>
+<h4 id="static-methods_4">Static methods</h4>
+<h4 id="from_exception_data">from_exception_data</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">from_exception_data</span><span class="p">(</span>
+    <span class="n">title</span><span class="p">,</span>
+    <span class="n">line_errors</span><span class="p">,</span>
+    <span class="n">error_mode</span><span class="o">=</span><span class="s1">&#39;python&#39;</span><span class="p">,</span>
+    <span class="n">hide_input</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
 </code></pre></div>
 <h4 id="methods">Methods</h4>
 <h4 id="add_note">add_note</h4>
@@ -2644,17 +2984,30 @@ of objects.</p>
 </code></pre></div>
 <p>Exception.add_note(note) --</p>
 <p>add a note to the exception</p>
+<h4 id="error_count">error_count</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">error_count</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="o">/</span>
+<span class="p">)</span>
+</code></pre></div>
 <h4 id="errors">errors</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">errors</span><span class="p">(</span>
-    <span class="bp">self</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;ErrorDict&#39;</span><span class="p">)]</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="o">/</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">include_url</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">include_context</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
 </code></pre></div>
 <h4 id="json">json</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">json</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
+    <span class="o">/</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">indent</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">NoneType</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;unicode&#39;</span>
+    <span class="n">indent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">include_url</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">include_context</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
 </code></pre></div>
 <h4 id="with_traceback">with_traceback</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">with_traceback</span><span class="p">(</span>

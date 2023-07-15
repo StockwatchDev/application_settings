@@ -692,18 +692,17 @@
 <h2 id="handling-deviations-in-the-parameter-file">Handling deviations in the parameter file</h2>
 <h3 id="when-your-parameter-file-does-not-adhere-to-the-specified-types">When your parameter file does not adhere to the specified types</h3>
 <p>When loading the parameter file, the values specified are coerced into the appropriate
-type where possible. If type coercion is not possible, then a <code>ValidationError</code>
-is raised (which is actually a
+type where possible. The details of the coersion are specified in this
+<a href="https://docs.pydantic.dev/2.0/usage/conversion_table/">conversion table</a> If type
+coercion is not possible, then a <code>ValidationError</code> is raised (which is actually a
 <a href="https://docs.pydantic.dev/latest/usage/validation_errors/"><code>pydantic.ValidationError</code></a>
 that has been exported from our namespace). Consider the case where you would use the
 following config file for the <code>MyExampleConfig</code> defined before:</p>
-<div class="highlight"><pre><span></span><code><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
-<span class="k">[section1]</span>
+<div class="highlight"><pre><span></span><code><span class="k">[section1]</span>
 <span class="n">field1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span>
 <span class="n">field2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;22&quot;</span>
 </code></pre></div>
-<p>The <code>bool</code> specified for <code>name</code> will be coerced into a <code>str</code> value of <code>"true"</code>.
-The <code>int</code> specified for <code>field1</code> will be coerced into a <code>float</code> value of <code>4.0</code>.
+<p>The <code>int</code> specified for <code>field1</code> will be coerced into a <code>float</code> value of <code>4.0</code>.
 The <code>str</code> specified for <code>field2</code> will be coerced into an <code>int</code> value of <code>22</code>.</p>
 <h3 id="when-your-parameter-file-does-not-contain-all-specified-attributes">When your parameter file does not contain all specified attributes</h3>
 <p>If your Config or Settings has one of more sections with one or more attributes that do
@@ -719,10 +718,12 @@ before attributes with default values.</p>
 will simply be ignored silently.</p>
 <h2 id="more-advanced-typing-and-validation-with-pydantic">More advanced typing and validation with pydantic</h2>
 <ul>
-<li>Non-standard types useful for configuration or settings, such as network addresses,
-  are offered, see <a href="https://docs.pydantic.dev/usage/types/#pydantic-types">pydantic types</a></li>
-<li>The value of numerous common types can be restricted using
-  <a href="https://docs.pydantic.dev/usage/types/#constrained-types">pydantic constrained types</a></li>
+<li>Non-standard types useful for configuration or settings, such as FilePath,
+  are offered, see <a href="https://docs.pydantic.dev/latest/api/types/">pydantic types</a></li>
+<li>In addition, a <a href="https://docs.pydantic.dev/latest/api/networks/">network module</a> is
+  provided by pydantic that contains types for common network-related fields</li>
+<li>The value of numeric types can be restricted using
+  <a href="https://docs.pydantic.dev/latest/usage/types/number_types/#constrained-types">pydantic constrained types</a></li>
 </ul>
 
 
