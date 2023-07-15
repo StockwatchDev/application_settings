@@ -3,8 +3,9 @@
 ### When your parameter file does not adhere to the specified types
 
 When loading the parameter file, the values specified are coerced into the appropriate
-type where possible. If type coercion is not possible, then a `ValidationError`
-is raised (which is actually a
+type where possible. The details of the coersion are specified in this
+[conversion table](https://docs.pydantic.dev/2.0/usage/conversion_table/) If type
+coercion is not possible, then a `ValidationError` is raised (which is actually a
 [`pydantic.ValidationError`](https://docs.pydantic.dev/latest/usage/validation_errors/)
 that has been exported from our namespace). Consider the case where you would use the
 following config file for the `MyExampleConfig` defined before:
