@@ -1704,7 +1704,7 @@
     <span class="n">slots</span><span class="p">:</span> <span class="s1">&#39;bool&#39;</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Callable[[type[_T]], type[PydanticDataclass]] | type[PydanticDataclass]&#39;</span>
 </code></pre></div>
-<p>A decorator used to create a Pydantic-enhanced dataclass, similar to the standard Python <code>dataclasses</code>,</p>
+<p>A decorator used to create a Pydantic-enhanced dataclass, similar to the standard Python <code>dataclass</code>,</p>
 <p>but with added validation.</p>
 <p>This function should be used similarly to <code>dataclasses.dataclass</code>.</p>
 <p><strong>Parameters:</strong></p>
@@ -1721,7 +1721,7 @@
 <tr>
 <td>_cls</td>
 <td>None</td>
-<td>The target dataclass.</td>
+<td>The target <code>dataclass</code>.</td>
 <td>None</td>
 </tr>
 <tr>
@@ -1733,7 +1733,7 @@
 <tr>
 <td>repr</td>
 <td>None</td>
-<td>A boolean indicating whether or not to include the field in the <strong>repr</strong> output.</td>
+<td>A boolean indicating whether or not to include the field in the <code>__repr__</code> output.</td>
 <td>None</td>
 </tr>
 <tr>
@@ -1745,7 +1745,7 @@
 <tr>
 <td>order</td>
 <td>None</td>
-<td>Determines if comparison magic methods should be generated, such as<code>__lt__</code>, but not <code>__eq__</code>.</td>
+<td>Determines if comparison magic methods should be generated, such as <code>__lt__</code>, but not <code>__eq__</code>.</td>
 <td>None</td>
 </tr>
 <tr>
@@ -1757,19 +1757,19 @@
 <tr>
 <td>frozen</td>
 <td>None</td>
-<td>Determines if the generated class should be a 'frozen' dataclass, which does not allow its<br>attributes to be modified from its constructor.</td>
+<td>Determines if the generated class should be a 'frozen' <code>dataclass</code>, which does not allow its<br>attributes to be modified from its constructor.</td>
 <td>None</td>
 </tr>
 <tr>
 <td>config</td>
 <td>None</td>
-<td>A configuration for the dataclass generation.</td>
+<td>A configuration for the <code>dataclass</code> generation.</td>
 <td>None</td>
 </tr>
 <tr>
 <td>validate_on_init</td>
 <td>None</td>
-<td>A deprecated parameter included for backwards compatibility; in V2, all pydantic dataclasses<br>are validated on init.</td>
+<td>A deprecated parameter included for backwards compatibility; in V2, all Pydantic dataclasses<br>are validated on init.</td>
 <td>None</td>
 </tr>
 <tr>
@@ -1781,7 +1781,7 @@
 <tr>
 <td>slots</td>
 <td>None</td>
-<td>Determines if the generated class should be a 'slots' dataclass, which does not allow the addition of<br>new attributes after instantiation.</td>
+<td>Determines if the generated class should be a 'slots' <code>dataclass</code>, which does not allow the addition of<br>new attributes after instantiation.</td>
 <td>None</td>
 </tr>
 </tbody>
@@ -1797,7 +1797,7 @@
 <tbody>
 <tr>
 <td>None</td>
-<td>A decorator that accepts a class as its argument and returns a Pydantic dataclass.</td>
+<td>A decorator that accepts a class as its argument and returns a Pydantic <code>dataclass</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -1846,7 +1846,7 @@
 
     ) -&gt; Callable[[type[_T]], type[PydanticDataclass]] | type[PydanticDataclass]:
 
-        &quot;&quot;&quot;A decorator used to create a Pydantic-enhanced dataclass, similar to the standard Python `dataclasses`,
+        &quot;&quot;&quot;A decorator used to create a Pydantic-enhanced dataclass, similar to the standard Python `dataclass`,
 
         but with added validation.
 
@@ -1854,7 +1854,7 @@
 
         Args:
 
-            _cls: The target dataclass.
+            _cls: The target `dataclass`.
 
             init: Included for signature compatibility with `dataclasses.dataclass`, and is passed through to
 
@@ -1862,33 +1862,33 @@
 
                 own  `__init__` function.
 
-            repr: A boolean indicating whether or not to include the field in the __repr__ output.
+            repr: A boolean indicating whether or not to include the field in the `__repr__` output.
 
             eq: Determines if a `__eq__` should be generated for the class.
 
-            order: Determines if comparison magic methods should be generated, such as` __lt__`, but not `__eq__`.
+            order: Determines if comparison magic methods should be generated, such as `__lt__`, but not `__eq__`.
 
             unsafe_hash: Determines if an unsafe hashing function should be included in the class.
 
-            frozen: Determines if the generated class should be a &#39;frozen&#39; dataclass, which does not allow its
+            frozen: Determines if the generated class should be a &#39;frozen&#39; `dataclass`, which does not allow its
 
                 attributes to be modified from its constructor.
 
-            config: A configuration for the dataclass generation.
+            config: A configuration for the `dataclass` generation.
 
-            validate_on_init: A deprecated parameter included for backwards compatibility; in V2, all pydantic dataclasses
+            validate_on_init: A deprecated parameter included for backwards compatibility; in V2, all Pydantic dataclasses
 
                 are validated on init.
 
             kw_only: Determines if `__init__` method parameters must be specified by keyword only. Defaults to `False`.
 
-            slots: Determines if the generated class should be a &#39;slots&#39; dataclass, which does not allow the addition of
+            slots: Determines if the generated class should be a &#39;slots&#39; `dataclass`, which does not allow the addition of
 
                 new attributes after instantiation.
 
         Returns:
 
-            A decorator that accepts a class as its argument and returns a Pydantic dataclass.
+            A decorator that accepts a class as its argument and returns a Pydantic `dataclass`.
 
         Raises:
 
@@ -1976,7 +1976,9 @@
 
                 cls,
 
-                init=init,
+                # the value of init here doesn&#39;t affect anything except that it makes it easier to generate a signature
+
+                init=True,
 
                 repr=repr,
 
