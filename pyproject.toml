@@ -31,6 +31,7 @@ include = [
 
 [tool.poetry.dependencies]
 python = "^3.9"
+loguru = "^0.7.0"
 pathvalidate = ">=2.5,<4.0"
 pydantic = "^2.0"
 tomli = { version = "^2.0", python = "<3.11" }
@@ -43,6 +44,7 @@ optional = true
 [tool.poetry.group.testing.dependencies]
 pytest = "^7.0"
 pytest-cov = "^4.0"
+pytest-loguru = "^0.2"
 
 [tool.poetry.group.typing]
 optional = true
