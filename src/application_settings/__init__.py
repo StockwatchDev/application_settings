@@ -2,6 +2,7 @@
 
 from importlib.metadata import version
 
+from loguru import logger
 from pydantic import ValidationError
 from pydantic.dataclasses import dataclass
 
@@ -18,6 +19,8 @@ from application_settings.settings_base import (
     SettingsT,
 )
 from application_settings.type_notation_helper import PathOpt, PathOrStr
+
+logger.disable("application_settings")
 
 __version__ = version("application_settings")
 
