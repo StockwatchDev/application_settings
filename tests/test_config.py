@@ -8,6 +8,10 @@ from typing import Any
 
 import pytest
 import tomli_w
+from loguru import logger
+from pytest_loguru.plugin import (
+    LogCaptureFixture,  # type: ignore[import, unused-ignore]
+)
 
 from application_settings import (
     ConfigBase,
@@ -236,10 +240,14 @@ def test_kind_string() -> None:
     assert AnExample1ConfigSection.kind_string() == "Config"
 
 
-def test_section_singleton(capfd: pytest.CaptureFixture[str]) -> None:
+def test_section_singleton(caplog: LogCaptureFixture) -> None:
+    logger.enable("application_settings")
     assert AnExample1ConfigSection.get().field1 == "field1"
-    captured = capfd.readouterr()
-    assert " accessed before data has been set by the application." in captured.out
+    assert (
+        " accessed before data has been set by the application."
+        in caplog.records[0].msg
+    )
+    logger.disable("application_settings")
 
 
 def test_paths(toml_file: Path) -> None:
@@ -302,38 +310,36 @@ def test_config_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_get_defaults(
-    monkeypatch: pytest.MonkeyPatch, capfd: pytest.CaptureFixture[str]
+    monkeypatch: pytest.MonkeyPatch, caplog: LogCaptureFixture
 ) -> None:
     def mock_default_filepath() -> PathOpt:
         return None
 
     monkeypatch.setattr(AnExample1Config, "default_filepath", mock_default_filepath)
+    logger.enable("application_settings")
     AnExample1Config.set_filepath("", load=True)
     assert AnExample1Config.get().section1.field1 == "field1"
     AnExample1Config.set_filepath("", load=True)
     assert AnExample1Config.get().section1.field2 == 2
     assert AnExample1Config.get().section1.subsec.field3[1] == "yes"
-    captured = capfd.readouterr()
-    assert (
-        "Path None not valid for config file. Trying with defaults, but this may not work."
-        in captured.out
-    )
+    assert "Path None not valid for config file." in caplog.records[0].msg
     # raising of FileNotFoundError:
     with pytest.raises(FileNotFoundError):
         AnExample1Config.load(throw_if_file_not_found=True)
+    logger.disable("application_settings")
+    caplog.clear()
 
 
-def test_set_filepath_after_get(
-    toml_file: Path, capfd: pytest.CaptureFixture[str]
-) -> None:
+def test_set_filepath_after_get(toml_file: Path, caplog: LogCaptureFixture) -> None:
+    logger.enable("application_settings")
     AnExample1Config.set_filepath(toml_file, load=True)
     assert AnExample1Config.get().section1.field1 == "f1"
     assert AnExample1Config.get().section1.subsec.field3[1] == "no"
     # test if the subsection singleton is properly registered
     assert AnExampleConfigSubSection.get().field3[1] == "no"
     AnExample1Config.set_filepath("", load=False)
-    captured = capfd.readouterr()
-    assert "file is not loaded into the Config." in captured.out
+    assert "file is not loaded into the Config." in caplog.records[0].msg
+    logger.disable("application_settings")
 
 
 def test_get(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
@@ -365,13 +371,14 @@ def test_get_json(json_file: Path) -> None:
     assert AnExample1Config.get().section1.field2 == 33
 
 
-def test_get_ini(ini_file: Path, capfd: pytest.CaptureFixture[str]) -> None:
+def test_get_ini(ini_file: Path, caplog: LogCaptureFixture) -> None:
+    logger.enable("application_settings")
     AnExample1Config.set_filepath(ini_file)
     AnExample1Config.load()
     assert AnExample1Config.get().section1.field1 == "field1"
     assert AnExample1Config.get().section1.field2 == 2
-    captured = capfd.readouterr()
-    assert "Unknown file format ini given in" in captured.out
+    assert "Unknown file format ini given in" in caplog.records[-1].msg
+    logger.disable("application_settings")
 
 
 def test_type_coercion(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:

@@ -9,6 +9,7 @@ from re import sub
 from typing import Any, cast
 
 import tomli_w
+from loguru import logger
 from pathvalidate import is_valid_filepath
 
 from application_settings.container_section_base import ContainerSectionBase
@@ -91,8 +92,8 @@ class ContainerBase(ContainerSectionBase, ABC):
             cls.load()
         else:
             if cls._get() is not None:
-                print(
-                    f"Warning: filepath has been set the but file is not loaded into the {cls.kind_string()}."
+                logger.info(
+                    f"Filepath has been set the but file is not loaded into the {cls.kind_string()}."
                 )
 
     @classmethod
@@ -145,7 +146,7 @@ class ContainerBase(ContainerSectionBase, ABC):
                     # self is a dataclass instance
                     json.dump(asdict(self), fptr)  # type: ignore[call-overload]
             else:
-                print(f"Unknown file format {ext} given in {path}.")
+                logger.error(f"Unknown file format {ext} given in {path}.")
         else:
             # This situation can occur if no valid path was given as an argument, and
             # the default path is set to None.
@@ -180,14 +181,16 @@ def _check_filepath(
         err_mess = f"Path {str(path)} not valid for {file_kind} file."
         if throw_if_file_not_found:
             raise FileNotFoundError(err_mess)
-        print(err_mess, "Trying with defaults, but this may not work.")
+        logger.error(err_mess, "Trying with defaults, but this may not work.")
         return False
     ext = path.suffix[1:].lower()
     try:
         FileFormat(ext)
     except ValueError:
-        print(f"Unknown file format {ext} given in {path}.")
-        print("Trying with defaults, but this may not work.")
+        logger.error(
+            f"Unknown file format {ext} given in {path}."
+            "Trying with defaults, but this may not work."
+        )
         return False
     return True
 

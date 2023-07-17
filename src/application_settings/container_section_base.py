@@ -4,6 +4,8 @@ from abc import ABC, abstractmethod
 from dataclasses import is_dataclass, replace
 from typing import Any, Literal, Optional, cast
 
+from loguru import logger
+
 if sys.version_info >= (3, 11):
     from typing import Self
 else:
@@ -63,7 +65,7 @@ class ContainerSectionBase(ABC):
         """Create a new ContainerSection with default values. Likely that this is wrong."""
         # This situation can occur if get() is called on a Section but the application
         # has not yet created or loaded a config.
-        print(
+        logger.warning(
             f"Section {cls.__name__} accessed before data has been set by the application."
         )
         return cls.set({})
