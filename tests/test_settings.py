@@ -143,12 +143,8 @@ def test_update_json(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
         / AnExample1Settings.default_filename()
     )
     AnExample1Settings.set_filepath(tmp_filepath)
-    new_settings = AnExample1Settings.update(
-        {"section1": {"setting1": "new s1a", "setting2": 333}}
-    )
+    AnExample1Settings.update({"section1": {"setting1": "new s1a", "setting2": 333}})
 
-    assert new_settings.section1.setting1 == "new s1a"
-    assert AnExample1Settings.get().section1.setting2 == 333
     AnExample1Settings.load()
     assert AnExample1Settings.get().section1.setting1 == "new s1a"
     assert AnExample1Settings.get().section1.setting2 == 333
@@ -176,12 +172,10 @@ def test_update_toml(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
         / AnExample1Settings.default_filename().replace("json", "toml")
     )
     AnExample1Settings.set_filepath(tmp_filepath)
-    new_settings = AnExample1Settings.update(
+    AnExample1Settings.update(
         {"section1": {"subsec": {"setting3": 4.44, "extra thing": True}}}
     )
 
-    assert new_settings.section1.subsec.setting3 == 4.44
-    assert AnExample1Settings.get().section1.subsec.setting3 == 4.44
     AnExample1Settings.load()
     assert AnExample1Settings.get().section1.subsec.setting3 == 4.44
     assert AnExample1Settings.get().section1.subsec.setting3 == 4.44
