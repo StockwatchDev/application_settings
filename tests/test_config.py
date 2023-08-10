@@ -9,8 +9,8 @@ from typing import Any
 import pytest
 import tomli_w
 from loguru import logger
-from pytest_loguru.plugin import (
-    LogCaptureFixture,  # type: ignore[import, unused-ignore]
+from pytest_loguru.plugin import (  # type: ignore[import, unused-ignore]
+    LogCaptureFixture,
 )
 
 from application_settings import (
