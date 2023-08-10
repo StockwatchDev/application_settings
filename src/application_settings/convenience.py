@@ -1,7 +1,10 @@
 """Functions that can be called from the application to make life easy."""
 from argparse import ArgumentParser
+from logging import Formatter, Handler, LogRecord, getLogger
 from pathlib import Path
 from typing import Union
+
+from loguru import logger
 
 from application_settings.configuring_base import ConfigT
 from application_settings.settings_base import SettingsT
@@ -106,3 +109,21 @@ def _parameters_filepath_from_cli(  # pylint: disable=too-many-arguments
         elif settings_class:
             settings_class.set_filepath(universal_cmdline_path, load=load)
     return parser
+
+
+def use_standard_logging(  # pylint: disable=consider-alternative-union-syntax
+    fmt: Union[Formatter, None] = None
+) -> None:
+    """Propagate Loguru messages to standard logging"""
+
+    class PropagateHandler(Handler):
+        """Handler to propagate log records to standard logging"""
+
+        def emit(self, record: LogRecord) -> None:
+            """Let the standard logger handle the log record"""
+
+            getLogger(record.name).handle(record)
+
+    handler = PropagateHandler()
+    handler.setFormatter(fmt)
+    logger.add(handler, format="{message}")

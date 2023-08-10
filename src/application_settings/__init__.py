@@ -12,6 +12,7 @@ from application_settings.convenience import (
     config_filepath_from_cli,
     parameters_folderpath_from_cli,
     settings_filepath_from_cli,
+    use_standard_logging,
 )
 from application_settings.settings_base import (
     SettingsBase,
@@ -39,4 +40,5 @@ __all__ = [
     "dataclass",
     "settings_filepath_from_cli",
     "parameters_folderpath_from_cli",
+    "use_standard_logging",
 ]
