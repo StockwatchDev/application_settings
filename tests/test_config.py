@@ -14,7 +14,6 @@ from application_settings import (
     ConfigSectionBase,
     PathOpt,
     ValidationError,
-    __version__,
     config_filepath_from_cli,
     dataclass,
 )
@@ -273,9 +272,6 @@ def test_paths(toml_file: Path) -> None:
     with pytest.raises(FileNotFoundError):
         AnExample1Config.load(throw_if_file_not_found=True)
 
-    AnExample1Config.set_filepath(
-        str(Path.home() / "ProgramData" / "test" / "config.toml")
-    )
     # raising in case of invalid path:
     with pytest.raises(ValueError):
         AnExample1Config.set_filepath('fi:\0\\l*e/p"a?t>h|.t<xt')
@@ -310,7 +306,6 @@ def test_get_defaults(
     monkeypatch.setattr(AnExample1Config, "default_filepath", mock_default_filepath)
     AnExample1Config.set_filepath("", load=True)
     assert AnExample1Config.get().section1.field1 == "field1"
-    AnExample1Config.set_filepath("", load=True)
     assert AnExample1Config.get().section1.field2 == 2
     assert AnExample1Config.get().section1.subsec.field3[1] == "yes"
     captured = capfd.readouterr()
@@ -374,49 +369,23 @@ def test_get_ini(ini_file: Path, capfd: pytest.CaptureFixture[str]) -> None:
     assert "Unknown file format ini given in" in captured.out
 
 
-def test_type_coercion(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
-    def mock_tomllib_load(
-        fptr: Any,  # pylint: disable=unused-argument
-    ) -> dict[str, dict[str, Any]]:
-        return {"section1": {"field2": "22"}}
-
-    monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
-    AnExample1Config.set_filepath(toml_file)
-    AnExample1Config.load()
+def test_type_coercion() -> None:
+    AnExample1Config.set({"section1": {"field2": "22"}})
     test_config = AnExample1Config.get()
     assert isinstance(test_config.section1.field2, int)
     assert test_config.section1.field2 == 22
 
 
-def test_wrong_type(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
-    def mock_tomllib_load(
-        fptr: Any,  # pylint: disable=unused-argument
-    ) -> dict[str, dict[str, Any]]:
-        return {"section1": {"field1": ("f1", 22), "field2": None}}
-
-    monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
-
-    AnExample1Config.set_filepath(toml_file)
+def test_wrong_type() -> None:
     with pytest.raises(ValidationError) as excinfo:
-        AnExample1Config.load()
-        _ = AnExample1Config.get()
+        AnExample1Config.set({"section1": {"field1": ("f1", 22), "field2": None}})
     assert "2 validation errors" in str(excinfo.value)
     assert "Input should be a valid string" in str(excinfo.value)
     assert "Input should be a valid integer" in str(excinfo.value)
 
 
-def test_missing_extra_attributes(
-    monkeypatch: pytest.MonkeyPatch, toml_file: Path
-) -> None:
-    def mock_tomllib_load(
-        fptr: Any,  # pylint: disable=unused-argument
-    ) -> dict[str, dict[str, Any]]:
-        return {"section1": {"field1": "f1", "field3": 22}}
-
-    monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
-
-    AnExample1Config.set_filepath(toml_file)
-    AnExample1Config.load()
+def test_missing_extra_attributes() -> None:
+    AnExample1Config.set({"section1": {"field1": "f1", "field3": 22}})
     test_config = AnExample1Config.get()
     assert test_config.section1.field2 == 2
     with pytest.raises(AttributeError):
@@ -447,22 +416,20 @@ class Example2Config(ConfigBase):
     section2: Example2bConfigSection = Example2bConfigSection()
 
 
-def test_attributes_no_default(
-    monkeypatch: pytest.MonkeyPatch, toml_file: Path
-) -> None:
-    Example2Config.set_filepath(toml_file)
+def test_attributes_no_default() -> None:
+    init_values = {
+        "field0": 33.33,
+        "section1": {
+            "field1": "f1",
+            "field2": 22,
+            "subsec": {"field3": (-3, "no")},
+        },
+    }
+    # field3 is a float and has no default value
     with pytest.raises(ValidationError):
-        AnExample1Config.load()
-        _ = Example2Config.get()
+        Example2Config.set(init_values)
 
-    def mock_tomllib_load2(
-        fptr: Any,  # pylint: disable=unused-argument
-    ) -> dict[str, dict[str, float]]:
-        return {"section1": {"field3": 1.1}}
-
-    monkeypatch.setattr(tomllib, "load", mock_tomllib_load2)
-
-    AnExample1Config.load()
+    Example2Config.set({"section1": {"field3": 1.1}})
     test_config = Example2Config.get()
     assert test_config.section1.field3 == 1.1
     assert test_config.section1.field4 == 0.5
