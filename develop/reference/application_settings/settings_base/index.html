@@ -693,13 +693,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#update_1" class="md-nav__link">
-    update
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -934,13 +927,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#update_1" class="md-nav__link">
-    update
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -975,7 +961,11 @@
 <p>Module for handling settings.</p>
 <p>??? example "View Source"
         """Module for handling settings."""</p>
-<div class="highlight"><pre><span></span><code>    from typing import TypeVar
+<div class="highlight"><pre><span></span><code>    import sys
+
+    from dataclasses import replace
+
+    from typing import Any, TypeVar
 
     from application_settings.container_base import ContainerBase, FileFormat
 
@@ -986,6 +976,16 @@
         SectionTypeStr,
 
     )
+
+    if sys.version_info &gt;= (3, 11):
+
+        from typing import Self
+
+    else:
+
+        from typing_extensions import Self
+
+
 
     SettingsT = TypeVar(&quot;SettingsT&quot;, bound=&quot;SettingsBase&quot;)
 
@@ -1026,6 +1026,48 @@
             &quot;&quot;&quot;Return the default file format&quot;&quot;&quot;
 
             return FileFormat.JSON
+
+        @classmethod
+
+        def update(cls, changes: dict[str, Any]) -&gt; Self:
+
+            &quot;&quot;&quot;Update the settings with data specified in changes and save.
+
+            Raises:
+
+            * RuntimeError: if filepath() == None
+
+            &quot;&quot;&quot;
+
+            return (
+
+                _update_settings_section(  # pylint: disable=protected-access
+
+                    cls.get(), changes
+
+                )
+
+                ._set()
+
+                ._save()
+
+            )
+
+
+
+    def _update_settings_section(
+
+        the_section: SettingsT, changes: dict[str, Any]
+
+    ) -&gt; SettingsT:
+
+        &quot;Update parameters and sections with data specified in changes&quot;
+
+        # in the_section._set(), which normally is always executed, we ensured that
+
+        # the_section is a dataclass instance
+
+        return replace(the_section, **changes)  # type: ignore[type-var]
 </code></pre></div>
 <h2 id="variables">Variables</h2>
 <div class="highlight"><pre><span></span><code><span class="n">SettingsT</span>
@@ -1058,6 +1100,32 @@
             &quot;&quot;&quot;Return the default file format&quot;&quot;&quot;
 
             return FileFormat.JSON
+
+        @classmethod
+
+        def update(cls, changes: dict[str, Any]) -&gt; Self:
+
+            &quot;&quot;&quot;Update the settings with data specified in changes and save.
+
+            Raises:
+
+            * RuntimeError: if filepath() == None
+
+            &quot;&quot;&quot;
+
+            return (
+
+                _update_settings_section(  # pylint: disable=protected-access
+
+                    cls.get(), changes
+
+                )
+
+                ._set()
+
+                ._save()
+
+            )
 </code></pre></div>
 <hr />
 <h4 id="ancestors-in-mro">Ancestors (in MRO)</h4>
@@ -1308,27 +1376,36 @@ If you prefer to not have a default path then overwrite this method and return N
     <span class="n">changes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
 </code></pre></div>
-<p>Update the settings with data specified in changes; not meant for config.</p>
+<p>Update the settings with data specified in changes and save.</p>
 <p>Raises:</p>
 <ul>
-<li>TypeError: if update is called upon a Config class</li>
 <li>RuntimeError: if filepath() == None</li>
 </ul>
 <p>??? example "View Source"
             @classmethod</p>
 <div class="highlight"><pre><span></span><code>        def update(cls, changes: dict[str, Any]) -&gt; Self:
 
-            &quot;&quot;&quot;Update the settings with data specified in changes; not meant for config.
+            &quot;&quot;&quot;Update the settings with data specified in changes and save.
 
             Raises:
-
-            * TypeError: if update is called upon a Config class
 
             * RuntimeError: if filepath() == None
 
             &quot;&quot;&quot;
 
-            return cls.get()._update(changes)._set()  # pylint: disable=protected-access
+            return (
+
+                _update_settings_section(  # pylint: disable=protected-access
+
+                    cls.get(), changes
+
+                )
+
+                ._set()
+
+                ._save()
+
+            )
 </code></pre></div>
 <h3 id="settingssectionbase">SettingsSectionBase</h3>
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">SettingsSectionBase</span><span class="p">(</span>
@@ -1406,33 +1483,6 @@ If you prefer to not have a default path then overwrite this method and return N
             &quot;&quot;&quot;Create a new dataclass instance using data and set the singleton.&quot;&quot;&quot;
 
             return cls(**data)._set()
-</code></pre></div>
-<h4 id="update_1">update</h4>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">update</span><span class="p">(</span>
-    <span class="n">changes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
-</code></pre></div>
-<p>Update the settings with data specified in changes; not meant for config.</p>
-<p>Raises:</p>
-<ul>
-<li>TypeError: if update is called upon a Config class</li>
-<li>RuntimeError: if filepath() == None</li>
-</ul>
-<p>??? example "View Source"
-            @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def update(cls, changes: dict[str, Any]) -&gt; Self:
-
-            &quot;&quot;&quot;Update the settings with data specified in changes; not meant for config.
-
-            Raises:
-
-            * TypeError: if update is called upon a Config class
-
-            * RuntimeError: if filepath() == None
-
-            &quot;&quot;&quot;
-
-            return cls.get()._update(changes)._set()  # pylint: disable=protected-access
 </code></pre></div>
 
 

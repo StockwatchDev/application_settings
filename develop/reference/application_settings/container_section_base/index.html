@@ -554,13 +554,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#update" class="md-nav__link">
-    update
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -740,13 +733,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#update" class="md-nav__link">
-    update
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -778,14 +764,14 @@
 
 
 <h1 id="module-application_settingscontainer_section_base">Module application_settings.container_section_base</h1>
-<p>Base class for sections to be added to containers and container sections for configuration and settings.</p>
+<p>Abstract base class for sections to be added to containers and container sections for configuration and settings.</p>
 <p>??? example "View Source"
-        """Base class for sections to be added to containers and container sections for configuration and settings."""</p>
+        """Abstract base class for sections to be added to containers and container sections for configuration and settings."""</p>
 <div class="highlight"><pre><span></span><code>    import sys
 
     from abc import ABC, abstractmethod
 
-    from dataclasses import is_dataclass, replace
+    from dataclasses import is_dataclass
 
     from typing import Any, Literal, Optional, cast
 
@@ -838,22 +824,6 @@
             &quot;&quot;&quot;Create a new dataclass instance using data and set the singleton.&quot;&quot;&quot;
 
             return cls(**data)._set()
-
-        @classmethod
-
-        def update(cls, changes: dict[str, Any]) -&gt; Self:
-
-            &quot;&quot;&quot;Update the settings with data specified in changes; not meant for config.
-
-            Raises:
-
-            * TypeError: if update is called upon a Config class
-
-            * RuntimeError: if filepath() == None
-
-            &quot;&quot;&quot;
-
-            return cls.get()._update(changes)._set()  # pylint: disable=protected-access
 
         @classmethod
 
@@ -916,16 +886,6 @@
                 subsec._set()  # pylint: disable=protected-access
 
             return self
-
-        def _update(self, changes: dict[str, Any]) -&gt; Self:
-
-            &quot;Update parameters and sections with data specified in changes; not meant for config&quot;
-
-            # in self._set(), which normally is always executed, we ensured that
-
-            # self is a dataclass instance
-
-            return replace(self, **changes)  # type: ignore[type-var]
 
 
 
@@ -1005,22 +965,6 @@
 
         @classmethod
 
-        def update(cls, changes: dict[str, Any]) -&gt; Self:
-
-            &quot;&quot;&quot;Update the settings with data specified in changes; not meant for config.
-
-            Raises:
-
-            * TypeError: if update is called upon a Config class
-
-            * RuntimeError: if filepath() == None
-
-            &quot;&quot;&quot;
-
-            return cls.get()._update(changes)._set()  # pylint: disable=protected-access
-
-        @classmethod
-
         def _get(
 
             cls,
@@ -1080,16 +1024,6 @@
                 subsec._set()  # pylint: disable=protected-access
 
             return self
-
-        def _update(self, changes: dict[str, Any]) -&gt; Self:
-
-            &quot;Update parameters and sections with data specified in changes; not meant for config&quot;
-
-            # in self._set(), which normally is always executed, we ensured that
-
-            # self is a dataclass instance
-
-            return replace(self, **changes)  # type: ignore[type-var]
 </code></pre></div>
 <hr />
 <h4 id="ancestors-in-mro">Ancestors (in MRO)</h4>
@@ -1152,33 +1086,6 @@
             &quot;&quot;&quot;Create a new dataclass instance using data and set the singleton.&quot;&quot;&quot;
 
             return cls(**data)._set()
-</code></pre></div>
-<h4 id="update">update</h4>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">update</span><span class="p">(</span>
-    <span class="n">changes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
-</code></pre></div>
-<p>Update the settings with data specified in changes; not meant for config.</p>
-<p>Raises:</p>
-<ul>
-<li>TypeError: if update is called upon a Config class</li>
-<li>RuntimeError: if filepath() == None</li>
-</ul>
-<p>??? example "View Source"
-            @classmethod</p>
-<div class="highlight"><pre><span></span><code>        def update(cls, changes: dict[str, Any]) -&gt; Self:
-
-            &quot;&quot;&quot;Update the settings with data specified in changes; not meant for config.
-
-            Raises:
-
-            * TypeError: if update is called upon a Config class
-
-            * RuntimeError: if filepath() == None
-
-            &quot;&quot;&quot;
-
-            return cls.get()._update(changes)._set()  # pylint: disable=protected-access
 </code></pre></div>
 
 
