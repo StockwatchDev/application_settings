@@ -86,8 +86,8 @@ class ContainerSectionBase(ABC):
     def _update(self, changes: dict[str, Any]) -> Self:
         "Update parameters and sections with data specified in changes; not meant for config"
         # in self._set(), which normally is always executed, we ensured that
-        # self is a dataclass instance
-        return replace(self, **changes)  # type: ignore[type-var]
+        # self is a dataclass instance, hence we can ignore the type error
+        return replace(self, **changes)  # type: ignore[misc, type-var]
 
 
 def _check_dataclass_decorator(obj: Any) -> None:
