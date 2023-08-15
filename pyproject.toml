@@ -7,6 +7,7 @@ license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/StockwatchDev/application_settings"
 repository = "https://github.com/StockwatchDev/application_settings"
+documentation = "https://stockwatchdev.github.io/application_settings/stable/"
 keywords = ["configuration", "settings", "dataclass", "pydantic", "toml"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -28,6 +29,8 @@ include = [
     { path = "examples", format = "sdist" },
 ]
 
+[tool.poetry.urls]
+Changelog = "https://stockwatchdev.github.io/application_settings/stable/CHANGELOG/"
 
 [tool.poetry.dependencies]
 python = "^3.9"
