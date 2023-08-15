@@ -1,7 +1,7 @@
-"""Base class for sections to be added to containers and container sections for configuration and settings."""
+"""Abstract base class for sections to be added to containers and container sections for configuration and settings."""
 import sys
 from abc import ABC, abstractmethod
-from dataclasses import is_dataclass, replace
+from dataclasses import is_dataclass
 from typing import Any, Literal, Optional, cast
 
 from loguru import logger
@@ -39,17 +39,6 @@ class ContainerSectionBase(ABC):
         return cls(**data)._set()
 
     @classmethod
-    def update(cls, changes: dict[str, Any]) -> Self:
-        """Update the settings with data specified in changes; not meant for config.
-
-        Raises:
-
-        * TypeError: if update is called upon a Config class
-        * RuntimeError: if filepath() == None
-        """
-        return cls.get()._update(changes)._set()  # pylint: disable=protected-access
-
-    @classmethod
     def _get(
         cls,
     ) -> Optional[Self]:  # pylint: disable=consider-alternative-union-syntax
@@ -82,12 +71,6 @@ class ContainerSectionBase(ABC):
         for subsec in subsections:
             subsec._set()  # pylint: disable=protected-access
         return self
-
-    def _update(self, changes: dict[str, Any]) -> Self:
-        "Update parameters and sections with data specified in changes; not meant for config"
-        # in self._set(), which normally is always executed, we ensured that
-        # self is a dataclass instance, hence we can ignore the type error
-        return replace(self, **changes)  # type: ignore[misc, type-var]
 
 
 def _check_dataclass_decorator(obj: Any) -> None:
