@@ -6,9 +6,6 @@ from pathlib import Path
 
 import pytest
 from loguru import logger
-from pytest_loguru.plugin import (
-    LogCaptureFixture,  # type: ignore[import, unused-ignore]
-)
 
 from application_settings import (
     ConfigBase,
@@ -17,6 +14,7 @@ from application_settings import (
     dataclass,
     parameters_folderpath_from_cli,
     settings_filepath_from_cli,
+    use_standard_logging,
 )
 
 if sys.version_info < (3, 10):
@@ -192,7 +190,7 @@ def test_update_toml(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
 
 
 def test_update_ini(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, caplog: LogCaptureFixture
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, caplog: pytest.LogCaptureFixture
 ) -> None:
     if sys.version_info >= (3, 10):
 
@@ -205,6 +203,7 @@ def test_update_ini(
             return None
 
     monkeypatch.setattr(AnExample1Settings, "default_filepath", mock_default_filepath)
+    use_standard_logging()
     logger.enable("application_settings")
     AnExample1Settings.set_filepath("")
     AnExample1Settings.load()

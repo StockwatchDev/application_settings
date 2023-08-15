@@ -9,9 +9,6 @@ from typing import Any
 import pytest
 import tomli_w
 from loguru import logger
-from pytest_loguru.plugin import (  # type: ignore[import, unused-ignore]
-    LogCaptureFixture,
-)
 
 from application_settings import (
     ConfigBase,
@@ -21,6 +18,7 @@ from application_settings import (
     __version__,
     config_filepath_from_cli,
     dataclass,
+    use_standard_logging,
 )
 
 if sys.version_info >= (3, 11):
@@ -240,7 +238,8 @@ def test_kind_string() -> None:
     assert AnExample1ConfigSection.kind_string() == "Config"
 
 
-def test_section_singleton(caplog: LogCaptureFixture) -> None:
+def test_section_singleton(caplog: pytest.LogCaptureFixture) -> None:
+    use_standard_logging()
     logger.enable("application_settings")
     assert AnExample1ConfigSection.get().field1 == "field1"
     assert (
@@ -310,12 +309,13 @@ def test_config_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_get_defaults(
-    monkeypatch: pytest.MonkeyPatch, caplog: LogCaptureFixture
+    monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
 ) -> None:
     def mock_default_filepath() -> PathOpt:
         return None
 
     monkeypatch.setattr(AnExample1Config, "default_filepath", mock_default_filepath)
+    use_standard_logging()
     logger.enable("application_settings")
     AnExample1Config.set_filepath("", load=True)
     assert AnExample1Config.get().section1.field1 == "field1"
@@ -330,7 +330,10 @@ def test_get_defaults(
     caplog.clear()
 
 
-def test_set_filepath_after_get(toml_file: Path, caplog: LogCaptureFixture) -> None:
+def test_set_filepath_after_get(
+    toml_file: Path, caplog: pytest.LogCaptureFixture
+) -> None:
+    use_standard_logging()
     logger.enable("application_settings")
     AnExample1Config.set_filepath(toml_file, load=True)
     assert AnExample1Config.get().section1.field1 == "f1"
@@ -371,7 +374,8 @@ def test_get_json(json_file: Path) -> None:
     assert AnExample1Config.get().section1.field2 == 33
 
 
-def test_get_ini(ini_file: Path, caplog: LogCaptureFixture) -> None:
+def test_get_ini(ini_file: Path, caplog: pytest.LogCaptureFixture) -> None:
+    use_standard_logging()
     logger.enable("application_settings")
     AnExample1Config.set_filepath(ini_file)
     AnExample1Config.load()
