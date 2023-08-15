@@ -40,6 +40,7 @@ can install from our repo.
 
 We have direct dependencies on the following packages:
 
+- [loguru](https://pypi.org/project/loguru/)
 - [pathvalidate](https://pypi.org/project/pathvalidate/)
 - [pydantic](https://pypi.org/project/pydantic/)
 - [tomli](https://pypi.org/project/tomli/) (for python versions below 3.11)

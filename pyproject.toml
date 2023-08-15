@@ -172,6 +172,9 @@ Home = "README.md"
 [[tool.portray.mkdocs.nav.Usage]]
 "6. Handling deviations" = "docs/6-Handling_deviations.md"
 
+[[tool.portray.mkdocs.nav.Usage]]
+"7. Logging" = "docs/7-Logging.md"
+
 [[tool.portray.mkdocs.nav]]
 Changelog = "CHANGELOG.md"
 
