@@ -39,6 +39,9 @@ stored as a singleton.
 Interested? Then have a look at our
 [quick start](https://stockwatchdev.github.io/application_settings/develop/docs/Quick_start/).
 
+If you appreciate this library package, then please give us a star on 
+[Github](https://github.com/StockwatchDev/application_settings).
+
 [//]: # (Change version in header and link to published quick start)
 
 ## License

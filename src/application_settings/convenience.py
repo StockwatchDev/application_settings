@@ -126,4 +126,5 @@ def use_standard_logging(  # pylint: disable=consider-alternative-union-syntax
 
     handler = PropagateHandler()
     handler.setFormatter(fmt)
+    logger.remove()  # Remove all handlers added so far, including the default one.
     logger.add(handler, format="{message}")
