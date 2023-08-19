@@ -1,10 +1,10 @@
 # Quick start
 
-### Install the package
+## Install the package
 
 `pip install -U application_settings`
 
-### Define dataclasses for configuration / settings parameters
+## Define dataclasses for configuration / settings parameters
 
 `Config` is for read-only parameters read from file, `Settings` are read-write parameters
 stored to file for persistancy over sessions. During definition, they differ only in
@@ -13,7 +13,6 @@ terms of the base classes that are used. Example:
 === "Configuration"
     ```python
     from application_settings import ConfigBase, ConfigSectionBase, dataclass
-
 
     @dataclass(frozen=True)
     class MyExampleConfigSection(ConfigSectionBase):
@@ -36,7 +35,6 @@ terms of the base classes that are used. Example:
     ```python
     from application_settings import SettingsBase, SettingsSectionBase, dataclass
 
-
     @dataclass(frozen=True)
     class BasicSettingsSection(SettingsSectionBase):
         """Settings section for the basics"""
@@ -54,10 +52,7 @@ terms of the base classes that are used. Example:
 
     ```
 
-
-
-
-### Write (or generate) the file
+## Write (or generate) the file
 
 By default, the following files are expected for the dataclasses defined above:
 
@@ -81,9 +76,9 @@ By default, the following files are expected for the dataclasses defined above:
             "totals": 3
         }
     }
-    ```
+```
 
-### Use parameters in your code
+## Use parameters in your code
 
 === "Configuration"
     ```python
