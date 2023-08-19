@@ -196,7 +196,7 @@ allowlist_externals = poetry
 commands_pre =
     poetry install --no-root --with testing -v
 commands =
-    poetry run pytest --cov-report xml:coverage.xml --cov-report term-missing --cov=application_settings tests/ --import-mode importlib
+    poetry run python -m pytest --cov-report xml:coverage.xml --cov-report term-missing --cov=application_settings tests/ --import-mode importlib
 
 [testenv:style]
 skip_install = true
