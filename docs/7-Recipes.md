@@ -1,6 +1,6 @@
 # Code snippets and recipes
 
-## Logging 
+## Logging
 
 ### Using `Loguru`
 
@@ -19,7 +19,7 @@ The logical location for this statement is before the first invocation of `load`
 you do not `load` explicitly, before the first invocation of `get`).
 
 Note that by default `Loguru` logs to `stderr`, not `stdout` (as the standard `logging`
-library does). Have a look at the 
+library does). Have a look at the
 [Loguru documentation](https://loguru.readthedocs.io/en/stable/index.html) if you want
 to configure the logger in the way that you want to.
 
@@ -71,6 +71,8 @@ and for fields for which the test value differs from the default one.
 
 ## Initialization needs to depend on configuration
 
+### Application case
+
 The situation may occur that your application imports a module that holds code that is
 initialized during import and you want this initialization to be configurable. For
 example, you might want a configurable initial value for a module global variable
@@ -99,3 +101,21 @@ fall back to creating a test config file and loading that in the way described i
 section. An example on how to do this can be found in the file
 [`tests/test_initialization_import.py`](https://github.com/StockwatchDev/application_settings/blob/develop/tests/test__initialization_import.py)
 (also part of the source distribution of this package).
+
+### Library package case
+
+It can be that you have defined a ConfigSection for your library package and that your
+library also has module globals or class variables that need to be initialized with
+fields defined in that ConfigSection.
+
+The normal situation would be that your ConfigSection and the module with configurable
+module globals are both imported in the `__init__.py` file of your package.
+Unfortunately, this implies that there is no way to `set` or `load` values for your
+ConfigSection before the configurable module globals are initialized.
+
+The only way that we currently see to handle such a situation properly is the following:
+
+- make a separate package for the ConfigSection (i.e., isolated from your libary package)
+- `import` that config package first, `set` (or `load`) the config values and only then
+  import your library package (which will also import the config package, but the
+  singleton has been initialized now).
