@@ -45,8 +45,13 @@ you do not `load` explicitly, before the first invocation of `get`).
 ## Having a test configuration during testing
 
 During unit testing, you typically would like to have a specific test configuration and
-it would be a hassle to provide a file for this purpose. Fortunately, there is another
-way. As an example, let's create a test config for `ExampleConfigSection` (see 
+it would be a hassle to provide a file for this purpose. this especially holds true
+for the situation in which you have used `application_settings` to define a config
+section for your library package, and hence have no config container in your package
+that can do the file handling.
+
+Fortunately, there is another way, namely by using classmethod `set`. As an example,
+let's create a test config for `ExampleConfigSection`, (see
 [Quick Start](Quick_start.md)):
 
 ```python
@@ -56,7 +61,7 @@ test_config = {
     "field2": -2
 }
 
-# Invoke class method set on the Config(Section) with this dict as parameter;
+# Invoke classmethod set on the Config(Section) with this dict as parameter;
 # this will set the config singleton with the provided values
 ExampleConfigSection.set(test_config)
 ```
@@ -68,16 +73,29 @@ and for fields for which the test value differs from the default one.
 
 The situation may occur that your application imports a module that holds code that is
 initialized during import and you want this initialization to be configurable. For
-example, you might want a configurable initial value for a module global variable.
+example, you might want a configurable initial value for a module global variable
+or a class variable.
 
 To make this work, you need to assure that the configuration is loaded before the
 module of concern is imported. To make this robust, the following way of work is
 suggested:
 
-- Define your configuration class(es) in a (number of) separate module(s);
-- Make a small module `_config_loader.py` that imports your configuration container,
-  possibly sets logging and loads the configuration;
-- In the file that is the entry point of your application (i.e., typically
-  `__main__.py`), make sure that `_config_loader` is the first module that you `import`.
+- Define your configuration class(es) in a separate module (or multiple separate
+  modules);
+- In the module that defines your configuration container, set `config_filepath_from_cli`
+  and `load` the configuration;
+- Make sure that the module with your config container is `import`ed before any of the
+  configured global module variables and/or class variables are initialized. One way of
+  assuring this in a robust way is by `import`ing your config container at the top of the
+  file that is the entry point of your application (i.e., typically `__main__.py`);
+- Start your application with the filepath to the config file as command line parameter.
 
 Obviously, the same approach can be followed for settings.
+
+As described [here](#having-a-test-configuration-during-testing), in a test setting it
+is generally easier to use class method `set`. Unfortunately, there is no straigtforward
+way to invoke `set` with test values during `import`, which means that you will have to
+fall back to creating a test config file and loading that in the way described in this
+section. An example on how to do this can be found in the file
+[`tests/test_initialization_import.py`](https://github.com/StockwatchDev/application_settings/blob/develop/tests/test__initialization_import.py)
+(also part of the source distribution of this package).
