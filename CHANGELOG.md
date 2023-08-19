@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (Issue [#67](https://github.com/StockwatchDev/application_settings/issues/67))
 - Added logging
   (Issue [#17](https://github.com/StockwatchDev/application_settings/issues/17))
+- Added a recipe for handling configurable initialization of module global variables
+  and class variables
 
 ### Changed
 
