@@ -36,7 +36,7 @@ provided, then the convenience function also enables logging.
 ```python
 from application_settings import use_standard_logging
 
-use_standard_logging()
+use_standard_logging(enable=True)
 
 ```
 
@@ -88,6 +88,11 @@ suggested:
 - In the module that defines your configuration container, set `config_filepath_from_cli`
   and `load` the configuration (this ensures that the config is loaded during import of
   the configuration container, which will always be before usage of a config parameter);
+- It might be that globals or class variables of a package that you import are configured
+  via `<some>ConfigSection.get()`, i.e., without importing the config container. Hence,
+  we must ensure that the config container for sure is imported before that moment.
+  Therefore, we suggest to make the `import` of the config container the very first
+  statement of your entry point file in such a situation;
 - Start your application with the filepath to the config file as command line parameter.
 
 Obviously, the same approach can be followed for settings.
