@@ -238,8 +238,7 @@ def test_kind_string() -> None:
 
 
 def test_section_singleton(caplog: pytest.LogCaptureFixture) -> None:
-    use_standard_logging()
-    logger.enable("application_settings")
+    use_standard_logging(enable=True)
     assert AnExample1ConfigSection.get().field1 == "field1"
     assert (
         " accessed before data has been set by the application."
@@ -311,8 +310,7 @@ def test_get_defaults(
         return None
 
     monkeypatch.setattr(AnExample1Config, "default_filepath", mock_default_filepath)
-    use_standard_logging()
-    logger.enable("application_settings")
+    use_standard_logging(enable=True)
     AnExample1Config.set_filepath("", load=True)
     assert AnExample1Config.get().section1.field1 == "field1"
     assert AnExample1Config.get().section1.field2 == 2
@@ -328,8 +326,7 @@ def test_get_defaults(
 def test_set_filepath_after_get(
     toml_file: Path, caplog: pytest.LogCaptureFixture
 ) -> None:
-    use_standard_logging()
-    logger.enable("application_settings")
+    use_standard_logging(enable=True)
     AnExample1Config.set_filepath(toml_file, load=True)
     assert AnExample1Config.get().section1.field1 == "f1"
     assert AnExample1Config.get().section1.subsec.field3[1] == "no"
@@ -370,8 +367,7 @@ def test_get_json(json_file: Path) -> None:
 
 
 def test_get_ini(ini_file: Path, caplog: pytest.LogCaptureFixture) -> None:
-    use_standard_logging()
-    logger.enable("application_settings")
+    use_standard_logging(enable=True)
     AnExample1Config.set_filepath(ini_file)
     AnExample1Config.load()
     assert AnExample1Config.get().section1.field1 == "field1"

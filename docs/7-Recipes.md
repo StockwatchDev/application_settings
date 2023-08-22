@@ -28,14 +28,15 @@ to configure the logger in the way that you want to.
 If you prefer to use the standard `logging` library, then you need to do two things.
 By default, logging is disabled, hence you need to enable it to get logging output. In
 addition to that, you need to propagate Loguru messages to standard logging.
-`application_settings` provides a convenience function for this purpose.
+`application_settings` provides a convenience function `use_standard_logging` for this
+purpose. This function sets the propagation to the standard logger. The function has a
+single argument `enable` that by default is set to `False`. If a parameter `True` is
+provided, then the convenience function also enables logging.
 
 ```python
 from application_settings import use_standard_logging
-from loguru import logger
 
 use_standard_logging()
-logger.enable("application_settings")
 
 ```
 
@@ -95,7 +96,7 @@ suggested:
 Obviously, the same approach can be followed for settings.
 
 As described [here](#having-a-test-configuration-during-testing), in a test setting it
-is generally easier to use class method `set`. Unfortunately, there is no straigtforward
+is generally easier to use class method `set`. Unfortunately, there is no straightforward
 way to invoke `set` with test values during `import`, which means that you will have to
 fall back to creating a test config file and loading that in the way described in this
 section. An example on how to do this can be found in the file

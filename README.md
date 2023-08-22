@@ -10,13 +10,13 @@
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-"You write the dataclasses to define parameters for configuration and settings, 
+"You write the dataclasses to define parameters for configuration and settings,
 application\_settings takes care of the logic."
 
 ## What and why
 
 Application\_settings is a package for providing a python application or library with
-parameters for configuration and settings. It uses [toml](https://toml.io/en/) or 
+parameters for configuration and settings. It uses [toml](https://toml.io/en/) or
 [json](https://www.json.org/) files that are parsed
 into dataclasses. This brings some benefits:
 
@@ -37,9 +37,11 @@ Parsing is done once before or during first access and the resulting set of para
 stored as a singleton.
 
 Interested? Then have a look at our
-[quick start](https://stockwatchdev.github.io/application_settings/develop/docs/Quick_start/).
+[quick start](https://stockwatchdev.github.io/application_settings/develop/docs/Quick_start/)
+or dive into the
+[full documentation](https://stockwatchdev.github.io/application_settings/develop/).
 
-If you appreciate this library package, then please give us a star on 
+If you appreciate this library package, then please give us a star on
 [Github](https://github.com/StockwatchDev/application_settings).
 
 [//]: # (Change version in header and link to published quick start)

@@ -197,8 +197,7 @@ def test_update_ini(
             return None
 
     monkeypatch.setattr(AnExample1Settings, "default_filepath", mock_default_filepath)
-    use_standard_logging()
-    logger.enable("application_settings")
+    use_standard_logging(enable=True)
     AnExample1Settings.set_filepath("")
     AnExample1Settings.load()
     assert AnExample1Settings.get().section1.setting1 == "setting1"

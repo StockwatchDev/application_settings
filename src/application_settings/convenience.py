@@ -112,7 +112,7 @@ def _parameters_filepath_from_cli(  # pylint: disable=too-many-arguments
 
 
 def use_standard_logging(  # pylint: disable=consider-alternative-union-syntax
-    fmt: Union[Formatter, None] = None
+    enable: bool = False, fmt: Union[Formatter, None] = None
 ) -> None:
     """Propagate Loguru messages to standard logging"""
 
@@ -128,3 +128,6 @@ def use_standard_logging(  # pylint: disable=consider-alternative-union-syntax
     handler.setFormatter(fmt)
     logger.remove()  # Remove all handlers added so far, including the default one.
     logger.add(handler, format="{message}")
+
+    if enable:
+        logger.enable("application_settings")
