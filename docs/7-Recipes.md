@@ -86,14 +86,18 @@ suggested:
 - Define your configuration class(es) in a separate module (or multiple separate
   modules);
 - In the module that defines your configuration container, set `config_filepath_from_cli`
-  and `load` the configuration;
-- Make sure that the module with your config container is `import`ed before any of the
-  configured global module variables and/or class variables are initialized. One way of
-  assuring this in a robust way is by `import`ing your config container at the top of the
-  file that is the entry point of your application (i.e., typically `__main__.py`);
+  and `load` the configuration (this ensures that the config is loaded during import of
+  the configuration container, which will always be before usage of a config parameter);
 - Start your application with the filepath to the config file as command line parameter.
 
 Obviously, the same approach can be followed for settings.
+
+To make this more clear, an example is provided in the folder
+[`examples/Recipies/initialization`](https://github.com/StockwatchDev/application_settings/tree/examples/Recipies/initialization).
+Two configurations are defined: one that is loaded as described in the second bullet
+above, and one that is (wrongly) loaded with the entry point file `__main__` and not in
+the Config module. When running the example, it will become apparent that loading in the
+entry point file is too late.
 
 As described [here](#having-a-test-configuration-during-testing), in a test setting it
 is generally easier to use class method `set`. Unfortunately, there is no straightforward
