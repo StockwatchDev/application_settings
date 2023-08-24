@@ -130,4 +130,4 @@ def use_standard_logging(  # pylint: disable=consider-alternative-union-syntax
     logger.add(handler, format="{message}")
 
     if enable:
-        logger.enable("application_settings")
+        logger.enable(__package__)

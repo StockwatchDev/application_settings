@@ -1,7 +1,7 @@
 """Example to demonstrate how to implement configurable module globals and class variables
 
-Run this example with the following command:
-python ./__main__.py -c ./the_config.toml -w ./the_config.toml
+Cd to the folder containing this file and run this example with the following command:
+python . -c ./the_config.toml -w ./the_config.toml
 """
 
 # the next module is placed at the top of the entry point but that does not help

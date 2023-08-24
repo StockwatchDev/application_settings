@@ -3,6 +3,7 @@
 # pylint: disable=consider-alternative-union-syntax
 import sys
 from pathlib import Path
+from typing import Any
 
 import pytest
 from loguru import logger
@@ -220,3 +221,17 @@ def test_update_ini(
     assert AnExample1Settings.get().section1.setting1 == "setting1"
     assert AnExample1Settings.get().section1.setting2 == 2
     logger.disable("application_settings")
+
+
+def test_update_create_file_failed(
+    monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
+) -> None:
+    def mock_touch(_: Any) -> None:
+        return None
+
+    monkeypatch.setattr(Path, "touch", mock_touch)
+    use_standard_logging(enable=True)
+    some_path = Path.home() / "ProgramData" / "test" / "nonexistingfile.json"
+    AnExample1Settings.set_filepath(some_path)
+    AnExample1Settings.update({"section1": {"subsec": {"setting3": 5.55}}})
+    assert f"Creation of file {str(some_path)} failed." in caplog.records[-1].msg
