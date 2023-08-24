@@ -37,7 +37,8 @@ following files.
     field1 = -0.5
     # field2 has default value 2
     field2 = 22
-```
+
+    ```
 
 === "`settings.json` file for the settings example"
     ```json
@@ -47,7 +48,8 @@ following files.
             "totals": 3
         }
     }
-```
+
+    ```
 
 The field names of a Container class are found as:
 
@@ -172,6 +174,11 @@ module from the standard library:
     # application_name -p C:\ProgramData
     ```
 
+It is good practice make a separate module that defines the container class and the
+sections and to add both the convenience function for setting the filepath via the
+cli and the `load` statement in that module.
+[This may help to prevent initialization problems.](7-Recipes.md#initialization-needs-to-depend-on-configuration)
+
 ## Handling FileNotFoundError
 
 When loading a parameter file, you have a choice what should happen when the parameter
@@ -207,7 +214,8 @@ file from the different configurations.
     # Use this file to set the config that you prefer by editing the file
     name = "application specific name"
     __include__ = "./config_common.toml"
-```
+
+    ```
 
 === "`config_common.toml` (in the same folder)"
     ```toml
@@ -216,7 +224,8 @@ file from the different configurations.
     field1 = -0.5
     # field2 has default value 2
     field2 = 22
-```
+
+    ```
 
 The file inclusion mechanism has been kept simple; the following rules apply:
 

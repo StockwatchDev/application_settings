@@ -12,44 +12,63 @@ terms of the base classes that are used. Example:
 
 === "Configuration"
     ```python
-    from application_settings import ConfigBase, ConfigSectionBase, dataclass
+    from application_settings import (
+        ConfigBase,
+        ConfigSectionBase,
+        config_filepath_from_cli,
+        dataclass,
+    )
 
     @dataclass(frozen=True)
     class MyExampleConfigSection(ConfigSectionBase):
         """Config section for an example"""
-
+    
         field1: float = 0.5
         field2: int = 2
-
-
+    
+    
     @dataclass(frozen=True)
     class MyExampleConfig(ConfigBase):
         """Config for an example"""
-
+    
         name: str = "nice example"
         section1: MyExampleConfigSection = MyExampleConfigSection()
-
+    
+    
+    # It is good practice to set the filepath via the command line interface
+    # and load your config in the module that defines the container
+    config_filepath_from_cli(MyExampleConfig)
+    MyExampleConfig.load()
     ```
 
 === "Settings"
     ```python
-    from application_settings import SettingsBase, SettingsSectionBase, dataclass
+    from application_settings import (
+        SettingsBase,
+        SettingsSectionBase,
+        dataclass,
+        settings_filepath_from_cli,
+    )
 
     @dataclass(frozen=True)
     class BasicSettingsSection(SettingsSectionBase):
         """Settings section for the basics"""
-
+    
         totals: int = 2
-
-
+    
+    
     @dataclass(frozen=True)
     class MyExampleSettings(SettingsBase):
         """Settings for an example"""
-
+    
         name: str = "nice name"
         basics: BasicSettingsSection = BasicSettingsSection()
-
-
+    
+    
+    # It is good practice to set the filepath via the command line interface
+    # and load your settings in the module that defines the container
+    settings_filepath_from_cli(MyExampleSettings)
+    MyExampleSettings.load()
     ```
 
 ## Write (or generate) the file
@@ -76,15 +95,14 @@ By default, the following files are expected for the dataclasses defined above:
             "totals": 3
         }
     }
-```
+
+    ```
 
 ## Use parameters in your code
 
 === "Configuration"
     ```python
-    # One of the first things to do in an application is loading the parameters
-    MyExampleConfig.load()
-    # Now you can access parameters via get()
+    # You can access parameters via get()
     # If you get() MyExampleConfig before load(), it will be loaded automatically
     a_variable = MyExampleConfig.get().section1.field1
     print(f"a_variable == {a_variable}")  # a_variable == -0.5
@@ -111,9 +129,7 @@ By default, the following files are expected for the dataclasses defined above:
 
 === "Settings"
     ```python
-    # One of the first things to do in an application is loading the parameters
-    MyExampleSettings.load()
-    # Now you can access parameters via get()
+    # You can access parameters via get()
     # If you get() MyExampleSettings before load(), it will be loaded automatically
     a_variable = MyExampleSettings.get().name
     print(f"a_variable == '{a_variable}'")  # a_variable == 'the stored name'

@@ -1,8 +1,8 @@
 """Module with two configurable class variables and two configurable module globals
 
-Configuration has been done such that the_first_classvar and the_first_global will be
+Configuration has been done such that the_first_classvar_is_set and the_first_global will be
 initialized with the default value (0.0) and not with the configured value (1.0);
-the_second_classvar and the_second_global will be initialized correctly with the
+the_second_classvar_is_set and the_second_global will be initialized correctly with the
 configured value (1.0).
 """
 
@@ -14,10 +14,12 @@ from modules.wrongly_initialized_config import WronglyInitializedConfig
 
 @dataclass
 class MyDataclass:
-    the_first_classvar: float = WronglyInitializedConfig.get().initial_value
-    the_second_classvar: float = CorrectlyInitializedConfig.get().initial_value
+    """Example of class with classvars that are configured"""
+
+    the_first_classvar_is_set: bool = WronglyInitializedConfig.get().configvar_is_set
+    the_second_classvar_is_set: bool = CorrectlyInitializedConfig.get().configvar_is_set
 
 
 print("Now initializing the module globals")
-the_first_global = WronglyInitializedConfig.get().initial_value
-the_second_global = CorrectlyInitializedConfig.get().initial_value
+the_first_global_is_set = WronglyInitializedConfig.get().configvar_is_set
+the_second_global_is_set = CorrectlyInitializedConfig.get().configvar_is_set
