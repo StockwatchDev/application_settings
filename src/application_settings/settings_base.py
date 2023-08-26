@@ -46,8 +46,7 @@ class SettingsBase(ContainerBase):
         """Update the settings with data specified in changes and save.
 
         Raises:
-
-        * RuntimeError: if filepath() == None
+            RuntimeError: if filepath() == None
         """
         return (
             _update_settings_section(  # pylint: disable=protected-access

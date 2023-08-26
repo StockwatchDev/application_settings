@@ -40,8 +40,7 @@ class ConfigBase(ContainerBase):
         """Update and save the settings with data specified in changes
 
         Raises:
-
-        * TypeError: update not applicable for a Config class
+            TypeError: update not applicable for a Config class
         """
 
         raise TypeError(
