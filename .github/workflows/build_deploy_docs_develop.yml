@@ -49,7 +49,7 @@ jobs:
 
       - name: Build html
         run:
-          poetry run portray as_html --overwrite -o site
+          poetry run mkdocs build -f ./docs/mkdocs.yml -d ../site"
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
