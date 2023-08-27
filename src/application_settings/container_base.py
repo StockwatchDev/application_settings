@@ -67,7 +67,7 @@ class ContainerBase(ContainerSectionBase, ABC):
         """Set the path for the file (a singleton).
 
         Raises:
-            * ValueError: if file_path is not a valid path for the OS running the code
+            ValueError: if file_path is not a valid path for the OS running the code
         """
 
         path: PathOpt = None
