@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added a GitHub action for PyPi deployment
 - Check for presence of the dataclass decorator
   (Issue [#76](https://github.com/StockwatchDev/application_settings/issues/76))
 - Enable file inclusion for toml config files
