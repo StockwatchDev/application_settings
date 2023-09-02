@@ -405,6 +405,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7-Recipes/" class="md-nav__link">
+        7. Code snippets and recipes
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -556,6 +570,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/application_settings/private/" class="md-nav__link">
+        Private
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/application_settings/settings_base/" class="md-nav__link">
         Settings Base
       </a>
@@ -666,17 +694,21 @@
 
 
 <h1 id="quick-start">Quick start</h1>
-<h3 id="install-the-package">Install the package</h3>
+<h2 id="install-the-package">Install the package</h2>
 <p><code>pip install -U application_settings</code></p>
-<h3 id="define-dataclasses-for-configuration-settings-parameters">Define dataclasses for configuration / settings parameters</h3>
+<h2 id="define-dataclasses-for-configuration-settings-parameters">Define dataclasses for configuration / settings parameters</h2>
 <p><code>Config</code> is for read-only parameters read from file, <code>Settings</code> are read-write parameters
 stored to file for persistancy over sessions. During definition, they differ only in
 terms of the base classes that are used. Example:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Configuration</label><label for="__tabbed_1_2">Settings</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="n">ConfigBase</span><span class="p">,</span> <span class="n">ConfigSectionBase</span><span class="p">,</span> <span class="n">dataclass</span>
-
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ConfigBase</span><span class="p">,</span>
+    <span class="n">ConfigSectionBase</span><span class="p">,</span>
+    <span class="n">config_filepath_from_cli</span><span class="p">,</span>
+    <span class="n">dataclass</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">MyExampleConfigSection</span><span class="p">(</span><span class="n">ConfigSectionBase</span><span class="p">):</span>
@@ -692,11 +724,21 @@ terms of the base classes that are used. Example:</p>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nice example&quot;</span>
     <span class="n">section1</span><span class="p">:</span> <span class="n">MyExampleConfigSection</span> <span class="o">=</span> <span class="n">MyExampleConfigSection</span><span class="p">()</span>
+
+
+<span class="c1"># It is good practice to set the filepath via the command line interface</span>
+<span class="c1"># and load your config in the module that defines the container</span>
+<span class="n">config_filepath_from_cli</span><span class="p">(</span><span class="n">MyExampleConfig</span><span class="p">)</span>
+<span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="n">SettingsBase</span><span class="p">,</span> <span class="n">SettingsSectionBase</span><span class="p">,</span> <span class="n">dataclass</span>
-
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">SettingsBase</span><span class="p">,</span>
+    <span class="n">SettingsSectionBase</span><span class="p">,</span>
+    <span class="n">dataclass</span><span class="p">,</span>
+    <span class="n">settings_filepath_from_cli</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">BasicSettingsSection</span><span class="p">(</span><span class="n">SettingsSectionBase</span><span class="p">):</span>
@@ -711,11 +753,17 @@ terms of the base classes that are used. Example:</p>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nice name&quot;</span>
     <span class="n">basics</span><span class="p">:</span> <span class="n">BasicSettingsSection</span> <span class="o">=</span> <span class="n">BasicSettingsSection</span><span class="p">()</span>
+
+
+<span class="c1"># It is good practice to set the filepath via the command line interface</span>
+<span class="c1"># and load your settings in the module that defines the container</span>
+<span class="n">settings_filepath_from_cli</span><span class="p">(</span><span class="n">MyExampleSettings</span><span class="p">)</span>
+<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 </code></pre></div>
 </div>
 </div>
 </div>
-<h3 id="write-or-generate-the-file">Write (or generate) the file</h3>
+<h2 id="write-or-generate-the-file">Write (or generate) the file</h2>
 <p>By default, the following files are expected for the dataclasses defined above:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1"><code>~/.my_example/config.toml</code></label><label for="__tabbed_2_2"><code>~/.my_example/settings.json</code></label></div>
 <div class="tabbed-content">
@@ -740,13 +788,11 @@ terms of the base classes that are used. Example:</p>
 </div>
 </div>
 </div>
-<h3 id="use-parameters-in-your-code">Use parameters in your code</h3>
+<h2 id="use-parameters-in-your-code">Use parameters in your code</h2>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Configuration</label><label for="__tabbed_3_2">Settings</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="c1"># One of the first things to do in an application is loading the parameters</span>
-<span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
-<span class="c1"># Now you can access parameters via get()</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># You can access parameters via get()</span>
 <span class="c1"># If you get() MyExampleConfig before load(), it will be loaded automatically</span>
 <span class="n">a_variable</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;a_variable == </span><span class="si">{</span><span class="n">a_variable</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># a_variable == -0.5</span>
@@ -771,9 +817,7 @@ terms of the base classes that are used. Example:</p>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="c1"># One of the first things to do in an application is loading the parameters</span>
-<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
-<span class="c1"># Now you can access parameters via get()</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># You can access parameters via get()</span>
 <span class="c1"># If you get() MyExampleSettings before load(), it will be loaded automatically</span>
 <span class="n">a_variable</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;a_variable == &#39;</span><span class="si">{</span><span class="n">a_variable</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>  <span class="c1"># a_variable == &#39;the stored name&#39;</span>

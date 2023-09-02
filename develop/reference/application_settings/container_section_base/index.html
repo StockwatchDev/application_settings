@@ -343,6 +343,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../docs/7-Recipes/" class="md-nav__link">
+        7. Code snippets and recipes
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -541,6 +555,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#get_without_load" class="md-nav__link">
+    get_without_load
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#kind_string" class="md-nav__link">
     kind_string
   </a>
@@ -595,6 +616,20 @@
     <li class="md-nav__item">
       <a href="../" class="md-nav__link">
         Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../private/" class="md-nav__link">
+        Private
       </a>
     </li>
   
@@ -720,6 +755,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#get_without_load" class="md-nav__link">
+    get_without_load
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#kind_string" class="md-nav__link">
     kind_string
   </a>
@@ -775,6 +817,8 @@
 
     from typing import Any, Literal, Optional, cast
 
+    from loguru import logger
+
     if sys.version_info &gt;= (3, 11):
 
         from typing import Self
@@ -809,13 +853,33 @@
 
             if (_the_container_or_none := cls._get()) is None:
 
-                # no config section has been made yet,
+                # no config section has been made yet
+
+                cls.get_without_load()
 
                 # so let&#39;s instantiate one and keep it in the global store
 
                 return cls._create_instance()
 
             return _the_container_or_none
+
+        @classmethod
+
+        def get_without_load(cls) -&gt; None:
+
+            &quot;&quot;&quot;Get has been called on a section before a load was done; handle this.&quot;&quot;&quot;
+
+            # get() is called on a Section but the application
+
+            # has not yet created or loaded a config.
+
+            logger.warning(
+
+                f&quot;{cls.kind_string()} section {cls.__name__} accessed before data has been loaded; &quot;
+
+                f&quot;will try to load via command line parameter &#39;--{cls.__name__}_file&#39;&quot;
+
+            )
 
         @classmethod
 
@@ -850,16 +914,6 @@
         ) -&gt; Self:
 
             &quot;&quot;&quot;Create a new ContainerSection with default values. Likely that this is wrong.&quot;&quot;&quot;
-
-            # This situation can occur if get() is called on a Section but the application
-
-            # has not yet created or loaded a config.
-
-            print(
-
-                f&quot;Section {cls.__name__} accessed before data has been set by the application.&quot;
-
-            )
 
             return cls.set({})
 
@@ -947,13 +1001,33 @@
 
             if (_the_container_or_none := cls._get()) is None:
 
-                # no config section has been made yet,
+                # no config section has been made yet
+
+                cls.get_without_load()
 
                 # so let&#39;s instantiate one and keep it in the global store
 
                 return cls._create_instance()
 
             return _the_container_or_none
+
+        @classmethod
+
+        def get_without_load(cls) -&gt; None:
+
+            &quot;&quot;&quot;Get has been called on a section before a load was done; handle this.&quot;&quot;&quot;
+
+            # get() is called on a Section but the application
+
+            # has not yet created or loaded a config.
+
+            logger.warning(
+
+                f&quot;{cls.kind_string()} section {cls.__name__} accessed before data has been loaded; &quot;
+
+                f&quot;will try to load via command line parameter &#39;--{cls.__name__}_file&#39;&quot;
+
+            )
 
         @classmethod
 
@@ -988,16 +1062,6 @@
         ) -&gt; Self:
 
             &quot;&quot;&quot;Create a new ContainerSection with default values. Likely that this is wrong.&quot;&quot;&quot;
-
-            # This situation can occur if get() is called on a Section but the application
-
-            # has not yet created or loaded a config.
-
-            print(
-
-                f&quot;Section {cls.__name__} accessed before data has been set by the application.&quot;
-
-            )
 
             return cls.set({})
 
@@ -1051,13 +1115,39 @@
 
             if (_the_container_or_none := cls._get()) is None:
 
-                # no config section has been made yet,
+                # no config section has been made yet
+
+                cls.get_without_load()
 
                 # so let&#39;s instantiate one and keep it in the global store
 
                 return cls._create_instance()
 
             return _the_container_or_none
+</code></pre></div>
+<h4 id="get_without_load">get_without_load</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_without_load</span><span class="p">(</span>
+
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Get has been called on a section before a load was done; handle this.</p>
+<p>??? example "View Source"
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def get_without_load(cls) -&gt; None:
+
+            &quot;&quot;&quot;Get has been called on a section before a load was done; handle this.&quot;&quot;&quot;
+
+            # get() is called on a Section but the application
+
+            # has not yet created or loaded a config.
+
+            logger.warning(
+
+                f&quot;{cls.kind_string()} section {cls.__name__} accessed before data has been loaded; &quot;
+
+                f&quot;will try to load via command line parameter &#39;--{cls.__name__}_file&#39;&quot;
+
+            )
 </code></pre></div>
 <h4 id="kind_string">kind_string</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">kind_string</span><span class="p">(</span>

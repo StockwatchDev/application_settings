@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#defining-non-container-sections" class="md-skip">
+        <a href="#defining-parameters" class="md-skip">
           Skip to content
         </a>
       
@@ -287,6 +287,8 @@
       <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
       
       
+        
+      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           2. Defining parameters
@@ -302,6 +304,8 @@
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
+  
+    
   
   
     <label class="md-nav__title" for="__toc">
@@ -390,6 +394,20 @@
     <li class="md-nav__item">
       <a href="../6-Handling_deviations/" class="md-nav__link">
         6. Handling deviations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7-Recipes/" class="md-nav__link">
+        7. Code snippets and recipes
       </a>
     </li>
   
@@ -547,6 +565,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/application_settings/private/" class="md-nav__link">
+        Private
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/application_settings/settings_base/" class="md-nav__link">
         Settings Base
       </a>
@@ -599,6 +631,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -647,13 +681,12 @@
   </a>
 
 
-  <h1>2. Defining parameters</h1>
-
+<h1 id="defining-parameters">Defining parameters</h1>
 <p>This package lets you define parameters for configuration and settings. The difference
 between configuration and settings is as follows. <code>Config</code> is for parameters that do not
 change during runtime and are read from file. <code>Settings</code> are parameters that can change
 programmatically during runtime and are read from and saved to file for persistancy over
-sessions. During definition, they differ only in terms of the base classes that are used. </p>
+sessions. During definition, they differ only in terms of the base classes that are used.</p>
 <p>The intended structure is that parameters are defined in section classes. Sections can be
 nested. There should be one special root section for the application, referred to as the
 container, that handles file storage. Config sections and Settings sections should never
@@ -661,7 +694,7 @@ be mixed (i.e., do not nest a Settings section in a Config section and vice vers
 <h2 id="defining-non-container-sections">Defining non-container section(s)</h2>
 <p>A section is defined by subclassing the relevant base class (<code>ConfigSectionBase</code> for
 config, <code>SettingsSectionBase</code> for settings) and decorating it with
-<code>@dataclass(frozen=True)</code>. Parameters are defined as fields of the dataclass. For a 
+<code>@dataclass(frozen=True)</code>. Parameters are defined as fields of the dataclass. For a
 dataclass, it is mandatory to add a type hint for each field. These type hints are used
 also to validate the data that is read from the parameter file. If you
 specify a default value as well, then you prevent the occurance of an exception if the
@@ -671,7 +704,7 @@ value for the parameter of concern is not found in the parameter file.</p>
 is a drop-in replacement for a <code>dataclass</code> from the standard python library, enhanced
 with data validation. If you need additional dataclass functionality such as <code>fields</code>
 etc., you can import those from the standard library.</p>
-<p>Nested sections are obtained by defining fields in a section that are type hinted with 
+<p>Nested sections are obtained by defining fields in a section that are type hinted with
 the appropriate contained section class(es) and instantiated (possible only when all
 parameters of the nested section have default values).</p>
 <h2 id="defining-the-container">Defining the container</h2>
@@ -686,7 +719,6 @@ the settings container and -sections (see also the example section below).</p>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="n">ConfigBase</span><span class="p">,</span> <span class="n">ConfigSectionBase</span><span class="p">,</span> <span class="n">dataclass</span>
-
 
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">MyExampleConfigSection</span><span class="p">(</span><span class="n">ConfigSectionBase</span><span class="p">):</span>
@@ -706,7 +738,6 @@ the settings container and -sections (see also the example section below).</p>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="n">SettingsBase</span><span class="p">,</span> <span class="n">SettingsSectionBase</span><span class="p">,</span> <span class="n">dataclass</span>
-
 
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">BasicSettingsSection</span><span class="p">(</span><span class="n">SettingsSectionBase</span><span class="p">):</span>

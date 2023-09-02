@@ -343,6 +343,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../docs/7-Recipes/" class="md-nav__link">
+        7. Code snippets and recipes
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -555,6 +569,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#get_without_load" class="md-nav__link">
+    get_without_load
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#kind_string" class="md-nav__link">
     kind_string
   </a>
@@ -578,33 +599,6 @@
           <li class="md-nav__item">
   <a href="#set_filepath" class="md-nav__link">
     set_filepath
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#fileformat" class="md-nav__link">
-    FileFormat
-  </a>
-  
-    <nav class="md-nav" aria-label="FileFormat">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#ancestors-in-mro_1" class="md-nav__link">
-    Ancestors (in MRO)
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#class-variables" class="md-nav__link">
-    Class variables
   </a>
   
 </li>
@@ -664,6 +658,20 @@
     <li class="md-nav__item">
       <a href="../" class="md-nav__link">
         Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../private/" class="md-nav__link">
+        Private
       </a>
     </li>
   
@@ -817,6 +825,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#get_without_load" class="md-nav__link">
+    get_without_load
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#kind_string" class="md-nav__link">
     kind_string
   </a>
@@ -840,33 +855,6 @@
           <li class="md-nav__item">
   <a href="#set_filepath" class="md-nav__link">
     set_filepath
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#fileformat" class="md-nav__link">
-    FileFormat
-  </a>
-  
-    <nav class="md-nav" aria-label="FileFormat">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#ancestors-in-mro_1" class="md-nav__link">
-    Ancestors (in MRO)
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#class-variables" class="md-nav__link">
-    Class variables
   </a>
   
 </li>
@@ -905,23 +893,19 @@
 <p>Base class for a container (= root section) for configuration and settings.</p>
 <p>??? example "View Source"
         """Base class for a container (= root section) for configuration and settings."""</p>
-<div class="highlight"><pre><span></span><code>    import json
-
-    import sys
+<div class="highlight"><pre><span></span><code>    import sys
 
     from abc import ABC, abstractmethod
 
     from dataclasses import asdict
 
-    from enum import Enum, unique
-
     from pathlib import Path
 
     from re import sub
 
-    from typing import Any, cast
+    from typing import Any
 
-    import tomli_w
+    from loguru import logger
 
     from pathvalidate import is_valid_filepath
 
@@ -929,29 +913,19 @@
 
     from application_settings.type_notation_helper import PathOpt, PathOrStr
 
-    if sys.version_info &gt;= (3, 11):
+    from .private._file_operations import FileFormat
 
-        import tomllib
+    from .private._file_operations import load as _do_load
+
+    from .private._file_operations import save as _do_save
+
+    if sys.version_info &gt;= (3, 11):
 
         from typing import Self
 
     else:
 
-        import tomli as tomllib
-
         from typing_extensions import Self
-
-
-
-    @unique
-
-    class FileFormat(Enum):
-
-        &quot;&quot;&quot;File formats that are supported by application_settings&quot;&quot;&quot;
-
-        TOML = &quot;toml&quot;
-
-        JSON = &quot;json&quot;
 
 
 
@@ -1055,9 +1029,9 @@
 
                 if cls._get() is not None:
 
-                    print(
+                    logger.info(
 
-                        f&quot;Warning: filepath has been set the but file is not loaded into the {cls.kind_string()}.&quot;
+                        f&quot;Filepath has been set the but file is not loaded into the {cls.kind_string()}.&quot;
 
                     )
 
@@ -1091,6 +1065,20 @@
 
         @classmethod
 
+        def get_without_load(cls) -&gt; None:
+
+            &quot;&quot;&quot;Get has been called on a section before a load was done; handle this.&quot;&quot;&quot;
+
+            logger.warning(
+
+                f&quot;{cls.kind_string()} {cls.__name__} accessed before data has been loaded; &quot;
+
+                f&quot;will try implicit loading with {cls.filepath()}.&quot;
+
+            )
+
+        @classmethod
+
         def _create_instance(cls, throw_if_file_not_found: bool = False) -&gt; Self:
 
             &quot;&quot;&quot;Load stored data, instantiate the Container with it, store it in the singleton and return it.&quot;&quot;&quot;
@@ -1111,29 +1099,11 @@
 
                 path.parent.mkdir(parents=True, exist_ok=True)
 
-                if (ext := path.suffix[1:].lower()) == FileFormat.TOML.value:
+                # in self._set(), which normally is always executed, we ensured that
 
-                    with path.open(mode=&quot;wb&quot;) as fptr:
+                # self is a dataclass instance
 
-                        # in self._set(), which normally is always executed, we ensured that
-
-                        # self is a dataclass instance
-
-                        tomli_w.dump(asdict(self), fptr)  # type: ignore[call-overload]
-
-                elif ext == FileFormat.JSON.value:
-
-                    with path.open(mode=&quot;w&quot;) as fptr:
-
-                        # in self._set(), which normally is always executed, we ensured that
-
-                        # self is a dataclass instance
-
-                        json.dump(asdict(self), fptr)  # type: ignore[call-overload]
-
-                else:
-
-                    print(f&quot;Unknown file format {ext} given in {path}.&quot;)
+                _do_save(path, asdict(self))  # type: ignore[call-overload]
 
             else:
 
@@ -1155,145 +1125,7 @@
 
             &quot;&quot;&quot;Get the data stored in the parameter file&quot;&quot;&quot;
 
-            data_stored: dict[str, Any] = {}
-
-            path = cls.filepath()
-
-            if _check_filepath(path, cls.kind_string().lower(), throw_if_file_not_found):
-
-                real_path = cast(Path, path)
-
-                if real_path.suffix[1:].lower() == str(FileFormat.TOML.value):
-
-                    if cls.kind_string() == &quot;Config&quot;:
-
-                        data_stored = _load_toml_with_includes(
-
-                            real_path, throw_if_file_not_found
-
-                        )
-
-                    else:
-
-                        data_stored = _load_toml(real_path)
-
-                if real_path.suffix[1:].lower() == str(FileFormat.JSON.value):
-
-                    data_stored = _load_json(real_path)
-
-            return data_stored
-
-
-
-    def _check_filepath(
-
-        path: PathOpt, file_kind: str, throw_if_file_not_found: bool
-
-    ) -&gt; bool:
-
-        if path is None or not path.is_file():
-
-            err_mess = f&quot;Path {str(path)} not valid for {file_kind} file.&quot;
-
-            if throw_if_file_not_found:
-
-                raise FileNotFoundError(err_mess)
-
-            print(err_mess, &quot;Trying with defaults, but this may not work.&quot;)
-
-            return False
-
-        ext = path.suffix[1:].lower()
-
-        try:
-
-            FileFormat(ext)
-
-        except ValueError:
-
-            print(f&quot;Unknown file format {ext} given in {path}.&quot;)
-
-            print(&quot;Trying with defaults, but this may not work.&quot;)
-
-            return False
-
-        return True
-
-
-
-    def _load_toml(path: Path) -&gt; dict[str, Any]:
-
-        data_stored: dict[str, Any] = {}
-
-        with path.open(mode=&quot;rb&quot;) as fptr:
-
-            data_stored = tomllib.load(fptr)
-
-        return data_stored
-
-
-
-    def _load_json(path: Path) -&gt; dict[str, Any]:
-
-        data_stored: dict[str, Any] = {}
-
-        with path.open(mode=&quot;r&quot;) as fptr:
-
-            data_stored = json.load(fptr)
-
-        return data_stored
-
-
-
-    def _load_toml_with_includes(
-
-        path: Path, throw_if_file_not_found: bool
-
-    ) -&gt; dict[str, Any]:
-
-        data_stored = _load_toml(path)
-
-        if included_files := data_stored.get(&quot;__include__&quot;):
-
-            if not isinstance(included_files, list):
-
-                included_files = [included_files]
-
-            for included_file in included_files:
-
-                if is_valid_filepath(included_file, platform=&quot;auto&quot;):
-
-                    included_file_path = Path(included_file)
-
-                    if not included_file_path.is_absolute():
-
-                        included_file_path = path.parents[0] / included_file_path
-
-                    included_file_path.resolve()
-
-                    if _check_filepath(included_file_path, &quot;toml&quot;, throw_if_file_not_found):
-
-                        data_stored = (
-
-                            _load_toml_with_includes(
-
-                                included_file_path, throw_if_file_not_found
-
-                            )
-
-                            | data_stored
-
-                        )
-
-                else:
-
-                    raise ValueError(
-
-                        f&quot;Given path: &#39;{included_file}&#39; is not a valid path for this OS&quot;
-
-                    )
-
-        return data_stored
+            return _do_load(cls.kind_string(), cls.filepath(), throw_if_file_not_found)
 
 
 
@@ -1408,9 +1240,9 @@
 
                 if cls._get() is not None:
 
-                    print(
+                    logger.info(
 
-                        f&quot;Warning: filepath has been set the but file is not loaded into the {cls.kind_string()}.&quot;
+                        f&quot;Filepath has been set the but file is not loaded into the {cls.kind_string()}.&quot;
 
                     )
 
@@ -1444,6 +1276,20 @@
 
         @classmethod
 
+        def get_without_load(cls) -&gt; None:
+
+            &quot;&quot;&quot;Get has been called on a section before a load was done; handle this.&quot;&quot;&quot;
+
+            logger.warning(
+
+                f&quot;{cls.kind_string()} {cls.__name__} accessed before data has been loaded; &quot;
+
+                f&quot;will try implicit loading with {cls.filepath()}.&quot;
+
+            )
+
+        @classmethod
+
         def _create_instance(cls, throw_if_file_not_found: bool = False) -&gt; Self:
 
             &quot;&quot;&quot;Load stored data, instantiate the Container with it, store it in the singleton and return it.&quot;&quot;&quot;
@@ -1464,29 +1310,11 @@
 
                 path.parent.mkdir(parents=True, exist_ok=True)
 
-                if (ext := path.suffix[1:].lower()) == FileFormat.TOML.value:
+                # in self._set(), which normally is always executed, we ensured that
 
-                    with path.open(mode=&quot;wb&quot;) as fptr:
+                # self is a dataclass instance
 
-                        # in self._set(), which normally is always executed, we ensured that
-
-                        # self is a dataclass instance
-
-                        tomli_w.dump(asdict(self), fptr)  # type: ignore[call-overload]
-
-                elif ext == FileFormat.JSON.value:
-
-                    with path.open(mode=&quot;w&quot;) as fptr:
-
-                        # in self._set(), which normally is always executed, we ensured that
-
-                        # self is a dataclass instance
-
-                        json.dump(asdict(self), fptr)  # type: ignore[call-overload]
-
-                else:
-
-                    print(f&quot;Unknown file format {ext} given in {path}.&quot;)
+                _do_save(path, asdict(self))  # type: ignore[call-overload]
 
             else:
 
@@ -1508,33 +1336,7 @@
 
             &quot;&quot;&quot;Get the data stored in the parameter file&quot;&quot;&quot;
 
-            data_stored: dict[str, Any] = {}
-
-            path = cls.filepath()
-
-            if _check_filepath(path, cls.kind_string().lower(), throw_if_file_not_found):
-
-                real_path = cast(Path, path)
-
-                if real_path.suffix[1:].lower() == str(FileFormat.TOML.value):
-
-                    if cls.kind_string() == &quot;Config&quot;:
-
-                        data_stored = _load_toml_with_includes(
-
-                            real_path, throw_if_file_not_found
-
-                        )
-
-                    else:
-
-                        data_stored = _load_toml(real_path)
-
-                if real_path.suffix[1:].lower() == str(FileFormat.JSON.value):
-
-                    data_stored = _load_json(real_path)
-
-            return data_stored
+            return _do_load(cls.kind_string(), cls.filepath(), throw_if_file_not_found)
 </code></pre></div>
 <hr />
 <h4 id="ancestors-in-mro">Ancestors (in MRO)</h4>
@@ -1551,7 +1353,7 @@
 <h4 id="default_file_format">default_file_format</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">default_file_format</span><span class="p">(</span>
 
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">application_settings</span><span class="o">.</span><span class="n">container_base</span><span class="o">.</span><span class="n">FileFormat</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">application_settings</span><span class="o">.</span><span class="n">private</span><span class="o">.</span><span class="n">_file_operations</span><span class="o">.</span><span class="n">FileFormat</span>
 </code></pre></div>
 <p>Return the default file format</p>
 <p>??? example "View Source"
@@ -1650,13 +1452,35 @@ If you prefer to not have a default path then overwrite this method and return N
 
             if (_the_container_or_none := cls._get()) is None:
 
-                # no config section has been made yet,
+                # no config section has been made yet
+
+                cls.get_without_load()
 
                 # so let&#39;s instantiate one and keep it in the global store
 
                 return cls._create_instance()
 
             return _the_container_or_none
+</code></pre></div>
+<h4 id="get_without_load">get_without_load</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_without_load</span><span class="p">(</span>
+
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Get has been called on a section before a load was done; handle this.</p>
+<p>??? example "View Source"
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def get_without_load(cls) -&gt; None:
+
+            &quot;&quot;&quot;Get has been called on a section before a load was done; handle this.&quot;&quot;&quot;
+
+            logger.warning(
+
+                f&quot;{cls.kind_string()} {cls.__name__} accessed before data has been loaded; &quot;
+
+                f&quot;will try implicit loading with {cls.filepath()}.&quot;
+
+            )
 </code></pre></div>
 <h4 id="kind_string">kind_string</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">kind_string</span><span class="p">(</span>
@@ -1778,42 +1602,11 @@ If you prefer to not have a default path then overwrite this method and return N
 
                 if cls._get() is not None:
 
-                    print(
+                    logger.info(
 
-                        f&quot;Warning: filepath has been set the but file is not loaded into the {cls.kind_string()}.&quot;
+                        f&quot;Filepath has been set the but file is not loaded into the {cls.kind_string()}.&quot;
 
                     )
-</code></pre></div>
-<h3 id="fileformat">FileFormat</h3>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">FileFormat</span><span class="p">(</span>
-    <span class="o">*</span><span class="n">args</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwds</span>
-<span class="p">)</span>
-</code></pre></div>
-<p>File formats that are supported by application_settings</p>
-<p>??? example "View Source"
-        @unique</p>
-<div class="highlight"><pre><span></span><code>    class FileFormat(Enum):
-
-        &quot;&quot;&quot;File formats that are supported by application_settings&quot;&quot;&quot;
-
-        TOML = &quot;toml&quot;
-
-        JSON = &quot;json&quot;
-</code></pre></div>
-<hr />
-<h4 id="ancestors-in-mro_1">Ancestors (in MRO)</h4>
-<ul>
-<li>enum.Enum</li>
-</ul>
-<h4 id="class-variables">Class variables</h4>
-<div class="highlight"><pre><span></span><code><span class="n">JSON</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">TOML</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">name</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">value</span>
 </code></pre></div>
 
 

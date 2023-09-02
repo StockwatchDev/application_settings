@@ -343,6 +343,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../docs/7-Recipes/" class="md-nav__link">
+        7. Code snippets and recipes
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -541,6 +555,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#get_without_load" class="md-nav__link">
+    get_without_load
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#kind_string" class="md-nav__link">
     kind_string
   </a>
@@ -605,6 +626,13 @@
           <li class="md-nav__item">
   <a href="#get_1" class="md-nav__link">
     get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_without_load_1" class="md-nav__link">
+    get_without_load
   </a>
   
 </li>
@@ -692,6 +720,20 @@
     <li class="md-nav__item">
       <a href="../" class="md-nav__link">
         Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../private/" class="md-nav__link">
+        Private
       </a>
     </li>
   
@@ -845,6 +887,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#get_without_load" class="md-nav__link">
+    get_without_load
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#kind_string" class="md-nav__link">
     kind_string
   </a>
@@ -914,6 +963,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#get_without_load_1" class="md-nav__link">
+    get_without_load
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#kind_string_1" class="md-nav__link">
     kind_string
   </a>
@@ -963,7 +1019,7 @@
         """Module for handling configuration."""</p>
 <div class="highlight"><pre><span></span><code>    from typing import Any, TypeVar
 
-    from application_settings.container_base import ContainerBase, FileFormat
+    from application_settings.container_base import ContainerBase
 
     from application_settings.container_section_base import (
 
@@ -972,6 +1028,8 @@
         SectionTypeStr,
 
     )
+
+    from .private._file_operations import FileFormat
 
     ConfigT = TypeVar(&quot;ConfigT&quot;, bound=&quot;ConfigBase&quot;)
 
@@ -1100,7 +1158,7 @@
 <h4 id="default_file_format">default_file_format</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">default_file_format</span><span class="p">(</span>
 
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">application_settings</span><span class="o">.</span><span class="n">container_base</span><span class="o">.</span><span class="n">FileFormat</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">application_settings</span><span class="o">.</span><span class="n">private</span><span class="o">.</span><span class="n">_file_operations</span><span class="o">.</span><span class="n">FileFormat</span>
 </code></pre></div>
 <p>Return the default file format</p>
 <p>??? example "View Source"
@@ -1199,13 +1257,35 @@ If you prefer to not have a default path then overwrite this method and return N
 
             if (_the_container_or_none := cls._get()) is None:
 
-                # no config section has been made yet,
+                # no config section has been made yet
+
+                cls.get_without_load()
 
                 # so let&#39;s instantiate one and keep it in the global store
 
                 return cls._create_instance()
 
             return _the_container_or_none
+</code></pre></div>
+<h4 id="get_without_load">get_without_load</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_without_load</span><span class="p">(</span>
+
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Get has been called on a section before a load was done; handle this.</p>
+<p>??? example "View Source"
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def get_without_load(cls) -&gt; None:
+
+            &quot;&quot;&quot;Get has been called on a section before a load was done; handle this.&quot;&quot;&quot;
+
+            logger.warning(
+
+                f&quot;{cls.kind_string()} {cls.__name__} accessed before data has been loaded; &quot;
+
+                f&quot;will try implicit loading with {cls.filepath()}.&quot;
+
+            )
 </code></pre></div>
 <h4 id="kind_string">kind_string</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">kind_string</span><span class="p">(</span>
@@ -1327,9 +1407,9 @@ If you prefer to not have a default path then overwrite this method and return N
 
                 if cls._get() is not None:
 
-                    print(
+                    logger.info(
 
-                        f&quot;Warning: filepath has been set the but file is not loaded into the {cls.kind_string()}.&quot;
+                        f&quot;Filepath has been set the but file is not loaded into the {cls.kind_string()}.&quot;
 
                     )
 </code></pre></div>
@@ -1406,13 +1486,39 @@ If you prefer to not have a default path then overwrite this method and return N
 
             if (_the_container_or_none := cls._get()) is None:
 
-                # no config section has been made yet,
+                # no config section has been made yet
+
+                cls.get_without_load()
 
                 # so let&#39;s instantiate one and keep it in the global store
 
                 return cls._create_instance()
 
             return _the_container_or_none
+</code></pre></div>
+<h4 id="get_without_load_1">get_without_load</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_without_load</span><span class="p">(</span>
+
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Get has been called on a section before a load was done; handle this.</p>
+<p>??? example "View Source"
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def get_without_load(cls) -&gt; None:
+
+            &quot;&quot;&quot;Get has been called on a section before a load was done; handle this.&quot;&quot;&quot;
+
+            # get() is called on a Section but the application
+
+            # has not yet created or loaded a config.
+
+            logger.warning(
+
+                f&quot;{cls.kind_string()} section {cls.__name__} accessed before data has been loaded; &quot;
+
+                f&quot;will try to load via command line parameter &#39;--{cls.__name__}_file&#39;&quot;
+
+            )
 </code></pre></div>
 <h4 id="kind_string_1">kind_string</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">kind_string</span><span class="p">(</span>

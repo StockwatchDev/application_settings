@@ -343,6 +343,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../docs/7-Recipes/" class="md-nav__link">
+        7. Code snippets and recipes
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -496,6 +510,20 @@
               
   
   
+  
+    <li class="md-nav__item">
+      <a href="../private/" class="md-nav__link">
+        Private
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
     
   
   
@@ -611,6 +639,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#get_without_load" class="md-nav__link">
+    get_without_load
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#kind_string" class="md-nav__link">
     kind_string
   </a>
@@ -675,6 +710,13 @@
           <li class="md-nav__item">
   <a href="#get_1" class="md-nav__link">
     get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_without_load_1" class="md-nav__link">
+    get_without_load
   </a>
   
 </li>
@@ -845,6 +887,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#get_without_load" class="md-nav__link">
+    get_without_load
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#kind_string" class="md-nav__link">
     kind_string
   </a>
@@ -914,6 +963,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#get_without_load_1" class="md-nav__link">
+    get_without_load
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#kind_string_1" class="md-nav__link">
     kind_string
   </a>
@@ -967,7 +1023,7 @@
 
     from typing import Any, TypeVar
 
-    from application_settings.container_base import ContainerBase, FileFormat
+    from application_settings.container_base import ContainerBase
 
     from application_settings.container_section_base import (
 
@@ -976,6 +1032,8 @@
         SectionTypeStr,
 
     )
+
+    from .private._file_operations import FileFormat
 
     if sys.version_info &gt;= (3, 11):
 
@@ -1065,9 +1123,9 @@
 
         # in the_section._set(), which normally is always executed, we ensured that
 
-        # the_section is a dataclass instance
+        # the_section is a dataclass instance and hence we can ignore type errors
 
-        return replace(the_section, **changes)  # type: ignore[type-var]
+        return replace(the_section, **changes)  # type: ignore[misc,type-var]
 </code></pre></div>
 <h2 id="variables">Variables</h2>
 <div class="highlight"><pre><span></span><code><span class="n">SettingsT</span>
@@ -1138,7 +1196,7 @@
 <h4 id="default_file_format">default_file_format</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">default_file_format</span><span class="p">(</span>
 
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">application_settings</span><span class="o">.</span><span class="n">container_base</span><span class="o">.</span><span class="n">FileFormat</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">application_settings</span><span class="o">.</span><span class="n">private</span><span class="o">.</span><span class="n">_file_operations</span><span class="o">.</span><span class="n">FileFormat</span>
 </code></pre></div>
 <p>Return the default file format</p>
 <p>??? example "View Source"
@@ -1237,13 +1295,35 @@ If you prefer to not have a default path then overwrite this method and return N
 
             if (_the_container_or_none := cls._get()) is None:
 
-                # no config section has been made yet,
+                # no config section has been made yet
+
+                cls.get_without_load()
 
                 # so let&#39;s instantiate one and keep it in the global store
 
                 return cls._create_instance()
 
             return _the_container_or_none
+</code></pre></div>
+<h4 id="get_without_load">get_without_load</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_without_load</span><span class="p">(</span>
+
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Get has been called on a section before a load was done; handle this.</p>
+<p>??? example "View Source"
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def get_without_load(cls) -&gt; None:
+
+            &quot;&quot;&quot;Get has been called on a section before a load was done; handle this.&quot;&quot;&quot;
+
+            logger.warning(
+
+                f&quot;{cls.kind_string()} {cls.__name__} accessed before data has been loaded; &quot;
+
+                f&quot;will try implicit loading with {cls.filepath()}.&quot;
+
+            )
 </code></pre></div>
 <h4 id="kind_string">kind_string</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">kind_string</span><span class="p">(</span>
@@ -1365,9 +1445,9 @@ If you prefer to not have a default path then overwrite this method and return N
 
                 if cls._get() is not None:
 
-                    print(
+                    logger.info(
 
-                        f&quot;Warning: filepath has been set the but file is not loaded into the {cls.kind_string()}.&quot;
+                        f&quot;Filepath has been set the but file is not loaded into the {cls.kind_string()}.&quot;
 
                     )
 </code></pre></div>
@@ -1448,13 +1528,39 @@ If you prefer to not have a default path then overwrite this method and return N
 
             if (_the_container_or_none := cls._get()) is None:
 
-                # no config section has been made yet,
+                # no config section has been made yet
+
+                cls.get_without_load()
 
                 # so let&#39;s instantiate one and keep it in the global store
 
                 return cls._create_instance()
 
             return _the_container_or_none
+</code></pre></div>
+<h4 id="get_without_load_1">get_without_load</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_without_load</span><span class="p">(</span>
+
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Get has been called on a section before a load was done; handle this.</p>
+<p>??? example "View Source"
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def get_without_load(cls) -&gt; None:
+
+            &quot;&quot;&quot;Get has been called on a section before a load was done; handle this.&quot;&quot;&quot;
+
+            # get() is called on a Section but the application
+
+            # has not yet created or loaded a config.
+
+            logger.warning(
+
+                f&quot;{cls.kind_string()} section {cls.__name__} accessed before data has been loaded; &quot;
+
+                f&quot;will try to load via command line parameter &#39;--{cls.__name__}_file&#39;&quot;
+
+            )
 </code></pre></div>
 <h4 id="kind_string_1">kind_string</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">kind_string</span><span class="p">(</span>
@@ -1504,7 +1610,7 @@ If you prefer to not have a default path then overwrite this method and return N
       <nav class="md-footer__inner md-grid" aria-label="Footer">
         
           
-          <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: Index" rel="prev">
+          <a href="../private/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Private" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -1513,7 +1619,7 @@ If you prefer to not have a default path then overwrite this method and return N
                 <span class="md-footer__direction">
                   Previous
                 </span>
-                Index
+                Private
               </div>
             </div>
           </a>

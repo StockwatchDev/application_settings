@@ -343,6 +343,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/7-Recipes/" class="md-nav__link">
+        7. Code snippets and recipes
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -567,6 +581,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#use_standard_logging" class="md-nav__link">
+    use_standard_logging
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -645,6 +666,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#get_without_load" class="md-nav__link">
+    get_without_load
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#kind_string" class="md-nav__link">
     kind_string
   </a>
@@ -709,6 +737,13 @@
           <li class="md-nav__item">
   <a href="#get_1" class="md-nav__link">
     get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_without_load_1" class="md-nav__link">
+    get_without_load
   </a>
   
 </li>
@@ -797,6 +832,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#get_without_load_2" class="md-nav__link">
+    get_without_load
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#kind_string_2" class="md-nav__link">
     kind_string
   </a>
@@ -861,6 +903,13 @@
           <li class="md-nav__item">
   <a href="#get_3" class="md-nav__link">
     get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_without_load_3" class="md-nav__link">
+    get_without_load
   </a>
   
 </li>
@@ -987,6 +1036,20 @@
   
   
     <li class="md-nav__item">
+      <a href="private/" class="md-nav__link">
+        Private
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="settings_base/" class="md-nav__link">
         Settings Base
       </a>
@@ -1098,6 +1161,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#use_standard_logging" class="md-nav__link">
+    use_standard_logging
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1176,6 +1246,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#get_without_load" class="md-nav__link">
+    get_without_load
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#kind_string" class="md-nav__link">
     kind_string
   </a>
@@ -1240,6 +1317,13 @@
           <li class="md-nav__item">
   <a href="#get_1" class="md-nav__link">
     get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_without_load_1" class="md-nav__link">
+    get_without_load
   </a>
   
 </li>
@@ -1328,6 +1412,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#get_without_load_2" class="md-nav__link">
+    get_without_load
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#kind_string_2" class="md-nav__link">
     kind_string
   </a>
@@ -1392,6 +1483,13 @@
           <li class="md-nav__item">
   <a href="#get_3" class="md-nav__link">
     get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_without_load_3" class="md-nav__link">
+    get_without_load
   </a>
   
 </li>
@@ -1529,6 +1627,8 @@
         """Module for loading and retrieving parameters for configuration and settings."""</p>
 <div class="highlight"><pre><span></span><code>    from importlib.metadata import version
 
+    from loguru import logger
+
     from pydantic import ValidationError
 
     from pydantic.dataclasses import dataclass
@@ -1545,6 +1645,8 @@
 
         settings_filepath_from_cli,
 
+        use_standard_logging,
+
     )
 
     from application_settings.settings_base import (
@@ -1559,7 +1661,11 @@
 
     from application_settings.type_notation_helper import PathOpt, PathOrStr
 
-    __version__ = version(&quot;application_settings&quot;)
+    LOGGER_NAME = __package__
+
+    logger.disable(LOGGER_NAME)
+
+    __version__ = version(__package__)
 
     __all__ = [
 
@@ -1591,6 +1697,8 @@
 
         &quot;parameters_folderpath_from_cli&quot;,
 
+        &quot;use_standard_logging&quot;,
+
     ]
 </code></pre></div>
 <h2 id="sub-modules">Sub-modules</h2>
@@ -1599,6 +1707,7 @@
 <li><a href="container_base/">application_settings.container_base</a></li>
 <li><a href="container_section_base/">application_settings.container_section_base</a></li>
 <li><a href="convenience/">application_settings.convenience</a></li>
+<li><a href="private/">application_settings.private</a></li>
 <li><a href="settings_base/">application_settings.settings_base</a></li>
 <li><a href="type_notation_helper/">application_settings.type_notation_helper</a></li>
 </ul>
@@ -2091,6 +2200,43 @@ but with added validation.</p>
 
         )
 </code></pre></div>
+<h3 id="use_standard_logging">use_standard_logging</h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">use_standard_logging</span><span class="p">(</span>
+    <span class="n">enable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Propagate Loguru messages to standard logging</p>
+<p>??? example "View Source"
+        def use_standard_logging(  # pylint: disable=consider-alternative-union-syntax</p>
+<div class="highlight"><pre><span></span><code>        enable: bool = False, fmt: Union[Formatter, None] = None
+
+    ) -&gt; None:
+
+        &quot;&quot;&quot;Propagate Loguru messages to standard logging&quot;&quot;&quot;
+
+        class PropagateHandler(Handler):
+
+            &quot;&quot;&quot;Handler to propagate log records to standard logging&quot;&quot;&quot;
+
+            def emit(self, record: LogRecord) -&gt; None:
+
+                &quot;&quot;&quot;Let the standard logger handle the log record&quot;&quot;&quot;
+
+                getLogger(record.name).handle(record)
+
+        handler = PropagateHandler()
+
+        handler.setFormatter(fmt)
+
+        logger.remove()  # Remove all handlers added so far, including the default one.
+
+        logger.add(handler, format=&quot;{message}&quot;)
+
+        if enable:
+
+            logger.enable(__package__)
+</code></pre></div>
 <h2 id="classes">Classes</h2>
 <h3 id="configbase">ConfigBase</h3>
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ConfigBase</span><span class="p">(</span>
@@ -2153,7 +2299,7 @@ but with added validation.</p>
 <h4 id="default_file_format">default_file_format</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">default_file_format</span><span class="p">(</span>
 
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">application_settings</span><span class="o">.</span><span class="n">container_base</span><span class="o">.</span><span class="n">FileFormat</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">application_settings</span><span class="o">.</span><span class="n">private</span><span class="o">.</span><span class="n">_file_operations</span><span class="o">.</span><span class="n">FileFormat</span>
 </code></pre></div>
 <p>Return the default file format</p>
 <p>??? example "View Source"
@@ -2252,13 +2398,35 @@ If you prefer to not have a default path then overwrite this method and return N
 
             if (_the_container_or_none := cls._get()) is None:
 
-                # no config section has been made yet,
+                # no config section has been made yet
+
+                cls.get_without_load()
 
                 # so let&#39;s instantiate one and keep it in the global store
 
                 return cls._create_instance()
 
             return _the_container_or_none
+</code></pre></div>
+<h4 id="get_without_load">get_without_load</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_without_load</span><span class="p">(</span>
+
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Get has been called on a section before a load was done; handle this.</p>
+<p>??? example "View Source"
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def get_without_load(cls) -&gt; None:
+
+            &quot;&quot;&quot;Get has been called on a section before a load was done; handle this.&quot;&quot;&quot;
+
+            logger.warning(
+
+                f&quot;{cls.kind_string()} {cls.__name__} accessed before data has been loaded; &quot;
+
+                f&quot;will try implicit loading with {cls.filepath()}.&quot;
+
+            )
 </code></pre></div>
 <h4 id="kind_string">kind_string</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">kind_string</span><span class="p">(</span>
@@ -2380,9 +2548,9 @@ If you prefer to not have a default path then overwrite this method and return N
 
                 if cls._get() is not None:
 
-                    print(
+                    logger.info(
 
-                        f&quot;Warning: filepath has been set the but file is not loaded into the {cls.kind_string()}.&quot;
+                        f&quot;Filepath has been set the but file is not loaded into the {cls.kind_string()}.&quot;
 
                     )
 </code></pre></div>
@@ -2459,13 +2627,39 @@ If you prefer to not have a default path then overwrite this method and return N
 
             if (_the_container_or_none := cls._get()) is None:
 
-                # no config section has been made yet,
+                # no config section has been made yet
+
+                cls.get_without_load()
 
                 # so let&#39;s instantiate one and keep it in the global store
 
                 return cls._create_instance()
 
             return _the_container_or_none
+</code></pre></div>
+<h4 id="get_without_load_1">get_without_load</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_without_load</span><span class="p">(</span>
+
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Get has been called on a section before a load was done; handle this.</p>
+<p>??? example "View Source"
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def get_without_load(cls) -&gt; None:
+
+            &quot;&quot;&quot;Get has been called on a section before a load was done; handle this.&quot;&quot;&quot;
+
+            # get() is called on a Section but the application
+
+            # has not yet created or loaded a config.
+
+            logger.warning(
+
+                f&quot;{cls.kind_string()} section {cls.__name__} accessed before data has been loaded; &quot;
+
+                f&quot;will try to load via command line parameter &#39;--{cls.__name__}_file&#39;&quot;
+
+            )
 </code></pre></div>
 <h4 id="kind_string_1">kind_string</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">kind_string</span><span class="p">(</span>
@@ -2560,7 +2754,7 @@ If you prefer to not have a default path then overwrite this method and return N
 <h4 id="default_file_format_1">default_file_format</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">default_file_format</span><span class="p">(</span>
 
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">application_settings</span><span class="o">.</span><span class="n">container_base</span><span class="o">.</span><span class="n">FileFormat</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">application_settings</span><span class="o">.</span><span class="n">private</span><span class="o">.</span><span class="n">_file_operations</span><span class="o">.</span><span class="n">FileFormat</span>
 </code></pre></div>
 <p>Return the default file format</p>
 <p>??? example "View Source"
@@ -2659,13 +2853,35 @@ If you prefer to not have a default path then overwrite this method and return N
 
             if (_the_container_or_none := cls._get()) is None:
 
-                # no config section has been made yet,
+                # no config section has been made yet
+
+                cls.get_without_load()
 
                 # so let&#39;s instantiate one and keep it in the global store
 
                 return cls._create_instance()
 
             return _the_container_or_none
+</code></pre></div>
+<h4 id="get_without_load_2">get_without_load</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_without_load</span><span class="p">(</span>
+
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Get has been called on a section before a load was done; handle this.</p>
+<p>??? example "View Source"
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def get_without_load(cls) -&gt; None:
+
+            &quot;&quot;&quot;Get has been called on a section before a load was done; handle this.&quot;&quot;&quot;
+
+            logger.warning(
+
+                f&quot;{cls.kind_string()} {cls.__name__} accessed before data has been loaded; &quot;
+
+                f&quot;will try implicit loading with {cls.filepath()}.&quot;
+
+            )
 </code></pre></div>
 <h4 id="kind_string_2">kind_string</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">kind_string</span><span class="p">(</span>
@@ -2787,9 +3003,9 @@ If you prefer to not have a default path then overwrite this method and return N
 
                 if cls._get() is not None:
 
-                    print(
+                    logger.info(
 
-                        f&quot;Warning: filepath has been set the but file is not loaded into the {cls.kind_string()}.&quot;
+                        f&quot;Filepath has been set the but file is not loaded into the {cls.kind_string()}.&quot;
 
                     )
 </code></pre></div>
@@ -2870,13 +3086,39 @@ If you prefer to not have a default path then overwrite this method and return N
 
             if (_the_container_or_none := cls._get()) is None:
 
-                # no config section has been made yet,
+                # no config section has been made yet
+
+                cls.get_without_load()
 
                 # so let&#39;s instantiate one and keep it in the global store
 
                 return cls._create_instance()
 
             return _the_container_or_none
+</code></pre></div>
+<h4 id="get_without_load_3">get_without_load</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_without_load</span><span class="p">(</span>
+
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Get has been called on a section before a load was done; handle this.</p>
+<p>??? example "View Source"
+            @classmethod</p>
+<div class="highlight"><pre><span></span><code>        def get_without_load(cls) -&gt; None:
+
+            &quot;&quot;&quot;Get has been called on a section before a load was done; handle this.&quot;&quot;&quot;
+
+            # get() is called on a Section but the application
+
+            # has not yet created or loaded a config.
+
+            logger.warning(
+
+                f&quot;{cls.kind_string()} section {cls.__name__} accessed before data has been loaded; &quot;
+
+                f&quot;will try to load via command line parameter &#39;--{cls.__name__}_file&#39;&quot;
+
+            )
 </code></pre></div>
 <h4 id="kind_string_3">kind_string</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">kind_string</span><span class="p">(</span>
@@ -3010,13 +3252,13 @@ If you prefer to not have a default path then overwrite this method and return N
         
         
           
-          <a href="settings_base/" class="md-footer__link md-footer__link--next" aria-label="Next: Settings Base" rel="next">
+          <a href="private/" class="md-footer__link md-footer__link--next" aria-label="Next: Private" rel="next">
             <div class="md-footer__title">
               <div class="md-ellipsis">
                 <span class="md-footer__direction">
                   Next
                 </span>
-                Settings Base
+                Private
               </div>
             </div>
             <div class="md-footer__button md-icon">

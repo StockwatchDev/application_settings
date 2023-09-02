@@ -65,6 +65,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#usage-in-a-library-package" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -324,6 +329,8 @@
       <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
       
       
+        
+      
       
       <a href="./" class="md-nav__link md-nav__link--active">
         5. Usage in a library package
@@ -342,6 +349,20 @@
     <li class="md-nav__item">
       <a href="../6-Handling_deviations/" class="md-nav__link">
         6. Handling deviations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7-Recipes/" class="md-nav__link">
+        7. Code snippets and recipes
       </a>
     </li>
   
@@ -499,6 +520,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/application_settings/private/" class="md-nav__link">
+        Private
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/application_settings/settings_base/" class="md-nav__link">
         Settings Base
       </a>
@@ -551,6 +586,8 @@
   
   
   
+    
+  
   
 </nav>
                   </div>
@@ -570,8 +607,7 @@
   </a>
 
 
-  <h1>5. Usage in a library package</h1>
-
+<h1 id="usage-in-a-library-package">Usage in a library package</h1>
 <p>You can use <code>application_settings</code> also to parametrize a library package:</p>
 <ul>
 <li>Define parameters in one or more Section classes (i.e., not in a Container) - best
@@ -579,18 +615,16 @@
 <li>Use parameters in the code of your library by invoking class method <code>get()</code> on your
   Section class(es) (see <a href="../4-Using_parameters/">chapter on using parameters</a>);</li>
 <li>The application that uses your library has to take care of loading stored values into
-  your parameters. This can be done in two ways:<ul>
+  your parameters. This can be done in two ways:</li>
 <li>If the application also uses <code>application_settings</code>, it's simple; the main Section
-  of your library package just needs to be contained in the Container of the
-  application;</li>
+      of your library package just needs to be contained in the Container of the
+      application;</li>
 <li>If the application does not use <code>application_settings</code>, then the application
-  should invoke class method <code>set(data: dict[str, Any])</code> on your main Section, where
-  <code>data</code> holds key-value-pairs with the name of the parameter and the value.
-  Subsections can be set by the name of the section as key and a nested dictionary
-  for the subsection parameters. Note that <code>set()</code> should be invoked before any
-  <code>get()</code> is done.</li>
-</ul>
-</li>
+      should invoke class method <code>set(data: dict[str, Any])</code> on your main Section, where
+      <code>data</code> holds key-value-pairs with the name of the parameter and the value.
+      Subsections can be set by the name of the section as key and a nested dictionary
+      for the subsection parameters. Note that <code>set()</code> should be invoked before any
+      <code>get()</code> is done.</li>
 </ul>
 
 

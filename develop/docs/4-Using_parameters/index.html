@@ -66,7 +66,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#use-parameters-in-your-code" class="md-skip">
+        <a href="#using-parameters" class="md-skip">
           Skip to content
         </a>
       
@@ -315,6 +315,8 @@
       <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
       
       
+        
+      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           4. Using parameters
@@ -330,6 +332,8 @@
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
+  
+    
   
   
     <label class="md-nav__title" for="__toc">
@@ -390,6 +394,20 @@
     <li class="md-nav__item">
       <a href="../6-Handling_deviations/" class="md-nav__link">
         6. Handling deviations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7-Recipes/" class="md-nav__link">
+        7. Code snippets and recipes
       </a>
     </li>
   
@@ -547,6 +565,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/application_settings/private/" class="md-nav__link">
+        Private
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/application_settings/settings_base/" class="md-nav__link">
         Settings Base
       </a>
@@ -599,6 +631,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -647,8 +681,7 @@
   </a>
 
 
-  <h1>4. Using parameters</h1>
-
+<h1 id="using-parameters">Using parameters</h1>
 <h2 id="use-parameters-in-your-code">Use parameters in your code</h2>
 <p>Parameter sections and containers are meant to be instantiated just once and be available
 globally for the application. Therefore, implementation has been done as follows:</p>
@@ -676,11 +709,11 @@ done by editing the config file and restarting your application or reloading the
 container.</p>
 <p>Obviously, settings parameters can also be changed by editing the settings file and
 restarting the application or reloading the settings container. In addition to that,
-settings can be changed programmatically by calling a class method 
+settings can be changed programmatically by calling a class method
 <code>update(changes: dict[str, dict[str, Any])</code>, where the argument <code>changes</code> is a dictionary
 in which each key is the name of a parameter that is to be updated. For updating a nested
 section, the key needs to hold the section name and the value should hold a dictionary
-with str-type keys again, etc. </p>
+with str-type keys again, etc.</p>
 <p>The method <code>update</code> will replace the stored settings
 in the private module global with an updated instance and the settings file will be
 updated as well. So the invocation of <code>get()</code> after <code>update</code> or application restart or

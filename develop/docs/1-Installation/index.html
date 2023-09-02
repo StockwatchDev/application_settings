@@ -273,39 +273,12 @@
       <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
       
       
+        
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          1. Installation
-          <span class="md-nav__icon md-icon"></span>
-        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         1. Installation
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#install-the-package" class="md-nav__link">
-    Install the package
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
       
     </li>
   
@@ -376,6 +349,20 @@
     <li class="md-nav__item">
       <a href="../6-Handling_deviations/" class="md-nav__link">
         6. Handling deviations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7-Recipes/" class="md-nav__link">
+        7. Code snippets and recipes
       </a>
     </li>
   
@@ -533,6 +520,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/application_settings/private/" class="md-nav__link">
+        Private
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/application_settings/settings_base/" class="md-nav__link">
         Settings Base
       </a>
@@ -585,21 +586,8 @@
   
   
   
+    
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#install-the-package" class="md-nav__link">
-    Install the package
-  </a>
-  
-</li>
-      
-    </ul>
   
 </nav>
                   </div>
@@ -619,12 +607,10 @@
   </a>
 
 
-  <h1>1. Installation</h1>
-
-<h2 id="install-the-package">Install the package</h2>
+<h1 id="install-the-package">Install the package</h1>
 <p><code>application_settings</code> is available for <a href="https://pypi.org/project/application-settings/">pypi</a>
 and can hence be installed with <a href="https://pypi.org/project/pip">pip</a> or
-<a href="https://python-poetry.org">poetry</a>. The package is not available on 
+<a href="https://python-poetry.org">poetry</a>. The package is not available on
 <a href="https://docs.conda.io/en/latest/">conda</a>.</p>
 <p>If you don't want to wait for a release and prefer to try the develop version, then you
 can install from our repo.</p>
@@ -662,6 +648,7 @@ can install from our repo.</p>
 </div>
 <p>We have direct dependencies on the following packages:</p>
 <ul>
+<li><a href="https://pypi.org/project/loguru/">loguru</a></li>
 <li><a href="https://pypi.org/project/pathvalidate/">pathvalidate</a></li>
 <li><a href="https://pypi.org/project/pydantic/">pydantic</a></li>
 <li><a href="https://pypi.org/project/tomli/">tomli</a> (for python versions below 3.11)</li>
