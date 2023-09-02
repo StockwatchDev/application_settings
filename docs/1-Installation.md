@@ -1,8 +1,8 @@
-## Install the package
+# Install the package
 
 `application_settings` is available for [pypi](https://pypi.org/project/application-settings/)
 and can hence be installed with [pip](https://pypi.org/project/pip) or
-[poetry](https://python-poetry.org). The package is not available on 
+[poetry](https://python-poetry.org). The package is not available on
 [conda](https://docs.conda.io/en/latest/).
 
 If you don't want to wait for a release and prefer to try the develop version, then you
@@ -40,6 +40,7 @@ can install from our repo.
 
 We have direct dependencies on the following packages:
 
+- [loguru](https://pypi.org/project/loguru/)
 - [pathvalidate](https://pypi.org/project/pathvalidate/)
 - [pydantic](https://pypi.org/project/pydantic/)
 - [tomli](https://pypi.org/project/tomli/) (for python versions below 3.11)

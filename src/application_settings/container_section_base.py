@@ -4,6 +4,8 @@ from abc import ABC, abstractmethod
 from dataclasses import is_dataclass
 from typing import Any, Literal, Optional, cast
 
+from loguru import logger
+
 if sys.version_info >= (3, 11):
     from typing import Self
 else:
@@ -26,10 +28,21 @@ class ContainerSectionBase(ABC):
         """Get the singleton; if not existing, create it. Loading from file only done for a container."""
 
         if (_the_container_or_none := cls._get()) is None:
-            # no config section has been made yet,
+            # no config section has been made yet
+            cls.get_without_load()
             # so let's instantiate one and keep it in the global store
             return cls._create_instance()
         return _the_container_or_none
+
+    @classmethod
+    def get_without_load(cls) -> None:
+        """Get has been called on a section before a load was done; handle this."""
+        # get() is called on a Section but the application
+        # has not yet created or loaded a config.
+        logger.warning(
+            f"{cls.kind_string()} section {cls.__name__} accessed before data has been loaded; "
+            f"will try to load via command line parameter '--{cls.__name__}_file'"
+        )
 
     @classmethod
     def set(cls, data: dict[str, Any]) -> Self:
@@ -50,11 +63,6 @@ class ContainerSectionBase(ABC):
         cls, throw_if_file_not_found: bool = False  # pylint: disable=unused-argument
     ) -> Self:
         """Create a new ContainerSection with default values. Likely that this is wrong."""
-        # This situation can occur if get() is called on a Section but the application
-        # has not yet created or loaded a config.
-        print(
-            f"Section {cls.__name__} accessed before data has been set by the application."
-        )
         return cls.set({})
 
     def _set(self) -> Self:

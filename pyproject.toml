@@ -7,6 +7,7 @@ license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/StockwatchDev/application_settings"
 repository = "https://github.com/StockwatchDev/application_settings"
+documentation = "https://stockwatchdev.github.io/application_settings/stable/"
 keywords = ["configuration", "settings", "dataclass", "pydantic", "toml"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -28,9 +29,12 @@ include = [
     { path = "examples", format = "sdist" },
 ]
 
+[tool.poetry.urls]
+Changelog = "https://stockwatchdev.github.io/application_settings/stable/CHANGELOG/"
 
 [tool.poetry.dependencies]
 python = "^3.9"
+loguru = "^0.7.0"
 pathvalidate = ">=2.5,<4.0"
 pydantic = "^2.0"
 tomli = { version = "^2.0", python = "<3.11" }
@@ -171,6 +175,9 @@ Home = "README.md"
 [[tool.portray.mkdocs.nav.Usage]]
 "6. Handling deviations" = "docs/6-Handling_deviations.md"
 
+[[tool.portray.mkdocs.nav.Usage]]
+"7. Code snippets and recipes" = "docs/7-Recipes.md"
+
 [[tool.portray.mkdocs.nav]]
 Changelog = "CHANGELOG.md"
 
@@ -189,7 +196,7 @@ allowlist_externals = poetry
 commands_pre =
     poetry install --no-root --with testing -v
 commands =
-    poetry run pytest --cov-report xml:coverage.xml --cov-report term-missing --cov=application_settings tests/ --import-mode importlib
+    poetry run python -m pytest --cov-report xml:coverage.xml --cov-report term-missing --cov=application_settings tests/ --import-mode importlib
 
 [testenv:style]
 skip_install = true
