@@ -1,3 +1,5 @@
+# Using parameters
+
 ## Use parameters in your code
 
 Parameter sections and containers are meant to be instantiated just once and be available
@@ -29,11 +31,11 @@ container.
 
 Obviously, settings parameters can also be changed by editing the settings file and
 restarting the application or reloading the settings container. In addition to that,
-settings can be changed programmatically by calling a class method 
+settings can be changed programmatically by calling a class method
 `update(changes: dict[str, dict[str, Any])`, where the argument `changes` is a dictionary
 in which each key is the name of a parameter that is to be updated. For updating a nested
 section, the key needs to hold the section name and the value should hold a dictionary
-with str-type keys again, etc. 
+with str-type keys again, etc.
 
 The method `update` will replace the stored settings
 in the private module global with an updated instance and the settings file will be

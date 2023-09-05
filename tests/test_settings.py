@@ -3,8 +3,10 @@
 # pylint: disable=consider-alternative-union-syntax
 import sys
 from pathlib import Path
+from typing import Any
 
 import pytest
+from loguru import logger
 
 from application_settings import (
     ConfigBase,
@@ -13,6 +15,7 @@ from application_settings import (
     dataclass,
     parameters_folderpath_from_cli,
     settings_filepath_from_cli,
+    use_standard_logging,
 )
 
 if sys.version_info < (3, 10):
@@ -182,7 +185,7 @@ def test_update_toml(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
 
 
 def test_update_ini(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, capfd: pytest.CaptureFixture[str]
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, caplog: pytest.LogCaptureFixture
 ) -> None:
     if sys.version_info >= (3, 10):
 
@@ -195,6 +198,7 @@ def test_update_ini(
             return None
 
     monkeypatch.setattr(AnExample1Settings, "default_filepath", mock_default_filepath)
+    use_standard_logging(enable=True)
     AnExample1Settings.set_filepath("")
     AnExample1Settings.load()
     assert AnExample1Settings.get().section1.setting1 == "setting1"
@@ -212,8 +216,22 @@ def test_update_ini(
     # new settings have been applied but not stored to file
     assert new_settings.section1.setting1 == "new s1a"
     assert AnExample1Settings.get().section1.setting2 == 333
-    captured = capfd.readouterr()
-    assert "Unknown file format ini given in" in captured.out
+    assert "Unknown file format ini given in" in caplog.records[-1].msg
     AnExample1Settings.load()
     assert AnExample1Settings.get().section1.setting1 == "setting1"
     assert AnExample1Settings.get().section1.setting2 == 2
+    logger.disable("application_settings")
+
+
+def test_update_create_file_failed(
+    monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
+) -> None:
+    def mock_touch(_: Any) -> None:
+        return None
+
+    monkeypatch.setattr(Path, "touch", mock_touch)
+    use_standard_logging(enable=True)
+    some_path = Path.home() / "ProgramData" / "test" / "nonexistingfile.json"
+    AnExample1Settings.set_filepath(some_path)
+    AnExample1Settings.update({"section1": {"subsec": {"setting3": 5.55}}})
+    assert f"Creation of file {str(some_path)} failed." in caplog.records[-1].msg

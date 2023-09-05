@@ -1,8 +1,10 @@
+# Defining parameters
+
 This package lets you define parameters for configuration and settings. The difference
 between configuration and settings is as follows. `Config` is for parameters that do not
 change during runtime and are read from file. `Settings` are parameters that can change
 programmatically during runtime and are read from and saved to file for persistancy over
-sessions. During definition, they differ only in terms of the base classes that are used. 
+sessions. During definition, they differ only in terms of the base classes that are used.
 
 The intended structure is that parameters are defined in section classes. Sections can be
 nested. There should be one special root section for the application, referred to as the
@@ -13,7 +15,7 @@ be mixed (i.e., do not nest a Settings section in a Config section and vice vers
 
 A section is defined by subclassing the relevant base class (`ConfigSectionBase` for
 config, `SettingsSectionBase` for settings) and decorating it with
-`@dataclass(frozen=True)`. Parameters are defined as fields of the dataclass. For a 
+`@dataclass(frozen=True)`. Parameters are defined as fields of the dataclass. For a
 dataclass, it is mandatory to add a type hint for each field. These type hints are used
 also to validate the data that is read from the parameter file. If you
 specify a default value as well, then you prevent the occurance of an exception if the
@@ -25,7 +27,7 @@ is a drop-in replacement for a `dataclass` from the standard python library, enh
 with data validation. If you need additional dataclass functionality such as `fields`
 etc., you can import those from the standard library.
 
-Nested sections are obtained by defining fields in a section that are type hinted with 
+Nested sections are obtained by defining fields in a section that are type hinted with
 the appropriate contained section class(es) and instantiated (possible only when all
 parameters of the nested section have default values).
 
@@ -44,7 +46,6 @@ the settings container and -sections (see also the example section below).
 === "Configuration"
     ```python
     from application_settings import ConfigBase, ConfigSectionBase, dataclass
-
 
     @dataclass(frozen=True)
     class MyExampleConfigSection(ConfigSectionBase):
@@ -66,7 +67,6 @@ the settings container and -sections (see also the example section below).
 === "Settings"
     ```python
     from application_settings import SettingsBase, SettingsSectionBase, dataclass
-
 
     @dataclass(frozen=True)
     class BasicSettingsSection(SettingsSectionBase):

@@ -9,10 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added a GitHub action for PyPi deployment
 - Check for presence of the dataclass decorator
   (Issue [#76](https://github.com/StockwatchDev/application_settings/issues/76))
 - Enable file inclusion for toml config files
   (Issue [#67](https://github.com/StockwatchDev/application_settings/issues/67))
+- Added logging
+  (Issue [#17](https://github.com/StockwatchDev/application_settings/issues/17))
+- Added a recipe for handling configurable initialization of module global variables
+  and class variables
 
 ### Changed
 
@@ -23,8 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgraded pydantic to version 2.0, which has a different way of doing type conversion,
   see the [conversion table](https://docs.pydantic.dev/2.0/usage/conversion_table/)
   (Issue [#75](https://github.com/StockwatchDev/application_settings/issues/75))
-
-### Fixed
 
 ## [0.3.0] - 2023-06-21
 

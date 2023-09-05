@@ -3,11 +3,13 @@ import sys
 from dataclasses import replace
 from typing import Any, TypeVar
 
-from application_settings.container_base import ContainerBase, FileFormat
+from application_settings.container_base import ContainerBase
 from application_settings.container_section_base import (
     ContainerSectionBase,
     SectionTypeStr,
 )
+
+from .private._file_operations import FileFormat
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -62,5 +64,5 @@ def _update_settings_section(
 ) -> SettingsT:
     "Update parameters and sections with data specified in changes"
     # in the_section._set(), which normally is always executed, we ensured that
-    # the_section is a dataclass instance
-    return replace(the_section, **changes)  # type: ignore[type-var,misc]
+    # the_section is a dataclass instance and hence we can ignore type errors
+    return replace(the_section, **changes)  # type: ignore[misc,type-var]

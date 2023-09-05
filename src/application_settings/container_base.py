@@ -1,33 +1,25 @@
 """Base class for a container (= root section) for configuration and settings."""
-import json
 import sys
 from abc import ABC, abstractmethod
 from dataclasses import asdict
-from enum import Enum, unique
 from pathlib import Path
 from re import sub
-from typing import Any, cast
+from typing import Any
 
-import tomli_w
+from loguru import logger
 from pathvalidate import is_valid_filepath
 
 from application_settings.container_section_base import ContainerSectionBase
 from application_settings.type_notation_helper import PathOpt, PathOrStr
 
+from .private._file_operations import FileFormat
+from .private._file_operations import load as _do_load
+from .private._file_operations import save as _do_save
+
 if sys.version_info >= (3, 11):
-    import tomllib
     from typing import Self
 else:
-    import tomli as tomllib
     from typing_extensions import Self
-
-
-@unique
-class FileFormat(Enum):
-    """File formats that are supported by application_settings"""
-
-    TOML = "toml"
-    JSON = "json"
 
 
 class ContainerBase(ContainerSectionBase, ABC):
@@ -90,8 +82,8 @@ class ContainerBase(ContainerSectionBase, ABC):
             cls.load()
         else:
             if cls._get() is not None:
-                print(
-                    f"Warning: filepath has been set the but file is not loaded into the {cls.kind_string()}."
+                logger.info(
+                    f"Filepath has been set the but file is not loaded into the {cls.kind_string()}."
                 )
 
     @classmethod
@@ -112,6 +104,14 @@ class ContainerBase(ContainerSectionBase, ABC):
         return cls._create_instance(throw_if_file_not_found)
 
     @classmethod
+    def get_without_load(cls) -> None:
+        """Get has been called on a section before a load was done; handle this."""
+        logger.warning(
+            f"{cls.kind_string()} {cls.__name__} accessed before data has been loaded; "
+            f"will try implicit loading with {cls.filepath()}."
+        )
+
+    @classmethod
     def _create_instance(cls, throw_if_file_not_found: bool = False) -> Self:
         """Load stored data, instantiate the Container with it, store it in the singleton and return it."""
 
@@ -124,18 +124,9 @@ class ContainerBase(ContainerSectionBase, ABC):
         """Private method to save the singleton to file."""
         if path := self.filepath():
             path.parent.mkdir(parents=True, exist_ok=True)
-            if (ext := path.suffix[1:].lower()) == FileFormat.TOML.value:
-                with path.open(mode="wb") as fptr:
-                    # in self._set(), which normally is always executed, we ensured that
-                    # self is a dataclass instance
-                    tomli_w.dump(asdict(self), fptr)  # type: ignore[call-overload]
-            elif ext == FileFormat.JSON.value:
-                with path.open(mode="w") as fptr:
-                    # in self._set(), which normally is always executed, we ensured that
-                    # self is a dataclass instance
-                    json.dump(asdict(self), fptr)  # type: ignore[call-overload]
-            else:
-                print(f"Unknown file format {ext} given in {path}.")
+            # in self._set(), which normally is always executed, we ensured that
+            # self is a dataclass instance
+            _do_save(path, asdict(self))  # type: ignore[call-overload]
         else:
             # This situation can occur if no valid path was given as an argument, and
             # the default path is set to None.
@@ -147,80 +138,7 @@ class ContainerBase(ContainerSectionBase, ABC):
     @classmethod
     def _get_saved_data(cls, throw_if_file_not_found: bool = False) -> dict[str, Any]:
         """Get the data stored in the parameter file"""
-        data_stored: dict[str, Any] = {}
-        path = cls.filepath()
-        if _check_filepath(path, cls.kind_string().lower(), throw_if_file_not_found):
-            real_path = cast(Path, path)
-            if real_path.suffix[1:].lower() == str(FileFormat.TOML.value):
-                if cls.kind_string() == "Config":
-                    data_stored = _load_toml_with_includes(
-                        real_path, throw_if_file_not_found
-                    )
-                else:
-                    data_stored = _load_toml(real_path)
-            if real_path.suffix[1:].lower() == str(FileFormat.JSON.value):
-                data_stored = _load_json(real_path)
-        return data_stored
-
-
-def _check_filepath(
-    path: PathOpt, file_kind: str, throw_if_file_not_found: bool
-) -> bool:
-    if path is None or not path.is_file():
-        err_mess = f"Path {str(path)} not valid for {file_kind} file."
-        if throw_if_file_not_found:
-            raise FileNotFoundError(err_mess)
-        print(err_mess, "Trying with defaults, but this may not work.")
-        return False
-    ext = path.suffix[1:].lower()
-    try:
-        FileFormat(ext)
-    except ValueError:
-        print(f"Unknown file format {ext} given in {path}.")
-        print("Trying with defaults, but this may not work.")
-        return False
-    return True
-
-
-def _load_toml(path: Path) -> dict[str, Any]:
-    data_stored: dict[str, Any] = {}
-    with path.open(mode="rb") as fptr:
-        data_stored = tomllib.load(fptr)
-    return data_stored
-
-
-def _load_json(path: Path) -> dict[str, Any]:
-    data_stored: dict[str, Any] = {}
-    with path.open(mode="r") as fptr:
-        data_stored = json.load(fptr)
-    return data_stored
-
-
-def _load_toml_with_includes(
-    path: Path, throw_if_file_not_found: bool
-) -> dict[str, Any]:
-    data_stored = _load_toml(path)
-    if included_files := data_stored.get("__include__"):
-        if not isinstance(included_files, list):
-            included_files = [included_files]
-        for included_file in included_files:
-            if is_valid_filepath(included_file, platform="auto"):
-                included_file_path = Path(included_file)
-                if not included_file_path.is_absolute():
-                    included_file_path = path.parents[0] / included_file_path
-                included_file_path.resolve()
-                if _check_filepath(included_file_path, "toml", throw_if_file_not_found):
-                    data_stored = (
-                        _load_toml_with_includes(
-                            included_file_path, throw_if_file_not_found
-                        )
-                        | data_stored
-                    )
-            else:
-                raise ValueError(
-                    f"Given path: '{included_file}' is not a valid path for this OS"
-                )
-    return data_stored
+        return _do_load(cls.kind_string(), cls.filepath(), throw_if_file_not_found)
 
 
 _ALL_PATHS: dict[int, PathOpt] = {}

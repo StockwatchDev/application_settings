@@ -1,11 +1,13 @@
 """Module for handling configuration."""
 from typing import Any, TypeVar
 
-from application_settings.container_base import ContainerBase, FileFormat
+from application_settings.container_base import ContainerBase
 from application_settings.container_section_base import (
     ContainerSectionBase,
     SectionTypeStr,
 )
+
+from .private._file_operations import FileFormat
 
 ConfigT = TypeVar("ConfigT", bound="ConfigBase")
 ConfigT.__doc__ = "Represents ConfigBase and all subclasses"
