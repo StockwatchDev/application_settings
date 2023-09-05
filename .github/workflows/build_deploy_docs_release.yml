@@ -52,7 +52,7 @@ jobs:
 
       - name: Build html
         run:
-          poetry run mkdocs build -f ./docs/mkdocs.yml -d ../site"
+          poetry run mkdocs build -f ./docs/mkdocs.yml -d ../site
 
       - name: Setup git config
         run: |
