@@ -21,10 +21,10 @@ from application_settings.settings_base import (
 )
 from application_settings.type_notation_helper import PathOpt, PathOrStr
 
-LOGGER_NAME = __package__
+LOGGER_NAME = "application-settings"
 logger.disable(LOGGER_NAME)
 
-__version__ = version(__package__)
+__version__ = version("application-settings")
 
 __all__ = [
     "ConfigSectionBase",
