@@ -33,7 +33,7 @@ include = [
 Changelog = "https://stockwatchdev.github.io/application_settings/stable/CHANGELOG/"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<3.13"
 loguru = "^0.7.0"
 pathvalidate = ">=2.5,<4.0"
 pydantic = "^2.0"
@@ -73,7 +73,13 @@ tox = "^4.4"
 optional = true
 
 [tool.poetry.group.docs.dependencies]
-portray = "^1.8"
+mkdocs = "^1.5"
+mkdocstrings-python = "^1.5"
+mkdocs-material = "^9.2"
+pymdown-extensions = "^10.1"
+mkdocs-include-markdown-plugin = "^6.0"
+mkdocs-gen-files = "^0.5"
+mkdocs-literate-nav = "^0.6"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -134,53 +140,6 @@ runtime-typing = false
 
 [tool.pylint.similarities]
 ignore-imports = "yes"
-
-[tool.portray.mkdocs]
-markdown_extensions = [
-    "pymdownx.highlight",
-    "pymdownx.superfences",
-    "pymdownx.tabbed",
-]
-
-[[tool.portray.extra_markdown_extensions]]
-[tool.portray.extra_markdown_extensions."pymdownx.tabbed"]
-alternate_style = true
-
-[tool.portray.mkdocs.theme]
-name = "material"
-palette = { scheme = "slate", primary = "blue" }
-
-[[tool.portray.mkdocs.nav]]
-Home = "README.md"
-
-[[tool.portray.mkdocs.nav]]
-"Quick start" = "docs/Quick_start.md"
-
-[[tool.portray.mkdocs.nav]]
-[[tool.portray.mkdocs.nav.Usage]]
-"1. Installation" = "docs/1-Installation.md"
-
-[[tool.portray.mkdocs.nav.Usage]]
-"2. Defining parameters" = "docs/2-Defining_parameters.md"
-
-[[tool.portray.mkdocs.nav.Usage]]
-"3. Files and file location" = "docs/3-Files.md"
-
-[[tool.portray.mkdocs.nav.Usage]]
-"4. Using parameters" = "docs/4-Using_parameters.md"
-
-[[tool.portray.mkdocs.nav.Usage]]
-"5. Usage in a library package" = "docs/5-Usage_in_a_library_package.md"
-
-[[tool.portray.mkdocs.nav.Usage]]
-"6. Handling deviations" = "docs/6-Handling_deviations.md"
-
-[[tool.portray.mkdocs.nav.Usage]]
-"7. Code snippets and recipes" = "docs/7-Recipes.md"
-
-[[tool.portray.mkdocs.nav]]
-Changelog = "CHANGELOG.md"
-
 
 [tool.tox]
 legacy_tox_ini = """
