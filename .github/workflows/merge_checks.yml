@@ -22,6 +22,11 @@ jobs:
             arch: x64
             os: ubuntu-latest
             toxenv: style
+          - name: Build doc check with py311-ubuntu
+            python: '3.11'
+            arch: x64
+            os: ubuntu-latest
+            toxenv: docs
           - name: Type check with py39-ubuntu
             python: '3.9'
             arch: x64
