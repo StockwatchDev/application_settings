@@ -62,6 +62,7 @@ Thumbs.db
 
 # Vim specific configuration
 .vim
+*.swp
 
 # stockwatch data
 stocks/
