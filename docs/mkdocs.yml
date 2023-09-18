@@ -57,5 +57,6 @@ nav:
   - 4. Using parameters: 4-Using_parameters.md
   - 5. Usage in a library package: 5-Usage_in_a_library_package.md
   - 6. Handling deviations: 6-Handling_deviations.md
+  - 7. Recipes: 7-Recipes.md
 - Changelog: CHANGELOG.md
 - Code Reference: reference/
