@@ -16,47 +16,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        python: ['3.9', '3.10', '3.11']
+        toxenv: ['pytest', 'typing']
         include:
-          - name: Style check with py311-ubuntu
-            python: '3.11'
-            arch: x64
-            os: ubuntu-latest
-            toxenv: style
-          - name: Build doc check with py311-ubuntu
-            python: '3.11'
-            arch: x64
-            os: ubuntu-latest
-            toxenv: docs
-          - name: Type check with py39-ubuntu
-            python: '3.9'
-            arch: x64
-            os: ubuntu-latest
-            toxenv: py39-typing
-          - name: Type check with py310-ubuntu
-            python: '3.10'
-            arch: x64
-            os: ubuntu-latest
-            toxenv: py310-typing
-          - name: Type check with py311-ubuntu
-            python: '3.11'
-            arch: x64
-            os: ubuntu-latest
-            toxenv: py311-typing
-          - name: Test suite with py39-ubuntu
-            python: '3.9'
-            arch: x64
-            os: ubuntu-latest
-            toxenv: py39
-          - name: Test suite with py310-ubuntu
-            python: '3.10'
-            arch: x64
-            os: ubuntu-latest
-            toxenv: py310
-          - name: Test suite with py311-ubuntu
-            python: '3.11'
-            arch: x64
-            os: ubuntu-latest
-            toxenv: py311
+          - python: '3.11'
+            toxenv: 'style'
+          - python: '3.11'
+            toxenv: 'docs'
+    name: "${{ matrix.toxenv }} for python ${{ matrix.python }}"
 
     steps:
       - name: Checkout repo
@@ -81,7 +48,7 @@ jobs:
         run: poetry install --no-interaction --no-root --only testrunner
 
       - name: Run tests
-        run: poetry run tox -e ${{ matrix.toxenv }}
+        run: poetry run tox -e py${{matrix.python}}-${{ matrix.toxenv }}
 
       - name: Report coverage
         uses: codecov/codecov-action@v3

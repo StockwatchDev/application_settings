@@ -73,6 +73,7 @@ tox = "^4.4"
 optional = true
 
 [tool.poetry.group.docs.dependencies]
+black = ">=22.10,<24.0"
 mkdocs = "^1.5"
 mkdocstrings-python = "^1.5"
 mkdocs-material = "^9.2"
@@ -146,16 +147,26 @@ legacy_tox_ini = """
 [tox]
 isolated_build = true
 envlist =
-    py{39,310,311}
-    style
+    py{39,310,311}-pytest
     py{39,310,311}-typing
+    docs
+    style
 
 [testenv]
 allowlist_externals = poetry
+
+[testenv:py{39,310,311}-pytest]
 commands_pre =
     poetry install --no-root --with testing -v
 commands =
     poetry run python -m pytest --cov-report xml:coverage.xml --cov-report term-missing --cov=application_settings tests/ --import-mode importlib
+
+[testenv:py{39,310,311}-typing]
+skip_install = true
+commands_pre =
+    poetry install --with typing -v
+commands =
+    poetry run mypy ./src
 
 [testenv:docs]
 skip_install = true
@@ -172,11 +183,4 @@ commands =
     poetry run python -m black --check ./src
     poetry run isort --check --diff ./src
     poetry run pylint ./src
-
-[testenv:py{39,310,311}-typing]
-skip_install = true
-commands_pre =
-    poetry install --with typing -v
-commands =
-    poetry run mypy ./src
 """
