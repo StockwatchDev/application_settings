@@ -65,8 +65,5 @@ Thumbs.db
 .vim
 *.swp
 
-# stockwatch data
-stocks/
-
 # Playground folder for local develop scripts
 develop/
