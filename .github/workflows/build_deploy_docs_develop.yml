@@ -1,6 +1,6 @@
 # Simple workflow for deploying static content to GitHub Pages
 # Run this job on pushes to `develop` (later; now pushes to update-docs).
-name: "Build and deploy docs"
+name: "Build and deploy docs develop"
 
 on:
   # Triggers the workflow on push but only for the indicated branches
@@ -48,8 +48,9 @@ jobs:
         run: poetry install --no-interaction --with docs
 
       - name: Build html
-        run:
+        run: |
           poetry run mkdocs build -f ./docs/mkdocs.yml -d ../site
+          ls ./site/assets/*
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
