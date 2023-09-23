@@ -59,6 +59,7 @@ jobs:
       - name: Rename folder
         run: |
             echo "Renaming site folder and committing"
+            git fetch
             git checkout gh-pages
             rm -r develop
             mv site develop
