@@ -61,7 +61,7 @@ jobs:
             echo "Renaming site folder and committing"
             git fetch
             git checkout gh-pages
-            rm -r develop
+            rm -r -f develop
             mv site develop
             git add develop/
             git commit -m "update docs for develop"
