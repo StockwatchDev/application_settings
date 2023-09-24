@@ -66,4 +66,4 @@ Thumbs.db
 *.swp
 
 # Playground folder for local develop scripts
-develop/
+playground/
