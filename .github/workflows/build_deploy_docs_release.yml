@@ -59,10 +59,12 @@ jobs:
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
-      - name: Rename folder and redirect stable to new release
+      - name: Rename folder, commit and redirect stable to new release
         run: |
             echo "Renaming site folder and committing"
+            git fetch
             git checkout gh-pages
+            rm -r -f "$RELEASE_VERSION"
             mv site "$RELEASE_VERSION"
             git add "$RELEASE_VERSION"/
             git commit -m "add docs for new version $RELEASE_VERSION"
