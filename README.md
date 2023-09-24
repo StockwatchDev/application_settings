@@ -25,7 +25,8 @@ into dataclasses. This brings some benefits:
 - IDEs will provide helpful hints and completion when using the parameters.
 - More control over what happens when a file contains mistakes
   (by leveraging the power of [pydantic](https://docs.pydantic.dev/)).
-- Possibility to specify defaults when no file is found or entries are missing.
+- Possibility to specify defaults when no file is found or entries are missing, i.e.,
+  aim for "zeroconf".
 - Configuration parameters are read-only (i.e., changed by editing the config file); we
   recommend (and support) the use of `toml` for this, which is a human-oriented,
   flexible, standardardized and not overly complex format.
