@@ -1,5 +1,5 @@
 # Simple workflow for deploying static content to GitHub Pages
-# Run this job on pushes to `develop` (later; now pushes to update-docs).
+# Run this job on pushes to `develop`.
 name: "Build and deploy docs develop"
 
 on:
@@ -56,7 +56,7 @@ jobs:
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
-      - name: Rename folder
+      - name: Rename folder and commit
         run: |
             echo "Renaming site folder and committing"
             git fetch
