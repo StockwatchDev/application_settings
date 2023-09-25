@@ -33,58 +33,62 @@ include = [
 Changelog = "https://stockwatchdev.github.io/application_settings/stable/CHANGELOG/"
 
 [tool.poetry.dependencies]
+# version cap for python needed because of mkdocs-include-markdown-plugin, will be removed soon
 python = ">=3.9,<3.13"
-loguru = "^0.7.0"
-pathvalidate = ">=2.5,<4.0"
-pydantic = "^2.0"
-tomli = { version = "^2.0", python = "<3.11" }
-tomli-w = "^1.0"
-typing-extensions = { version = "^4.5.0", python = "<3.11" }
+loguru = ">=0.7.0"
+pathvalidate = ">=2.5"
+pydantic = ">=2.0"
+tomli = { version = ">=2.0", python = "<3.11" }
+tomli-w = ">=1.0"
+typing-extensions = { version = ">=4.5.0", python = "<3.11" }
 
 [tool.poetry.group.testing]
 optional = true
 
 [tool.poetry.group.testing.dependencies]
-pytest = "^7.0"
-pytest-cov = "^4.0"
+pytest = ">=7.0"
+pytest-cov = ">=4.0"
 
 [tool.poetry.group.typing]
 optional = true
 
 [tool.poetry.group.typing.dependencies]
-mypy = "^1.1"
-lxml = "^4.9"
+mypy = ">=1.1"
+lxml = ">=4.9"
 
 [tool.poetry.group.style]
 optional = true
 
 [tool.poetry.group.style.dependencies]
-black = ">=22.10,<24.0"
-isort = "^5.12"
-pylint = "^2.15"
+black = ">=22.10"
+isort = ">=5.12"
+pylint = ">=2.15"
 
 [tool.poetry.group.testrunner]
 optional = true
 
 [tool.poetry.group.testrunner.dependencies]
-tox = "^4.4"
+tox = ">=4.4"
 
 [tool.poetry.group.docs]
 optional = true
 
 [tool.poetry.group.docs.dependencies]
-black = ">=22.10,<24.0"
-mkdocs = "^1.5"
-mkdocstrings-python = "^1.5"
-mkdocs-material = "^9.2"
-pymdown-extensions = "^10.1"
-mkdocs-include-markdown-plugin = "^6.0"
-mkdocs-gen-files = "^0.5"
-mkdocs-literate-nav = "^0.6"
+black = ">=22.10"
+mkdocs = ">=1.5"
+mkdocstrings-python = ">=1.5"
+mkdocs-material = ">=9.2"
+pymdown-extensions = ">=10.1"
+mkdocs-include-markdown-plugin = ">=6.0"
+mkdocs-gen-files = ">=0.5"
+mkdocs-literate-nav = ">=0.6"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+filterwarnings = ["error"]
 
 [tool.isort]
 profile = "black"
