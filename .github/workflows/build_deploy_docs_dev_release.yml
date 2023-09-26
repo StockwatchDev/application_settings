@@ -6,7 +6,7 @@ on:
   # Triggers the workflow on push but only for the indicated branches
   push:
     branches:
-      - "develop"
+      - "hotfix/fix-deploy-docs"
 
   # Triggers the workflow on pubishing a release
   release:
