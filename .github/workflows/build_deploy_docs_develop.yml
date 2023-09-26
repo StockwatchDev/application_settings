@@ -4,9 +4,9 @@ name: "Build and deploy docs develop"
 
 on:
   # Triggers the workflow on push but only for the indicated branches
-  push:
-    branches:
-      - "develop"
+  # push:
+  #   branches:
+  #     - "develop"
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -28,6 +28,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: develop
+          fetch-depth: 0
 
       - name: Setup python 3.11
         uses: actions/setup-python@v4
@@ -59,9 +62,8 @@ jobs:
       - name: Rename folder and commit
         run: |
             echo "Renaming site folder and committing"
-            git fetch
             git checkout gh-pages
-            rm -r -f develop
+            rm -rf develop
             mv site develop
             git add develop/
             git commit -m "update docs for develop"
