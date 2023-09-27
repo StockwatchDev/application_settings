@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - "hotfix/fix-deploy-docs"
-      - "develop"
 
   # Triggers the workflow on pubishing a release
   release:
