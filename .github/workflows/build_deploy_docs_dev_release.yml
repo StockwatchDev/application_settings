@@ -35,17 +35,17 @@ jobs:
         with:
           fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
           ref: release
-        if: github.event_name != 'release'
+        if: github.event_name == 'release'
 
       - name: Checkout develop
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
           ref: develop
-        if: github.event_name == 'release'
+        if: github.event_name != 'release'
 
       - name: Set folder name for release
-        run: echo "FOLDERNAME=${{ github.event.release.tag_name }}-tst" >> $GITHUB_ENV
+        run: echo "FOLDERNAME=${{ github.event.release.tag_name }}tst" >> $GITHUB_ENV
         if: github.event_name != 'release'
 
       - name: Set folder name for develop
