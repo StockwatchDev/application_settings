@@ -6,7 +6,6 @@ on:
   # Triggers the workflow on push but only for the indicated branches
   push:
     branches:
-      - "hotfix/fix-deploy-docs"
       - "develop"
 
   # Triggers the workflow on pubishing a release
@@ -45,12 +44,12 @@ jobs:
         if: github.event_name != 'release'
 
       - name: Set folder name for release
-        run: echo "FOLDERNAME=${{ github.event.release.tag_name }}tst" >> $GITHUB_ENV
-        if: github.event_name != 'release'
+        run: echo "FOLDERNAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+        if: github.event_name == 'release'
 
       - name: Set folder name for develop
         run: echo "FOLDERNAME=develop" >> $GITHUB_ENV
-        if: github.event_name == 'release'
+        if: github.event_name != 'release'
 
       - name: Setup python 3.11
         uses: actions/setup-python@v4
@@ -91,11 +90,11 @@ jobs:
       - name: Redirect stable to new release
         run: |
           echo "Redirecting stable to newly released version " $FOLDERNAME
-          # rm -rf stable
-          ln -s $FOLDERNAME stable2
-          git add stable2
-          git commit -m "redirect stable2 to new version $FOLDERNAME"
-        if: github.event_name != 'release'
+          rm -rf stable
+          ln -s $FOLDERNAME stable
+          git add stable
+          git commit -m "redirect stable to new version $FOLDERNAME"
+        if: github.event_name == 'release'
 
       - name: Push changes
         uses: ad-m/github-push-action@v0.6.0
