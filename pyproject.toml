@@ -18,6 +18,7 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Typing :: Typed",
 ]
@@ -40,7 +41,7 @@ pathvalidate = ">=2.5"
 pydantic = ">=2.0"
 tomli = { version = ">=2.0", python = "<3.11" }
 tomli-w = ">=1.0"
-typing-extensions = { version = ">=4.5.0", python = "<3.11" }
+typing-extensions = { version = ">=4.5.0", python = "<3.12" }
 
 [tool.poetry.group.testing]
 optional = true
@@ -151,21 +152,21 @@ legacy_tox_ini = """
 [tox]
 isolated_build = true
 envlist =
-    py{39,310,311}-pytest
-    py{39,310,311}-typing
+    py{39,310,311,312}-pytest
+    py{39,310,311,312}-typing
     docs
     style
 
 [testenv]
 allowlist_externals = poetry
 
-[testenv:py{39,310,311}-pytest]
+[testenv:py{39,310,311,312}-pytest]
 commands_pre =
     poetry install --no-root --with testing -v
 commands =
     poetry run python -m pytest --cov-report xml:coverage.xml --cov-report term-missing --cov=application_settings tests/ --import-mode importlib
 
-[testenv:py{39,310,311}-typing]
+[testenv:py{39,310,311,312}-typing]
 skip_install = true
 commands_pre =
     poetry install --with typing -v
