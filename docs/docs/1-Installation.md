@@ -45,4 +45,4 @@ We have direct dependencies on the following packages:
 - [pydantic](https://pypi.org/project/pydantic/)
 - [tomli](https://pypi.org/project/tomli/) (for python versions below 3.11)
 - [tomli-w](https://pypi.org/project/tomli-w/)
-- [typing-extensions](https://pypi.org/project/typing-extensions/) (for python versions below 3.11)
+- [typing-extensions](https://pypi.org/project/typing-extensions/) (for python versions below 3.12)
