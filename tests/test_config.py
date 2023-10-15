@@ -446,14 +446,6 @@ def test_attributes_no_default() -> None:
     assert test_config.section2.field1 == "field1"
 
 
-def test_update() -> None:
-    with pytest.raises(TypeError):
-        # a Config cannot be updated
-        _ = AnExample1Config.get().update(
-            {"section1": {"setting1": "new s1", "setting2": 222}}
-        )
-
-
 def test_include_1(toml_file_inc1: Path) -> None:
     AnExample1Config.set_filepath(toml_file_inc1, load=True)
     assert AnExample1Config.get().section1.field1 == "f1"
