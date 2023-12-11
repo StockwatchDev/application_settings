@@ -1,0 +1,62 @@
+site_name: application_settings
+site_description: For providing a python application or library with configuration and/or settings
+strict: true
+site_url: https://stockwatchdev.github.io/application_settings/
+
+theme:
+  name: 'material'
+  palette:
+    scheme: slate
+    primary: blue
+  # features:
+  #   - content.tabs.link
+  #   - content.code.annotate
+  #   - content.code.copy
+  #   - announce.dismiss
+  #   - navigation.tabs
+
+repo_name: StockwatchDev/application_settings
+repo_url: https://github.com/StockwatchDev/application_settings
+
+markdown_extensions:
+- toc:
+    # permalink: true
+    title: Page contents
+- pymdownx.superfences
+- pymdownx.highlight
+- pymdownx.tabbed:
+    alternate_style: true
+
+plugins:
+- search
+- gen-files:
+    scripts:
+    - docs/generate_api_pages.py
+- literate-nav:
+    nav_file: SUMMARY.md
+- mkdocstrings:
+    handlers:
+      python:
+        paths: [./src]
+        options:
+          members_order: source
+          separate_signature: true
+          filters: ["!^_"]
+          docstring_options:
+            ignore_init_summary: true
+          merge_init_into_class: true
+- include-markdown
+
+nav:
+- Home: README.md
+- Quick start: Quick_start.md
+- Usage:
+  - 1. Installation: 1-Installation.md
+  - 2. Defining parameters: 2-Defining_parameters.md
+  - 3. Files and file locations: 3-Files.md
+  - 4. Using parameters: 4-Using_parameters.md
+  - 5. Usage in a library package: 5-Usage_in_a_library_package.md
+  - 6. Handling deviations: 6-Handling_deviations.md
+  - 7. Recipes: 7-Recipes.md
+- Changelog: CHANGELOG.md
+- Code Reference: reference/

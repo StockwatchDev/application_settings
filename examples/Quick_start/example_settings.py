@@ -1,10 +1,19 @@
 # pylint: disable=duplicate-code
-"""Example for settings."""
+"""Example for settings.
+
+Cd to the folder containing this file and run this example with the following command:
+python ./example_settings.py -s ./settings.json
+"""
 from pathlib import Path
 
-from pydantic.dataclasses import dataclass
+from application_settings import (
+    SettingsBase,
+    SettingsSectionBase,
+    dataclass,
+    settings_filepath_from_cli,
+)
 
-from application_settings import SettingsBase, SettingsSectionBase
+# ----------------------- settings.py module ----------------------- #
 
 
 @dataclass(frozen=True)
@@ -22,11 +31,17 @@ class MyExampleSettings(SettingsBase):
     basics: BasicSettingsSection = BasicSettingsSection()
 
 
+# It is good practice to set the filepath via the command line interface
+# and load your settings in the module that defines the container
+settings_filepath_from_cli(MyExampleSettings)
+MyExampleSettings.load()
+
+# --------------------- end settings.py module --------------------- #
+
+
 def main1() -> None:
     """example how to use the module application_settings"""
-    # One of the first things to do in an application is loading the parameters
-    MyExampleSettings.load()
-    # Now you can access parameters via get()
+    # You can access parameters via get()
     # If you get() MyExampleSettings before load(), it will be loaded automatically
     a_variable = MyExampleSettings.get().name
     print(f"a_variable == '{a_variable}'")  # a_variable == 'the stored name'
@@ -55,15 +70,12 @@ def main2() -> None:
 
 
 if __name__ == "__main__":
-    # Set the filepath to the default filename, but then in the local folder
-    local_filepath = (
-        Path(__file__).parent.absolute() / MyExampleSettings.default_filename()
-    )
-    MyExampleSettings.set_filepath(local_filepath)
-
     main1()
 
     # Edit the settings file
+    local_filepath = (
+        Path(__file__).parent.absolute() / MyExampleSettings.default_filename()
+    )
     with local_filepath.open("r") as file:
         filedata = file.read()
     filedata = filedata.replace('"the stored name"', '"updated name"')

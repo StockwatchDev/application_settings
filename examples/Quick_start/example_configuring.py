@@ -1,9 +1,17 @@
-"""Example for configuration."""
+"""Example for configuration.
+
+Cd to the folder containing this file and run this example with the following command:
+python ./example_configuring.py -c ./config.toml
+"""
 from pathlib import Path
 
-from pydantic.dataclasses import dataclass
-
-from application_settings import ConfigBase, ConfigSectionBase
+# ----------------------- config.py module ----------------------- #
+from application_settings import (
+    ConfigBase,
+    ConfigSectionBase,
+    config_filepath_from_cli,
+    dataclass,
+)
 
 
 @dataclass(frozen=True)
@@ -22,11 +30,17 @@ class MyExampleConfig(ConfigBase):
     section1: MyExampleConfigSection = MyExampleConfigSection()
 
 
+# It is good practice to set the filepath via the command line interface
+# and load your config in the module that defines the container
+config_filepath_from_cli(MyExampleConfig)
+MyExampleConfig.load()
+
+# --------------------- end config.py module --------------------- #
+
+
 def main1() -> None:
     """example how to use the module application_settings"""
-    # One of the first things to do in an application is loading the parameters
-    MyExampleConfig.load()
-    # Now you can access parameters via get()
+    # You can access parameters via get()
     # If you get() MyExampleConfig before load(), it will be loaded automatically
     a_variable = MyExampleConfig.get().section1.field1
     print(f"a_variable == {a_variable}")  # a_variable == -0.5
@@ -46,7 +60,7 @@ def main2() -> None:
     # You can reload a config
     MyExampleConfig.load()
     new_variable = MyExampleConfig.get().name
-    print(f"new_variable == {new_variable}")  # new_variable == "new name"
+    print(f"new_variable == '{new_variable}'")  # new_variable == 'new name'
     another_new_variable = MyExampleConfigSection.get().field2
     print(
         f"another_new_variable == {another_new_variable}"
@@ -54,15 +68,12 @@ def main2() -> None:
 
 
 if __name__ == "__main__":
-    # Set the filepath to the default filename, but then in the local folder
-    local_filepath = (
-        Path(__file__).parent.absolute() / MyExampleConfig.default_filename()
-    )
-    MyExampleConfig.set_filepath(local_filepath)
-
     main1()
 
     # Edit the config file
+    local_filepath = (
+        Path(__file__).parent.absolute() / MyExampleConfig.default_filename()
+    )
     with local_filepath.open("r") as file:
         filedata = file.read()
     filedata = filedata.replace('"the real thing"', '"new name"')
