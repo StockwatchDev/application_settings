@@ -1,4 +1,4 @@
-# application_settings - version develop
+# application_settings - version 0.5.0.dev
 
 [![pypi](https://img.shields.io/pypi/v/application-settings.svg)](https://pypi.python.org/pypi/application-settings)
 [![versions](https://img.shields.io/pypi/pyversions/application-settings.svg)](https://github.com/StockwatchDev/application_settings)
