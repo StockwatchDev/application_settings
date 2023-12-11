@@ -65,4 +65,4 @@ def _update_settings_section(
     "Update parameters and sections with data specified in changes"
     # in the_section._set(), which normally is always executed, we ensured that
     # the_section is a dataclass instance and hence we can ignore type errors
-    return replace(the_section, **changes)  # type: ignore[misc,type-var]
+    return replace(the_section, **changes)  # type: ignore[type-var]
