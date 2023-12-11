@@ -2,102 +2,102 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/1-Installation/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/2-Defining_parameters/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/3-Files/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/4-Using_parameters/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/5-Usage_in_a_library_package/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/6-Handling_deviations/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/7-Recipes/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/CHANGELOG/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/Quick_start/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/reference/SUMMARY/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/reference/application_settings/__init__/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/reference/application_settings/configuring_base/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/reference/application_settings/container_base/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/reference/application_settings/container_section_base/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/reference/application_settings/convenience/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/reference/application_settings/settings_base/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/reference/application_settings/type_notation_helper/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/reference/application_settings/private/__init__/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://stockwatchdev.github.io/application_settings/reference/application_settings/private/_file_operations/</loc>
-         <lastmod>2023-10-15</lastmod>
+         <lastmod>2023-12-11</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
