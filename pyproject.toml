@@ -34,8 +34,7 @@ include = [
 Changelog = "https://stockwatchdev.github.io/application_settings/stable/CHANGELOG/"
 
 [tool.poetry.dependencies]
-# version cap for python needed because of mkdocs-include-markdown-plugin, will be removed soon
-python = ">=3.9,<3.13"
+python = ">=3.9"
 loguru = ">=0.7.0"
 pathvalidate = ">=2.5"
 pydantic = ">=2.0"
@@ -111,15 +110,6 @@ no_implicit_reexport = true
 strict_equality = true
 show_error_codes = true
 show_error_context = true
-
-[[tool.mypy.overrides]]
-module = [
-    "dash.*",
-    "dash_bootstrap_components.*",
-    "dash_bootstrap_templates.*",
-    "dash_extensions.*",
-    "plotly.*",
-]
 ignore_missing_imports = true
 
 [tool.pylint.main]
