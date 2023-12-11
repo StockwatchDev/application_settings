@@ -26,6 +26,17 @@ files = [
 typing-extensions = {version = ">=4.0.0", markers = "python_version < \"3.11\""}
 
 [[package]]
+name = "attributes-doc"
+version = "0.3.0"
+description = "PEP 224 implementation"
+optional = false
+python-versions = "*"
+files = [
+    {file = "attributes-doc-0.3.0.tar.gz", hash = "sha256:1139b59601b4d71b90fa7681007160a048885e6d3c7c728ff26bc2cb46621d6a"},
+    {file = "attributes_doc-0.3.0-py2.py3-none-any.whl", hash = "sha256:bba25a1b3676f0d843b0e130d6fe1cb126cea940706b0821309733f8785631b2"},
+]
+
+[[package]]
 name = "babel"
 version = "2.13.1"
 description = "Internationalization utilities"
@@ -1686,4 +1697,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9"
-content-hash = "18c9c7c045d4b3448a9d8f32c2efd35804b43c6b0ba7354e5cbb4c1812949893"
+content-hash = "8d88ef11299288746048e20b128671f41ffffc1fb757e201fc0d98a9956d01aa"
