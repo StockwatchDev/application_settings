@@ -1,20 +1,14 @@
 """Funtions for storing dicts to and loading dicts from file."""
-import json
-import sys
 from enum import Enum, unique
 from pathlib import Path
 from typing import Any, cast
 
-import tomli_w
 from loguru import logger
 from pathvalidate import is_valid_filepath
 
+from application_settings._private.json_file_operations import load_json, save_json
+from application_settings._private.toml_file_operations import load_toml, save_toml
 from application_settings.type_notation_helper import PathOpt
-
-if sys.version_info >= (3, 11):
-    import tomllib
-else:
-    import tomli as tomllib
 
 
 @unique
@@ -70,11 +64,11 @@ def load(kind: str, path: PathOpt, throw_if_file_not_found: bool) -> dict[str, A
     ):
         real_path = cast(Path, path)
         if (ext := real_path.suffix[1:].lower()) == FileFormat.JSON.value:
-            return _load_json(real_path)
+            return load_json(real_path)
         if ext == FileFormat.TOML.value:
             if kind == "Config":
                 return _load_toml_with_includes(real_path, throw_if_file_not_found)
-            return _load_toml(real_path)
+            return load_toml(real_path)
     logger.warning(
         "Trying with default values, as loading from file is impossible. This may fail."
     )
@@ -90,30 +84,16 @@ def save(path: Path, data: dict[str, Any]) -> None:
         create_file_if_not_found=True,
     ):
         if (ext := path.suffix[1:].lower()) == FileFormat.JSON.value:
-            return _save_json(path, data)
+            return save_json(path, data)
         if ext == FileFormat.TOML.value:
-            return _save_toml(path, data)
+            return save_toml(path, data)
     return None
-
-
-def _load_toml(path: Path) -> dict[str, Any]:
-    data_stored: dict[str, Any] = {}
-    with path.open(mode="rb") as fptr:
-        data_stored = tomllib.load(fptr)
-    return data_stored
-
-
-def _load_json(path: Path) -> dict[str, Any]:
-    data_stored: dict[str, Any] = {}
-    with path.open(mode="r") as fptr:
-        data_stored = json.load(fptr)
-    return data_stored
 
 
 def _load_toml_with_includes(
     path: Path, throw_if_file_not_found: bool
 ) -> dict[str, Any]:
-    data_stored = _load_toml(path)
+    data_stored = load_toml(path)
     if included_files := data_stored.get("__include__"):
         if not isinstance(included_files, list):
             included_files = [included_files]
@@ -140,13 +120,3 @@ def _load_toml_with_includes(
                     f"Given path: '{included_file}' is not a valid path for this OS"
                 )
     return data_stored
-
-
-def _save_json(path: Path, data: dict[str, Any]) -> None:
-    with path.open(mode="w") as fptr:
-        json.dump(data, fptr)
-
-
-def _save_toml(path: Path, data: dict[str, Any]) -> None:
-    with path.open(mode="wb") as fptr:
-        tomli_w.dump(data, fptr)

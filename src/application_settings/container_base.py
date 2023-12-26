@@ -12,9 +12,9 @@ from pathvalidate import is_valid_filepath
 from application_settings.container_section_base import ContainerSectionBase
 from application_settings.type_notation_helper import PathOpt, PathOrStr
 
-from .private._file_operations import FileFormat
-from .private._file_operations import load as _do_load
-from .private._file_operations import save as _do_save
+from ._private.file_operations import FileFormat
+from ._private.file_operations import load as _do_load
+from ._private.file_operations import save as _do_save
 
 if sys.version_info >= (3, 11):
     from typing import Self
