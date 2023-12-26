@@ -4,14 +4,14 @@ import sys
 from pathlib import Path
 
 import pytest
-import tomli_w
+import tomlkit
 
 
 @pytest.fixture(scope="session")
 def toml_file_init(tmp_path_factory: pytest.TempPathFactory) -> Path:
     file_path = tmp_path_factory.mktemp(".example_init") / "config.toml"
-    with file_path.open(mode="wb") as fptr:
-        tomli_w.dump(
+    with file_path.open(mode="w") as fptr:
+        tomlkit.dump(
             {
                 "field0": 33.33,
             },
