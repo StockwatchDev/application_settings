@@ -1,4 +1,5 @@
 """Funtions for storing dicts to and loading dicts from file."""
+from collections.abc import Callable
 from enum import Enum, unique
 from pathlib import Path
 from typing import Any, cast
@@ -8,7 +9,7 @@ from pathvalidate import is_valid_filepath
 
 from application_settings._private.json_file_operations import load_json, save_json
 from application_settings._private.toml_file_operations import load_toml, save_toml
-from application_settings.type_notation_helper import PathOpt
+from application_settings.type_notation_helper import LoaderOpt, PathOpt
 
 
 @unique
@@ -63,12 +64,10 @@ def load(kind: str, path: PathOpt, throw_if_file_not_found: bool) -> dict[str, A
         create_file_if_not_found=False,
     ):
         real_path = cast(Path, path)
-        if (ext := real_path.suffix[1:].lower()) == FileFormat.JSON.value:
-            return load_json(real_path)
-        if ext == FileFormat.TOML.value:
+        if loader := _get_loader(ext=real_path.suffix[1:].lower()):
             if kind == "Config":
-                return _load_toml_with_includes(real_path, throw_if_file_not_found)
-            return load_toml(real_path)
+                return _load_with_includes(real_path, throw_if_file_not_found, loader)
+            return loader(real_path)
     logger.warning(
         "Trying with default values, as loading from file is impossible. This may fail."
     )
@@ -90,10 +89,20 @@ def save(path: Path, data: dict[str, Any]) -> None:
     return None
 
 
-def _load_toml_with_includes(
-    path: Path, throw_if_file_not_found: bool
+def _get_loader(ext: str) -> LoaderOpt:
+    """Return the loader to be used for the file extension ext and the kind (Config or Settings)"""
+    # TODO: enable with_includes for all formats and all kinds
+    if ext == FileFormat.JSON.value:
+        return load_json
+    if ext == FileFormat.TOML.value:
+        return load_toml
+    return None
+
+
+def _load_with_includes(
+    path: Path, throw_if_file_not_found: bool, loader: Callable[[Path], dict[str, Any]]
 ) -> dict[str, Any]:
-    data_stored = load_toml(path)
+    data_stored = loader(path)
     if included_files := data_stored.get("__include__"):
         if not isinstance(included_files, list):
             included_files = [included_files]
@@ -110,8 +119,8 @@ def _load_toml_with_includes(
                     create_file_if_not_found=False,
                 ):
                     data_stored = (
-                        _load_toml_with_includes(
-                            included_file_path, throw_if_file_not_found
+                        _load_with_includes(
+                            included_file_path, throw_if_file_not_found, loader
                         )
                         | data_stored
                     )

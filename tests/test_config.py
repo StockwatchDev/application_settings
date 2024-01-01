@@ -220,6 +220,38 @@ def json_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
 
 
 @pytest.fixture(scope="session")
+def json_file_inc2(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    tmp_folder = tmp_path_factory.mktemp(AnExample1Config.default_foldername())
+    file_path = tmp_folder / "conf_inc1.json"
+    with file_path.open(mode="w") as fptr:
+        json.dump(
+            {
+                "section1": {
+                    "field1": "f1",
+                    "field2": 22,
+                    "subsec": {"field3": (-33, "no")},
+                },
+            },
+            fptr,
+        )
+    file_path = tmp_folder / "conf_inc2.json"
+    with file_path.open(mode="w") as fptr:
+        json.dump(
+            {
+                "field0": 333.33,
+            },
+            fptr,
+        )
+    file_path = tmp_folder / "conf_main.json"
+    with file_path.open(mode="w") as fptr:
+        json.dump(
+            {"field0": 33.33, "__include__": ["./conf_inc1.json", "./conf_inc2.json"]},
+            fptr,
+        )
+    return file_path
+
+
+@pytest.fixture(scope="session")
 def ini_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
     file_path = tmp_path_factory.mktemp(
         AnExample1Config.default_foldername()
@@ -468,3 +500,9 @@ def test_include_5(toml_file_inc5: Path) -> None:
     # raising in case of invalid path:
     with pytest.raises(ValueError):
         AnExample1Config.set_filepath(toml_file_inc5, load=True)
+
+
+def test_include_6(json_file_inc2: Path) -> None:
+    AnExample1Config.set_filepath(json_file_inc2, load=True)
+    assert AnExample1Config.get().field0 == 33.33
+    assert AnExample1Config.get().section1.subsec.field3[0] == -33
