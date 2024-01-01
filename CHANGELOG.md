@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.0.dev] - Unreleased
 
-### Added
+### Added - 0.5.0
 
 - Enable file inclusion for json config files
   (Issue [#79](https://github.com/StockwatchDev/application_settings/issues/79))
@@ -15,9 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   [PEP224](https://peps.python.org/pep-0224/)
   (Issue [#140](https://github.com/StockwatchDev/application_settings/issues/140))
 
+####
+
 ## [0.4.0] - 2023-12-11
 
-### Added
+### Added - 0.4.0
 
 - Added a GitHub action for PyPi deployment
 - Check for presence of the dataclass decorator
@@ -29,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a recipe for handling configurable initialization of module global variables
   and class variables
 
-### Changed
+### Changed - 0.4.0
 
 - pydantic.dataclasses.dataclass and pydantic.ValidationError now exported from our
   namespace (Issue [#36](https://github.com/StockwatchDev/application_settings/issues/36))
@@ -41,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0] - 2023-06-21
 
-### Added
+### Added - 0.3.0
 
 - Multiple versions of documentation served on Github Pages.
 - You can now request a (re-) load when setting the filepath or via a method `load`.
@@ -59,35 +61,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Convenience functions to specify filepath for config and settings via command-line
   [[#53](https://github.com/StockwatchDev/application_settings/issues/53)]
 
-### Changed
+### Changed - 0.3.0
 
 - The method `update` now is a class method (breaking).
 - You cannot request a reload via method `get` anymore, use separate method `load`
   (breaking).
 - A Container now is a specialization of a ContainerSection.
 
-### Fixed
+### Fixed - 0.3.0
 
 - Default folder name no longer just a dot if container class is called Config or
   Settings.
 
 ## [0.2.0] - 2023-03-19
 
-### Added
+### Added - 0.2.0
 
 - Files can be formatted as `toml` or `json`.
 - Introduced settings, i.e., read-write parameters (where config is read-only).
 - Now also useable with python 3.9.
 - Documentation extended and served on Github Pages.
 
-### Changed
+### Changed - 0.2.0
 
 - File path for config / settings now via `set_filepath()` and no longer as argument of
   `get()`.
 
 ## [0.1.0] - 2023-02-13
 
-### Added 
+### Added - 0.1.0
 
 - Loading a `toml` file.
 - Initializing a dataclass with the loaded toml and storing it as a singleton.
