@@ -9,7 +9,7 @@ from pathvalidate import is_valid_filepath
 
 from application_settings._private.json_file_operations import load_json, save_json
 from application_settings._private.toml_file_operations import load_toml, save_toml
-from application_settings.type_notation_helper import LoaderOpt, PathOpt
+from application_settings.type_notation_helper import LoaderOpt, PathOpt, SaverOpt
 
 
 @unique
@@ -82,10 +82,8 @@ def save(path: Path, data: dict[str, Any]) -> None:
         throw_if_file_not_found=False,
         create_file_if_not_found=True,
     ):
-        if (ext := path.suffix[1:].lower()) == FileFormat.JSON.value:
-            return save_json(path, data)
-        if ext == FileFormat.TOML.value:
-            return save_toml(path, data)
+        if saver := _get_saver(ext=path.suffix[1:].lower()):
+            return saver(path, data)
     return None
 
 
@@ -129,3 +127,13 @@ def _load_with_includes(
                     f"Given path: '{included_file}' is not a valid path for this OS"
                 )
     return data_stored
+
+
+def _get_saver(ext: str) -> SaverOpt:
+    """Return the loader to be used for the file extension ext and the kind (Config or Settings)"""
+    # TODO: enable with_includes for all formats and all kinds
+    if ext == FileFormat.JSON.value:
+        return save_json
+    if ext == FileFormat.TOML.value:
+        return save_toml
+    return None
