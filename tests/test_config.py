@@ -229,7 +229,7 @@ def json_file_inc2(tmp_path_factory: pytest.TempPathFactory) -> Path:
                 "section1": {
                     "field1": "f1",
                     "field2": 22,
-                    "subsec": {"field3": (-33, "no")},
+                    "subsec": {"field3": (-99, "no")},
                 },
             },
             fptr,
@@ -245,7 +245,7 @@ def json_file_inc2(tmp_path_factory: pytest.TempPathFactory) -> Path:
     file_path = tmp_folder / "conf_main.json"
     with file_path.open(mode="w") as fptr:
         json.dump(
-            {"field0": 33.33, "__include__": ["./conf_inc1.json", "./conf_inc2.json"]},
+            {"field0": 99.99, "__include__": ["./conf_inc1.json", "./conf_inc2.json"]},
             fptr,
         )
     return file_path
@@ -504,5 +504,5 @@ def test_include_5(toml_file_inc5: Path) -> None:
 
 def test_include_6(json_file_inc2: Path) -> None:
     AnExample1Config.set_filepath(json_file_inc2, load=True)
-    assert AnExample1Config.get().field0 == 33.33
-    assert AnExample1Config.get().section1.subsec.field3[0] == -33
+    assert AnExample1Config.get().field0 == 99.99
+    assert AnExample1Config.get().section1.subsec.field3[0] == -99
