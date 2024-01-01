@@ -15,7 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   [PEP224](https://peps.python.org/pep-0224/)
   (Issue [#140](https://github.com/StockwatchDev/application_settings/issues/140))
 
-####
+### Changed - 0.5.0
+
+- Use [`tomlkit`](https://tomlkit.readthedocs.io/en/latest/) instead of `tomli` and `tomli-w` (non-breaking)
 
 ## [0.4.0] - 2023-12-11
 
