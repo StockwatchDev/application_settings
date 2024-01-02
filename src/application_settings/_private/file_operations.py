@@ -1,4 +1,4 @@
-"""Funtions for storing dicts to and loading dicts from file."""
+"""Functions for storing dicts to and loading dicts from file."""
 from collections.abc import Callable
 from enum import Enum, unique
 from pathlib import Path
@@ -64,7 +64,7 @@ def load(kind: str, path: PathOpt, throw_if_file_not_found: bool) -> dict[str, A
         create_file_if_not_found=False,
     ):
         real_path = cast(Path, path)
-        if loader := _get_loader(ext=real_path.suffix[1:].lower()):
+        if loader := _get_loader(path=real_path):
             if kind == "Config":
                 return _load_with_includes(real_path, throw_if_file_not_found, loader)
             return loader(real_path)
@@ -82,14 +82,15 @@ def save(path: Path, data: dict[str, Any]) -> None:
         throw_if_file_not_found=False,
         create_file_if_not_found=True,
     ):
-        if saver := _get_saver(ext=path.suffix[1:].lower()):
+        if saver := _get_saver(path=path):
             return saver(path, data)
     return None
 
 
-def _get_loader(ext: str) -> LoaderOpt:
+def _get_loader(path: Path) -> LoaderOpt:
     """Return the loader to be used for the file extension ext and the kind (Config or Settings)"""
-    # TODO: enable with_includes for all formats and all kinds
+    # TODO: enable with_includes for all all kinds
+    ext = path.suffix[1:].lower()
     if ext == FileFormat.JSON.value:
         return load_json
     if ext == FileFormat.TOML.value:
@@ -129,9 +130,10 @@ def _load_with_includes(
     return data_stored
 
 
-def _get_saver(ext: str) -> SaverOpt:
+def _get_saver(path: Path) -> SaverOpt:
     """Return the loader to be used for the file extension ext and the kind (Config or Settings)"""
-    # TODO: enable with_includes for all formats and all kinds
+    # TODO: enable with_includes for all kinds
+    ext = path.suffix[1:].lower()
     if ext == FileFormat.JSON.value:
         return save_json
     if ext == FileFormat.TOML.value:

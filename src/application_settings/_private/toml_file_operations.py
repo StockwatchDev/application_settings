@@ -1,14 +1,8 @@
-"""Funtions for storing dicts to and loading dicts from toml files."""
-# import sys
+"""Functions for storing dicts to and loading dicts from toml files."""
 from pathlib import Path
 from typing import Any
 
 import tomlkit
-
-# if sys.version_info >= (3, 11):
-#     import tomllib
-# else:
-#     import tomli as tomllib
 
 
 def load_toml(path: Path) -> dict[str, Any]:

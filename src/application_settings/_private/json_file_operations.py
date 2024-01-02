@@ -1,4 +1,4 @@
-"""Funtions for storing dicts to and loading dicts from file."""
+"""Functions for storing dicts to and loading dicts from json files."""
 import json
 from pathlib import Path
 from typing import Any
