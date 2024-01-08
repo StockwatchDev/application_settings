@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
@@ -434,9 +434,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sharing-parameters-over-different-configs-via-file-inclusion-with-toml" class="md-nav__link">
+  <a href="#sharing-parameters-over-different-configs-via-file-inclusion" class="md-nav__link">
     <span class="md-ellipsis">
-      Sharing parameters over different configs via file inclusion with toml
+      Sharing parameters over different configs via file inclusion
     </span>
   </a>
   
@@ -663,6 +663,135 @@
   
   
   
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1_2" id="__nav_5_1_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    _private
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            _private
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/__init__/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+      init  
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/file_operations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    file_operations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/json_file_operations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    json_file_operations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/toml_file_operations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    toml_file_operations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="../reference/application_settings/configuring_base/" class="md-nav__link">
         
@@ -736,93 +865,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_6" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_1_6" id="__nav_5_1_6_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    private
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_1_6">
-            <span class="md-nav__icon md-icon"></span>
-            private
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../reference/application_settings/private/__init__/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-      init  
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../reference/application_settings/private/_file_operations/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    _file_operations
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -950,9 +992,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sharing-parameters-over-different-configs-via-file-inclusion-with-toml" class="md-nav__link">
+  <a href="#sharing-parameters-over-different-configs-via-file-inclusion" class="md-nav__link">
     <span class="md-ellipsis">
-      Sharing parameters over different configs via file inclusion with toml
+      Sharing parameters over different configs via file inclusion
     </span>
   </a>
   
@@ -1155,12 +1197,12 @@ file is not found in the location that has been specified:</p>
 an exception when the parameter file is not found. Note that if you do not explicitly
 use <code>load</code> but rather implicitly call it via <code>get()</code> or <code>set_filepath()</code>, then this
 default behavior will also be obtained.</p>
-<h2 id="sharing-parameters-over-different-configs-via-file-inclusion-with-toml">Sharing parameters over different configs via file inclusion with toml</h2>
+<h2 id="sharing-parameters-over-different-configs-via-file-inclusion">Sharing parameters over different configs via file inclusion</h2>
 <p>Another common scenario is that you work with different configurations for your
 application but these different configurations are partially the same. To prevent
 inconsistencies and config duplication, it is desirable to be able to share the common
 part. For this purpose, <code>application_settings</code> provides a file inclusion mechanism
-for <code>toml</code> configuration files.</p>
+for configuration files.</p>
 <p>Above, an example of such a config file was given. Suppose now that you want to create
 several configurations that have a varying <code>name</code> but they will share the parametrization
 <code>section1</code>. Then we can put that part in a file <code>config_common.toml</code> and include that
@@ -1189,9 +1231,8 @@ file from the different configurations.</p>
   to be treated as a keyword and is not available as field name.</li>
 <li>The value can be either a single path string or an array of path strings.</li>
 <li>File inclusion can only be specified at the top level, not inside a section.</li>
-<li>File inclusion is only available for configuration, not for settings, and only for the
-  <code>toml</code> format.</li>
-<li>File inclusion can be nested, i.e., in the included <code>toml</code> file one can again specify
+<li>File inclusion is only available for configuration, not for settings.</li>
+<li>File inclusion can be nested, i.e., in the included config file one can again specify
   another file to include (albeit at the top level only).</li>
 <li>If the included file specifies a key that was already specified in the file that does
   the inclusion, then it is disregarded and the key-value pair of the latter file is

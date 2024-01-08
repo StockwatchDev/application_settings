@@ -10,28 +10,28 @@
       
       
       
-        <link rel="canonical" href="https://stockwatchdev.github.io/application_settings/2-Defining_parameters/">
+        <link rel="canonical" href="https://stockwatchdev.github.io/application_settings/reference/application_settings/_private/file_operations/">
       
       
-        <link rel="prev" href="../1-Installation/">
+        <link rel="prev" href="../__init__/">
       
       
-        <link rel="next" href="../3-Files/">
+        <link rel="next" href="../json_file_operations/">
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
-        <title>2. Defining parameters - application_settings</title>
+        <title>file_operations - application_settings</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.50c56a3b.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.50c56a3b.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -50,9 +50,9 @@
       
     
     
-      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../../../../assets/_mkdocstrings.css">
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#defining-parameters" class="md-skip">
+        <a href="#application_settings._private.file_operations" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +92,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="application_settings" class="md-header__button md-logo" aria-label="application_settings" data-md-component="logo">
+    <a href="../../../.." title="application_settings" class="md-header__button md-logo" aria-label="application_settings" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              2. Defining parameters
+              file_operations
             
           </span>
         </div>
@@ -199,7 +199,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="application_settings" class="md-nav__button md-logo" aria-label="application_settings" data-md-component="logo">
+    <a href="../../../.." title="application_settings" class="md-nav__button md-logo" aria-label="application_settings" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -229,7 +229,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../../../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -249,7 +249,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Quick_start/" class="md-nav__link">
+      <a href="../../../../Quick_start/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -266,21 +266,19 @@
       
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
@@ -294,7 +292,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Usage
@@ -308,7 +306,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../1-Installation/" class="md-nav__link">
+      <a href="../../../../1-Installation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -326,30 +324,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    2. Defining parameters
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../../../2-Defining_parameters/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -358,55 +336,6 @@
   
 
       </a>
-      
-        
-
-  
-
-<nav class="md-nav md-nav--secondary" aria-label="Page contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Page contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#defining-non-container-sections" class="md-nav__link">
-    <span class="md-ellipsis">
-      Defining non-container section(s)
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#defining-the-container" class="md-nav__link">
-    <span class="md-ellipsis">
-      Defining the container
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
-    <span class="md-ellipsis">
-      Example
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -419,7 +348,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../3-Files/" class="md-nav__link">
+      <a href="../../../../3-Files/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -440,7 +369,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../4-Using_parameters/" class="md-nav__link">
+      <a href="../../../../4-Using_parameters/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -461,7 +390,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../5-Usage_in_a_library_package/" class="md-nav__link">
+      <a href="../../../../5-Usage_in_a_library_package/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -482,7 +411,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../6-Handling_deviations/" class="md-nav__link">
+      <a href="../../../../6-Handling_deviations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -503,7 +432,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../7-Recipes/" class="md-nav__link">
+      <a href="../../../../7-Recipes/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -531,7 +460,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../CHANGELOG/" class="md-nav__link">
+      <a href="../../../../CHANGELOG/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -548,19 +477,21 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
@@ -574,7 +505,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             Code Reference
@@ -585,19 +516,21 @@
                 
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" checked>
         
           
           <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
@@ -611,7 +544,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5_1">
             <span class="md-nav__icon md-icon"></span>
             application_settings
@@ -625,7 +558,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/application_settings/__init__/" class="md-nav__link">
+      <a href="../../__init__/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -643,19 +576,21 @@
                 
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_2" checked>
         
           
           <label class="md-nav__link" for="__nav_5_1_2" id="__nav_5_1_2_label" tabindex="0">
@@ -669,7 +604,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5_1_2">
             <span class="md-nav__icon md-icon"></span>
             _private
@@ -683,7 +618,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/application_settings/_private/__init__/" class="md-nav__link">
+      <a href="../__init__/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -701,10 +636,28 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../reference/application_settings/_private/file_operations/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    file_operations
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -713,6 +666,62 @@
   
 
       </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Page contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Page contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#application_settings._private.file_operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      file_operations
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application_settings._private.file_operations.FileFormat" class="md-nav__link">
+    <span class="md-ellipsis">
+      FileFormat
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application_settings._private.file_operations.load" class="md-nav__link">
+    <span class="md-ellipsis">
+      load()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application_settings._private.file_operations.save" class="md-nav__link">
+    <span class="md-ellipsis">
+      save()
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -725,7 +734,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/application_settings/_private/json_file_operations/" class="md-nav__link">
+      <a href="../json_file_operations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -746,7 +755,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/application_settings/_private/toml_file_operations/" class="md-nav__link">
+      <a href="../toml_file_operations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -775,7 +784,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/application_settings/configuring_base/" class="md-nav__link">
+      <a href="../../configuring_base/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -796,7 +805,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/application_settings/container_base/" class="md-nav__link">
+      <a href="../../container_base/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -817,7 +826,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/application_settings/container_section_base/" class="md-nav__link">
+      <a href="../../container_section_base/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -838,7 +847,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/application_settings/convenience/" class="md-nav__link">
+      <a href="../../convenience/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -859,7 +868,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/application_settings/settings_base/" class="md-nav__link">
+      <a href="../../settings_base/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -880,7 +889,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/application_settings/type_notation_helper/" class="md-nav__link">
+      <a href="../../type_notation_helper/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -928,8 +937,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -938,27 +945,36 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#defining-non-container-sections" class="md-nav__link">
+  <a href="#application_settings._private.file_operations" class="md-nav__link">
     <span class="md-ellipsis">
-      Defining non-container section(s)
+      file_operations
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#defining-the-container" class="md-nav__link">
+  <a href="#application_settings._private.file_operations.FileFormat" class="md-nav__link">
     <span class="md-ellipsis">
-      Defining the container
+      FileFormat
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
+  <a href="#application_settings._private.file_operations.load" class="md-nav__link">
     <span class="md-ellipsis">
-      Example
+      load()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application_settings._private.file_operations.save" class="md-nav__link">
+    <span class="md-ellipsis">
+      save()
     </span>
   </a>
   
@@ -978,95 +994,182 @@
                 
                   
 
+
+  <h1>file_operations</h1>
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="application_settings._private.file_operations"></a>
+  <div class="doc doc-contents first">
   
+      <p>Functions for storing dicts to and loading dicts from file.</p>
+
   
 
-
-<h1 id="defining-parameters">Defining parameters</h1>
-<p>This package lets you define parameters for configuration and settings. The difference
-between configuration and settings is as follows. <code>Config</code> is for parameters that do not
-change during runtime and are read from file. <code>Settings</code> are parameters that can change
-programmatically during runtime and are read from and saved to file for persistancy over
-sessions. During definition, they differ only in terms of the base classes that are used.</p>
-<p>The intended structure is that parameters are defined in section classes. Sections can be
-nested. There should be one special root section for the application, referred to as the
-container, that handles file storage. Config sections and Settings sections should never
-be mixed (i.e., do not nest a Settings section in a Config section and vice versa).</p>
-<h2 id="defining-non-container-sections">Defining non-container section(s)</h2>
-<p>A section is defined by subclassing the relevant base class (<code>ConfigSectionBase</code> for
-config, <code>SettingsSectionBase</code> for settings) and decorating it with
-<code>@dataclass(frozen=True)</code>. Parameters are defined as fields of the dataclass. For a
-dataclass, it is mandatory to add a type hint for each field. These type hints are used
-also to validate the data that is read from the parameter file. If you
-specify a default value as well, then you prevent the occurance of an exception if the
-value for the parameter of concern is not found in the parameter file.</p>
-<p>The <code>dataclass</code> decorator provided by <code>application_settings</code> is actually an exported
-<a href="https://docs.pydantic.dev/usage/dataclasses/"><code>pydantic.dataclasses.dataclass</code></a>, which
-is a drop-in replacement for a <code>dataclass</code> from the standard python library, enhanced
-with data validation. If you need additional dataclass functionality such as <code>fields</code>
-etc., you can import those from the standard library.</p>
-<p>Nested sections are obtained by defining fields in a section that are type hinted with
-the appropriate contained section class(es) and instantiated (possible only when all
-parameters of the nested section have default values).</p>
-<h2 id="defining-the-container">Defining the container</h2>
-<p>The container is a special section that is to be the root for parametrisation of an
-application. It is defined likewise: by subclassing the relevant base class (<code>ConfigBase</code>
-for config, <code>SettingsBase</code> for settings), decorating it with <code>@dataclass(frozen=True)</code>,
-defining fields for parameters and nested non-root sections.</p>
-<p>Note that albeit settings can be changed programmatically, we still set <code>frozen=True</code> for
-the settings container and -sections (see also the example section below).</p>
-<h2 id="example">Example</h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Configuration</label><label for="__tabbed_1_2">Settings</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="n">ConfigBase</span><span class="p">,</span> <span class="n">ConfigSectionBase</span><span class="p">,</span> <span class="n">attributes_doc</span><span class="p">,</span> <span class="n">dataclass</span>
-
-<span class="nd">@attributes_doc</span>
-<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">MyExampleConfigSection</span><span class="p">(</span><span class="n">ConfigSectionBase</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Config section for an example&quot;&quot;&quot;</span>
-
-    <span class="n">field1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Docstring for the first field; defaults to 0.5&quot;&quot;&quot;</span>
-    <span class="n">field2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Docstring for the second field; defaults to 2&quot;&quot;&quot;</span>
+  <div class="doc doc-children">
 
 
-<span class="nd">@attributes_doc</span>
-<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">MyExampleConfig</span><span class="p">(</span><span class="n">ConfigBase</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Config for an example&quot;&quot;&quot;</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nice example&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;With this parameter you can configure the name; defaults to &#39;nice example&#39;&quot;&quot;&quot;</span>
-    <span class="n">section1</span><span class="p">:</span> <span class="n">MyExampleConfigSection</span> <span class="o">=</span> <span class="n">MyExampleConfigSection</span><span class="p">()</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Holds the configuration parameters for the first section&quot;&quot;&quot;</span>
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h2 id="application_settings._private.file_operations.FileFormat" class="doc doc-heading">
+          <span class="doc doc-object-name doc-class-name">FileFormat</span>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><span title="enum.Enum">Enum</span></code></p>
+
+  
+      <p>File formats that are supported by application_settings</p>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h2 id="application_settings._private.file_operations.load" class="doc doc-heading">
+          <span class="doc doc-object-name doc-function-name">load</span>
+
+
+</h2>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">load</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">throw_if_file_not_found</span><span class="p">)</span>
 </code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Load data from the file given in path; log error or throw if not possible</p>
+
+          <details class="quote">
+            <summary>Source code in <code>src/application_settings/_private/file_operations.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">PathOpt</span><span class="p">,</span> <span class="n">throw_if_file_not_found</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load data from the file given in path; log error or throw if not possible&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_check_filepath</span><span class="p">(</span>
+        <span class="n">path</span><span class="p">,</span>
+        <span class="n">throw_if_invalid_path</span><span class="o">=</span><span class="n">throw_if_file_not_found</span><span class="p">,</span>
+        <span class="n">throw_if_file_not_found</span><span class="o">=</span><span class="n">throw_if_file_not_found</span><span class="p">,</span>
+        <span class="n">create_file_if_not_found</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">real_path</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Path</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">loader</span> <span class="o">:=</span> <span class="n">_get_loader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">real_path</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;Config&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">_load_with_includes</span><span class="p">(</span><span class="n">real_path</span><span class="p">,</span> <span class="n">throw_if_file_not_found</span><span class="p">,</span> <span class="n">loader</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">loader</span><span class="p">(</span><span class="n">real_path</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+        <span class="s2">&quot;Trying with default values, as loading from file is impossible. This may fail.&quot;</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="p">{}</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
 </div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="n">SettingsBase</span><span class="p">,</span> <span class="n">SettingsSectionBase</span><span class="p">,</span> <span class="n">attributes_doc</span><span class="p">,</span> <span class="n">dataclass</span>
-
-<span class="nd">@attributes_doc</span>
-<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">BasicSettingsSection</span><span class="p">(</span><span class="n">SettingsSectionBase</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Settings section for the basics&quot;&quot;&quot;</span>
-
-    <span class="n">totals</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The totals value; defaults to 2&quot;&quot;&quot;</span>
 
 
-<span class="nd">@attributes_doc</span>
-<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">MyExampleSettings</span><span class="p">(</span><span class="n">SettingsBase</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Settings for an example&quot;&quot;&quot;</span>
+<div class="doc doc-object doc-function">
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nice name&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;This parameter holds the name setting; defaults to &#39;nice name&#39;&quot;&quot;&quot;</span>
-    <span class="n">basics</span><span class="p">:</span> <span class="n">BasicSettingsSection</span> <span class="o">=</span> <span class="n">BasicSettingsSection</span><span class="p">()</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Holds the setting parameters for the basic section&quot;&quot;&quot;</span>
+
+
+
+<h2 id="application_settings._private.file_operations.save" class="doc doc-heading">
+          <span class="doc doc-object-name doc-function-name">save</span>
+
+
+</h2>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">save</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 </code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Save data to the file given in path; log error or throw if not possible</p>
+
+          <details class="quote">
+            <summary>Source code in <code>src/application_settings/_private/file_operations.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save data to the file given in path; log error or throw if not possible&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_check_filepath</span><span class="p">(</span>
+        <span class="n">path</span><span class="p">,</span>
+        <span class="n">throw_if_invalid_path</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">throw_if_file_not_found</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">create_file_if_not_found</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">saver</span> <span class="o">:=</span> <span class="n">_get_saver</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">saver</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
 </div>
-</div>
+
+
+
+  </div>
+
+  </div>
+
 </div>
 
 
@@ -1114,10 +1217,10 @@ the settings container and -sections (see also the example section below).</p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": [], "search": "../../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.d7c377c4.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.d7c377c4.min.js"></script>
       
     
   </body>
