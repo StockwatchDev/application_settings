@@ -45,42 +45,53 @@ the settings container and -sections (see also the example section below).
 
 === "Configuration"
     ```python
-    from application_settings import ConfigBase, ConfigSectionBase, dataclass
+    from application_settings import ConfigBase, ConfigSectionBase, attributes_doc, dataclass
 
+    @attributes_doc
     @dataclass(frozen=True)
     class MyExampleConfigSection(ConfigSectionBase):
         """Config section for an example"""
 
         field1: float = 0.5
+        """Docstring for the first field; defaults to 0.5"""
         field2: int = 2
+        """Docstring for the second field; defaults to 2"""
 
 
+    @attributes_doc
     @dataclass(frozen=True)
     class MyExampleConfig(ConfigBase):
         """Config for an example"""
 
         name: str = "nice example"
+        """With this parameter you can configure the name; defaults to 'nice example'"""
         section1: MyExampleConfigSection = MyExampleConfigSection()
+        """Holds the configuration parameters for the first section"""
 
     ```
 
 === "Settings"
     ```python
-    from application_settings import SettingsBase, SettingsSectionBase, dataclass
+    from application_settings import SettingsBase, SettingsSectionBase, attributes_doc, dataclass
 
+    @attributes_doc
     @dataclass(frozen=True)
     class BasicSettingsSection(SettingsSectionBase):
         """Settings section for the basics"""
 
         totals: int = 2
+        """The totals value; defaults to 2"""
 
 
+    @attributes_doc
     @dataclass(frozen=True)
     class MyExampleSettings(SettingsBase):
         """Settings for an example"""
 
         name: str = "nice name"
+        """This parameter holds the name setting; defaults to 'nice name'"""
         basics: BasicSettingsSection = BasicSettingsSection()
+        """Holds the setting parameters for the basic section"""
 
 
     ```

@@ -40,9 +40,9 @@ can install from our repo.
 
 We have direct dependencies on the following packages:
 
+- [attributes-doc](https://pypi.org/project/attributes-doc/)
 - [loguru](https://pypi.org/project/loguru/)
 - [pathvalidate](https://pypi.org/project/pathvalidate/)
 - [pydantic](https://pypi.org/project/pydantic/)
-- [tomli](https://pypi.org/project/tomli/) (for python versions below 3.11)
-- [tomli-w](https://pypi.org/project/tomli-w/)
+- [tomlkit](https://pypi.org/project/tomlkit/)
 - [typing-extensions](https://pypi.org/project/typing-extensions/) (for python versions below 3.12)

@@ -2,6 +2,7 @@
 
 from importlib.metadata import version
 
+from attributes_doc import attributes_doc
 from loguru import logger
 from pydantic import ValidationError
 from pydantic.dataclasses import dataclass
@@ -37,6 +38,7 @@ __all__ = [
     "SettingsBase",
     "SettingsT",
     "ValidationError",
+    "attributes_doc",
     "config_filepath_from_cli",
     "dataclass",
     "settings_filepath_from_cli",

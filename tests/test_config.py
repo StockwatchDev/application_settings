@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-import tomli_w
+import tomlkit
 from loguru import logger
 
 from application_settings import (
@@ -20,11 +20,6 @@ from application_settings import (
     dataclass,
     use_standard_logging,
 )
-
-if sys.version_info >= (3, 11):
-    import tomllib
-else:
-    import tomli as tomllib
 
 
 @dataclass(frozen=True)
@@ -71,8 +66,8 @@ def toml_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
         tmp_path_factory.mktemp(AnExample1Config.default_foldername())
         / AnExample1Config.default_filename()
     )
-    with file_path.open(mode="wb") as fptr:
-        tomli_w.dump(
+    with file_path.open(mode="w") as fptr:
+        tomlkit.dump(
             {
                 "field0": 33.33,
                 "section1": {
@@ -90,8 +85,8 @@ def toml_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
 def toml_file_inc1(tmp_path_factory: pytest.TempPathFactory) -> Path:
     tmp_folder = tmp_path_factory.mktemp(AnExample1Config.default_foldername())
     file_path = tmp_folder / "conf_inc.toml"
-    with file_path.open(mode="wb") as fptr:
-        tomli_w.dump(
+    with file_path.open(mode="w") as fptr:
+        tomlkit.dump(
             {
                 "section1": {
                     "field1": "f1",
@@ -102,8 +97,8 @@ def toml_file_inc1(tmp_path_factory: pytest.TempPathFactory) -> Path:
             fptr,
         )
     file_path = tmp_folder / "conf_main.toml"
-    with file_path.open(mode="wb") as fptr:
-        tomli_w.dump(
+    with file_path.open(mode="w") as fptr:
+        tomlkit.dump(
             {
                 "field0": 33.33,
                 "__include__": "./conf_inc.toml",
@@ -117,8 +112,8 @@ def toml_file_inc1(tmp_path_factory: pytest.TempPathFactory) -> Path:
 def toml_file_inc2(tmp_path_factory: pytest.TempPathFactory) -> Path:
     tmp_folder = tmp_path_factory.mktemp(AnExample1Config.default_foldername())
     file_path = tmp_folder / "conf_inc1.toml"
-    with file_path.open(mode="wb") as fptr:
-        tomli_w.dump(
+    with file_path.open(mode="w") as fptr:
+        tomlkit.dump(
             {
                 "section1": {
                     "field1": "f1",
@@ -129,16 +124,16 @@ def toml_file_inc2(tmp_path_factory: pytest.TempPathFactory) -> Path:
             fptr,
         )
     file_path = tmp_folder / "conf_inc2.toml"
-    with file_path.open(mode="wb") as fptr:
-        tomli_w.dump(
+    with file_path.open(mode="w") as fptr:
+        tomlkit.dump(
             {
                 "field0": 333.33,
             },
             fptr,
         )
     file_path = tmp_folder / "conf_main.toml"
-    with file_path.open(mode="wb") as fptr:
-        tomli_w.dump(
+    with file_path.open(mode="w") as fptr:
+        tomlkit.dump(
             {"field0": 33.33, "__include__": ["./conf_inc1.toml", "./conf_inc2.toml"]},
             fptr,
         )
@@ -149,8 +144,8 @@ def toml_file_inc2(tmp_path_factory: pytest.TempPathFactory) -> Path:
 def toml_file_inc3(tmp_path_factory: pytest.TempPathFactory) -> Path:
     tmp_folder = tmp_path_factory.mktemp(AnExample1Config.default_foldername())
     file_path = tmp_folder / "conf_inc1.toml"
-    with file_path.open(mode="wb") as fptr:
-        tomli_w.dump(
+    with file_path.open(mode="w") as fptr:
+        tomlkit.dump(
             {
                 "section1": {
                     "field1": "f1",
@@ -161,14 +156,14 @@ def toml_file_inc3(tmp_path_factory: pytest.TempPathFactory) -> Path:
             fptr,
         )
     file_path = tmp_folder / "conf_inc2.toml"
-    with file_path.open(mode="wb") as fptr:
-        tomli_w.dump(
+    with file_path.open(mode="w") as fptr:
+        tomlkit.dump(
             {"field0": 333.33, "__include__": "./conf_inc1.toml"},
             fptr,
         )
     file_path = tmp_folder / "conf_main.toml"
-    with file_path.open(mode="wb") as fptr:
-        tomli_w.dump(
+    with file_path.open(mode="w") as fptr:
+        tomlkit.dump(
             {"field0": 33.33, "__include__": "./conf_inc2.toml"},
             fptr,
         )
@@ -179,8 +174,8 @@ def toml_file_inc3(tmp_path_factory: pytest.TempPathFactory) -> Path:
 def toml_file_inc4(tmp_path_factory: pytest.TempPathFactory) -> Path:
     tmp_folder = tmp_path_factory.mktemp(AnExample1Config.default_foldername())
     file_path = tmp_folder / "conf_main.toml"
-    with file_path.open(mode="wb") as fptr:
-        tomli_w.dump(
+    with file_path.open(mode="w") as fptr:
+        tomlkit.dump(
             {
                 "field0": 33.33,
                 "__include__": 'fi:\0\\l*e/p"a?t>h|.t<xt',
@@ -194,8 +189,8 @@ def toml_file_inc4(tmp_path_factory: pytest.TempPathFactory) -> Path:
 def toml_file_inc5(tmp_path_factory: pytest.TempPathFactory) -> Path:
     tmp_folder = tmp_path_factory.mktemp(AnExample1Config.default_foldername())
     file_path = tmp_folder / "conf_main.toml"
-    with file_path.open(mode="wb") as fptr:
-        tomli_w.dump(
+    with file_path.open(mode="w") as fptr:
+        tomlkit.dump(
             {
                 "field0": 33.33,
                 "__include__": 14,
@@ -219,6 +214,38 @@ def json_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
                     "subsec": {"field3": (-4, "maybe")},
                 }
             },
+            fptr,
+        )
+    return file_path
+
+
+@pytest.fixture(scope="session")
+def json_file_inc2(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    tmp_folder = tmp_path_factory.mktemp(AnExample1Config.default_foldername())
+    file_path = tmp_folder / "conf_inc1.json"
+    with file_path.open(mode="w") as fptr:
+        json.dump(
+            {
+                "section1": {
+                    "field1": "f1",
+                    "field2": 22,
+                    "subsec": {"field3": (-99, "no")},
+                },
+            },
+            fptr,
+        )
+    file_path = tmp_folder / "conf_inc2.json"
+    with file_path.open(mode="w") as fptr:
+        json.dump(
+            {
+                "field0": 333.33,
+            },
+            fptr,
+        )
+    file_path = tmp_folder / "conf_main.json"
+    with file_path.open(mode="w") as fptr:
+        json.dump(
+            {"field0": 99.99, "__include__": ["./conf_inc1.json", "./conf_inc2.json"]},
             fptr,
         )
     return file_path
@@ -348,12 +375,12 @@ def test_get(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
     assert AnExample1Config.get().section1.field2 == 22
 
     # test that by default it is not reloaded
-    def mock_tomllib_load(
+    def mock_tomlkit_load(
         fptr: Any,  # pylint: disable=unused-argument
     ) -> dict[str, dict[str, Any]]:
         return {"section1": {"field1": "f1", "field2": 222}}
 
-    monkeypatch.setattr(tomllib, "load", mock_tomllib_load)
+    monkeypatch.setattr(tomlkit, "load", mock_tomlkit_load)
     assert AnExample1Config.get().section1.field2 == 22
 
     # and now test reload
@@ -473,3 +500,9 @@ def test_include_5(toml_file_inc5: Path) -> None:
     # raising in case of invalid path:
     with pytest.raises(ValueError):
         AnExample1Config.set_filepath(toml_file_inc5, load=True)
+
+
+def test_include_6(json_file_inc2: Path) -> None:
+    AnExample1Config.set_filepath(json_file_inc2, load=True)
+    assert AnExample1Config.get().field0 == 99.99
+    assert AnExample1Config.get().section1.subsec.field3[0] == -99

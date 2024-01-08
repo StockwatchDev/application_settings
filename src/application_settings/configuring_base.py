@@ -8,7 +8,7 @@ from application_settings.container_section_base import (
     SectionTypeStr,
 )
 
-from .private._file_operations import FileFormat
+from ._private.file_operations import FileFormat
 
 if sys.version_info >= (3, 12):
     from typing import override
