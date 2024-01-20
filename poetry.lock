@@ -27,13 +27,13 @@ typing-extensions = {version = ">=4.0.0", markers = "python_version < \"3.11\""}
 
 [[package]]
 name = "attributes-doc"
-version = "0.3.0"
+version = "0.4.0"
 description = "PEP 224 implementation"
 optional = false
-python-versions = "*"
+python-versions = ">=3.8"
 files = [
-    {file = "attributes-doc-0.3.0.tar.gz", hash = "sha256:1139b59601b4d71b90fa7681007160a048885e6d3c7c728ff26bc2cb46621d6a"},
-    {file = "attributes_doc-0.3.0-py2.py3-none-any.whl", hash = "sha256:bba25a1b3676f0d843b0e130d6fe1cb126cea940706b0821309733f8785631b2"},
+    {file = "attributes-doc-0.4.0.tar.gz", hash = "sha256:b1576c94a714e9fc2c65c47cf10d0c8e1a5f7c4f5ae7f69006be108d95cbfbfb"},
+    {file = "attributes_doc-0.4.0-py2.py3-none-any.whl", hash = "sha256:4c3007d9e58f3a6cb4b9c614c4d4ce2d92161581f28e594ddd8241cc3a113bdd"},
 ]
 
 [[package]]
