@@ -7,7 +7,7 @@ from application_settings import ConfigBase, config_filepath_from_cli, dataclass
 class CorrectlyInitializedConfig(ConfigBase):
     """Example of a Config that does not load the config in the module"""
 
-    configvar_is_set: bool = False
+    configvar_is_set = False
 
 
 config_filepath_from_cli(CorrectlyInitializedConfig)

@@ -16,8 +16,8 @@ from modules.wrongly_initialized_config import WronglyInitializedConfig
 class MyDataclass:
     """Example of class with classvars that are configured"""
 
-    the_first_classvar_is_set: bool = WronglyInitializedConfig.get().configvar_is_set
-    the_second_classvar_is_set: bool = CorrectlyInitializedConfig.get().configvar_is_set
+    the_first_classvar_is_set = WronglyInitializedConfig.get().configvar_is_set
+    the_second_classvar_is_set = CorrectlyInitializedConfig.get().configvar_is_set
 
 
 print("Now initializing the module globals")

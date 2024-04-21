@@ -31,7 +31,7 @@ class MyExampleConfigSection(ConfigSectionBase):
 class MyExampleConfig(ConfigBase):
     """Config for an example"""
 
-    name: str = "nice example"
+    name = "nice example"
     """With this parameter you can configure the name; defaults to 'nice example'"""
     section1: MyExampleConfigSection = MyExampleConfigSection()
     """Holds the configuration parameters for the first section"""
@@ -45,7 +45,7 @@ MyExampleConfig.load()
 # --------------------- end config.py module --------------------- #
 
 
-def main1() -> None:
+def main1():
     """example how to use the module application_settings"""
     # You can access parameters via get()
     # If you get() MyExampleConfig before load(), it will be loaded automatically
@@ -57,7 +57,7 @@ def main1() -> None:
     print(f"another_variable == {another_variable}")  # another_variable == 22
 
 
-def main2() -> None:
+def main2():
     """continued example how to use the module application_settings"""
     # The only way to modify a config parameter is by editing the config file
     # or by changing the default value in the definition

@@ -1,24 +1,20 @@
 """Functions that can be called from the application to make life easy."""
 from argparse import ArgumentParser
-from logging import Formatter, Handler, LogRecord, getLogger
+from logging import Handler, getLogger
 from pathlib import Path
-from typing import Union
 
 from loguru import logger
 
-from application_settings.configuring_base import ConfigT
-from application_settings.settings_base import SettingsT
-
 
 def config_filepath_from_cli(
-    config_class: type[ConfigT],
-    parser: ArgumentParser = ArgumentParser(),
-    short_option: str = "-c",
-    long_option: str = "--config_filepath",
-    load: bool = False,
-) -> ArgumentParser:
+    config_class,
+    parser = ArgumentParser(),
+    short_option = "-c",
+    long_option = "--config_filepath",
+    load = False,
+):
     """Add a commandline option for the config file and set filepath if it is given"""
-    helptext: str = "Path of the configuration file"
+    helptext = "Path of the configuration file"
     return _parameters_filepath_from_cli(
         config_class=config_class,
         settings_class=None,
@@ -31,14 +27,14 @@ def config_filepath_from_cli(
 
 
 def settings_filepath_from_cli(
-    settings_class: type[SettingsT],
-    parser: ArgumentParser = ArgumentParser(),
-    short_option: str = "-s",
-    long_option: str = "--settings_filepath",
-    load: bool = False,
-) -> ArgumentParser:
+    settings_class,
+    parser = ArgumentParser(),
+    short_option = "-s",
+    long_option = "--settings_filepath",
+    load = False,
+):
     """Add a commandline option for the settings file and set filepath if it is given"""
-    helptext: str = "Path of the settings file"
+    helptext = "Path of the settings file"
     return _parameters_filepath_from_cli(
         config_class=None,
         settings_class=settings_class,
@@ -51,17 +47,17 @@ def settings_filepath_from_cli(
 
 
 def parameters_folderpath_from_cli(  # pylint: disable=too-many-arguments
-    config_class: type[ConfigT],
-    settings_class: type[SettingsT],
-    parser: ArgumentParser = ArgumentParser(),
-    short_option: str = "-p",
-    long_option: str = "--parameters_folderpath",
-    load: bool = False,
-) -> ArgumentParser:
+    config_class,
+    settings_class,
+    parser = ArgumentParser(),
+    short_option = "-p",
+    long_option = "--parameters_folderpath",
+    load = False,
+):
     """Add a commandline option '--parameters_folderpath' for the common config and settings folder and set filepaths if it is given.
 
     Default filenames will be appended to the folderpath for config and settings."""
-    helptext: str = "Common path of the config file and settings file"
+    helptext = "Common path of the config file and settings file"
     return _parameters_filepath_from_cli(
         config_class=config_class,
         settings_class=settings_class,
@@ -74,18 +70,14 @@ def parameters_folderpath_from_cli(  # pylint: disable=too-many-arguments
 
 
 def _parameters_filepath_from_cli(  # pylint: disable=too-many-arguments
-    config_class: Union[  # pylint: disable=consider-alternative-union-syntax
-        type[ConfigT], None
-    ],
-    settings_class: Union[  # pylint: disable=consider-alternative-union-syntax
-        type[SettingsT], None
-    ],
-    parser: ArgumentParser,
-    short_option: str,
-    long_option: str,
-    helptext: str,
-    load: bool,
-) -> ArgumentParser:
+    config_class,
+    settings_class,
+    parser,
+    short_option,
+    long_option,
+    helptext,
+    load,
+):
     parser.add_argument(
         short_option,
         long_option,
@@ -112,14 +104,14 @@ def _parameters_filepath_from_cli(  # pylint: disable=too-many-arguments
 
 
 def use_standard_logging(  # pylint: disable=consider-alternative-union-syntax
-    enable: bool = False, fmt: Union[Formatter, None] = None
-) -> None:
+    enable = False, fmt = None
+):
     """Propagate Loguru messages to standard logging"""
 
     class PropagateHandler(Handler):
         """Handler to propagate log records to standard logging"""
 
-        def emit(self, record: LogRecord) -> None:
+        def emit(self, record):
             """Let the standard logger handle the log record"""
 
             getLogger(record.name).handle(record)

@@ -33,7 +33,7 @@ class AnExampleConfigSubSection(ConfigSectionBase):
 class AnExample1ConfigSection(ConfigSectionBase):
     """Example 1 of a Config section"""
 
-    field1: str = "field1"
+    field1 = "field1"
     field2: int = 2
     subsec: AnExampleConfigSubSection = AnExampleConfigSubSection()
 
@@ -261,18 +261,18 @@ def ini_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
     return file_path
 
 
-def test_kind_string() -> None:
+def test_kind_string():
     assert AnExample1ConfigSection.kind_string() == "Config"
 
 
-def test_section_singleton(caplog: pytest.LogCaptureFixture) -> None:
+def test_section_singleton(caplog: pytest.LogCaptureFixture):
     use_standard_logging(enable=True)
     assert AnExample1ConfigSection.get().field1 == "field1"
     assert " accessed before data has been loaded" in caplog.records[0].msg
     logger.disable(LOGGER_NAME)
 
 
-def test_paths(toml_file: Path, caplog: pytest.LogCaptureFixture) -> None:
+def test_paths(toml_file, caplog: pytest.LogCaptureFixture):
     use_standard_logging(enable=True)
     # default_filepath:
     if the_path := Config.default_filepath():
@@ -313,7 +313,7 @@ def test_paths(toml_file: Path, caplog: pytest.LogCaptureFixture) -> None:
     logger.disable(LOGGER_NAME)
 
 
-def test_decorator() -> None:
+def test_decorator():
     # raising of TypeError:
     with pytest.raises(TypeError):
         ConfigNoDataclass.load()
@@ -321,7 +321,7 @@ def test_decorator() -> None:
         ConfigUnfrozenDataclass.load()
 
 
-def test_config_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_config_cmdline(monkeypatch: pytest.MonkeyPatch):
     # test without commandline arguments
     # - this works, but not together with the last 4 lines
     # monkeypatch.setattr(sys, "argv", ["bla"])
@@ -335,8 +335,8 @@ def test_config_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
 
 def test_get_defaults(
     monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
-) -> None:
-    def mock_default_filepath() -> PathOpt:
+):
+    def mock_default_filepath():
         return None
 
     monkeypatch.setattr(AnExample1Config, "default_filepath", mock_default_filepath)
@@ -354,8 +354,8 @@ def test_get_defaults(
 
 
 def test_set_filepath_after_get(
-    toml_file: Path, caplog: pytest.LogCaptureFixture
-) -> None:
+    toml_file, caplog: pytest.LogCaptureFixture
+):
     use_standard_logging(enable=True)
     AnExample1Config.set_filepath(toml_file, load=True)
     assert AnExample1Config.get().section1.field1 == "f1"
@@ -367,7 +367,7 @@ def test_set_filepath_after_get(
     logger.disable(LOGGER_NAME)
 
 
-def test_get(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
+def test_get(monkeypatch: pytest.MonkeyPatch, toml_file):
     AnExample1Config.set_filepath(toml_file)
     AnExample1Config.load()
     assert AnExample1Config.get().field0 == 33.33
@@ -376,7 +376,7 @@ def test_get(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
 
     # test that by default it is not reloaded
     def mock_tomlkit_load(
-        fptr: Any,  # pylint: disable=unused-argument
+        fptr,  # pylint: disable=unused-argument
     ) -> dict[str, dict[str, Any]]:
         return {"section1": {"field1": "f1", "field2": 222}}
 
@@ -389,14 +389,14 @@ def test_get(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
     assert AnExample1Config.get().section1.field2 == 222
 
 
-def test_get_json(json_file: Path) -> None:
+def test_get_json(json_file):
     AnExample1Config.set_filepath(json_file)
     AnExample1Config.load()
     assert AnExample1Config.get().section1.field1 == "f2"
     assert AnExample1Config.get().section1.field2 == 33
 
 
-def test_get_ini(ini_file: Path, caplog: pytest.LogCaptureFixture) -> None:
+def test_get_ini(ini_file, caplog: pytest.LogCaptureFixture):
     use_standard_logging(enable=True)
     AnExample1Config.set_filepath(ini_file)
     AnExample1Config.load()
@@ -406,14 +406,14 @@ def test_get_ini(ini_file: Path, caplog: pytest.LogCaptureFixture) -> None:
     logger.disable(LOGGER_NAME)
 
 
-def test_type_coercion() -> None:
+def test_type_coercion():
     AnExample1Config.set({"section1": {"field2": "22"}})
     test_config = AnExample1Config.get()
     assert isinstance(test_config.section1.field2, int)
     assert test_config.section1.field2 == 22
 
 
-def test_wrong_type() -> None:
+def test_wrong_type():
     with pytest.raises(ValidationError) as excinfo:
         AnExample1Config.set({"section1": {"field1": ("f1", 22), "field2": None}})
     assert "2 validation errors" in str(excinfo.value)
@@ -421,7 +421,7 @@ def test_wrong_type() -> None:
     assert "Input should be a valid integer" in str(excinfo.value)
 
 
-def test_missing_extra_attributes() -> None:
+def test_missing_extra_attributes():
     AnExample1Config.set({"section1": {"field1": "f1", "field3": 22}})
     test_config = AnExample1Config.get()
     assert test_config.section1.field2 == 2
@@ -441,7 +441,7 @@ class Example2aConfigSection(ConfigSectionBase):
 class Example2bConfigSection(ConfigSectionBase):
     """Example 2b of a Config section"""
 
-    field1: str = "field1"
+    field1 = "field1"
     field2: int = 2
 
 
@@ -453,7 +453,7 @@ class Example2Config(ConfigBase):
     section2: Example2bConfigSection = Example2bConfigSection()
 
 
-def test_attributes_no_default() -> None:
+def test_attributes_no_default():
     init_values = {
         "field0": 33.33,
         "section1": {
@@ -473,36 +473,36 @@ def test_attributes_no_default() -> None:
     assert test_config.section2.field1 == "field1"
 
 
-def test_include_1(toml_file_inc1: Path) -> None:
+def test_include_1(toml_file_inc1):
     AnExample1Config.set_filepath(toml_file_inc1, load=True)
     assert AnExample1Config.get().section1.field1 == "f1"
     assert AnExample1Config.get().section1.subsec.field3[1] == "no"
 
 
-def test_include_2(toml_file_inc2: Path) -> None:
+def test_include_2(toml_file_inc2):
     AnExample1Config.set_filepath(toml_file_inc2, load=True)
     assert AnExample1Config.get().field0 == 33.33
     assert AnExample1Config.get().section1.subsec.field3[0] == -33
 
 
-def test_include_3(toml_file_inc3: Path) -> None:
+def test_include_3(toml_file_inc3):
     AnExample1Config.set_filepath(toml_file_inc3, load=True)
     assert AnExample1Config.get().section1.subsec.field3[0] == -333
 
 
-def test_include_4(toml_file_inc4: Path) -> None:
+def test_include_4(toml_file_inc4):
     # raising in case of invalid path:
     with pytest.raises(ValueError):
         AnExample1Config.set_filepath(toml_file_inc4, load=True)
 
 
-def test_include_5(toml_file_inc5: Path) -> None:
+def test_include_5(toml_file_inc5):
     # raising in case of invalid path:
     with pytest.raises(ValueError):
         AnExample1Config.set_filepath(toml_file_inc5, load=True)
 
 
-def test_include_6(json_file_inc2: Path) -> None:
+def test_include_6(json_file_inc2):
     AnExample1Config.set_filepath(json_file_inc2, load=True)
     assert AnExample1Config.get().field0 == 99.99
     assert AnExample1Config.get().section1.subsec.field3[0] == -99

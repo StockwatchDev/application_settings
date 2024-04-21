@@ -23,8 +23,8 @@ def toml_file_init(tmp_path_factory: pytest.TempPathFactory) -> Path:
 
 def test_global_initialization(
     monkeypatch: pytest.MonkeyPatch,
-    toml_file_init: Path,  # pylint: disable=redefined-outer-name
-) -> None:
+    toml_file_init,  # pylint: disable=redefined-outer-name
+):
     """Test global initialization"""
     monkeypatch.setattr(
         sys, "argv", ["test_global_initialization", "-a", str(toml_file_init)]

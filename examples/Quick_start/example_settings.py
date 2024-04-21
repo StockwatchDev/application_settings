@@ -31,7 +31,7 @@ class BasicSettingsSection(SettingsSectionBase):
 class MyExampleSettings(SettingsBase):
     """Settings for an example"""
 
-    name: str = "nice name"
+    name = "nice name"
     """This parameter holds the name setting; defaults to 'nice name'"""
     basics: BasicSettingsSection = BasicSettingsSection()
     """Holds the setting parameters for the basic section"""
@@ -45,7 +45,7 @@ MyExampleSettings.load()
 # --------------------- end settings.py module --------------------- #
 
 
-def main1() -> None:
+def main1():
     """example how to use the module application_settings"""
     # You can access parameters via get()
     # If you get() MyExampleSettings before load(), it will be loaded automatically
@@ -64,7 +64,7 @@ def main1() -> None:
     print(f"refreshed_totals == {refreshed_totals}")  # refreshed_totals == 33
 
 
-def main2() -> None:
+def main2():
     """continued example how to use the module application_settings"""
     # You can also edit the settings file. Suppose that we changed the value for name to
     # "updated name"

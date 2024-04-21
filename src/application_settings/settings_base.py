@@ -1,31 +1,19 @@
 """Module for handling settings."""
-import sys
 from dataclasses import replace
-from typing import Any, TypeVar
 
 from application_settings.container_base import ContainerBase
 from application_settings.container_section_base import (
     ContainerSectionBase,
-    SectionTypeStr,
 )
 
 from ._private.file_operations import FileFormat
-
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
-
-
-SettingsT = TypeVar("SettingsT", bound="SettingsBase")
-SettingsT.__doc__ = "Represents SettingsBase and all subclasses"
 
 
 class SettingsSectionBase(ContainerSectionBase):
     """Base class for all SettingsSection classes (so that we can bound a TypeVar)"""
 
     @classmethod
-    def kind_string(cls) -> SectionTypeStr:
+    def kind_string(cls):
         """Return 'Settings'"""
         return "Settings"
 
@@ -34,17 +22,17 @@ class SettingsBase(ContainerBase):
     """Base class for main Settings class"""
 
     @classmethod
-    def kind_string(cls) -> SectionTypeStr:
+    def kind_string(cls):
         """Return 'Settings'"""
         return "Settings"
 
     @classmethod
-    def default_file_format(cls) -> FileFormat:
+    def default_file_format(cls):
         """Return the default file format"""
         return FileFormat.JSON
 
     @classmethod
-    def update(cls, changes: dict[str, Any]) -> Self:
+    def update(cls, changes):
         """Update the settings with data specified in changes and save.
 
         Raises:
@@ -60,8 +48,8 @@ class SettingsBase(ContainerBase):
 
 
 def _update_settings_section(
-    the_section: SettingsT, changes: dict[str, Any]
-) -> SettingsT:
+    the_section, changes
+):
     "Update parameters and sections with data specified in changes"
     # in the_section._set(), which normally is always executed, we ensured that
     # the_section is a dataclass instance and hence we can ignore type errors
