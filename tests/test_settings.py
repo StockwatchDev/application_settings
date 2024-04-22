@@ -7,6 +7,7 @@ from typing import Any
 
 import pytest
 from loguru import logger
+from pydantic import BaseModel
 
 from application_settings import (
     ConfigBase,
@@ -22,15 +23,15 @@ if sys.version_info < (3, 10):
     from typing import Union
 
 
-@dataclass(frozen=True)
-class AnExample1SettingsSubSection(SettingsSectionBase):
+# @dataclass(frozen=True)
+class AnExample1SettingsSubSection(SettingsSectionBase, BaseModel):
     """Example 1 of a Settings section"""
 
     setting3: float = 3.3
 
 
-@dataclass(frozen=True)
-class AnExample1SettingsSection(SettingsSectionBase):
+# @dataclass(frozen=True)
+class AnExample1SettingsSection(SettingsSectionBase, BaseModel):
     """Example 1 of a Settings section"""
 
     setting1 = "setting1"
@@ -38,8 +39,8 @@ class AnExample1SettingsSection(SettingsSectionBase):
     subsec: AnExample1SettingsSubSection = AnExample1SettingsSubSection()
 
 
-@dataclass(frozen=True)
-class AnExample1Settings(SettingsBase):
+# @dataclass(frozen=True)
+class AnExample1Settings(SettingsBase, BaseModel):
     """Example Settings"""
 
     section1: AnExample1SettingsSection = AnExample1SettingsSection()
@@ -56,7 +57,8 @@ def test_kind_string():
 
 def test_paths():
     # default_filepath:
-    if the_path := AnExample1Settings.default_filepath():
+    the_path = AnExample1Settings.default_filepath()
+    if the_path:
         assert the_path.parts[-1] == "settings.json"
         assert the_path.parts[-2] == ".an_example1"
     else:

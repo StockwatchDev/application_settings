@@ -87,7 +87,8 @@ def _parameters_filepath_from_cli(  # pylint: disable=too-many-arguments
         help=helptext,
     )
     args, _ = parser.parse_known_args()
-    if cmdline_path := getattr(args, long_option[2:], None):
+    cmdline_path = getattr(args, long_option[2:], None)
+    if cmdline_path:
         universal_cmdline_path = Path(cmdline_path[0])
         if config_class and settings_class:
             config_class.set_filepath(

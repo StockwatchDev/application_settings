@@ -23,7 +23,8 @@ class ContainerBase(ContainerSectionBase, ABC):
     @classmethod
     def default_foldername(cls):
         """Return the class name without kind_string, lowercase, with a preceding dot and underscores to seperate words."""
-        if (kind_str := cls.kind_string()) == cls.__name__:
+        kind_str = cls.kind_string()
+        if kind_str == cls.__name__:
             return f".{kind_str.lower()}"
         return (
             "."
@@ -112,11 +113,11 @@ class ContainerBase(ContainerSectionBase, ABC):
 
     def _save(self):
         """Private method to save the singleton to file."""
-        if path := self.filepath():
+        path = self.filepath()
+        if path:
             path.parent.mkdir(parents=True, exist_ok=True)
-            # in self._set(), which normally is always executed, we ensured that
-            # self is a dataclass instance
-            _do_save(path, asdict(self))  # type: ignore[call-overload]
+            # self should be a pydantic BaseModel
+            _do_save(path, self.dict())  # type: ignore[call-overload]
         else:
             # This situation can occur if no valid path was given as an argument, and
             # the default path is set to None.

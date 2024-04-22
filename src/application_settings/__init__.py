@@ -1,14 +1,10 @@
 """Module for loading and retrieving parameters for configuration and settings."""
 
-from importlib.metadata import version
-
-from attributes_doc import attributes_doc
 from loguru import logger
 from pydantic import ValidationError
 from pydantic.dataclasses import dataclass
 
-from application_settings.configuring_base import ConfigBase, ConfigSectionBase, ConfigT
-from application_settings.container_section_base import SectionTypeStr
+from application_settings.configuring_base import ConfigBase, ConfigSectionBase
 from application_settings.convenience import (
     config_filepath_from_cli,
     parameters_folderpath_from_cli,
@@ -18,14 +14,12 @@ from application_settings.convenience import (
 from application_settings.settings_base import (
     SettingsBase,
     SettingsSectionBase,
-    SettingsT,
 )
-from application_settings.type_notation_helper import PathOpt, PathOrStr
 
 LOGGER_NAME = "application-settings"
 logger.disable(LOGGER_NAME)
 
-__version__ = version("application-settings")
+__version__ = "0.5.0.dev0"
 
 __all__ = [
     "ConfigSectionBase",

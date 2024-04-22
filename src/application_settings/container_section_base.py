@@ -16,7 +16,8 @@ class ContainerSectionBase(ABC):
     def get(cls):
         """Get the singleton; if not existing, create it. Loading from file only done for a container."""
 
-        if (_the_container_or_none := cls._get()) is None:
+        _the_container_or_none = cls._get()
+        if _the_container_or_none is None:
             # no config section has been made yet
             cls.get_without_load()
             # so let's instantiate one and keep it in the global store
@@ -43,7 +44,8 @@ class ContainerSectionBase(ABC):
         cls,
     ):  # pylint: disable=consider-alternative-union-syntax
         """Get the singleton."""
-        if the_container := _ALL_CONTAINER_SECTION_SINGLETONS.get(id(cls)):
+        the_container = _ALL_CONTAINER_SECTION_SINGLETONS.get(id(cls))
+        if the_container:
             return the_container
         return None
 

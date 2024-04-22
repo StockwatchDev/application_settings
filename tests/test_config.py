@@ -7,14 +7,15 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-import tomlkit
+import tomli_w
+import tomli
 from loguru import logger
+from pydantic import BaseModel
 
 from application_settings import (
     LOGGER_NAME,
     ConfigBase,
     ConfigSectionBase,
-    PathOpt,
     ValidationError,
     config_filepath_from_cli,
     dataclass,
@@ -22,28 +23,28 @@ from application_settings import (
 )
 
 
-@dataclass(frozen=True)
-class AnExampleConfigSubSection(ConfigSectionBase):
+# @dataclass(frozen=True)
+class AnExampleConfigSubSection(ConfigSectionBase, BaseModel):
     """Example of a Config subsection"""
 
-    field3: tuple[int, str] = (3, "yes")
+    field3 = (3, "yes")
 
 
-@dataclass(frozen=True)
-class AnExample1ConfigSection(ConfigSectionBase):
+# @dataclass(frozen=True)
+class AnExample1ConfigSection(ConfigSectionBase, BaseModel):
     """Example 1 of a Config section"""
 
     field1 = "field1"
-    field2: int = 2
-    subsec: AnExampleConfigSubSection = AnExampleConfigSubSection()
+    field2 = 2
+    subsec = AnExampleConfigSubSection()
 
 
-@dataclass(frozen=True)
-class AnExample1Config(ConfigBase):
+# @dataclass(frozen=True)
+class AnExample1Config(ConfigBase, BaseModel):
     """Example Config"""
 
-    field0: float = 2.2
-    section1: AnExample1ConfigSection = AnExample1ConfigSection()
+    field0 = 2.2
+    section1 = AnExample1ConfigSection()
 
 
 @dataclass(frozen=True)
@@ -66,8 +67,8 @@ def toml_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
         tmp_path_factory.mktemp(AnExample1Config.default_foldername())
         / AnExample1Config.default_filename()
     )
-    with file_path.open(mode="w") as fptr:
-        tomlkit.dump(
+    with file_path.open(mode="wb") as fptr:
+        tomli_w.dump(
             {
                 "field0": 33.33,
                 "section1": {
@@ -85,8 +86,8 @@ def toml_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
 def toml_file_inc1(tmp_path_factory: pytest.TempPathFactory) -> Path:
     tmp_folder = tmp_path_factory.mktemp(AnExample1Config.default_foldername())
     file_path = tmp_folder / "conf_inc.toml"
-    with file_path.open(mode="w") as fptr:
-        tomlkit.dump(
+    with file_path.open(mode="wb") as fptr:
+        tomli_w.dump(
             {
                 "section1": {
                     "field1": "f1",
@@ -97,8 +98,8 @@ def toml_file_inc1(tmp_path_factory: pytest.TempPathFactory) -> Path:
             fptr,
         )
     file_path = tmp_folder / "conf_main.toml"
-    with file_path.open(mode="w") as fptr:
-        tomlkit.dump(
+    with file_path.open(mode="wb") as fptr:
+        tomli_w.dump(
             {
                 "field0": 33.33,
                 "__include__": "./conf_inc.toml",
@@ -112,8 +113,8 @@ def toml_file_inc1(tmp_path_factory: pytest.TempPathFactory) -> Path:
 def toml_file_inc2(tmp_path_factory: pytest.TempPathFactory) -> Path:
     tmp_folder = tmp_path_factory.mktemp(AnExample1Config.default_foldername())
     file_path = tmp_folder / "conf_inc1.toml"
-    with file_path.open(mode="w") as fptr:
-        tomlkit.dump(
+    with file_path.open(mode="wb") as fptr:
+        tomli_w.dump(
             {
                 "section1": {
                     "field1": "f1",
@@ -124,16 +125,16 @@ def toml_file_inc2(tmp_path_factory: pytest.TempPathFactory) -> Path:
             fptr,
         )
     file_path = tmp_folder / "conf_inc2.toml"
-    with file_path.open(mode="w") as fptr:
-        tomlkit.dump(
+    with file_path.open(mode="wb") as fptr:
+        tomli_w.dump(
             {
                 "field0": 333.33,
             },
             fptr,
         )
     file_path = tmp_folder / "conf_main.toml"
-    with file_path.open(mode="w") as fptr:
-        tomlkit.dump(
+    with file_path.open(mode="wb") as fptr:
+        tomli_w.dump(
             {"field0": 33.33, "__include__": ["./conf_inc1.toml", "./conf_inc2.toml"]},
             fptr,
         )
@@ -144,8 +145,8 @@ def toml_file_inc2(tmp_path_factory: pytest.TempPathFactory) -> Path:
 def toml_file_inc3(tmp_path_factory: pytest.TempPathFactory) -> Path:
     tmp_folder = tmp_path_factory.mktemp(AnExample1Config.default_foldername())
     file_path = tmp_folder / "conf_inc1.toml"
-    with file_path.open(mode="w") as fptr:
-        tomlkit.dump(
+    with file_path.open(mode="wb") as fptr:
+        tomli_w.dump(
             {
                 "section1": {
                     "field1": "f1",
@@ -156,14 +157,14 @@ def toml_file_inc3(tmp_path_factory: pytest.TempPathFactory) -> Path:
             fptr,
         )
     file_path = tmp_folder / "conf_inc2.toml"
-    with file_path.open(mode="w") as fptr:
-        tomlkit.dump(
+    with file_path.open(mode="wb") as fptr:
+        tomli_w.dump(
             {"field0": 333.33, "__include__": "./conf_inc1.toml"},
             fptr,
         )
     file_path = tmp_folder / "conf_main.toml"
-    with file_path.open(mode="w") as fptr:
-        tomlkit.dump(
+    with file_path.open(mode="wb") as fptr:
+        tomli_w.dump(
             {"field0": 33.33, "__include__": "./conf_inc2.toml"},
             fptr,
         )
@@ -174,8 +175,8 @@ def toml_file_inc3(tmp_path_factory: pytest.TempPathFactory) -> Path:
 def toml_file_inc4(tmp_path_factory: pytest.TempPathFactory) -> Path:
     tmp_folder = tmp_path_factory.mktemp(AnExample1Config.default_foldername())
     file_path = tmp_folder / "conf_main.toml"
-    with file_path.open(mode="w") as fptr:
-        tomlkit.dump(
+    with file_path.open(mode="wb") as fptr:
+        tomli_w.dump(
             {
                 "field0": 33.33,
                 "__include__": 'fi:\0\\l*e/p"a?t>h|.t<xt',
@@ -189,8 +190,8 @@ def toml_file_inc4(tmp_path_factory: pytest.TempPathFactory) -> Path:
 def toml_file_inc5(tmp_path_factory: pytest.TempPathFactory) -> Path:
     tmp_folder = tmp_path_factory.mktemp(AnExample1Config.default_foldername())
     file_path = tmp_folder / "conf_main.toml"
-    with file_path.open(mode="w") as fptr:
-        tomlkit.dump(
+    with file_path.open(mode="wb") as fptr:
+        tomli_w.dump(
             {
                 "field0": 33.33,
                 "__include__": 14,
@@ -275,12 +276,14 @@ def test_section_singleton(caplog: pytest.LogCaptureFixture):
 def test_paths(toml_file, caplog: pytest.LogCaptureFixture):
     use_standard_logging(enable=True)
     # default_filepath:
-    if the_path := Config.default_filepath():
+    the_path = Config.default_filepath()
+    if the_path:
         assert the_path.parts[-2] == ".config"
     else:
         assert False
 
-    if the_path := AnExample1Config.default_filepath():
+    the_path = AnExample1Config.default_filepath()
+    if the_path:
         assert the_path.parts[-1] == "config.toml"
         assert the_path.parts[-2] == ".an_example1"
     else:
@@ -313,12 +316,12 @@ def test_paths(toml_file, caplog: pytest.LogCaptureFixture):
     logger.disable(LOGGER_NAME)
 
 
-def test_decorator():
-    # raising of TypeError:
-    with pytest.raises(TypeError):
-        ConfigNoDataclass.load()
-    with pytest.raises(TypeError):
-        ConfigUnfrozenDataclass.load()
+# def test_decorator():
+#     # raising of TypeError:
+#     with pytest.raises(TypeError):
+#         ConfigNoDataclass.load()
+#     with pytest.raises(TypeError):
+#         ConfigUnfrozenDataclass.load()
 
 
 def test_config_cmdline(monkeypatch: pytest.MonkeyPatch):
@@ -357,7 +360,8 @@ def test_set_filepath_after_get(
     toml_file, caplog: pytest.LogCaptureFixture
 ):
     use_standard_logging(enable=True)
-    AnExample1Config.set_filepath(toml_file, load=True)
+    AnExample1Config.set_filepath(toml_file)
+    AnExample1Config.load()
     assert AnExample1Config.get().section1.field1 == "f1"
     assert AnExample1Config.get().section1.subsec.field3[1] == "no"
     # test if the subsection singleton is properly registered
@@ -375,12 +379,12 @@ def test_get(monkeypatch: pytest.MonkeyPatch, toml_file):
     assert AnExample1Config.get().section1.field2 == 22
 
     # test that by default it is not reloaded
-    def mock_tomlkit_load(
+    def mock_toml_load(
         fptr,  # pylint: disable=unused-argument
-    ) -> dict[str, dict[str, Any]]:
+    ):
         return {"section1": {"field1": "f1", "field2": 222}}
 
-    monkeypatch.setattr(tomlkit, "load", mock_tomlkit_load)
+    monkeypatch.setattr(tomli, "load", mock_toml_load)
     assert AnExample1Config.get().section1.field2 == 22
 
     # and now test reload
@@ -417,8 +421,8 @@ def test_wrong_type():
     with pytest.raises(ValidationError) as excinfo:
         AnExample1Config.set({"section1": {"field1": ("f1", 22), "field2": None}})
     assert "2 validation errors" in str(excinfo.value)
-    assert "Input should be a valid string" in str(excinfo.value)
-    assert "Input should be a valid integer" in str(excinfo.value)
+    assert "str type expected" in str(excinfo.value)
+    assert "none is not an allowed value" in str(excinfo.value)
 
 
 def test_missing_extra_attributes():
@@ -429,24 +433,24 @@ def test_missing_extra_attributes():
         assert test_config.section1.field3 == 22  # type: ignore[attr-defined]
 
 
-@dataclass(frozen=True)
-class Example2aConfigSection(ConfigSectionBase):
+# @dataclass(frozen=True)
+class Example2aConfigSection(ConfigSectionBase, BaseModel):
     """Example 2a of a Config section"""
 
     field3: float
     field4: float = 0.5
 
 
-@dataclass(frozen=True)
-class Example2bConfigSection(ConfigSectionBase):
+# @dataclass(frozen=True)
+class Example2bConfigSection(ConfigSectionBase, BaseModel):
     """Example 2b of a Config section"""
 
     field1 = "field1"
     field2: int = 2
 
 
-@dataclass(frozen=True)
-class Example2Config(ConfigBase):
+# @dataclass(frozen=True)
+class Example2Config(ConfigBase, BaseModel):
     """Example Config"""
 
     section1: Example2aConfigSection
@@ -498,7 +502,7 @@ def test_include_4(toml_file_inc4):
 
 def test_include_5(toml_file_inc5):
     # raising in case of invalid path:
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         AnExample1Config.set_filepath(toml_file_inc5, load=True)
 
 

@@ -1,5 +1,6 @@
 """Module for handling settings."""
-from dataclasses import replace
+# from dataclasses import replace
+from pydantic import BaseModel
 
 from application_settings.container_base import ContainerBase
 from application_settings.container_section_base import (
@@ -48,9 +49,12 @@ class SettingsBase(ContainerBase):
 
 
 def _update_settings_section(
-    the_section, changes
+    the_section: BaseModel, changes
 ):
     "Update parameters and sections with data specified in changes"
     # in the_section._set(), which normally is always executed, we ensured that
     # the_section is a dataclass instance and hence we can ignore type errors
-    return replace(the_section, **changes)  # type: ignore[type-var]
+    print(the_section)
+    updated = the_section.copy(update=changes)
+    print(updated)
+    return the_section.copy(update=changes)  # type: ignore[type-var]

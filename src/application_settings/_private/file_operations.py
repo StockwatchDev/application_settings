@@ -3,7 +3,7 @@ from enum import Enum, unique
 from pathlib import Path
 
 from loguru import logger
-from pathvalidate import is_valid_filepath
+# from pathvalidate import is_valid_filepath
 
 from application_settings._private.json_file_operations import load_json, save_json
 from application_settings._private.toml_file_operations import load_toml, save_toml
@@ -61,7 +61,8 @@ def load(kind, path, throw_if_file_not_found):
         create_file_if_not_found=False,
     ):
         real_path = path
-        if loader := _get_loader(path=real_path):
+        loader = _get_loader(path=real_path)
+        if loader:
             if kind == "Config":
                 return _load_with_includes(real_path, throw_if_file_not_found, loader)
             return loader(real_path)
@@ -79,7 +80,8 @@ def save(path, data):
         throw_if_file_not_found=False,
         create_file_if_not_found=True,
     ):
-        if saver := _get_saver(path=path):
+        saver = _get_saver(path=path)
+        if saver:
             return saver(path, data)
     return None
 
@@ -99,31 +101,29 @@ def _load_with_includes(
     path, throw_if_file_not_found, loader
 ):
     data_stored = loader(path)
-    if included_files := data_stored.get("__include__"):
+    included_files = data_stored.get("__include__")
+    if included_files:
         if not isinstance(included_files, list):
             included_files = [included_files]
         for included_file in included_files:
-            if is_valid_filepath(included_file, platform="auto"):
-                included_file_path = Path(included_file)
-                if not included_file_path.is_absolute():
-                    included_file_path = path.parents[0] / included_file_path
-                included_file_path.resolve()
-                if _check_filepath(
-                    included_file_path,
-                    throw_if_invalid_path=throw_if_file_not_found,
-                    throw_if_file_not_found=throw_if_file_not_found,
-                    create_file_if_not_found=False,
-                ):
-                    data_stored = (
-                        _load_with_includes(
-                            included_file_path, throw_if_file_not_found, loader
-                        )
-                        | data_stored
-                    )
-            else:
-                raise ValueError(
-                    f"Given path: '{included_file}' is not a valid path for this OS"
-                )
+            # if is_valid_filepath(included_file, platform="auto"):
+            included_file_path = Path(included_file)
+            if not included_file_path.is_absolute():
+                included_file_path = path.parents[0] / included_file_path
+            included_file_path.resolve()
+            if _check_filepath(
+                included_file_path,
+                throw_if_invalid_path=throw_if_file_not_found,
+                throw_if_file_not_found=throw_if_file_not_found,
+                create_file_if_not_found=False,
+            ):
+                data_stored = {**_load_with_includes(
+                        included_file_path, throw_if_file_not_found, loader
+                    ), **data_stored }
+            # else:
+            #     raise ValueError(
+            #         f"Given path: '{included_file}' is not a valid path for this OS"
+            #     )
     return data_stored
 
 

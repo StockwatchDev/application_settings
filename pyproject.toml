@@ -34,55 +34,22 @@ include = [
 Changelog = "https://stockwatchdev.github.io/application_settings/stable/CHANGELOG/"
 
 [tool.poetry.dependencies]
-python = ">=3.6"
+python = ">=3.6.8,<3.7"
 loguru = ">=0.7.0"
 # pathvalidate = ">=2.5"
 pydantic = "=1.9.2"
 # tomlkit = ">=0.12"
-toml = ">=0.10"
+tomli = ">=1.2.3"
+tomli_w = ">=0.4.0"
 # typing-extensions = { version = ">=4.5.0", python = "<3.12" }
 # attributes-doc = ">=0.3.0"
 
-[tool.poetry.group.testing]
-optional = true
-
-[tool.poetry.group.testing.dependencies]
+[tool.poetry.dev-dependencies]
 pytest = ">=7.0"
 pytest-cov = ">=4.0"
-
-[tool.poetry.group.typing]
-optional = true
-
-[tool.poetry.group.typing.dependencies]
-# mypy = ">=1.1"
-lxml = ">=4.9"
-
-[tool.poetry.group.style]
-optional = true
-
-[tool.poetry.group.style.dependencies]
 black = ">=22.8"
 isort = ">=5.5"
 pylint = ">=2.10"
-
-[tool.poetry.group.testrunner]
-optional = true
-
-[tool.poetry.group.testrunner.dependencies]
-tox = ">=3.22"
-
-[tool.poetry.group.docs]
-optional = true
-
-[tool.poetry.group.docs.dependencies]
-black = ">=22.8"
-# mkdocs = ">=1.5"
-# mkdocstrings-python = ">=1.5"
-# mkdocs-material = ">=9.2"
-# pymdown-extensions = ">=10.1"
-# mkdocs-include-markdown-plugin = ">=6.0"
-# mkdocs-gen-files = ">=0.5"
-# mkdocs-literate-nav = ">=0.6"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -93,25 +60,6 @@ filterwarnings = ["error"]
 
 [tool.isort]
 profile = "black"
-
-[tool.mypy]
-warn_unused_configs = true
-disallow_any_generics = true
-disallow_subclassing_any = true
-disallow_untyped_calls = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
-check_untyped_defs = true
-disallow_untyped_decorators = false
-no_implicit_optional = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-warn_return_any = true
-no_implicit_reexport = true
-strict_equality = true
-show_error_codes = true
-show_error_context = true
-ignore_missing_imports = true
 
 [tool.pylint.main]
 load-plugins = [
