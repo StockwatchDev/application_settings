@@ -1,4 +1,5 @@
 """Module for handling settings."""
+
 import sys
 from dataclasses import replace
 from typing import Any, TypeVar

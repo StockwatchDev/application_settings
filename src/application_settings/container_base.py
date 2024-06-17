@@ -1,4 +1,5 @@
 """Base class for a container (= root section) for configuration and settings."""
+
 import sys
 from abc import ABC, abstractmethod
 from dataclasses import asdict
