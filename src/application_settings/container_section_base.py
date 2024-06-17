@@ -1,4 +1,5 @@
 """Abstract base class for sections to be added to containers and container sections for configuration and settings."""
+
 import sys
 from abc import ABC, abstractmethod
 from dataclasses import is_dataclass

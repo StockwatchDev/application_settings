@@ -1,4 +1,5 @@
 """Module for handling configuration."""
+
 import sys
 from typing import TypeVar
 

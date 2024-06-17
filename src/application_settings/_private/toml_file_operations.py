@@ -1,4 +1,5 @@
 """Functions for storing dicts to and loading dicts from toml files."""
+
 from pathlib import Path
 from typing import Any
 

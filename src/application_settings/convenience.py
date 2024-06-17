@@ -1,4 +1,5 @@
 """Functions that can be called from the application to make life easy."""
+
 from argparse import ArgumentParser
 from logging import Formatter, Handler, LogRecord, getLogger
 from pathlib import Path

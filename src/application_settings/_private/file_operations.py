@@ -1,4 +1,5 @@
 """Functions for storing dicts to and loading dicts from file."""
+
 from collections.abc import Callable
 from enum import Enum, unique
 from pathlib import Path
