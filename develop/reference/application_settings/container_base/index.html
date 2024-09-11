@@ -1114,7 +1114,7 @@
 <a id="application_settings.container_base"></a>
     <div class="doc doc-contents first">
 
-      <p>Base class for a container (= root section) for configuration and settings.</p>
+        <p>Base class for a container (= root section) for configuration and settings.</p>
 
 
 
@@ -1140,10 +1140,10 @@
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code><autoref identifier="application_settings.container_section_base.ContainerSectionBase" optional hover>ContainerSectionBase</autoref></code>, <code><autoref identifier="abc.ABC" optional hover>ABC</autoref></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="application_settings.container_section_base.ContainerSectionBase" href="../container_section_base/#application_settings.container_section_base.ContainerSectionBase">ContainerSectionBase</a></code>, <code><span title="abc.ABC">ABC</span></code></p>
 
 
-      <p>Base class for Config and Settings container classes</p>
+        <p>Base class for Config and Settings container classes</p>
 
 
 
@@ -1176,7 +1176,7 @@
 
     <div class="doc doc-contents ">
 
-      <p>Return the default file format</p>
+        <p>Return the default file format</p>
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/container_base.py</code></summary>
@@ -1210,7 +1210,7 @@
 
     <div class="doc doc-contents ">
 
-      <p>Return the class name without kind_string, lowercase, with a preceding dot and underscores to seperate words.</p>
+        <p>Return the class name without kind_string, lowercase, with a preceding dot and underscores to seperate words.</p>
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/container_base.py</code></summary>
@@ -1254,7 +1254,7 @@
 
     <div class="doc doc-contents ">
 
-      <p>Return the kind_string, lowercase, with the extension that fits the file_format.</p>
+        <p>Return the kind_string, lowercase, with the extension that fits the file_format.</p>
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/container_base.py</code></summary>
@@ -1288,7 +1288,7 @@
 
     <div class="doc doc-contents ">
 
-      <p>Return the fully qualified default path for the config/settingsfile</p>
+        <p>Return the fully qualified default path for the config/settingsfile</p>
 <p>E.g. ~/.example/config.toml.
 If you prefer to not have a default path then overwrite this method and return None.</p>
 
@@ -1332,7 +1332,7 @@ If you prefer to not have a default path then overwrite this method and return N
 
     <div class="doc doc-contents ">
 
-      <p>Set the path for the file (a singleton).</p>
+        <p>Set the path for the file (a singleton).</p>
 
 
 <p><span class="doc-section-title">Raises:</span></p>
@@ -1346,7 +1346,7 @@ If you prefer to not have a default path then overwrite this method and return N
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><autoref identifier="ValueError" optional>ValueError</autoref></code>
+                  <code>ValueError</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1443,7 +1443,7 @@ If you prefer to not have a default path then overwrite this method and return N
 
     <div class="doc doc-contents ">
 
-      <p>Return the path for the file that holds the config / settings.</p>
+        <p>Return the path for the file that holds the config / settings.</p>
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/container_base.py</code></summary>
@@ -1477,7 +1477,7 @@ If you prefer to not have a default path then overwrite this method and return N
 
     <div class="doc doc-contents ">
 
-      <p>Create a new singleton, try to load parameter values from file.</p>
+        <p>Create a new singleton, try to load parameter values from file.</p>
 
 
 <p><span class="doc-section-title">Raises:</span></p>
@@ -1491,7 +1491,7 @@ If you prefer to not have a default path then overwrite this method and return N
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><autoref identifier="FileNotFoundError" optional>FileNotFoundError</autoref></code>
+                  <code>FileNotFoundError</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1501,7 +1501,7 @@ If you prefer to not have a default path then overwrite this method and return N
           </tr>
           <tr class="doc-section-item">
             <td>
-                  <code><autoref identifier="TOMLDecodeError" optional>TOMLDecodeError</autoref></code>
+                  <code>TOMLDecodeError</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1511,7 +1511,7 @@ If you prefer to not have a default path then overwrite this method and return N
           </tr>
           <tr class="doc-section-item">
             <td>
-                  <code><autoref identifier="JSONDecodeError" optional>JSONDecodeError</autoref></code>
+                  <code>JSONDecodeError</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1521,7 +1521,7 @@ If you prefer to not have a default path then overwrite this method and return N
           </tr>
           <tr class="doc-section-item">
             <td>
-                  <code><autoref identifier="pydantic.ValidationError" optional hover>ValidationError</autoref></code>
+                  <code><span title="pydantic.ValidationError">ValidationError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1578,7 +1578,7 @@ If you prefer to not have a default path then overwrite this method and return N
 
     <div class="doc doc-contents ">
 
-      <p>Get has been called on a section before a load was done; handle this.</p>
+        <p>Get has been called on a section before a load was done; handle this.</p>
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/container_base.py</code></summary>
