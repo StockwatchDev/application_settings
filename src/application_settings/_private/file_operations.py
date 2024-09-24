@@ -56,6 +56,20 @@ def _check_filepath(
     return True
 
 
+def get_root_from_file(kind: str, path: PathOpt, throw_if_file_not_found: bool) -> str:
+    """Load data from the file given in path; log error or throw if not possible"""
+    if _check_filepath(
+        path,
+        throw_if_invalid_path=throw_if_file_not_found,
+        throw_if_file_not_found=throw_if_file_not_found,
+        create_file_if_not_found=False,
+    ):
+        real_path = cast(Path, path)
+        if loader := _get_loader(path=real_path):
+            return loader(real_path).get(f"{kind}_root_class", "")
+    return ""
+
+
 def load(kind: str, path: PathOpt, throw_if_file_not_found: bool) -> dict[str, Any]:
     """Load data from the file given in path; log error or throw if not possible"""
     if _check_filepath(

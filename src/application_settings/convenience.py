@@ -1,5 +1,9 @@
 """Functions that can be called from the application to make life easy."""
 
+import importlib
+import importlib.util
+import sys
+
 from argparse import ArgumentParser
 from logging import Formatter, Handler, LogRecord, getLogger
 from pathlib import Path
@@ -7,8 +11,46 @@ from typing import Union
 
 from loguru import logger
 
-from application_settings.configuring_base import ConfigT
-from application_settings.settings_base import SettingsT
+from application_settings.configuring_base import ConfigBase, ConfigT
+from application_settings._private.file_operations import get_root_from_file
+from application_settings.settings_base import SettingsBase, SettingsT
+
+
+def _get_config_class(qualified_classname: str) -> ConfigT:
+    components = qualified_classname.split(".")
+    if len(components) < 2:
+        logger.error(
+            f"Unable to import {qualified_classname}: no package / module name provided."
+        )
+        return ConfigBase
+    if components[0] == "":
+        # relative import, no package
+        logger.warning(
+            f"{qualified_classname}: attempted relative import with no known parent package. Will try to load file, but this may fail."
+        )
+        module_name = components[-2]
+        filename = "/".join(components[1:-1])
+        file_path = Path.cwd() / f"{filename}.py"
+        print(file_path)
+        input()
+        spec = importlib.util.spec_from_file_location(module_name, file_path)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[module_name] = module
+        spec.loader.exec_module(module)
+    else:
+        module = importlib.import_module(".".join(components[:-1]))
+    return getattr(module, components[-1], ConfigBase)
+
+
+def _get_settings_class(qualified_classname: str) -> SettingsT:
+    components = qualified_classname.split(".")
+    if len(components) < 2:
+        logger.error(
+            f"Unable to import {qualified_classname}: no package / module name provided."
+        )
+        return SettingsBase
+    module = importlib.import_module(".".join(components[:-1]))
+    return getattr(module, components[-1], SettingsBase)
 
 
 def config_filepath_from_cli(
@@ -98,6 +140,21 @@ def _parameters_filepath_from_cli(  # pylint: disable=too-many-arguments
     args, _ = parser.parse_known_args()
     if cmdline_path := getattr(args, long_option[2:], None):
         universal_cmdline_path = Path(cmdline_path[0])
+        if config_class == ConfigBase:
+            config_classname = get_root_from_file(
+                "Config", universal_cmdline_path, True
+            )
+            if (config_class := _get_config_class(config_classname)) == ConfigBase:
+                raise ValueError(f"Unable to import {config_classname}")
+        if settings_class == SettingsBase:
+            settings_classname = get_root_from_file(
+                "Settings", universal_cmdline_path, True
+            )
+            settings_class = _get_config_class(settings_classname)
+            if (
+                settings_class := _get_settings_class(settings_classname)
+            ) == SettingsBase:
+                raise ValueError(f"Unable to import {settings_classname}")
         if config_class and settings_class:
             config_class.set_filepath(
                 universal_cmdline_path / config_class.default_filename(), load=load
