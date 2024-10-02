@@ -66,7 +66,7 @@ def get_root_from_file(kind: str, path: PathOpt, throw_if_file_not_found: bool) 
     ):
         real_path = cast(Path, path)
         if loader := _get_loader(path=real_path):
-            return loader(real_path).get(f"{kind}_root_class", "")
+            return cast(str, loader(real_path).get(f"{kind}_root_class", ""))
     return ""
 
 

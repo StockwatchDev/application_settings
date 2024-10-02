@@ -4,9 +4,9 @@ Cd to the folder containing this file and run this example with the following co
 python . -c ./the_config.toml
 """
 
-from application_settings import ConfigBase, config_filepath_from_cli
-
 from lib_config import MyLibConfigSection
+
+from application_settings import ConfigBase, config_filepath_from_cli
 
 
 def main() -> int:

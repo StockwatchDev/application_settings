@@ -86,7 +86,11 @@ def _check_dataclass_decorator(obj: Any) -> None:
             f"{obj} is not a dataclass instance; did you forget to add "
             f"'@dataclass(frozen=True)' when you defined {obj.__class__}?."
         )
-    if not obj.__class__.__dataclass_params__.frozen:
+    if not (
+        hasattr(obj, "__dataclass_params__")
+        and hasattr(obj.__dataclass_params__, "frozen")
+        and obj.__dataclass_params__.frozen
+    ):
         raise TypeError(
             f"{obj} is not a frozen dataclass instance; did you forget "
             f"to add '(frozen=True)' when you defined {obj.__class__}?."
