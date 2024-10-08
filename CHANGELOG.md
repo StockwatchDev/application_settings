@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Document parameters by means of docstrings according to (the rejected) 
   [PEP224](https://peps.python.org/pep-0224/)
   (Issue [#140](https://github.com/StockwatchDev/application_settings/issues/140))
+- Allow to specify the container class that takes care of loading in the parameter file rather than in
+  code (Issue [#237](https://github.com/StockwatchDev/application_settings/issues/237))
 
 ### Changed - 0.5.0
 
