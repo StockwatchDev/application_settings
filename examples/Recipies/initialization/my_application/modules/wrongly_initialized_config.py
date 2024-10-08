@@ -11,3 +11,6 @@ class WronglyInitializedConfig(ConfigBase):
     """Example of a Config that does not load the config in the module"""
 
     configvar_is_set: bool = False
+
+
+# filepath not loaded from cli here

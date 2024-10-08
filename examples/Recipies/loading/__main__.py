@@ -6,16 +6,16 @@ python . -c ./the_config.toml
 
 from lib_config import MyLibConfigSection
 
-from application_settings import ConfigBase, config_filepath_from_cli
+from application_settings import config_filepath_from_cli
 
 
 def main() -> int:
-    """print an instance of my_dataclass and all globals"""
+    """print configvar_with_default_zero before and after loading"""
     print(f"{MyLibConfigSection.get().configvar_with_default_zero = }")
     print(
         "In main(), loading from command line without specifying Config container class"
     )
-    config_filepath_from_cli(ConfigBase, load=True)
+    config_filepath_from_cli(load=True)
 
     print(f"{MyLibConfigSection.get().configvar_with_default_zero = }")
     return 0

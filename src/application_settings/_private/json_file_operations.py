@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from application_settings._private.file_operations_utils import deep_update
+
 
 def load_json(path: Path) -> dict[str, Any]:
     """Load the info in the json file given by path and return as dict"""
@@ -14,6 +16,11 @@ def load_json(path: Path) -> dict[str, Any]:
 
 
 def save_json(path: Path, data: dict[str, Any]) -> None:
-    """Save the info in the data dict to the json file given by path"""
+    """Update the json file given by path with the data"""
+    if path.stat().st_size > 0:
+        old_data = load_json(path)
+        updated_data = deep_update(old_data, data)
+    else:
+        updated_data = data
     with path.open(mode="w") as fptr:
-        json.dump(data, fptr)
+        json.dump(updated_data, fptr)

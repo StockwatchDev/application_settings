@@ -10,7 +10,7 @@ from typing import Union, cast
 
 from loguru import logger
 
-from application_settings._private.file_operations import get_root_from_file
+from application_settings._private.file_operations import get_container_from_file
 from application_settings.configuring_base import ConfigBase, ConfigT
 from application_settings.settings_base import SettingsBase, SettingsT
 from application_settings.type_notation_helper import ModuleTypeOpt
@@ -92,7 +92,9 @@ def _get_settings_class(
 
 
 def config_filepath_from_cli(
-    config_class: type[ConfigT],
+    config_class: Union[  # pylint: disable=consider-alternative-union-syntax
+        type[ConfigT], type[ConfigBase]
+    ] = ConfigBase,
     parser: ArgumentParser = ArgumentParser(),
     short_option: str = "-c",
     long_option: str = "--config_filepath",
@@ -112,7 +114,9 @@ def config_filepath_from_cli(
 
 
 def settings_filepath_from_cli(
-    settings_class: type[SettingsT],
+    settings_class: Union[  # pylint: disable=consider-alternative-union-syntax
+        type[SettingsT], type[SettingsBase]
+    ] = SettingsBase,
     parser: ArgumentParser = ArgumentParser(),
     short_option: str = "-s",
     long_option: str = "--settings_filepath",
@@ -132,8 +136,12 @@ def settings_filepath_from_cli(
 
 
 def parameters_folderpath_from_cli(  # pylint: disable=too-many-arguments
-    config_class: type[ConfigT],
-    settings_class: type[SettingsT],
+    config_class: Union[  # pylint: disable=consider-alternative-union-syntax
+        type[ConfigT], type[ConfigBase]
+    ] = ConfigBase,
+    settings_class: Union[  # pylint: disable=consider-alternative-union-syntax
+        type[SettingsT], type[SettingsBase]
+    ] = SettingsBase,
     parser: ArgumentParser = ArgumentParser(),
     short_option: str = "-p",
     long_option: str = "--parameters_folderpath",
@@ -156,10 +164,10 @@ def parameters_folderpath_from_cli(  # pylint: disable=too-many-arguments
 
 def _parameters_filepath_from_cli(  # pylint: disable=too-many-arguments
     config_class: Union[  # pylint: disable=consider-alternative-union-syntax
-        type[ConfigT], None
+        type[ConfigT], type[ConfigBase], None
     ],
     settings_class: Union[  # pylint: disable=consider-alternative-union-syntax
-        type[SettingsT], None
+        type[SettingsT], type[SettingsBase], None
     ],
     parser: ArgumentParser,
     short_option: str,
@@ -179,13 +187,13 @@ def _parameters_filepath_from_cli(  # pylint: disable=too-many-arguments
     if cmdline_path := getattr(args, long_option[2:], None):
         universal_cmdline_path = Path(cmdline_path[0])
         if config_class == ConfigBase:
-            config_classname = get_root_from_file(
+            config_classname = get_container_from_file(
                 "Config", universal_cmdline_path, True
             )
             if not (config_class := _get_config_class(config_classname)):
                 raise ValueError(f"Unable to import {config_classname}")
         if settings_class == SettingsBase:
-            settings_classname = get_root_from_file(
+            settings_classname = get_container_from_file(
                 "Settings", universal_cmdline_path, True
             )
             if not (settings_class := _get_settings_class(settings_classname)):

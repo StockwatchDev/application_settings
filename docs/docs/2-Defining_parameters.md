@@ -57,7 +57,16 @@ exports this decorator to facilitate documentation and introspection.
 
 === "Configuration"
     ```python
-    from application_settings import ConfigBase, ConfigSectionBase, attributes_doc, dataclass
+    """Configuration parameter definition"""
+
+    from application_settings import (
+        ConfigBase,
+        ConfigSectionBase,
+        attributes_doc,
+        config_filepath_from_cli,
+        dataclass,
+    )
+
 
     @attributes_doc
     @dataclass(frozen=True)
@@ -65,10 +74,10 @@ exports this decorator to facilitate documentation and introspection.
         """Config section for an example"""
 
         field1: float = 0.5
-        """Docstring for the first field; defaults to 0.5"""
+        """The first field; defaults to 0.5"""
 
         field2: int = 2
-        """Docstring for the second field; defaults to 2"""
+        """The second field; defaults to 2"""
 
 
     @attributes_doc
@@ -77,16 +86,30 @@ exports this decorator to facilitate documentation and introspection.
         """Config for an example"""
 
         name: str = "nice example"
-        """With this parameter you can configure the name; defaults to 'nice example'"""
+        """Name of the application; defaults to 'nice example'"""
 
         section1: MyExampleConfigSection = MyExampleConfigSection()
         """Holds the configuration parameters for the first section"""
+
+
+    # It is good practice to set the filepath via the command line interface
+    # You can optionally set load=True
+    config_filepath_from_cli()
 
     ```
 
 === "Settings"
     ```python
-    from application_settings import SettingsBase, SettingsSectionBase, attributes_doc, dataclass
+    """Settings definitions"""
+
+    from application_settings import (
+        SettingsBase,
+        SettingsSectionBase,
+        attributes_doc,
+        dataclass,
+        settings_filepath_from_cli,
+    )
+
 
     @attributes_doc
     @dataclass(frozen=True)
@@ -108,5 +131,8 @@ exports this decorator to facilitate documentation and introspection.
         basics: BasicSettingsSection = BasicSettingsSection()
         """Holds the setting parameters for the basic section"""
 
+
+    # It is good practice to set the filepath via the command line interface
+    settings_filepath_from_cli()
 
     ```

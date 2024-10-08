@@ -56,7 +56,9 @@ def _check_filepath(
     return True
 
 
-def get_root_from_file(kind: str, path: PathOpt, throw_if_file_not_found: bool) -> str:
+def get_container_from_file(
+    kind: str, path: PathOpt, throw_if_file_not_found: bool
+) -> str:
     """Load data from the file given in path; log error or throw if not possible"""
     if _check_filepath(
         path,
@@ -66,7 +68,7 @@ def get_root_from_file(kind: str, path: PathOpt, throw_if_file_not_found: bool) 
     ):
         real_path = cast(Path, path)
         if loader := _get_loader(path=real_path):
-            return cast(str, loader(real_path).get(f"{kind}_root_class", ""))
+            return cast(str, loader(real_path).get(f"{kind}_container_class", ""))
     return ""
 
 
