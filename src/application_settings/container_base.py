@@ -139,7 +139,7 @@ class ContainerBase(ContainerSectionBase, ABC):
     @classmethod
     def _get_saved_data(cls, throw_if_file_not_found: bool = False) -> dict[str, Any]:
         """Get the data stored in the parameter file"""
-        return _do_load(cls.kind_string(), cls.filepath(), throw_if_file_not_found)
+        return _do_load(cls.kind(), cls.filepath(), throw_if_file_not_found)
 
 
 _ALL_PATHS: dict[int, PathOpt] = {}

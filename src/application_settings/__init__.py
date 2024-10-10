@@ -8,13 +8,13 @@ from pydantic import ValidationError
 from pydantic.dataclasses import dataclass
 
 from application_settings.configuring_base import ConfigBase, ConfigSectionBase, ConfigT
-from application_settings.container_section_base import SectionTypeStr
 from application_settings.convenience import (
     config_filepath_from_cli,
     parameters_folderpath_from_cli,
     settings_filepath_from_cli,
     use_standard_logging,
 )
+from application_settings.parameter_kind import ParameterKind, ParameterKindStr
 from application_settings.settings_base import (
     SettingsBase,
     SettingsSectionBase,
@@ -27,13 +27,15 @@ logger.disable(LOGGER_NAME)
 
 __version__ = version("application-settings")
 
+
 __all__ = [
     "ConfigSectionBase",
     "ConfigBase",
     "ConfigT",
+    "ParameterKind",
     "PathOpt",
     "PathOrStr",
-    "SectionTypeStr",
+    "ParameterKindStr",
     "SettingsSectionBase",
     "SettingsBase",
     "SettingsT",

@@ -1,1 +1,1 @@
-{"Settings_container_class": "settings.MyExampleSettings", "name": "the stored name", "basics": {"totals": 3}}
+{"__Settings_container_class__": "settings.MyExampleSettings", "name": "the stored name", "basics": {"totals": 3}}

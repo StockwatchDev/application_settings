@@ -3,9 +3,11 @@
 import sys
 from abc import ABC, abstractmethod
 from dataclasses import is_dataclass
-from typing import Any, Literal, Optional, cast
+from typing import Any, Optional, cast
 
 from loguru import logger
+
+from application_settings.parameter_kind import ParameterKind, ParameterKindStr
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -13,16 +15,18 @@ else:
     from typing_extensions import Self
 
 
-SectionTypeStr = Literal["Config", "Settings"]
-
-
 class ContainerSectionBase(ABC):
     """Base class for all ContainerSection classes"""
 
     @classmethod
     @abstractmethod
-    def kind_string(cls) -> SectionTypeStr:
+    def kind(cls) -> ParameterKind:
+        """Return either ParameterKind.CONFIG or ParameterKind.SETTINGS"""
+
+    @classmethod
+    def kind_string(cls) -> ParameterKindStr:
         """Return either 'Config' or 'Settings'"""
+        return cls.kind().value
 
     @classmethod
     def get(cls) -> Self:

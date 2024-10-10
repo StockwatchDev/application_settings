@@ -12,6 +12,7 @@ from loguru import logger
 
 from application_settings._private.file_operations import get_container_from_file
 from application_settings.configuring_base import ConfigBase, ConfigT
+from application_settings.parameter_kind import ParameterKind
 from application_settings.settings_base import SettingsBase, SettingsT
 from application_settings.type_notation_helper import ModuleTypeOpt
 
@@ -188,13 +189,13 @@ def _parameters_filepath_from_cli(  # pylint: disable=too-many-arguments
         universal_cmdline_path = Path(cmdline_path[0])
         if config_class == ConfigBase:
             config_classname = get_container_from_file(
-                "Config", universal_cmdline_path, True
+                ParameterKind.CONFIG, universal_cmdline_path, True
             )
             if not (config_class := _get_config_class(config_classname)):
                 raise ValueError(f"Unable to import {config_classname}")
         if settings_class == SettingsBase:
             settings_classname = get_container_from_file(
-                "Settings", universal_cmdline_path, True
+                ParameterKind.SETTINGS, universal_cmdline_path, True
             )
             if not (settings_class := _get_settings_class(settings_classname)):
                 raise ValueError(f"Unable to import {settings_classname}")

@@ -4,9 +4,9 @@ Cd to the folder containing this file and run this example with the following co
 python . -c ./config.toml
 """
 
-from config import MyExampleConfig, MyExampleConfigSection
-
 from pathlib import Path
+
+from config import MyExampleConfig, MyExampleConfigSection
 
 
 def main1() -> None:

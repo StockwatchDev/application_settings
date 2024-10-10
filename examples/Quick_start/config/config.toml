@@ -5,7 +5,7 @@
 # The next element is refering to the Config container class that
 # defines the config parameters of the application.
 # It is used when loading from command line
-Config_container_class = "config.MyExampleConfig"
+__Config_container_class__ = "config.MyExampleConfig"
 
 
 # With this parameter you can configure the name; defaults to 'nice example'

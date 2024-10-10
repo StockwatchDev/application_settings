@@ -37,7 +37,7 @@ following files.
     # The next element is refering to the Config container class that
     # defines the config parameters of the application.
     # It is used when loading from command line
-    Config_container_class = "config.MyExampleConfig"
+    __Config_container_class__ = "config.MyExampleConfig"
 
 
     # With this parameter you can configure the name; defaults to 'nice example'
@@ -56,7 +56,7 @@ following files.
 === "`settings.json` file for the settings example"
     ```json
     {
-        "Settings_container_class": "settings.MyExampleSettings",
+        "__Settings_container_class__": "settings.MyExampleSettings",
         "name": "the stored name",
         "basics": {
             "totals": 3
@@ -65,8 +65,8 @@ following files.
 
     ```
 Although not strictly necessary, it is recommended to include the fully qualified name
-of the container class in the parameter file. The key for this item is `Config_container_class`
-for a configuration and `Settings_container_class` for settings.
+of the container class in the parameter file. The key for this item is `__Config_container_class__`
+for a configuration and `__Settings_container_class__` for settings.
 
 The field names of a Container class are found as:
 
