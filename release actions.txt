@@ -1,0 +1,20 @@
+- create branch prepare-release-<version> from develop
+- changelog Unreleased -> <version> + <date> 
+- readme version develop -> version <version>
+- readme quickstart link develop -> <version>
+- poetry build 
+- poetry publish
+- check if everything except docs link is ok @ pypi
+- merge prepare-release into branch release and push
+- on github, draft a new release; enter the new verion number to create a new tag;
+  select as Target release; don't enter a title, set as latest release
+- publish release, this will trigger docs publication
+- check on pypi that docs are now also ok
+- go back to prepare-release-<version>
+- revert readme <version> -> develop
+- new section in changelog
+- new version number in pyproject.toml
+- update version test
+- git push --set-upstream origin prepare-release-<version>
+- make Pull request
+- (merge as stockwatchdev)
