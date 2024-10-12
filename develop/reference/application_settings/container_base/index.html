@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.40">
     
     
       
@@ -1160,6 +1160,11 @@
 
 
 
+
+
+
+
+
   <div class="doc doc-children">
 
 
@@ -1182,10 +1187,15 @@
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="application_settings.container_section_base.ContainerSectionBase" href="../container_section_base/#application_settings.container_section_base.ContainerSectionBase">ContainerSectionBase</a></code>, <code><span title="abc.ABC">ABC</span></code></p>
+              Bases: <code>ContainerSectionBase</code>, <code>ABC</code></p>
 
 
         <p>Base class for Config and Settings container classes</p>
+
+
+
+
+
 
 
 
@@ -1369,7 +1379,7 @@ If you prefer to not have a default path then overwrite this method and return N
   </span>
 
 </h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">set_filepath</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">set_filepath</span><span class="p">(</span><span class="n">file_path</span><span class="o">=&amp;</span><span class="c1">#39;&amp;#39;, load=False)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1563,7 +1573,7 @@ If you prefer to not have a default path then overwrite this method and return N
           </tr>
           <tr class="doc-section-item">
             <td>
-                  <code><span title="pydantic.ValidationError">ValidationError</span></code>
+                  <code>ValidationError</code>
             </td>
             <td>
               <div class="doc-md-description">
