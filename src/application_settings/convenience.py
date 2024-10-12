@@ -136,7 +136,7 @@ def settings_filepath_from_cli(
     )
 
 
-def parameters_folderpath_from_cli(  # pylint: disable=too-many-arguments
+def parameters_folderpath_from_cli(  # pylint: disable=too-many-arguments,too-many-positional-arguments
     config_class: Union[  # pylint: disable=consider-alternative-union-syntax
         type[ConfigT], type[ConfigBase]
     ] = ConfigBase,
@@ -163,7 +163,7 @@ def parameters_folderpath_from_cli(  # pylint: disable=too-many-arguments
     )
 
 
-def _parameters_filepath_from_cli(  # pylint: disable=too-many-arguments
+def _parameters_filepath_from_cli(  # pylint: disable=too-many-arguments,too-many-positional-arguments
     config_class: Union[  # pylint: disable=consider-alternative-union-syntax
         type[ConfigT], type[ConfigBase], None
     ],
