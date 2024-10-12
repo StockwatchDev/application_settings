@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "application_settings"
-version = "0.5.0.dev"
+version = "0.5.0"
 description = "For providing a python application with configuration and/or settings"
 authors = ["Stockwatchdevs <stockwatchdevs@gmail.com>"]
 license = "MIT"
