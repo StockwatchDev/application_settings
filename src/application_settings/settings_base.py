@@ -1,15 +1,14 @@
 """Module for handling settings."""
+
 import sys
 from dataclasses import replace
 from typing import Any, TypeVar
 
 from application_settings.container_base import ContainerBase
-from application_settings.container_section_base import (
-    ContainerSectionBase,
-    SectionTypeStr,
-)
+from application_settings.container_section_base import ContainerSectionBase
+from application_settings.parameter_kind import ParameterKind
 
-from .private._file_operations import FileFormat
+from ._private.file_operations import FileFormat
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -25,18 +24,18 @@ class SettingsSectionBase(ContainerSectionBase):
     """Base class for all SettingsSection classes (so that we can bound a TypeVar)"""
 
     @classmethod
-    def kind_string(cls) -> SectionTypeStr:
-        """Return 'Settings'"""
-        return "Settings"
+    def kind(cls) -> ParameterKind:
+        """Return ParameterKind.SETTINGS"""
+        return ParameterKind.SETTINGS
 
 
 class SettingsBase(ContainerBase):
     """Base class for main Settings class"""
 
     @classmethod
-    def kind_string(cls) -> SectionTypeStr:
-        """Return 'Settings'"""
-        return "Settings"
+    def kind(cls) -> ParameterKind:
+        """Return ParameterKind.SETTINGS"""
+        return ParameterKind.SETTINGS
 
     @classmethod
     def default_file_format(cls) -> FileFormat:

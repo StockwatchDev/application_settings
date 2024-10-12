@@ -1,4 +1,5 @@
 """Base class for a container (= root section) for configuration and settings."""
+
 import sys
 from abc import ABC, abstractmethod
 from dataclasses import asdict
@@ -12,9 +13,9 @@ from pathvalidate import is_valid_filepath
 from application_settings.container_section_base import ContainerSectionBase
 from application_settings.type_notation_helper import PathOpt, PathOrStr
 
-from .private._file_operations import FileFormat
-from .private._file_operations import load as _do_load
-from .private._file_operations import save as _do_save
+from ._private.file_operations import FileFormat
+from ._private.file_operations import load as _do_load
+from ._private.file_operations import save as _do_save
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -138,7 +139,7 @@ class ContainerBase(ContainerSectionBase, ABC):
     @classmethod
     def _get_saved_data(cls, throw_if_file_not_found: bool = False) -> dict[str, Any]:
         """Get the data stored in the parameter file"""
-        return _do_load(cls.kind_string(), cls.filepath(), throw_if_file_not_found)
+        return _do_load(cls.kind(), cls.filepath(), throw_if_file_not_found)
 
 
 _ALL_PATHS: dict[int, PathOpt] = {}

@@ -1,0 +1,21 @@
+# Config for an example
+
+# Use this file to set the config that you prefer by editing the file
+
+# The next element is refering to the Config container class that
+# defines the config parameters of the application.
+# It is used when loading from command line
+__Config_container_class__ = "config.MyExampleConfig"
+
+
+# With this parameter you can configure the name; defaults to 'nice example'
+name = "the real thing"
+
+# Holds the configuration parameters for the first section
+[section1]
+
+# The first field; defaults to 0.5
+field1 = -0.5
+
+# The second field; defaults to 2
+field2 = 22

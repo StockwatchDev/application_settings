@@ -1,53 +1,25 @@
 """Example for configuration.
 
 Cd to the folder containing this file and run this example with the following command:
-python ./example_configuring.py -c ./config.toml
+python . -c ./config.toml
 """
+
 from pathlib import Path
 
-# ----------------------- config.py module ----------------------- #
-from application_settings import (
-    ConfigBase,
-    ConfigSectionBase,
-    config_filepath_from_cli,
-    dataclass,
-)
-
-
-@dataclass(frozen=True)
-class MyExampleConfigSection(ConfigSectionBase):
-    """Config section for an example"""
-
-    field1: float = 0.5
-    field2: int = 2
-
-
-@dataclass(frozen=True)
-class MyExampleConfig(ConfigBase):
-    """Config for an example"""
-
-    name: str = "nice example"
-    section1: MyExampleConfigSection = MyExampleConfigSection()
-
-
-# It is good practice to set the filepath via the command line interface
-# and load your config in the module that defines the container
-config_filepath_from_cli(MyExampleConfig)
-MyExampleConfig.load()
-
-# --------------------- end config.py module --------------------- #
+from config import MyExampleConfig, MyExampleConfigSection
 
 
 def main1() -> None:
     """example how to use the module application_settings"""
     # You can access parameters via get()
     # If you get() MyExampleConfig before load(), it will be loaded automatically
+    # using the filepath that has been set via the command line
     a_variable = MyExampleConfig.get().section1.field1
-    print(f"a_variable == {a_variable}")  # a_variable == -0.5
+    print(f"{a_variable =}")  # a_variable = -0.5
     # You can also directly get() a section; but remember that the config should
     # be loaded already then (get() on a section does not automatically load())
     another_variable = MyExampleConfigSection.get().field2
-    print(f"another_variable == {another_variable}")  # another_variable == 22
+    print(f"{another_variable =}")  # another_variable = 22
 
 
 def main2() -> None:
@@ -60,11 +32,9 @@ def main2() -> None:
     # You can reload a config
     MyExampleConfig.load()
     new_variable = MyExampleConfig.get().name
-    print(f"new_variable == '{new_variable}'")  # new_variable == 'new name'
+    print(f"new_variable = '{new_variable}'")  # new_variable == 'new name'
     another_new_variable = MyExampleConfigSection.get().field2
-    print(
-        f"another_new_variable == {another_new_variable}"
-    )  # another_new_variable == 2
+    print(f"{another_new_variable =}")  # another_new_variable = 2
 
 
 if __name__ == "__main__":

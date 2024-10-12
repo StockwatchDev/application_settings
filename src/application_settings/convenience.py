@@ -1,17 +1,101 @@
 """Functions that can be called from the application to make life easy."""
+
+import importlib
+import importlib.util
+import sys
 from argparse import ArgumentParser
 from logging import Formatter, Handler, LogRecord, getLogger
 from pathlib import Path
-from typing import Union
+from typing import Union, cast
 
 from loguru import logger
 
-from application_settings.configuring_base import ConfigT
-from application_settings.settings_base import SettingsT
+from application_settings._private.file_operations import get_container_from_file
+from application_settings.configuring_base import ConfigBase, ConfigT
+from application_settings.parameter_kind import ParameterKind
+from application_settings.settings_base import SettingsBase, SettingsT
+from application_settings.type_notation_helper import ModuleTypeOpt
+
+
+def _get_module_from_file(qualified_classname: str) -> ModuleTypeOpt:
+    components = qualified_classname.split(".")
+    module_name = components[-2]
+    filename = "/".join(components[:-1])
+    file_path = Path.cwd() / f"{filename}.py"
+    logger.debug(f"Trying to load {qualified_classname} from {file_path}")
+    if not (spec := importlib.util.spec_from_file_location(module_name, file_path)):
+        logger.error(f"Unable to find module spec {module_name} with path {file_path}.")
+        return None
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    if spec.loader:
+        spec.loader.exec_module(module)
+    return module
+
+
+def _get_module(qualified_classname: str) -> ModuleTypeOpt:
+    components = qualified_classname.split(".")
+    if len(components) < 2:
+        logger.error(
+            f"Unable to import {qualified_classname}: no package / module name provided."
+        )
+        return None
+    if components[0] == "":
+        # relative import, no package
+        logger.warning(
+            f"{qualified_classname}: attempted relative import with no known parent package. Will try to load file, but this may fail."
+        )
+        if not (module := _get_module_from_file(".".join(components[1:]))):
+            return None
+    else:
+        try:
+            module = importlib.import_module(".".join(components[:-1]))
+        except ModuleNotFoundError:
+            logger.error(f"Module {'.'.join(components[:-1])} not found.")
+            return None
+    return module
+
+
+def _get_config_class(
+    qualified_classname: str,
+) -> Union[type[ConfigT], None]:  # pylint: disable=consider-alternative-union-syntax
+    if not (module := _get_module(qualified_classname)):
+        return None
+    components = qualified_classname.split(".")
+    if not (the_class := getattr(module, components[-1], None)):
+        logger.error(
+            f"No class {components[-1]} found in module {'.'.join(components[:-1])}"
+        )
+        return None
+    if not issubclass(the_class, ConfigBase):
+        logger.error(f"Class {components[-1]} is not a subclass of ConfigBase")
+        return None
+    logger.debug(f"Class {components[-1]} found")
+    return cast(type[ConfigT], the_class)
+
+
+def _get_settings_class(
+    qualified_classname: str,
+) -> Union[type[SettingsT], None]:  # pylint: disable=consider-alternative-union-syntax
+    if not (module := _get_module(qualified_classname)):
+        return None
+    components = qualified_classname.split(".")
+    if not (the_class := getattr(module, components[-1], None)):
+        logger.error(
+            f"No class {components[-1]} found in module {'.'.join(components[:-1])}"
+        )
+        return None
+    if not issubclass(the_class, SettingsBase):
+        logger.error(f"Class {components[-1]} is not a subclass of SettingsBase")
+        return None
+    logger.debug(f"Class {components[-1]} found")
+    return cast(type[SettingsT], the_class)
 
 
 def config_filepath_from_cli(
-    config_class: type[ConfigT],
+    config_class: Union[  # pylint: disable=consider-alternative-union-syntax
+        type[ConfigT], type[ConfigBase]
+    ] = ConfigBase,
     parser: ArgumentParser = ArgumentParser(),
     short_option: str = "-c",
     long_option: str = "--config_filepath",
@@ -31,7 +115,9 @@ def config_filepath_from_cli(
 
 
 def settings_filepath_from_cli(
-    settings_class: type[SettingsT],
+    settings_class: Union[  # pylint: disable=consider-alternative-union-syntax
+        type[SettingsT], type[SettingsBase]
+    ] = SettingsBase,
     parser: ArgumentParser = ArgumentParser(),
     short_option: str = "-s",
     long_option: str = "--settings_filepath",
@@ -51,8 +137,12 @@ def settings_filepath_from_cli(
 
 
 def parameters_folderpath_from_cli(  # pylint: disable=too-many-arguments
-    config_class: type[ConfigT],
-    settings_class: type[SettingsT],
+    config_class: Union[  # pylint: disable=consider-alternative-union-syntax
+        type[ConfigT], type[ConfigBase]
+    ] = ConfigBase,
+    settings_class: Union[  # pylint: disable=consider-alternative-union-syntax
+        type[SettingsT], type[SettingsBase]
+    ] = SettingsBase,
     parser: ArgumentParser = ArgumentParser(),
     short_option: str = "-p",
     long_option: str = "--parameters_folderpath",
@@ -75,10 +165,10 @@ def parameters_folderpath_from_cli(  # pylint: disable=too-many-arguments
 
 def _parameters_filepath_from_cli(  # pylint: disable=too-many-arguments
     config_class: Union[  # pylint: disable=consider-alternative-union-syntax
-        type[ConfigT], None
+        type[ConfigT], type[ConfigBase], None
     ],
     settings_class: Union[  # pylint: disable=consider-alternative-union-syntax
-        type[SettingsT], None
+        type[SettingsT], type[SettingsBase], None
     ],
     parser: ArgumentParser,
     short_option: str,
@@ -97,6 +187,18 @@ def _parameters_filepath_from_cli(  # pylint: disable=too-many-arguments
     args, _ = parser.parse_known_args()
     if cmdline_path := getattr(args, long_option[2:], None):
         universal_cmdline_path = Path(cmdline_path[0])
+        if config_class == ConfigBase:
+            config_classname = get_container_from_file(
+                ParameterKind.CONFIG, universal_cmdline_path, True
+            )
+            if not (config_class := _get_config_class(config_classname)):
+                raise ValueError(f"Unable to import {config_classname}")
+        if settings_class == SettingsBase:
+            settings_classname = get_container_from_file(
+                ParameterKind.SETTINGS, universal_cmdline_path, True
+            )
+            if not (settings_class := _get_settings_class(settings_classname)):
+                raise ValueError(f"Unable to import {settings_classname}")
         if config_class and settings_class:
             config_class.set_filepath(
                 universal_cmdline_path / config_class.default_filename(), load=load

@@ -1,0 +1,5 @@
+
+__Config_container_class__ = "app_config.MyAppConfig"
+
+[lib_config]
+configvar_with_default_zero = 1

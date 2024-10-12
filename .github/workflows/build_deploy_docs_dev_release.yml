@@ -8,7 +8,7 @@ on:
     branches:
       - "develop"
 
-  # Triggers the workflow on pubishing a release
+  # Triggers the workflow on pubishing a release from master
   release:
     types: [published]
 
@@ -51,15 +51,15 @@ jobs:
         run: echo "FOLDERNAME=develop" >> $GITHUB_ENV
         if: github.event_name != 'release'
 
-      - name: Setup python 3.11
-        uses: actions/setup-python@v4
+      - name: Setup python 3.12
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.11
+          python-version: 3.12
 
       - name: Install poetry
         uses: snok/install-poetry@v1
         with:
-          version: 1.5.1
+          version: 1.7.0
           virtualenvs-create: true
           virtualenvs-in-project: true
 
@@ -97,7 +97,7 @@ jobs:
         if: github.event_name == 'release'
 
       - name: Push changes
-        uses: ad-m/github-push-action@v0.6.0
+        uses: ad-m/github-push-action@v0.8.0
         with:
           branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}

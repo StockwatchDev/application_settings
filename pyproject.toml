@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "application_settings"
-version = "0.4.0"
+version = "0.5.0"
 description = "For providing a python application with configuration and/or settings"
 authors = ["Stockwatchdevs <stockwatchdevs@gmail.com>"]
 license = "MIT"
@@ -38,9 +38,9 @@ python = ">=3.9"
 loguru = ">=0.7.0"
 pathvalidate = ">=2.5"
 pydantic = ">=2.0"
-tomli = { version = ">=2.0", python = "<3.11" }
-tomli-w = ">=1.0"
+tomlkit = ">=0.12"
 typing-extensions = { version = ">=4.5.0", python = "<3.12" }
+attributes-doc = ">=0.3.0"
 
 [tool.poetry.group.testing]
 optional = true
