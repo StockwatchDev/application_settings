@@ -26,6 +26,7 @@ target/
 dist/
 build/
 .venv/
+site/
 
 # JetBrains IDE
 .idea/
@@ -62,9 +63,7 @@ Thumbs.db
 
 # Vim specific configuration
 .vim
-
-# stockwatch data
-stocks/
+*.swp
 
 # Playground folder for local develop scripts
-develop/
+playground/

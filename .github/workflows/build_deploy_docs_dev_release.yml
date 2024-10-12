@@ -1,0 +1,103 @@
+# Simple workflow for deploying static content to GitHub Pages
+# Create versioned docs on pushes to develop or when publishing a release.
+name: "Build and deploy docs on release or when develop is modified"
+
+on:
+  # Triggers the workflow on push but only for the indicated branches
+  push:
+    branches:
+      - "develop"
+
+  # Triggers the workflow on pubishing a release
+  release:
+    types: [published]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build_and_deploy_docs:
+    # environment: dev_environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout release
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
+          ref: release
+        if: github.event_name == 'release'
+
+      - name: Checkout develop
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
+          ref: develop
+        if: github.event_name != 'release'
+
+      - name: Set folder name for release
+        run: echo "FOLDERNAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+        if: github.event_name == 'release'
+
+      - name: Set folder name for develop
+        run: echo "FOLDERNAME=develop" >> $GITHUB_ENV
+        if: github.event_name != 'release'
+
+      - name: Setup python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.5.1
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Check lockfile
+        run: poetry lock --check
+
+      - name: Install packages
+        run: poetry install --no-interaction --with docs
+
+      - name: Build html
+        run:
+          poetry run mkdocs build -f ./docs/mkdocs.yml -d ../site
+
+      - name: Setup git config
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+
+      - name: Rename folder and commit
+        run: |
+          echo "Renaming site folder and committing"
+          git checkout gh-pages
+          rm -rf "$FOLDERNAME"
+          mv site "$FOLDERNAME"
+          git add "$FOLDERNAME"/
+          git commit -m "add/update docs for $FOLDERNAME"
+
+      - name: Redirect stable to new release
+        run: |
+          echo "Redirecting stable to newly released version " $FOLDERNAME
+          rm -rf stable
+          ln -s $FOLDERNAME stable
+          git add stable
+          git commit -m "redirect stable to new version $FOLDERNAME"
+        if: github.event_name == 'release'
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}

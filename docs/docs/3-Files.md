@@ -1,9 +1,11 @@
+# Files and file location
+
 ## Files for storing parameters
 
 A Container class defines a root section and provides for behavior to load parameter
 values from files and, in case of settings, store updated values to files.
 
-Currently, two formats are supported for persistent storage of parameters: 
+Currently, two formats are supported for persistent storage of parameters:
 [`toml`](https://toml.io/en/) and [`json`](https://www.json.org/).
 
 The `toml` format is human-oriented, flexible, standardardized and not overly complex.
@@ -35,6 +37,7 @@ following files.
     field1 = -0.5
     # field2 has default value 2
     field2 = 22
+
     ```
 
 === "`settings.json` file for the settings example"
@@ -45,8 +48,8 @@ following files.
             "totals": 3
         }
     }
-    ```
 
+    ```
 
 The field names of a Container class are found as:
 
@@ -77,7 +80,7 @@ the user running the application. The default name of that subfolder is provided
 container class: the word `Config`/`Settings` is removed, underscores are put in front of
 capitals (except for the first letter) and all letters are made lower case. For example,
 the Container class `MyExampleConfig` by default will store its config in
-`~/.my_example/config.toml`. And `MyExampleSettings` will default to a settings file 
+`~/.my_example/config.toml`. And `MyExampleSettings` will default to a settings file
 `~/.my_example/settings.json`.
 
 If you want the files to be stored in a different location and/or have a different name
@@ -110,7 +113,7 @@ to support this using the [argparse](https://docs.python.org/3/library/argparse.
 module from the standard library:
 
 - a function `config_filepath_from_cli` is available that will define a command-line
-  argument that takes exactly one additional argument, namely the config filepath. 
+  argument that takes exactly one additional argument, namely the config filepath.
   You have to specify the Config class when calling this function, and you may
   pass a parser (default: the main argument parser) and your own short option
   (default: `"-c"`) and long option (default:  `"--config_filepath"`) and you may
@@ -171,6 +174,10 @@ module from the standard library:
     # application_name -p C:\ProgramData
     ```
 
+It is good practice make a separate module that defines the container class and the
+sections and to add both the convenience function for setting the filepath via the
+cli and the `load` statement in that module.
+[This may help to prevent initialization problems.](7-Recipes.md#initialization-needs-to-depend-on-configuration)
 
 ## Handling FileNotFoundError
 
@@ -188,3 +195,48 @@ The default value for `throw_if_file_not_found` is `False`, hence `load()` will 
 an exception when the parameter file is not found. Note that if you do not explicitly
 use `load` but rather implicitly call it via `get()` or `set_filepath()`, then this
 default behavior will also be obtained.
+
+## Sharing parameters over different configs via file inclusion with toml
+
+Another common scenario is that you work with different configurations for your
+application but these different configurations are partially the same. To prevent
+inconsistencies and config duplication, it is desirable to be able to share the common
+part. For this purpose, `application_settings` provides a file inclusion mechanism
+for `toml` configuration files.
+
+Above, an example of such a config file was given. Suppose now that you want to create
+several configurations that have a varying `name` but they will share the parametrization
+`section1`. Then we can put that part in a file `config_common.toml` and include that
+file from the different configurations.
+
+=== "`config.toml` file for the configuration example"
+    ```toml
+    # Use this file to set the config that you prefer by editing the file
+    name = "application specific name"
+    __include__ = "./config_common.toml"
+
+    ```
+
+=== "`config_common.toml` (in the same folder)"
+    ```toml
+    [section1]
+    # field1 has default value 0.5
+    field1 = -0.5
+    # field2 has default value 2
+    field2 = 22
+
+    ```
+
+The file inclusion mechanism has been kept simple; the following rules apply:
+
+- The key to use for specifying a file to include is `__include__`; hence, this key is
+  to be treated as a keyword and is not available as field name.
+- The value can be either a single path string or an array of path strings.
+- File inclusion can only be specified at the top level, not inside a section.
+- File inclusion is only available for configuration, not for settings, and only for the
+  `toml` format.
+- File inclusion can be nested, i.e., in the included `toml` file one can again specify
+  another file to include (albeit at the top level only).
+- If the included file specifies a key that was already specified in the file that does
+  the inclusion, then it is disregarded and the key-value pair of the latter file is
+  kept.
