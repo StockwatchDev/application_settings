@@ -1,8 +1,8 @@
-# application_settings
+# application_settings - version 0.3.0
 
 [![pypi](https://img.shields.io/pypi/v/application-settings.svg)](https://pypi.python.org/pypi/application-settings)
 [![versions](https://img.shields.io/pypi/pyversions/application-settings.svg)](https://github.com/StockwatchDev/application_settings)
-[![Build Status](https://github.com/StockwatchDev/application_settings/actions/workflows/application_settings-tests.yml/badge.svg?branch=develop)](https://github.com/StockwatchDev/application_settings/actions)
+[![Build Status](https://github.com/StockwatchDev/application_settings/actions/workflows/merge_checks.yml/badge.svg?branch=develop)](https://github.com/StockwatchDev/application_settings/actions)
 [![codecov](https://codecov.io/gh/StockwatchDev/application_settings/branch/develop/graph/badge.svg)](https://app.codecov.io/gh/StockwatchDev/application_settings)
 [![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
 [![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
@@ -15,12 +15,12 @@ application\_settings takes care of the logic."
 
 ## What and why
 
-Application\_settings is a package for providing a python application with parameters for
-configuration and settings. It uses [toml](https://toml.io/en/) or 
+Application\_settings is a package for providing a python application or library with
+parameters for configuration and settings. It uses [toml](https://toml.io/en/) or 
 [json](https://www.json.org/) files that are parsed
 into dataclasses. This brings some benefits:
 
-- Minimal work for the application designer
+- Minimal work for the developer of the application / library
 - Parameters are typed, which allows for improved static code analyses.
 - IDEs will provide helpful hints and completion when using the parameters.
 - More control over what happens when a file contains mistakes
@@ -33,13 +33,13 @@ into dataclasses. This brings some benefits:
   application); we recommend (and support) use `json` for this, an established
   standardized machine-oriented format.
 
-Parsing is done once during first access and the resulting set of parameters is stored
-as a singleton.
+Parsing is done once before or during first access and the resulting set of parameters is
+stored as a singleton.
 
 Interested? Then have a look at our
-[quick start](https://stockwatchdev.github.io/application_settings/0.2.0/docs/Quick_start/).
+[quick start](https://stockwatchdev.github.io/application_settings/0.3.0/docs/Quick_start/).
 
-[//]: # (Change link to published quick start)
+[//]: # (Change version in header and link to published quick start)
 
 ## License
 

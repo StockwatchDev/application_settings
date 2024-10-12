@@ -5,13 +5,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2023-06-21
+
+### Added
+
+- Multiple versions of documentation served on Github Pages.
+- You can now request a (re-) load when setting the filepath or via a method `load`.
+- You can choose whether or not to throw a `FileNotFoundError` during `load`
+  when the parameter file is not found in the expected location
+  (Issue [#51](https://github.com/StockwatchDev/application_settings/issues/51))
+- Support for parameters in the main container (Issue
+  [#20](https://github.com/StockwatchDev/application_settings/issues/20)).
+- Support for subsections (arbitrary depth) (Issue
+  [#5](https://github.com/StockwatchDev/application_settings/issues/5)).
+- Sections also stored as a singleton, so that libs can define and access parameters
+  via their own Section (Issue 
+  [#46](https://github.com/StockwatchDev/application_settings/issues/46)).
+- Literal SectionTypeStr exported.
+- Convenience functions to specify filepath for config and settings via command-line
+  [[#53](https://github.com/StockwatchDev/application_settings/issues/53)]
+
+### Changed
+
+- The method `update` now is a class method (breaking).
+- You cannot request a reload via method `get` anymore, use separate method `load`
+  (breaking).
+- A Container now is a specialization of a ContainerSection.
+
+### Fixed
+
+- Default folder name no longer just a dot if container class is called Config or
+  Settings.
+
 ## [0.2.0] - 2023-03-19
 
 ### Added
 
 - Files can be formatted as `toml` or `json`.
-- Introduced settings, i.e., read-write parameters (where config is read-only)
-- Now also useable with python 3.9
+- Introduced settings, i.e., read-write parameters (where config is read-only).
+- Now also useable with python 3.9.
+- Documentation extended and served on Github Pages.
 
 ### Changed
 

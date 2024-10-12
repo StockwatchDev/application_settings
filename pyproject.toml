@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "application_settings"
-version = "0.2.0"
+version = "0.3.0"
 description = "For providing a python application with configuration and/or settings"
 authors = ["Stockwatchdevs <stockwatchdevs@gmail.com>"]
 license = "MIT"
@@ -25,15 +25,17 @@ include = [
     { path = "LICENSE" },
     { path = "README.md" },
     { path = "tests", format = "sdist" },
+    { path = "examples", format = "sdist" },
 ]
 
 
 [tool.poetry.dependencies]
 python = "^3.9"
-pathvalidate = "^2.5"
+pathvalidate = ">=2.5,<4.0"
 pydantic = "^1.10"
 tomli = { version = "^2.0", python = "<3.11" }
 tomli-w = "^1.0"
+typing-extensions = { version = "^4.5.0", python = "<3.11" }
 
 [tool.poetry.group.testing]
 optional = true
@@ -46,7 +48,8 @@ pytest-cov = "^4.0"
 optional = true
 
 [tool.poetry.group.typing.dependencies]
-mypy = ">=0.942"
+mypy = "^1.1"
+lxml = "^4.9"
 
 [tool.poetry.group.style]
 optional = true
@@ -61,6 +64,12 @@ optional = true
 
 [tool.poetry.group.testrunner.dependencies]
 tox = "^4.4"
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+portray = "^1.8"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -122,6 +131,50 @@ runtime-typing = false
 [tool.pylint.similarities]
 ignore-imports = "yes"
 
+[tool.portray.mkdocs]
+markdown_extensions = [
+    "pymdownx.highlight",
+    "pymdownx.superfences",
+    "pymdownx.tabbed",
+]
+
+[[tool.portray.extra_markdown_extensions]]
+[tool.portray.extra_markdown_extensions."pymdownx.tabbed"]
+alternate_style = true
+
+[tool.portray.mkdocs.theme]
+name = "material"
+palette = { scheme = "slate", primary = "blue" }
+
+[[tool.portray.mkdocs.nav]]
+Home = "README.md"
+
+[[tool.portray.mkdocs.nav]]
+"Quick start" = "docs/Quick_start.md"
+
+[[tool.portray.mkdocs.nav]]
+[[tool.portray.mkdocs.nav.Usage]]
+"1. Installation" = "docs/1-Installation.md"
+
+[[tool.portray.mkdocs.nav.Usage]]
+"2. Defining parameters" = "docs/2-Defining_parameters.md"
+
+[[tool.portray.mkdocs.nav.Usage]]
+"3. Files and file location" = "docs/3-Files.md"
+
+[[tool.portray.mkdocs.nav.Usage]]
+"4. Using parameters" = "docs/4-Using_parameters.md"
+
+[[tool.portray.mkdocs.nav.Usage]]
+"5. Usage in a library package" = "docs/5-Usage_in_a_library_package.md"
+
+[[tool.portray.mkdocs.nav.Usage]]
+"6. Handling deviations" = "docs/6-Handling_deviations.md"
+
+[[tool.portray.mkdocs.nav]]
+Changelog = "CHANGELOG.md"
+
+
 [tool.tox]
 legacy_tox_ini = """
 [tox]
@@ -129,7 +182,7 @@ isolated_build = true
 envlist =
     py{39,310,311}
     style
-    typing
+    py{39,310,311}-typing
 
 [testenv]
 allowlist_externals = poetry
@@ -145,9 +198,9 @@ commands_pre =
 commands =
     poetry run python -m black --check ./src
     poetry run isort --check --diff ./src
-    poetry run pylint --recursive=y ./src
+    poetry run pylint ./src
 
-[testenv:typing]
+[testenv:py{39,310,311}-typing]
 skip_install = true
 commands_pre =
     poetry install --with typing -v
