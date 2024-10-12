@@ -16,7 +16,7 @@
         <link rel="prev" href="../__init__/">
       
       
-        <link rel="next" href="../json_file_operations/">
+        <link rel="next" href="../file_operations_utils/">
       
       
       <link rel="icon" href="../../../../assets/images/favicon.png">
@@ -693,6 +693,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#application_settings._private.file_operations.get_container_from_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_container_from_file
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#application_settings._private.file_operations.load" class="md-nav__link">
     <span class="md-ellipsis">
       load
@@ -714,6 +723,27 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../file_operations_utils/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    file_operations_utils
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -860,6 +890,27 @@
   
   
     <li class="md-nav__item">
+      <a href="../../parameter_kind/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    parameter_kind
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../settings_base/" class="md-nav__link">
         
   
@@ -949,6 +1000,15 @@
   <a href="#application_settings._private.file_operations.FileFormat" class="md-nav__link">
     <span class="md-ellipsis">
       FileFormat
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application_settings._private.file_operations.get_container_from_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_container_from_file
     </span>
   </a>
   
@@ -1052,6 +1112,58 @@
 <div class="doc doc-object doc-function">
 
 
+<h2 id="application_settings._private.file_operations.get_container_from_file" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">get_container_from_file</span>
+
+
+</h2>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">get_container_from_file</span><span class="p">(</span>
+    <span class="n">kind</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">throw_if_file_not_found</span>
+<span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Load data from the file given in path; log error or throw if not possible</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/application_settings/_private/file_operations.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_container_from_file</span><span class="p">(</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="n">ParameterKind</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">PathOpt</span><span class="p">,</span> <span class="n">throw_if_file_not_found</span><span class="p">:</span> <span class="nb">bool</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load data from the file given in path; log error or throw if not possible&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_check_filepath</span><span class="p">(</span>
+        <span class="n">path</span><span class="p">,</span>
+        <span class="n">throw_if_invalid_path</span><span class="o">=</span><span class="n">throw_if_file_not_found</span><span class="p">,</span>
+        <span class="n">throw_if_file_not_found</span><span class="o">=</span><span class="n">throw_if_file_not_found</span><span class="p">,</span>
+        <span class="n">create_file_if_not_found</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">real_path</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Path</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">loader</span> <span class="o">:=</span> <span class="n">_get_loader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">real_path</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">loader</span><span class="p">(</span><span class="n">real_path</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_container_class_key</span><span class="p">(</span><span class="n">kind</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
 <h2 id="application_settings._private.file_operations.load" class="doc doc-heading">
             <span class="doc doc-object-name doc-function-name">load</span>
 
@@ -1066,23 +1178,27 @@
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/_private/file_operations.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span>
-<span class="normal">72</span>
-<span class="normal">73</span>
-<span class="normal">74</span>
-<span class="normal">75</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">PathOpt</span><span class="p">,</span> <span class="n">throw_if_file_not_found</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span>
+<span class="normal">95</span>
+<span class="normal">96</span>
+<span class="normal">97</span>
+<span class="normal">98</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">load</span><span class="p">(</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="n">ParameterKind</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">PathOpt</span><span class="p">,</span> <span class="n">throw_if_file_not_found</span><span class="p">:</span> <span class="nb">bool</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Load data from the file given in path; log error or throw if not possible&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">_check_filepath</span><span class="p">(</span>
         <span class="n">path</span><span class="p">,</span>
@@ -1092,7 +1208,7 @@
     <span class="p">):</span>
         <span class="n">real_path</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Path</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">loader</span> <span class="o">:=</span> <span class="n">_get_loader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">real_path</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;Config&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="n">ParameterKind</span><span class="o">.</span><span class="n">CONFIG</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">_load_with_includes</span><span class="p">(</span><span class="n">real_path</span><span class="p">,</span> <span class="n">throw_if_file_not_found</span><span class="p">,</span> <span class="n">loader</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">loader</span><span class="p">(</span><span class="n">real_path</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
@@ -1122,17 +1238,17 @@
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/_private/file_operations.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">78</span>
-<span class="normal">79</span>
-<span class="normal">80</span>
-<span class="normal">81</span>
-<span class="normal">82</span>
-<span class="normal">83</span>
-<span class="normal">84</span>
-<span class="normal">85</span>
-<span class="normal">86</span>
-<span class="normal">87</span>
-<span class="normal">88</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Save data to the file given in path; log error or throw if not possible&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">_check_filepath</span><span class="p">(</span>
         <span class="n">path</span><span class="p">,</span>

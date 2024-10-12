@@ -735,6 +735,27 @@
   
   
     <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/file_operations_utils/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    file_operations_utils
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../reference/application_settings/_private/json_file_operations/" class="md-nav__link">
         
   
@@ -853,6 +874,27 @@
   
   <span class="md-ellipsis">
     convenience
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/parameter_kind/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    parameter_kind
   </span>
   
 
@@ -1036,17 +1078,32 @@ following files.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1"><code>config.toml</code> file for the configuration example</label><label for="__tabbed_1_2"><code>settings.json</code> file for the settings example</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="c1"># Use this file to set the config that you prefer by editing the file</span>
-<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;application specific name&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Config for an example</span>
+
+<span class="c1"># Use this file to set the config that you prefer by editing the file</span>
+
+<span class="c1"># The next element is refering to the Config container class that</span>
+<span class="c1"># defines the config parameters of the application.</span>
+<span class="c1"># It is used when loading from command line</span>
+<span class="n">__Config_container_class__</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;config.MyExampleConfig&quot;</span>
+
+
+<span class="c1"># With this parameter you can configure the name; defaults to &#39;nice example&#39;</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;the real thing&quot;</span>
+
+<span class="c1"># Holds the configuration parameters for the first section</span>
 <span class="k">[section1]</span>
-<span class="c1"># field1 has default value 0.5</span>
+
+<span class="c1"># The first field; defaults to 0.5</span>
 <span class="n">field1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">-0.5</span>
-<span class="c1"># field2 has default value 2</span>
+
+<span class="c1"># The second field; defaults to 2</span>
 <span class="n">field2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">22</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;__Settings_container_class__&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;settings.MyExampleSettings&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the stored name&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">&quot;basics&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="nt">&quot;totals&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span>
@@ -1056,6 +1113,9 @@ following files.</p>
 </div>
 </div>
 </div>
+<p>Although not strictly necessary, it is recommended to include the fully qualified name
+of the container class in the parameter file. The key for this item is <code>__Config_container_class__</code>
+for a configuration and <code>__Settings_container_class__</code> for settings.</p>
 <p>The field names of a Container class are found as:</p>
 <ul>
 <li>the root parameter names and the section names in the <code>toml</code> file</li>

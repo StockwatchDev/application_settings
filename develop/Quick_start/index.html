@@ -724,6 +724,27 @@
   
   
     <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/file_operations_utils/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    file_operations_utils
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../reference/application_settings/_private/json_file_operations/" class="md-nav__link">
         
   
@@ -842,6 +863,27 @@
   
   <span class="md-ellipsis">
     convenience
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/parameter_kind/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    parameter_kind
   </span>
   
 
@@ -1000,62 +1042,81 @@ terms of the base classes that are used. Example:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Configuration</label><label for="__tabbed_1_2">Settings</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="p">(</span>
+<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Configuration parameter definition&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">ConfigBase</span><span class="p">,</span>
     <span class="n">ConfigSectionBase</span><span class="p">,</span>
+    <span class="n">attributes_doc</span><span class="p">,</span>
     <span class="n">config_filepath_from_cli</span><span class="p">,</span>
     <span class="n">dataclass</span><span class="p">,</span>
 <span class="p">)</span>
 
+
+<span class="nd">@attributes_doc</span>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">MyExampleConfigSection</span><span class="p">(</span><span class="n">ConfigSectionBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Config section for an example&quot;&quot;&quot;</span>
 
     <span class="n">field1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The first field; defaults to 0.5&quot;&quot;&quot;</span>
+
     <span class="n">field2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The second field; defaults to 2&quot;&quot;&quot;</span>
 
 
+<span class="nd">@attributes_doc</span>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">MyExampleConfig</span><span class="p">(</span><span class="n">ConfigBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Config for an example&quot;&quot;&quot;</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nice example&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Name of the application; defaults to &#39;nice example&#39;&quot;&quot;&quot;</span>
+
     <span class="n">section1</span><span class="p">:</span> <span class="n">MyExampleConfigSection</span> <span class="o">=</span> <span class="n">MyExampleConfigSection</span><span class="p">()</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Holds the configuration parameters for the first section&quot;&quot;&quot;</span>
 
 
 <span class="c1"># It is good practice to set the filepath via the command line interface</span>
-<span class="c1"># and load your config in the module that defines the container</span>
-<span class="n">config_filepath_from_cli</span><span class="p">(</span><span class="n">MyExampleConfig</span><span class="p">)</span>
-<span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="c1"># You can optionally set load=True</span>
+<span class="n">config_filepath_from_cli</span><span class="p">()</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="p">(</span>
+<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Settings definitions&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">SettingsBase</span><span class="p">,</span>
     <span class="n">SettingsSectionBase</span><span class="p">,</span>
+    <span class="n">attributes_doc</span><span class="p">,</span>
     <span class="n">dataclass</span><span class="p">,</span>
     <span class="n">settings_filepath_from_cli</span><span class="p">,</span>
 <span class="p">)</span>
 
+
+<span class="nd">@attributes_doc</span>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">BasicSettingsSection</span><span class="p">(</span><span class="n">SettingsSectionBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Settings section for the basics&quot;&quot;&quot;</span>
 
     <span class="n">totals</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The totals value; defaults to 2&quot;&quot;&quot;</span>
 
 
+<span class="nd">@attributes_doc</span>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">MyExampleSettings</span><span class="p">(</span><span class="n">SettingsBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Settings for an example&quot;&quot;&quot;</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nice name&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This parameter holds the name setting; defaults to &#39;nice name&#39;&quot;&quot;&quot;</span>
+
     <span class="n">basics</span><span class="p">:</span> <span class="n">BasicSettingsSection</span> <span class="o">=</span> <span class="n">BasicSettingsSection</span><span class="p">()</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Holds the setting parameters for the basic section&quot;&quot;&quot;</span>
 
 
 <span class="c1"># It is good practice to set the filepath via the command line interface</span>
-<span class="c1"># and load your settings in the module that defines the container</span>
-<span class="n">settings_filepath_from_cli</span><span class="p">(</span><span class="n">MyExampleSettings</span><span class="p">)</span>
-<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="n">settings_filepath_from_cli</span><span class="p">()</span>
 </code></pre></div>
 </div>
 </div>
@@ -1065,20 +1126,35 @@ terms of the base classes that are used. Example:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1"><code>~/.my_example/config.toml</code></label><label for="__tabbed_2_2"><code>~/.my_example/settings.json</code></label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="c1"># Use this file to set the config that you prefer by editing the file</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Config for an example</span>
+
+<span class="c1"># Use this file to set the config that you prefer by editing the file</span>
+
+<span class="c1"># The next element is refering to the Config container class that</span>
+<span class="c1"># defines the config parameters of the application.</span>
+<span class="c1"># It is used when loading from command line</span>
+<span class="n">__Config_container_class__</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;config.MyExampleConfig&quot;</span>
+
+
+<span class="c1"># With this parameter you can configure the name; defaults to &#39;nice example&#39;</span>
 <span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;the real thing&quot;</span>
+
+<span class="c1"># Holds the configuration parameters for the first section</span>
 <span class="k">[section1]</span>
-<span class="c1"># field1 has default value 0.5</span>
+
+<span class="c1"># The first field; defaults to 0.5</span>
 <span class="n">field1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">-0.5</span>
-<span class="c1"># field2 has default value 2</span>
+
+<span class="c1"># The second field; defaults to 2</span>
 <span class="n">field2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">22</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;__Settings_container_class__&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;settings.MyExampleSettings&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the stored name&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="nt">&quot;basics&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;totals&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span>
+<span class="w">            </span><span class="nt">&quot;totals&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -1089,14 +1165,16 @@ terms of the base classes that are used. Example:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Configuration</label><label for="__tabbed_3_2">Settings</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="c1"># You can access parameters via get()</span>
+<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;example how to use the module application_settings&quot;&quot;&quot;</span>
+<span class="c1"># You can access parameters via get()</span>
 <span class="c1"># If you get() MyExampleConfig before load(), it will be loaded automatically</span>
+<span class="c1"># using the filepath that has been set via the command line</span>
 <span class="n">a_variable</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;a_variable == </span><span class="si">{</span><span class="n">a_variable</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># a_variable == -0.5</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">a_variable</span><span class="w"> </span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># a_variable = -0.5</span>
 <span class="c1"># You can also directly get() a section; but remember that the config should</span>
 <span class="c1"># be loaded already then (get() on a section does not automatically load())</span>
 <span class="n">another_variable</span> <span class="o">=</span> <span class="n">MyExampleConfigSection</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">field2</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;another_variable == </span><span class="si">{</span><span class="n">another_variable</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># another_variable == 22</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">another_variable</span><span class="w"> </span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># another_variable = 22</span>
 
 <span class="c1"># The only way to modify a config parameter is by editing the config file</span>
 <span class="c1"># or by changing the default value in the definition</span>
@@ -1106,29 +1184,28 @@ terms of the base classes that are used. Example:</p>
 <span class="c1"># You can reload a config</span>
 <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 <span class="n">new_variable</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;new_variable == </span><span class="si">{</span><span class="n">new_variable</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># new_variable == &quot;new name&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;new_variable = &#39;</span><span class="si">{</span><span class="n">new_variable</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>  <span class="c1"># new_variable == &#39;new name&#39;</span>
 <span class="n">another_new_variable</span> <span class="o">=</span> <span class="n">MyExampleConfigSection</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">field2</span>
-<span class="nb">print</span><span class="p">(</span>
-    <span class="sa">f</span><span class="s2">&quot;another_new_variable == </span><span class="si">{</span><span class="n">another_new_variable</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="p">)</span>  <span class="c1"># another_new_variable == 2</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">another_new_variable</span><span class="w"> </span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># another_new_variable = 2</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="c1"># You can access parameters via get()</span>
+<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;example how to use the module application_settings&quot;&quot;&quot;</span>
+<span class="c1"># You can access parameters via get()</span>
 <span class="c1"># If you get() MyExampleSettings before load(), it will be loaded automatically</span>
 <span class="n">a_variable</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;a_variable == &#39;</span><span class="si">{</span><span class="n">a_variable</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>  <span class="c1"># a_variable == &#39;the stored name&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;a_variable = &#39;</span><span class="si">{</span><span class="n">a_variable</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>  <span class="c1"># a_variable = &#39;the stored name&#39;</span>
 <span class="c1"># You can also directly get() a section; but remember that the settings should</span>
 <span class="c1"># be loaded already then (get() on a section does not automatically load())</span>
 <span class="n">another_variable</span> <span class="o">=</span> <span class="n">BasicSettingsSection</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">totals</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;another_variable == </span><span class="si">{</span><span class="n">another_variable</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># another_variable == 3</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">another_variable</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># another_variable = 3</span>
 
 <span class="c1"># You can update the settings:</span>
 <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;basics&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;totals&quot;</span><span class="p">:</span> <span class="mi">33</span><span class="p">}})</span>
 <span class="c1"># The updated values will be written to the settings file automatically and the</span>
 <span class="c1"># singleton is replaced by a new instance of MyExampleSettings with the updated values</span>
 <span class="n">refreshed_totals</span> <span class="o">=</span> <span class="n">BasicSettingsSection</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">totals</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;refreshed_totals == </span><span class="si">{</span><span class="n">refreshed_totals</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># refreshed_totals == 33</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">refreshed_totals</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># refreshed_totals = 33</span>
 
 <span class="c1"># You can also edit the settings file. Suppose that we changed the value for name to</span>
 <span class="c1"># &quot;updated name&quot;</span>

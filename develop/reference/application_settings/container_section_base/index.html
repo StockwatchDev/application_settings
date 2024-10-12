@@ -650,6 +650,27 @@
   
   
     <li class="md-nav__item">
+      <a href="../_private/file_operations_utils/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    file_operations_utils
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../_private/json_file_operations/" class="md-nav__link">
         
   
@@ -805,6 +826,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#application_settings.container_section_base.ContainerSectionBase.kind" class="md-nav__link">
+    <span class="md-ellipsis">
+      kind
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#application_settings.container_section_base.ContainerSectionBase.kind_string" class="md-nav__link">
     <span class="md-ellipsis">
       kind_string
@@ -866,6 +896,27 @@
   
   <span class="md-ellipsis">
     convenience
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parameter_kind/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    parameter_kind
   </span>
   
 
@@ -976,6 +1027,15 @@
   
     <nav class="md-nav" aria-label="ContainerSectionBase">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#application_settings.container_section_base.ContainerSectionBase.kind" class="md-nav__link">
+    <span class="md-ellipsis">
+      kind
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#application_settings.container_section_base.ContainerSectionBase.kind_string" class="md-nav__link">
@@ -1089,12 +1149,46 @@
 <div class="doc doc-object doc-function">
 
 
+<h3 id="application_settings.container_section_base.ContainerSectionBase.kind" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">kind</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">kind</span><span class="p">()</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return either ParameterKind.CONFIG or ParameterKind.SETTINGS</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/application_settings/container_section_base.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">kind</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParameterKind</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return either ParameterKind.CONFIG or ParameterKind.SETTINGS&quot;&quot;&quot;</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
 <h3 id="application_settings.container_section_base.ContainerSectionBase.kind_string" class="doc doc-heading">
             <span class="doc doc-object-name doc-function-name">kind_string</span>
 
 
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
       <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
   </span>
 
@@ -1108,13 +1202,13 @@
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/container_section_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
-<span class="nd">@abstractmethod</span>
-<span class="k">def</span> <span class="nf">kind_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SectionTypeStr</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">kind_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParameterKindStr</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return either &#39;Config&#39; or &#39;Settings&#39;&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">kind</span><span class="p">()</span><span class="o">.</span><span class="n">value</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1142,16 +1236,16 @@
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/container_section_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">31</span>
 <span class="normal">32</span>
 <span class="normal">33</span>
 <span class="normal">34</span>
 <span class="normal">35</span>
-<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the singleton; if not existing, create it. Loading from file only done for a container.&quot;&quot;&quot;</span>
 
@@ -1188,15 +1282,15 @@
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/container_section_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span>
-<span class="normal">42</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">42</span>
 <span class="normal">43</span>
 <span class="normal">44</span>
 <span class="normal">45</span>
-<span class="normal">46</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span> <span class="nf">get_without_load</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get has been called on a section before a load was done; handle this.&quot;&quot;&quot;</span>
     <span class="c1"># get() is called on a Section but the application</span>
@@ -1232,10 +1326,10 @@
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/container_section_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">48</span>
-<span class="normal">49</span>
-<span class="normal">50</span>
-<span class="normal">51</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new dataclass instance using data and set the singleton.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">_set</span><span class="p">()</span>

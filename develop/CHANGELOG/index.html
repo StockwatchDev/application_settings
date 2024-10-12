@@ -853,6 +853,27 @@
   
   
     <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/file_operations_utils/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    file_operations_utils
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../reference/application_settings/_private/json_file_operations/" class="md-nav__link">
         
   
@@ -971,6 +992,27 @@
   
   <span class="md-ellipsis">
     convenience
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/parameter_kind/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    parameter_kind
   </span>
   
 
@@ -1261,10 +1303,14 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <li>Document parameters by means of docstrings according to (the rejected) 
   <a href="https://peps.python.org/pep-0224/">PEP224</a>
   (Issue <a href="https://github.com/StockwatchDev/application_settings/issues/140">#140</a>)</li>
+<li>Allow to specify the container class that takes care of loading in the parameter file rather than in
+  code (Issue <a href="https://github.com/StockwatchDev/application_settings/issues/237">#237</a>)</li>
+<li>Introduced a ParameterKind enum.</li>
 </ul>
 <h3 id="changed-050">Changed - 0.5.0</h3>
 <ul>
 <li>Use <a href="https://tomlkit.readthedocs.io/en/latest/"><code>tomlkit</code></a> instead of <code>tomli</code> and <code>tomli-w</code> (non-breaking)</li>
+<li>Rename literal SectionTypeStr to ParameterKindStr (breaking).</li>
 </ul>
 <h2 id="040-2023-12-11">[0.4.0] - 2023-12-11</h2>
 <h3 id="added-040">Added - 0.4.0</h3>

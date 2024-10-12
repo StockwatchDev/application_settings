@@ -393,6 +393,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#parameter-docstrings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameter docstrings
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#example" class="md-nav__link">
     <span class="md-ellipsis">
       Example
@@ -717,6 +726,27 @@
   
   
     <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/file_operations_utils/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    file_operations_utils
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../reference/application_settings/_private/json_file_operations/" class="md-nav__link">
         
   
@@ -851,6 +881,27 @@
   
   
     <li class="md-nav__item">
+      <a href="../reference/application_settings/parameter_kind/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    parameter_kind
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../reference/application_settings/settings_base/" class="md-nav__link">
         
   
@@ -948,6 +999,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#parameter-docstrings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameter docstrings
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#example" class="md-nav__link">
     <span class="md-ellipsis">
       Example
@@ -1007,11 +1067,29 @@ for config, <code>SettingsBase</code> for settings), decorating it with <code>@d
 defining fields for parameters and nested non-root sections.</p>
 <p>Note that albeit settings can be changed programmatically, we still set <code>frozen=True</code> for
 the settings container and -sections (see also the example section below).</p>
+<h2 id="parameter-docstrings">Parameter docstrings</h2>
+<p>The python standard states that class variables are to be documented in the docstring of the containing class.
+<a href="https://peps.python.org/pep-0224/">PEP 224</a> proposed to enable inline documentation of class attributes, namely
+by having a docstring appear directly after an attribute definition (analogous to how it's done for e.g. a class
+definition). This PEP was rejected. However, IDE's such as VSCode do know how to handle this documentation style.
+Moreover, the package <a href="https://pypi.org/project/attributes-doc/"><code>attributes-doc</code></a> provides the functionality to add
+the docstring literals to the objects in question such that introspection tools can make use of it. This is achieved
+by means of a decorator <code>@attributes_doc</code> for the class that defines the attributes. Our package <code>application_settings</code>
+exports this decorator to facilitate documentation and introspection.</p>
 <h2 id="example">Example</h2>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Configuration</label><label for="__tabbed_1_2">Settings</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="n">ConfigBase</span><span class="p">,</span> <span class="n">ConfigSectionBase</span><span class="p">,</span> <span class="n">attributes_doc</span><span class="p">,</span> <span class="n">dataclass</span>
+<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Configuration parameter definition&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ConfigBase</span><span class="p">,</span>
+    <span class="n">ConfigSectionBase</span><span class="p">,</span>
+    <span class="n">attributes_doc</span><span class="p">,</span>
+    <span class="n">config_filepath_from_cli</span><span class="p">,</span>
+    <span class="n">dataclass</span><span class="p">,</span>
+<span class="p">)</span>
+
 
 <span class="nd">@attributes_doc</span>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1019,9 +1097,10 @@ the settings container and -sections (see also the example section below).</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Config section for an example&quot;&quot;&quot;</span>
 
     <span class="n">field1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Docstring for the first field; defaults to 0.5&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The first field; defaults to 0.5&quot;&quot;&quot;</span>
+
     <span class="n">field2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Docstring for the second field; defaults to 2&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The second field; defaults to 2&quot;&quot;&quot;</span>
 
 
 <span class="nd">@attributes_doc</span>
@@ -1030,13 +1109,28 @@ the settings container and -sections (see also the example section below).</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Config for an example&quot;&quot;&quot;</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nice example&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;With this parameter you can configure the name; defaults to &#39;nice example&#39;&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Name of the application; defaults to &#39;nice example&#39;&quot;&quot;&quot;</span>
+
     <span class="n">section1</span><span class="p">:</span> <span class="n">MyExampleConfigSection</span> <span class="o">=</span> <span class="n">MyExampleConfigSection</span><span class="p">()</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Holds the configuration parameters for the first section&quot;&quot;&quot;</span>
+
+
+<span class="c1"># It is good practice to set the filepath via the command line interface</span>
+<span class="c1"># You can optionally set load=True</span>
+<span class="n">config_filepath_from_cli</span><span class="p">()</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="n">SettingsBase</span><span class="p">,</span> <span class="n">SettingsSectionBase</span><span class="p">,</span> <span class="n">attributes_doc</span><span class="p">,</span> <span class="n">dataclass</span>
+<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Settings definitions&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">SettingsBase</span><span class="p">,</span>
+    <span class="n">SettingsSectionBase</span><span class="p">,</span>
+    <span class="n">attributes_doc</span><span class="p">,</span>
+    <span class="n">dataclass</span><span class="p">,</span>
+    <span class="n">settings_filepath_from_cli</span><span class="p">,</span>
+<span class="p">)</span>
+
 
 <span class="nd">@attributes_doc</span>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1054,8 +1148,13 @@ the settings container and -sections (see also the example section below).</p>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nice name&quot;</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;This parameter holds the name setting; defaults to &#39;nice name&#39;&quot;&quot;&quot;</span>
+
     <span class="n">basics</span><span class="p">:</span> <span class="n">BasicSettingsSection</span> <span class="o">=</span> <span class="n">BasicSettingsSection</span><span class="p">()</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Holds the setting parameters for the basic section&quot;&quot;&quot;</span>
+
+
+<span class="c1"># It is good practice to set the filepath via the command line interface</span>
+<span class="n">settings_filepath_from_cli</span><span class="p">()</span>
 </code></pre></div>
 </div>
 </div>

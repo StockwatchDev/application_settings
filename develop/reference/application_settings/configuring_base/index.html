@@ -650,6 +650,27 @@
   
   
     <li class="md-nav__item">
+      <a href="../_private/file_operations_utils/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    file_operations_utils
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../_private/json_file_operations/" class="md-nav__link">
         
   
@@ -763,9 +784,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#application_settings.configuring_base.ConfigSectionBase.kind_string" class="md-nav__link">
+  <a href="#application_settings.configuring_base.ConfigSectionBase.kind" class="md-nav__link">
     <span class="md-ellipsis">
-      kind_string
+      kind
     </span>
   </a>
   
@@ -787,9 +808,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#application_settings.configuring_base.ConfigBase.kind_string" class="md-nav__link">
+  <a href="#application_settings.configuring_base.ConfigBase.kind" class="md-nav__link">
     <span class="md-ellipsis">
-      kind_string
+      kind
     </span>
   </a>
   
@@ -872,6 +893,27 @@
   
   <span class="md-ellipsis">
     convenience
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parameter_kind/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    parameter_kind
   </span>
   
 
@@ -984,9 +1026,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#application_settings.configuring_base.ConfigSectionBase.kind_string" class="md-nav__link">
+  <a href="#application_settings.configuring_base.ConfigSectionBase.kind" class="md-nav__link">
     <span class="md-ellipsis">
-      kind_string
+      kind
     </span>
   </a>
   
@@ -1008,9 +1050,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#application_settings.configuring_base.ConfigBase.kind_string" class="md-nav__link">
+  <a href="#application_settings.configuring_base.ConfigBase.kind" class="md-nav__link">
     <span class="md-ellipsis">
-      kind_string
+      kind
     </span>
   </a>
   
@@ -1101,8 +1143,8 @@
 <div class="doc doc-object doc-function">
 
 
-<h3 id="application_settings.configuring_base.ConfigSectionBase.kind_string" class="doc doc-heading">
-            <span class="doc doc-object-name doc-function-name">kind_string</span>
+<h3 id="application_settings.configuring_base.ConfigSectionBase.kind" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">kind</span>
 
 
   <span class="doc doc-labels">
@@ -1110,24 +1152,22 @@
   </span>
 
 </h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">kind_string</span><span class="p">()</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">kind</span><span class="p">()</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
 
-        <p>Return 'Config'</p>
+        <p>Return ParameterKind.CONFIG</p>
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/configuring_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@override</span>
-<span class="nd">@classmethod</span>
-<span class="k">def</span> <span class="nf">kind_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SectionTypeStr</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return &#39;Config&#39;&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="s2">&quot;Config&quot;</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">kind</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParameterKind</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ParameterKind.CONFIG&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">ParameterKind</span><span class="o">.</span><span class="n">CONFIG</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1176,8 +1216,8 @@
 <div class="doc doc-object doc-function">
 
 
-<h3 id="application_settings.configuring_base.ConfigBase.kind_string" class="doc doc-heading">
-            <span class="doc doc-object-name doc-function-name">kind_string</span>
+<h3 id="application_settings.configuring_base.ConfigBase.kind" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">kind</span>
 
 
   <span class="doc doc-labels">
@@ -1185,24 +1225,22 @@
   </span>
 
 </h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">kind_string</span><span class="p">()</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">kind</span><span class="p">()</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
 
-        <p>Return 'Config'</p>
+        <p>Return ParameterKind.CONFIG</p>
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/configuring_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@override</span>
-<span class="nd">@classmethod</span>
-<span class="k">def</span> <span class="nf">kind_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SectionTypeStr</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return &#39;Config&#39;&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="s2">&quot;Config&quot;</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">kind</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParameterKind</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ParameterKind.CONFIG&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">ParameterKind</span><span class="o">.</span><span class="n">CONFIG</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1230,11 +1268,11 @@
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/configuring_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">43</span>
-<span class="normal">44</span>
-<span class="normal">45</span>
-<span class="normal">46</span>
-<span class="normal">47</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@override</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@override</span>
 <span class="nd">@classmethod</span>
 <span class="k">def</span> <span class="nf">default_file_format</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FileFormat</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the default file format&quot;&quot;&quot;</span>
