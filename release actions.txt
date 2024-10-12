@@ -1,0 +1,19 @@
+- create branch release/<version> from develop
+- changelog Unreleased -> <version> + <date> 
+- readme version develop -> version <version>
+- readme quickstart link develop -> <version>
+- readme full doc link develop -> <version>
+- merge release/<version> into branch master and push
+- on github, draft a new release; enter the new verion number to create a new tag;
+  select as Target master; don't enter a title, set as latest release
+- publish release, this will trigger publication on pypi and docs publication
+- check on pypi that everything is ok (including docs)
+- go back to release/<version>
+- revert readme <version> -> develop
+- new section in changelog
+- new version number in pyproject.toml
+- update version test
+- check tox
+- git push --set-upstream origin release/<version>
+- make Pull request
+- (merge as stockwatchdev)
