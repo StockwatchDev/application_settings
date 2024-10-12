@@ -3,6 +3,7 @@
 import sys
 from collections.abc import Callable
 from pathlib import Path
+from types import ModuleType
 from typing import Any
 
 if sys.version_info >= (3, 10):
@@ -12,6 +13,7 @@ if sys.version_info >= (3, 10):
     PathOpt: TypeAlias = Path | None
     LoaderOpt: TypeAlias = Callable[[Path], dict[str, Any]] | None
     SaverOpt: TypeAlias = Callable[[Path, dict[str, Any]], None] | None
+    ModuleTypeOpt: TypeAlias = ModuleType | None
 else:
     from typing import Union
 
@@ -21,3 +23,4 @@ else:
     PathOpt: TypeAlias = Union[Path, None]
     LoaderOpt: TypeAlias = Union[Callable[[Path], dict[str, Any]], None]
     SaverOpt: TypeAlias = Union[Callable[[Path, dict[str, Any]], None], None]
+    ModuleTypeOpt: TypeAlias = Union[ModuleType, None]

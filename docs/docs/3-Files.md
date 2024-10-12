@@ -30,19 +30,33 @@ following files.
 
 === "`config.toml` file for the configuration example"
     ```toml
-    # Use this file to set the config that you prefer by editing the file
-    name = "application specific name"
-    [section1]
-    # field1 has default value 0.5
-    field1 = -0.5
-    # field2 has default value 2
-    field2 = 22
+    # Config for an example
 
+    # Use this file to set the config that you prefer by editing the file
+
+    # The next element is refering to the Config container class that
+    # defines the config parameters of the application.
+    # It is used when loading from command line
+    __Config_container_class__ = "config.MyExampleConfig"
+
+
+    # With this parameter you can configure the name; defaults to 'nice example'
+    name = "the real thing"
+
+    # Holds the configuration parameters for the first section
+    [section1]
+
+    # The first field; defaults to 0.5
+    field1 = -0.5
+
+    # The second field; defaults to 2
+    field2 = 22
     ```
 
 === "`settings.json` file for the settings example"
     ```json
     {
+        "__Settings_container_class__": "settings.MyExampleSettings",
         "name": "the stored name",
         "basics": {
             "totals": 3
@@ -50,6 +64,9 @@ following files.
     }
 
     ```
+Although not strictly necessary, it is recommended to include the fully qualified name
+of the container class in the parameter file. The key for this item is `__Config_container_class__`
+for a configuration and `__Settings_container_class__` for settings.
 
 The field names of a Container class are found as:
 

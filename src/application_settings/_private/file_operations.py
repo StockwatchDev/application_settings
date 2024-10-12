@@ -10,6 +10,7 @@ from pathvalidate import is_valid_filepath
 
 from application_settings._private.json_file_operations import load_json, save_json
 from application_settings._private.toml_file_operations import load_toml, save_toml
+from application_settings.parameter_kind import ParameterKind
 from application_settings.type_notation_helper import LoaderOpt, PathOpt, SaverOpt
 
 
@@ -56,7 +57,13 @@ def _check_filepath(
     return True
 
 
-def load(kind: str, path: PathOpt, throw_if_file_not_found: bool) -> dict[str, Any]:
+def _container_class_key(kind: ParameterKind) -> str:
+    return f"__{kind.value}_container_class__"
+
+
+def get_container_from_file(
+    kind: ParameterKind, path: PathOpt, throw_if_file_not_found: bool
+) -> str:
     """Load data from the file given in path; log error or throw if not possible"""
     if _check_filepath(
         path,
@@ -66,7 +73,23 @@ def load(kind: str, path: PathOpt, throw_if_file_not_found: bool) -> dict[str, A
     ):
         real_path = cast(Path, path)
         if loader := _get_loader(path=real_path):
-            if kind == "Config":
+            return cast(str, loader(real_path).get(_container_class_key(kind), ""))
+    return ""
+
+
+def load(
+    kind: ParameterKind, path: PathOpt, throw_if_file_not_found: bool
+) -> dict[str, Any]:
+    """Load data from the file given in path; log error or throw if not possible"""
+    if _check_filepath(
+        path,
+        throw_if_invalid_path=throw_if_file_not_found,
+        throw_if_file_not_found=throw_if_file_not_found,
+        create_file_if_not_found=False,
+    ):
+        real_path = cast(Path, path)
+        if loader := _get_loader(path=real_path):
+            if kind == ParameterKind.CONFIG:
                 return _load_with_includes(real_path, throw_if_file_not_found, loader)
             return loader(real_path)
     logger.warning(

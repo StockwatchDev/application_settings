@@ -10,6 +10,5 @@ class CorrectlyInitializedConfig(ConfigBase):
     configvar_is_set: bool = False
 
 
+print("Now setting filepath for CorrectlyInitializedConfig")
 config_filepath_from_cli(CorrectlyInitializedConfig)
-print("Now loading CorrectlyInitializedConfig")
-CorrectlyInitializedConfig.load()

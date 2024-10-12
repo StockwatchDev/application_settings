@@ -41,11 +41,32 @@ defining fields for parameters and nested non-root sections.
 Note that albeit settings can be changed programmatically, we still set `frozen=True` for
 the settings container and -sections (see also the example section below).
 
+## Parameter docstrings
+
+The python standard states that class variables are to be documented in the docstring of the containing class.
+[PEP 224](https://peps.python.org/pep-0224/) proposed to enable inline documentation of class attributes, namely
+by having a docstring appear directly after an attribute definition (analogous to how it's done for e.g. a class
+definition). This PEP was rejected. However, IDE's such as VSCode do know how to handle this documentation style.
+Moreover, the package [`attributes-doc`](https://pypi.org/project/attributes-doc/) provides the functionality to add
+the docstring literals to the objects in question such that introspection tools can make use of it. This is achieved
+by means of a decorator `@attributes_doc` for the class that defines the attributes. Our package `application_settings`
+exports this decorator to facilitate documentation and introspection.
+
+
 ## Example
 
 === "Configuration"
     ```python
-    from application_settings import ConfigBase, ConfigSectionBase, attributes_doc, dataclass
+    """Configuration parameter definition"""
+
+    from application_settings import (
+        ConfigBase,
+        ConfigSectionBase,
+        attributes_doc,
+        config_filepath_from_cli,
+        dataclass,
+    )
+
 
     @attributes_doc
     @dataclass(frozen=True)
@@ -53,9 +74,10 @@ the settings container and -sections (see also the example section below).
         """Config section for an example"""
 
         field1: float = 0.5
-        """Docstring for the first field; defaults to 0.5"""
+        """The first field; defaults to 0.5"""
+
         field2: int = 2
-        """Docstring for the second field; defaults to 2"""
+        """The second field; defaults to 2"""
 
 
     @attributes_doc
@@ -64,15 +86,30 @@ the settings container and -sections (see also the example section below).
         """Config for an example"""
 
         name: str = "nice example"
-        """With this parameter you can configure the name; defaults to 'nice example'"""
+        """Name of the application; defaults to 'nice example'"""
+
         section1: MyExampleConfigSection = MyExampleConfigSection()
         """Holds the configuration parameters for the first section"""
+
+
+    # It is good practice to set the filepath via the command line interface
+    # You can optionally set load=True
+    config_filepath_from_cli()
 
     ```
 
 === "Settings"
     ```python
-    from application_settings import SettingsBase, SettingsSectionBase, attributes_doc, dataclass
+    """Settings definitions"""
+
+    from application_settings import (
+        SettingsBase,
+        SettingsSectionBase,
+        attributes_doc,
+        dataclass,
+        settings_filepath_from_cli,
+    )
+
 
     @attributes_doc
     @dataclass(frozen=True)
@@ -90,8 +127,12 @@ the settings container and -sections (see also the example section below).
 
         name: str = "nice name"
         """This parameter holds the name setting; defaults to 'nice name'"""
+
         basics: BasicSettingsSection = BasicSettingsSection()
         """Holds the setting parameters for the basic section"""
 
+
+    # It is good practice to set the filepath via the command line interface
+    settings_filepath_from_cli()
 
     ```
