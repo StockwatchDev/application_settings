@@ -1,11 +1,13 @@
-"""Abstract base class for sections to be added to containers and container sections for configuration and settings."""
+"""Defines config parameters for application_settings"""
+
+# pylint: disable=duplicate-code
 
 import sys
-from abc import ABC, abstractmethod
-from dataclasses import is_dataclass
 from typing import Any, Optional, cast
 
+from attributes_doc import attributes_doc
 from loguru import logger
+from pydantic.dataclasses import dataclass
 
 from application_settings.parameter_kind import ParameterKind, ParameterKindStr
 from application_settings.protocols import ContainerSection
@@ -15,14 +17,28 @@ if sys.version_info >= (3, 11):
 else:
     from typing_extensions import Self
 
+# This is not an example how to implement a ConfigSection
+# because class ApplicationSettingsConfigSection (re-)implements all methods of ConfigSectionBase.
+# This is done so that this class will meet the ConfigSection protocol
+# yet does not inherit from ConfigSectionBase and therewith prevents circular imports
+# (because ConfigSectionBase imports ApplicationSettingsConfig).
 
-class ContainerSectionBase(ABC):
-    """Base class for all ContainerSection classes"""
 
-    @classmethod
-    @abstractmethod
-    def kind(cls) -> ParameterKind:
-        """Return either ParameterKind.CONFIG or ParameterKind.SETTINGS"""
+@attributes_doc
+@dataclass(frozen=True)
+class ApplicationSettingsConfigSection:
+    """Config parameters for the application_settings library package"""
+
+    default_fileformat_config: str = "toml"
+    """File format to use for config files when no filepath is specified; either 'toml' or 'json'"""
+
+    default_fileformat_settings: str = "json"
+    """File format to use for settings files when no filepath is specified; either 'toml' or 'json'"""
+
+    @staticmethod
+    def kind() -> ParameterKind:
+        """Return either ParameterKind.CONFIG"""
+        return ParameterKind.CONFIG
 
     @classmethod
     def kind_string(cls) -> ParameterKindStr:
@@ -73,33 +89,17 @@ class ContainerSectionBase(ABC):
 
     def _set(self) -> Self:
         """Store the singleton."""
-        _check_dataclass_decorator(self)
+        # no need to do the check on dataclass decorator, I have it :)
         _ALL_CONTAINER_SECTION_SINGLETONS[id(self.__class__)] = self
-        subsections = [
-            attr
-            for attr in vars(self).values()
-            if isinstance(attr, ContainerSectionBase)
-        ]
-        for subsec in subsections:
-            subsec._set()  # pylint: disable=protected-access
+        # ApplicationSettingsConfigSection does not have subsections
         return self
 
 
-def _check_dataclass_decorator(obj: Any) -> None:
-    if not (is_dataclass(obj)):
-        raise TypeError(
-            f"{obj} is not a dataclass instance; did you forget to add "
-            f"'@dataclass(frozen=True)' when you defined {obj.__class__}?."
-        )
-    if not (
-        hasattr(obj, "__dataclass_params__")
-        and hasattr(obj.__dataclass_params__, "frozen")
-        and obj.__dataclass_params__.frozen
-    ):
-        raise TypeError(
-            f"{obj} is not a frozen dataclass instance; did you forget "
-            f"to add '(frozen=True)' when you defined {obj.__class__}?."
-        )
-
-
 _ALL_CONTAINER_SECTION_SINGLETONS: dict[int, ContainerSection] = {}
+
+
+# TODO:
+# - create module _singleton that holds the singleton stores
+# - convert ConfigT and ConfigSectionT etc to protocols
+# - adapt tests
+# - silence logging until application settings config has been loaded

@@ -4,6 +4,9 @@ import sys
 from dataclasses import replace
 from typing import Any, TypeVar
 
+from loguru import logger
+
+from application_settings.config import ApplicationSettingsConfigSection
 from application_settings.container_base import ContainerBase
 from application_settings.container_section_base import ContainerSectionBase
 from application_settings.parameter_kind import ParameterKind
@@ -23,8 +26,8 @@ SettingsT.__doc__ = "Represents SettingsBase and all subclasses"
 class SettingsSectionBase(ContainerSectionBase):
     """Base class for all SettingsSection classes (so that we can bound a TypeVar)"""
 
-    @classmethod
-    def kind(cls) -> ParameterKind:
+    @staticmethod
+    def kind() -> ParameterKind:
         """Return ParameterKind.SETTINGS"""
         return ParameterKind.SETTINGS
 
@@ -32,14 +35,23 @@ class SettingsSectionBase(ContainerSectionBase):
 class SettingsBase(ContainerBase):
     """Base class for main Settings class"""
 
-    @classmethod
-    def kind(cls) -> ParameterKind:
+    @staticmethod
+    def kind() -> ParameterKind:
         """Return ParameterKind.SETTINGS"""
         return ParameterKind.SETTINGS
 
     @classmethod
     def default_file_format(cls) -> FileFormat:
         """Return the default file format"""
+        if (
+            fmt := ApplicationSettingsConfigSection.get().default_fileformat_settings
+        ) == FileFormat.TOML.value:
+            return FileFormat.TOML
+        if fmt == FileFormat.JSON.value:
+            return FileFormat.JSON
+        logger.error(
+            f"Unknown file format specified in ApplicationSettingsConfig; will assume {FileFormat.JSON} format."
+        )
         return FileFormat.JSON
 
     @classmethod
