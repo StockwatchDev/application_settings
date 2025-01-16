@@ -19,6 +19,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Typing :: Typed",
 ]
@@ -143,21 +144,21 @@ legacy_tox_ini = """
 [tox]
 isolated_build = true
 envlist =
-    py{39,310,311,312}-pytest
-    py{39,310,311,312}-typing
+    py{39,310,311,312,313}-pytest
+    py{39,310,311,312,313}-typing
     docs
     style
 
 [testenv]
 allowlist_externals = poetry
 
-[testenv:py{39,310,311,312}-pytest]
+[testenv:py{39,310,311,312,313}-pytest]
 commands_pre =
     poetry install --no-root --with testing -v
 commands =
     poetry run python -m pytest --cov-report xml:coverage.xml --cov-report term-missing --cov=application_settings tests/ --import-mode importlib
 
-[testenv:py{39,310,311,312}-typing]
+[testenv:py{39,310,311,312,313}-typing]
 skip_install = true
 commands_pre =
     poetry install --with typing -v
