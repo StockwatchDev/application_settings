@@ -941,6 +941,27 @@
   
   
     <li class="md-nav__item">
+      <a href="../reference/application_settings/parametrization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    parametrization
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../reference/application_settings/protocols/" class="md-nav__link">
         
   
@@ -1139,7 +1160,7 @@
 <p><code>application_settings</code> makes use of the <a href="https://github.com/Delgan/loguru">Loguru</a> library
 for logging. By default, logging is disabled, hence you need to enable it to get
 logging output.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">loguru</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
 
 <span class="n">logger</span><span class="o">.</span><span class="n">enable</span><span class="p">(</span><span class="s2">&quot;application_settings&quot;</span><span class="p">)</span>
 </code></pre></div>
@@ -1157,7 +1178,7 @@ addition to that, you need to propagate Loguru messages to standard logging.
 purpose. This function sets the propagation to the standard logger. The function has a
 single argument <code>enable</code> that by default is set to <code>False</code>. If a parameter <code>True</code> is
 provided, then the convenience function also enables logging.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">application_settings</span> <span class="kn">import</span> <span class="n">use_standard_logging</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">application_settings</span><span class="w"> </span><span class="kn">import</span> <span class="n">use_standard_logging</span>
 
 <span class="n">use_standard_logging</span><span class="p">(</span><span class="n">enable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>

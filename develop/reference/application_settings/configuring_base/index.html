@@ -808,6 +808,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#application_settings.configuring_base.ConfigBase.application_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      application_config
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#application_settings.configuring_base.ConfigBase.kind" class="md-nav__link">
     <span class="md-ellipsis">
       kind
@@ -914,6 +923,27 @@
   
   <span class="md-ellipsis">
     parameter_kind
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parametrization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    parametrization
   </span>
   
 
@@ -1071,6 +1101,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#application_settings.configuring_base.ConfigBase.application_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      application_config
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#application_settings.configuring_base.ConfigBase.kind" class="md-nav__link">
     <span class="md-ellipsis">
       kind
@@ -1192,11 +1231,11 @@
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/configuring_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
-<span class="k">def</span> <span class="nf">kind</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ParameterKind</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kind</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ParameterKind</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ParameterKind.CONFIG&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">ParameterKind</span><span class="o">.</span><span class="n">CONFIG</span>
 </code></pre></div></td></tr></table></div>
@@ -1247,6 +1286,30 @@
 
 
 
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="application_settings.configuring_base.ConfigBase.application_config" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">application_config</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">application_config</span> <span class="o">=</span> <span class="n">ApplicationConfigSection</span><span class="p">()</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Holds the configuration parameters for application_settings</p>
+    </div>
+
+</div>
+
 
 
 <div class="doc doc-object doc-function">
@@ -1270,11 +1333,11 @@
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/configuring_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
-<span class="k">def</span> <span class="nf">kind</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ParameterKind</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kind</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ParameterKind</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ParameterKind.CONFIG&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">ParameterKind</span><span class="o">.</span><span class="n">CONFIG</span>
 </code></pre></div></td></tr></table></div>
@@ -1304,11 +1367,11 @@
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/configuring_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
-<span class="k">def</span> <span class="nf">default_file_format</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">FileFormat</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">default_file_format</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">FileFormat</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the default file format&quot;&quot;&quot;</span>  <span class="c1"># disable=duplicate-code</span>
     <span class="k">return</span> <span class="n">FileFormat</span><span class="o">.</span><span class="n">TOML</span>
 </code></pre></div></td></tr></table></div>
