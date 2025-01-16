@@ -2,12 +2,14 @@
 
 import sys
 from abc import ABC, abstractmethod
-from dataclasses import is_dataclass
+from dataclasses import fields
 from typing import Any, Optional, cast
 
 from loguru import logger
+from pydantic.dataclasses import is_pydantic_dataclass
 
 from application_settings.parameter_kind import ParameterKind, ParameterKindStr
+from application_settings.parametrization import log_level
 from application_settings.protocols import ParameterContainerSectionProtocol
 
 if sys.version_info >= (3, 11):
@@ -46,15 +48,26 @@ class ParameterContainerSectionBase(ABC):
         """Get has been called on a section before a load was done; handle this."""
         # get() is called on a Section but the application
         # has not yet created or loaded a config.
-        logger.warning(
+        logger.log(
+            log_level(cls.kind()),
             f"{cls.kind_string()} section {cls.__name__} accessed before data has been loaded; "
-            f"will try to load via command line parameter '--{cls.__name__}_file'"
+            f"will try to load via command line parameter '--{cls.__name__}_file'",
         )
 
     @classmethod
     def set(cls, data: dict[str, Any]) -> Self:
         """Create a new dataclass instance using data and set the singleton."""
-        return cls(**data)._set()
+        new_instance = cls(**data)
+        # config sections may be initialized without data in two situations:
+        # - during import, because a config section is a class variables of
+        #   a dataclass and hence will always be initialized without data if
+        #   they has a default value;
+        # - when the application is used in a zero conf manner.
+        # In these cases we don't want to do check for uninitialized and we
+        # will not have extra parameters, in all other cases we do check.
+        if data:
+            new_instance._check_uninitialized_and_extra(data)
+        return new_instance._set()
 
     @classmethod
     def _get(
@@ -85,12 +98,80 @@ class ParameterContainerSectionBase(ABC):
             subsec._set()  # pylint: disable=protected-access
         return self
 
+    @staticmethod
+    def _is_parameter_container_section(a_field_type: Any) -> bool:
+        try:
+            return issubclass(a_field_type, ParameterContainerSectionProtocol)
+        except TypeError:
+            return False
+
+    def _check_uninitialized_and_extra(
+        self, data: dict[str, Any], section_name: str = ""
+    ) -> Self:
+        """Check if extra parameters were provided and/or parameters were missing; if so, log message."""
+
+        # Subclasses shall be pydantic dataclasses, however, this base class is not
+        # Hence, filter in order to do this check only for instances of pydantic dataclasses.
+        if is_pydantic_dataclass(type(self)):
+            # log message needs to specify the section and the root section has no section_name
+            section_specifier = (
+                f" in section {section_name}"
+                if section_name
+                else " in the root section"
+            )
+            # get the names of all fields
+            field_names = {fld.name for fld in fields(self)}  # type: ignore[arg-type]
+            # get the names of all fields that are a subsection
+            subsection_names = {
+                fld.name
+                for fld in fields(self)  # type: ignore[arg-type]
+                if self._is_parameter_container_section(fld.type)
+            }
+            # uninitialized fields are found by removing from field_names the subsection_names
+            # and the fields that are set in data
+            uninitialized_field_names = (
+                field_names - subsection_names - set(data.keys())
+            )
+            for uninitialized_field in uninitialized_field_names:
+                logger.log(
+                    log_level(self.kind()),
+                    f"Parameter {uninitialized_field}{section_specifier} initialized with default value.",
+                )
+            # data may also contain elements that are not fields, and we want to report that as well
+            extra_data_fields = set(data.keys()) - field_names
+            for extra_data_field in extra_data_fields:
+                logger.log(
+                    log_level(self.kind()),
+                    f"Extra parameter {extra_data_field}{section_specifier} that is not used for initialization.",
+                )
+            # get subsections so that these can be checked as well
+            subsections = [
+                (
+                    subsection_name,
+                    cast(
+                        ParameterContainerSectionProtocol,
+                        getattr(self, subsection_name),
+                    ),
+                )
+                for subsection_name in subsection_names
+            ]
+            # names of subsections should be prefixed with the current section_name, followed by a dot
+            prefix = f"{section_name}." if section_name else ""
+            # recurse into subsections, if any
+            for subsec_name, subsec in subsections:
+                sub_data = data.get(subsec_name, {})
+                subsec._check_uninitialized_and_extra(  # pylint: disable=protected-access
+                    sub_data, f"{prefix}{subsec_name}"
+                )
+        return self
+
 
 def _check_dataclass_decorator(obj: Any) -> None:
-    if not (is_dataclass(obj)):
+    # TODO: check if we can do this in a static analysis rather than runtime
+    if not (is_pydantic_dataclass(type(obj))):
         raise TypeError(
-            f"{obj} is not a dataclass instance; did you forget to add "
-            f"'@dataclass(frozen=True)' when you defined {obj.__class__}?."
+            f"{obj} is not a pydantic dataclass instance; did you forget to add "
+            f"'@dataclass(frozen=True)' when you defined {obj.__class__}?"
         )
     # We don't have to test for frozen=True, because a TypeError will be raised
     # by dataclass anyway if the subclass is not frozen

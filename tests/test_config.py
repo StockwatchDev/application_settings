@@ -262,7 +262,7 @@ def test_kind_string() -> None:
 def test_section_singleton(caplog: pytest.LogCaptureFixture) -> None:
     use_standard_logging(enable=True)
     assert AnExample1ConfigSection.get().field1 == "field1"
-    assert " accessed before data has been loaded" in caplog.records[0].msg
+    assert " accessed before data has been loaded" in caplog.records[-1].msg
     logger.disable(LOGGER_NAME)
 
 
@@ -355,7 +355,7 @@ def test_set_filepath_after_get(
     # test if the subsection singleton is properly registered
     assert AnExampleConfigSubSection.get().field3[1] == "no"
     AnExample1Config.set_filepath("", load=False)
-    assert "file is not loaded into the Config." in caplog.records[0].msg
+    assert "file is not loaded into the Config." in caplog.records[-1].msg
     logger.disable(LOGGER_NAME)
 
 
@@ -421,48 +421,47 @@ def test_missing_extra_attributes() -> None:
         assert test_config.section1.field3 == 22  # type: ignore[attr-defined]
 
 
-@dataclass(frozen=True)
-class Example2aConfigSection(ConfigSectionBase):
-    """Example 2a of a Config section"""
+if sys.version_info >= (3, 10):
 
-    field3: float
-    field4: float = 0.5
+    @dataclass(frozen=True)
+    class Example2aConfigSection(ConfigSectionBase):
+        """Example 2a of a Config section"""
 
+        field3: float
+        field4: float = 0.5
 
-@dataclass(frozen=True)
-class Example2bConfigSection(ConfigSectionBase):
-    """Example 2b of a Config section"""
+    @dataclass(frozen=True)
+    class Example2bConfigSection(ConfigSectionBase):
+        """Example 2b of a Config section"""
 
-    field1: str = "field1"
-    field2: int = 2
+        field1: str = "field1"
+        field2: int = 2
 
+    @dataclass(frozen=True)
+    class Example2Config(ConfigBase):
+        """Example Config"""
 
-@dataclass(frozen=True)
-class Example2Config(ConfigBase):
-    """Example Config"""
+        section1: Example2aConfigSection
+        section2: Example2bConfigSection = Example2bConfigSection()
 
-    section1: Example2aConfigSection
-    section2: Example2bConfigSection = Example2bConfigSection()
+    def test_attributes_no_default() -> None:
+        init_values = {
+            "field0": 33.33,
+            "section1": {
+                "field1": "f1",
+                "field2": 22,
+                "subsec": {"field3": (-3, "no")},
+            },
+        }
+        # field3 is a float and has no default value
+        with pytest.raises(ValidationError):
+            Example2Config.set(init_values)
 
-
-def test_attributes_no_default() -> None:
-    init_values = {
-        "field0": 33.33,
-        "section1": {
-            "field1": "f1",
-            "field2": 22,
-            "subsec": {"field3": (-3, "no")},
-        },
-    }
-    # field3 is a float and has no default value
-    with pytest.raises(ValidationError):
-        Example2Config.set(init_values)
-
-    Example2Config.set({"section1": {"field3": 1.1}})
-    test_config = Example2Config.get()
-    assert test_config.section1.field3 == 1.1
-    assert test_config.section1.field4 == 0.5
-    assert test_config.section2.field1 == "field1"
+        Example2Config.set({"section1": {"field3": 1.1}})
+        test_config = Example2Config.get()
+        assert test_config.section1.field3 == 1.1
+        assert test_config.section1.field4 == 0.5
+        assert test_config.section2.field1 == "field1"
 
 
 def test_include_1(toml_file_inc1: Path) -> None:

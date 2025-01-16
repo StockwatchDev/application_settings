@@ -2,14 +2,22 @@
 
 # Use this file to set the config that you prefer by editing the file
 
-# The next element is refering to the Config container class that
-# defines the config parameters of the application.
-# It is used when loading from command line
-__Config_container_class__ = "config.MyExampleConfig"
-
-
 # With this parameter you can configure the name; defaults to 'nice example'
 name = "the real thing"
+
+# Holds the configuration parameters for application_settings
+[application_config]
+
+# Class that defines the root container of an application config; 
+# defaults to 'application_settings.ConfigBase' but should be given an application-specific value
+config_container_class = "config.MyExampleConfig"
+
+# Whether or not to apply strict mode. In strict mode, warnings rather than debug messages are logged when: 
+# 1) parameters are accessed before a file is loaded
+# 2) parameters are missing from the loaded file
+# 3) unknown parameters are found in the loaded file"""
+strict_mode = true
+
 
 # Holds the configuration parameters for the first section
 [section1]

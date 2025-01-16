@@ -42,6 +42,11 @@ class ParameterContainerSectionProtocol(Protocol):
     def _set(self) -> Self:
         """Store the singleton (protected method)"""
 
+    def _check_uninitialized_and_extra(
+        self, data: dict[str, Any], section_name: str = ""
+    ) -> Self:
+        """Check which fields are not present in data and if extra fields are present in data"""
+
 
 @runtime_checkable
 class ParameterContainerProtocol(ParameterContainerSectionProtocol, Protocol):

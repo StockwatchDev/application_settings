@@ -11,6 +11,7 @@ from loguru import logger
 from pathvalidate import is_valid_filepath
 
 from application_settings.container_section_base import ParameterContainerSectionBase
+from application_settings.parametrization import log_level
 from application_settings.type_notation_helper import PathOrStr
 
 from ._private.file_operations import FileFormat
@@ -108,9 +109,10 @@ class ParameterContainerBase(ParameterContainerSectionBase, ABC):
     @classmethod
     def get_without_load(cls) -> None:
         """Get has been called on a section before a load was done; handle this."""
-        logger.warning(
+        logger.log(
+            log_level(cls.kind()),
             f"{cls.kind_string()} {cls.__name__} accessed before data has been loaded; "
-            f"will try implicit loading with {cls.filepath()}."
+            f"will try implicit loading with {cls.filepath()}.",
         )
 
     @classmethod

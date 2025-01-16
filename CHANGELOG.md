@@ -10,13 +10,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added - 0.6.0
 
 - Protocol classes so that we can use structural typing for function parameters and return types:
-  ParameterContainerProtocol, ParameterContainerSectionProtocol, UpdateableParameterContainerProtocol
+  ParameterContainerProtocol, ParameterContainerSectionProtocol, UpdateableParameterContainerProtocol;
+- Configuration - and settings parameters for the package `application_settings` itself, namely the
+  import string for the Config class / the Settings class that the application uses and whether or not
+  to use `application_settings` in strict mode.
 
 ### Changed - 0.6.0
 
 ### Removed - 0.6.0
 
-- Type aliase PathOpt, use Optional[Path] instead (breaking)
+- Type alias PathOpt, use Optional[Path] instead (breaking)
 
 ## [0.5.0] - Released 2024-10-12
 

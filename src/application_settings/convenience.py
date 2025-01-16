@@ -41,15 +41,15 @@ def _get_module(qualified_classname: str) -> Optional[ModuleType]:
     components = qualified_classname.split(".")
     if len(components) < 2:
         logger.error(
-            f"Unable to import {qualified_classname}: no package / module name provided."
+            f"Unable to import {qualified_classname}: no package / module name or no class name provided."
         )
         return None
     if components[0] == "":
         # relative import, no package
-        logger.warning(
+        logger.info(
             f"{qualified_classname}: attempted relative import with no known parent package. Will try to load file, but this may fail."
         )
-        if not (module := _get_module_from_file(".".join(components[1:]))):
+        if not (module := _get_module_from_file(qualified_classname)):
             return None
     else:
         try:
@@ -69,6 +69,11 @@ def _get_config_class(
     if not (the_class := getattr(module, components[-1], None)):
         logger.error(
             f"No class {components[-1]} found in module {'.'.join(components[:-1])}"
+        )
+        return None
+    if not isinstance(the_class, type):
+        logger.error(
+            f"Attribute {components[-1]} found in module {'.'.join(components[:-1])} but this is not a class."
         )
         return None
     logger.debug(f"Class {components[-1]} found in module {'.'.join(components[:-1])}")
@@ -95,6 +100,11 @@ def _get_settings_class(
     if not (the_class := getattr(module, components[-1], None)):
         logger.error(
             f"No class {components[-1]} found in module {'.'.join(components[:-1])}"
+        )
+        return None
+    if not isinstance(the_class, type):
+        logger.error(
+            f"Attribute {components[-1]} found in module {'.'.join(components[:-1])} but this is not a class."
         )
         return None
     logger.debug(f"Class {components[-1]} found in module {'.'.join(components[:-1])}")

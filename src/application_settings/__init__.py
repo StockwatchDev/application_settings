@@ -15,6 +15,10 @@ from application_settings.convenience import (
     use_standard_logging,
 )
 from application_settings.parameter_kind import ParameterKind, ParameterKindStr
+from application_settings.parametrization import (
+    ApplicationConfigSection,
+    ApplicationSettingsSection,
+)
 from application_settings.protocols import (
     ParameterContainerProtocol,
     ParameterContainerSectionProtocol,
@@ -30,6 +34,8 @@ __version__ = version("application-settings")
 
 
 __all__ = [
+    "ApplicationConfigSection",
+    "ApplicationSettingsSection",
     "ConfigBase",
     "ConfigSectionBase",
     "ParameterContainerSectionProtocol",

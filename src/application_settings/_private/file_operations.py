@@ -56,8 +56,9 @@ def _check_filepath(
     return True
 
 
-def _container_class_key(kind: ParameterKind) -> str:
-    return f"__{kind.value}_container_class__"
+def _container_class_keys(kind: ParameterKind) -> tuple[str, str]:
+    kind_str = kind.value.lower()
+    return f"application_{kind_str}", f"{kind_str}_container_class"
 
 
 def get_container_from_file(
@@ -72,7 +73,9 @@ def get_container_from_file(
     ):
         real_path = cast(Path, path)
         if loader := _get_loader(path=real_path):
-            return cast(str, loader(real_path).get(_container_class_key(kind), ""))
+            the_keys = _container_class_keys(kind)
+            if appl_sec := cast(dict[str, Any], loader(real_path).get(the_keys[0], {})):
+                return cast(str, appl_sec.get(the_keys[1], ""))
     return ""
 
 
