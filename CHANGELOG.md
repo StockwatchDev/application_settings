@@ -15,7 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   import string for the Config class / the Settings class that the application uses and whether or not
   to use `application_settings` in strict mode.
 
-### Changed - 0.6.0
+### Fixed - 0.6.0
+
+- Toml files read with `tomlkit` need to be `unwrap`ped before processing with pydantic.
 
 ### Removed - 0.6.0
 
