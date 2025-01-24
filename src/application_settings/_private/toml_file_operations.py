@@ -16,7 +16,7 @@ def load_toml(path: Path) -> dict[str, Any]:
         path.stat().st_size > 0
     ):  # this evaluates to false if the file does not exist or is empty
         with path.open(mode="r") as fptr:
-            data_stored = tomlkit.load(fptr)
+            data_stored = tomlkit.load(fptr).unwrap()
     else:
         logger.warning(f"File {path} does not exist or is empty.")
     return data_stored

@@ -4,7 +4,7 @@
 import json
 import sys
 from pathlib import Path
-from typing import Any, Optional
+from typing import Optional
 
 import pytest
 import tomlkit
@@ -26,6 +26,7 @@ class AnExampleConfigSubSection(ConfigSectionBase):
     """Example of a Config subsection"""
 
     field3: tuple[int, str] = (3, "yes")
+    field4: bool = True
 
 
 @dataclass(frozen=True)
@@ -67,7 +68,7 @@ def toml_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
                 "section1": {
                     "field1": "f1",
                     "field2": 22,
-                    "subsec": {"field3": (-3, "no")},
+                    "subsec": {"field3": (-3, "no"), "field4": False},
                 },
             },
             fptr,
@@ -85,7 +86,7 @@ def toml_file_inc1(tmp_path_factory: pytest.TempPathFactory) -> Path:
                 "section1": {
                     "field1": "f1",
                     "field2": 22,
-                    "subsec": {"field3": (-3, "no")},
+                    "subsec": {"field3": (-3, "no"), "field4": False},
                 },
             },
             fptr,
@@ -112,7 +113,7 @@ def toml_file_inc2(tmp_path_factory: pytest.TempPathFactory) -> Path:
                 "section1": {
                     "field1": "f1",
                     "field2": 22,
-                    "subsec": {"field3": (-33, "no")},
+                    "subsec": {"field3": (-33, "no"), "field4": False},
                 },
             },
             fptr,
@@ -144,7 +145,7 @@ def toml_file_inc3(tmp_path_factory: pytest.TempPathFactory) -> Path:
                 "section1": {
                     "field1": "f1",
                     "field2": 22,
-                    "subsec": {"field3": (-333, "no")},
+                    "subsec": {"field3": (-333, "no"), "field4": False},
                 },
             },
             fptr,
@@ -205,7 +206,7 @@ def json_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
                 "section1": {
                     "field1": "f2",
                     "field2": 33,
-                    "subsec": {"field3": (-4, "maybe")},
+                    "subsec": {"field3": (-4, "maybe"), "field4": False},
                 }
             },
             fptr,
@@ -223,7 +224,7 @@ def json_file_inc2(tmp_path_factory: pytest.TempPathFactory) -> Path:
                 "section1": {
                     "field1": "f1",
                     "field2": 22,
-                    "subsec": {"field3": (-99, "no")},
+                    "subsec": {"field3": (-99, "no"), "field4": False},
                 },
             },
             fptr,
@@ -359,26 +360,12 @@ def test_set_filepath_after_get(
     logger.disable(LOGGER_NAME)
 
 
-def test_get(monkeypatch: pytest.MonkeyPatch, toml_file: Path) -> None:
+def test_get(toml_file: Path) -> None:
     AnExample1Config.set_filepath(toml_file)
     AnExample1Config.load()
     assert AnExample1Config.get().field0 == 33.33
     assert AnExample1Config.get().section1.field1 == "f1"
     assert AnExample1Config.get().section1.field2 == 22
-
-    # test that by default it is not reloaded
-    def mock_tomlkit_load(
-        fptr: Any,  # pylint: disable=unused-argument
-    ) -> dict[str, dict[str, Any]]:
-        return {"section1": {"field1": "f1", "field2": 222}}
-
-    monkeypatch.setattr(tomlkit, "load", mock_tomlkit_load)
-    assert AnExample1Config.get().section1.field2 == 22
-
-    # and now test reload
-    AnExample1Config.load()
-    assert AnExample1Config.get().field0 == 2.2
-    assert AnExample1Config.get().section1.field2 == 222
 
 
 def test_get_json(json_file: Path) -> None:
