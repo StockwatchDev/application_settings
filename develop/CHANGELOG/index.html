@@ -525,9 +525,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#changed-060" class="md-nav__link">
+  <a href="#fixed-060" class="md-nav__link">
     <span class="md-ellipsis">
-      Changed - 0.6.0
+      Fixed - 0.6.0
     </span>
   </a>
   
@@ -1211,9 +1211,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#changed-060" class="md-nav__link">
+  <a href="#fixed-060" class="md-nav__link">
     <span class="md-ellipsis">
-      Changed - 0.6.0
+      Fixed - 0.6.0
     </span>
   </a>
   
@@ -1429,7 +1429,10 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
   import string for the Config class / the Settings class that the application uses and whether or not
   to use <code>application_settings</code> in strict mode.</li>
 </ul>
-<h3 id="changed-060">Changed - 0.6.0</h3>
+<h3 id="fixed-060">Fixed - 0.6.0</h3>
+<ul>
+<li>Toml files read with <code>tomlkit</code> need to be <code>unwrap</code>ped before processing with pydantic.</li>
+</ul>
 <h3 id="removed-060">Removed - 0.6.0</h3>
 <ul>
 <li>Type alias PathOpt, use Optional[Path] instead (breaking)</li>
