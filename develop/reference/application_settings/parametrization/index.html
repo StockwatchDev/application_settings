@@ -1370,6 +1370,7 @@
 
 
 
+
   <div class="doc doc-children">
 
 
@@ -1396,6 +1397,7 @@
 
 
         <p>Behavior for parametrization of the application_settings library package</p>
+
 
 
 
@@ -1435,6 +1437,7 @@
 
         <p>Return either ParameterKind.CONFIG or ParameterKind.SETTINGS</p>
 
+
             <details class="quote">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">40</span>
@@ -1469,6 +1472,7 @@
 
         <p>Return either 'Config' or 'Settings'</p>
 
+
             <details class="quote">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">45</span>
@@ -1502,6 +1506,7 @@
     <div class="doc doc-contents ">
 
         <p>Get the singleton; if not existing, create it. Loading from file only done for a container.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>
@@ -1549,6 +1554,7 @@
 
         <p>Get has been called on a section before a load was done; handle this.</p>
 
+
             <details class="quote">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">61</span>
@@ -1580,6 +1586,7 @@
     <div class="doc doc-contents ">
 
         <p>Create a new dataclass instance using data and set the singleton.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>
@@ -1637,10 +1644,11 @@
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="application_settings.parametrization.ApplicationSettingsContainerSectionBase" href="#application_settings.parametrization.ApplicationSettingsContainerSectionBase">ApplicationSettingsContainerSectionBase</a></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="ApplicationSettingsContainerSectionBase (application_settings.parametrization.ApplicationSettingsContainerSectionBase)" href="#application_settings.parametrization.ApplicationSettingsContainerSectionBase">ApplicationSettingsContainerSectionBase</a></code></p>
 
 
         <p>Settings parameters for the application_settings library package</p>
+
 
 
 
@@ -1681,6 +1689,7 @@
 
         <p>Class that defines the root container of an application's settings; 
 defaults to 'application_settings.SettingsBase' but should be given an application-specific value</p>
+
     </div>
 
 </div>
@@ -1708,6 +1717,7 @@ defaults to 'application_settings.SettingsBase' but should be given an applicati
 1) parameters are accessed before a file is loaded
 2) parameters are missing from the loaded file
 3) unknown parameters are found in the loaded file</p>
+
     </div>
 
 </div>
@@ -1732,6 +1742,7 @@ defaults to 'application_settings.SettingsBase' but should be given an applicati
     <div class="doc doc-contents ">
 
         <p>Return ParameterKind.SETTINGS</p>
+
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>
@@ -1769,10 +1780,11 @@ defaults to 'application_settings.SettingsBase' but should be given an applicati
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="application_settings.parametrization.ApplicationSettingsContainerSectionBase" href="#application_settings.parametrization.ApplicationSettingsContainerSectionBase">ApplicationSettingsContainerSectionBase</a></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="ApplicationSettingsContainerSectionBase (application_settings.parametrization.ApplicationSettingsContainerSectionBase)" href="#application_settings.parametrization.ApplicationSettingsContainerSectionBase">ApplicationSettingsContainerSectionBase</a></code></p>
 
 
         <p>Config parameters for the application_settings library package</p>
+
 
 
 
@@ -1811,6 +1823,7 @@ defaults to 'application_settings.SettingsBase' but should be given an applicati
 
         <p>Class that defines the root container of an application config; 
 defaults to 'application_settings.ConfigBase' but should be given an application-specific value</p>
+
     </div>
 
 </div>
@@ -1838,6 +1851,7 @@ defaults to 'application_settings.ConfigBase' but should be given an application
 1) parameters are accessed before a file is loaded
 2) parameters are missing from the loaded file
 3) unknown parameters are found in the loaded file</p>
+
     </div>
 
 </div>
@@ -1862,6 +1876,7 @@ defaults to 'application_settings.ConfigBase' but should be given an application
     <div class="doc doc-contents ">
 
         <p>Return ParameterKind.CONFIG</p>
+
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>
@@ -1901,6 +1916,7 @@ defaults to 'application_settings.ConfigBase' but should be given an application
     <div class="doc doc-contents ">
 
         <p>Return the log level taking into consideration whether or not strict_mode is applied</p>
+
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>

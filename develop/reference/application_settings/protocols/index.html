@@ -1406,6 +1406,7 @@
 
 
 
+
   <div class="doc doc-children">
 
 
@@ -1432,6 +1433,7 @@
 
 
         <p>Protocol for a ParameterContainerSection</p>
+
 
 
 
@@ -1470,6 +1472,7 @@
 
         <p>Return either ParameterKind.CONFIG or ParameterKind.SETTINGS</p>
 
+
             <details class="quote">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">22</span>
@@ -1501,6 +1504,7 @@
     <div class="doc doc-contents ">
 
         <p>Return either 'Config' or 'Settings'</p>
+
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
@@ -1534,6 +1538,7 @@
 
         <p>Get the singleton; if not existing, create it. Loading from file only done for a container.</p>
 
+
             <details class="quote">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">30</span>
@@ -1566,6 +1571,7 @@
 
         <p>Get has been called on a section before a load was done; handle this.</p>
 
+
             <details class="quote">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">34</span>
@@ -1597,6 +1603,7 @@
     <div class="doc doc-contents ">
 
         <p>Create a new dataclass instance using data and set the singleton.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
@@ -1632,10 +1639,11 @@
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="application_settings.protocols.ParameterContainerSectionProtocol" href="#application_settings.protocols.ParameterContainerSectionProtocol">ParameterContainerSectionProtocol</a></code>, <code><span title="typing.Protocol">Protocol</span></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="ParameterContainerSectionProtocol (application_settings.protocols.ParameterContainerSectionProtocol)" href="#application_settings.protocols.ParameterContainerSectionProtocol">ParameterContainerSectionProtocol</a></code>, <code><span title="typing.Protocol">Protocol</span></code></p>
 
 
         <p>Protocol for a Parameter Container without update (i.e., Config)</p>
+
 
 
 
@@ -1674,6 +1682,7 @@
 
         <p>Return the default file format</p>
 
+
             <details class="quote">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">55</span>
@@ -1706,6 +1715,7 @@
 
         <p>Return the class name without kind_string, lowercase, with a preceding dot
 and underscores to seperate words.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
@@ -1741,6 +1751,7 @@ and underscores to seperate words.</p>
 
         <p>Return the kind_string, lowercase, with the extension that fits the file_format.</p>
 
+
             <details class="quote">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">64</span>
@@ -1774,6 +1785,7 @@ and underscores to seperate words.</p>
         <p>Return the fully qualified default path for the config/settingsfile</p>
 <p>E.g. ~/.example/config.toml.
 If you prefer to not have a default path then overwrite this method and return None.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
@@ -1827,7 +1839,7 @@ If you prefer to not have a default path then overwrite this method and return N
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code>ValueError</code>
+                  <code><span title="ValueError">ValueError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1837,6 +1849,7 @@ If you prefer to not have a default path then overwrite this method and return N
           </tr>
       </tbody>
     </table>
+
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
@@ -1877,6 +1890,7 @@ If you prefer to not have a default path then overwrite this method and return N
     <div class="doc doc-contents ">
 
         <p>Return the path for the file that holds the config / settings.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
@@ -1922,7 +1936,7 @@ If you prefer to not have a default path then overwrite this method and return N
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code>FileNotFoundError</code>
+                  <code><span title="FileNotFoundError">FileNotFoundError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1932,7 +1946,7 @@ If you prefer to not have a default path then overwrite this method and return N
           </tr>
           <tr class="doc-section-item">
             <td>
-                  <code>TOMLDecodeError</code>
+                  <code><span title="TOMLDecodeError">TOMLDecodeError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1942,7 +1956,7 @@ If you prefer to not have a default path then overwrite this method and return N
           </tr>
           <tr class="doc-section-item">
             <td>
-                  <code>JSONDecodeError</code>
+                  <code><span title="JSONDecodeError">JSONDecodeError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1962,6 +1976,7 @@ If you prefer to not have a default path then overwrite this method and return N
           </tr>
       </tbody>
     </table>
+
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
@@ -2009,6 +2024,7 @@ If you prefer to not have a default path then overwrite this method and return N
 
         <p>Get has been called on a section before a load was done; handle this.</p>
 
+
             <details class="quote">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 99</span>
@@ -2043,10 +2059,11 @@ If you prefer to not have a default path then overwrite this method and return N
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="application_settings.protocols.ParameterContainerProtocol" href="#application_settings.protocols.ParameterContainerProtocol">ParameterContainerProtocol</a></code>, <code><span title="typing.Protocol">Protocol</span></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="ParameterContainerProtocol (application_settings.protocols.ParameterContainerProtocol)" href="#application_settings.protocols.ParameterContainerProtocol">ParameterContainerProtocol</a></code>, <code><span title="typing.Protocol">Protocol</span></code></p>
 
 
         <p>Protocol for a Parameter Container that has an update method (i.e., Settings)</p>
+
 
 
 
@@ -2084,6 +2101,7 @@ If you prefer to not have a default path then overwrite this method and return N
     <div class="doc doc-contents ">
 
         <p>Update the settings with data specified in changes and save.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
