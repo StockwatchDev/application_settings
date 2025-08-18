@@ -30,14 +30,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout master
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
           ref: ${{ github.event.release.tag_name }}
         if: github.event_name == 'release'
 
       - name: Checkout develop
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
           ref: develop
