@@ -94,7 +94,41 @@ mkdocs-literate-nav = ">=0.6"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.coverage.run]
+omit = [
+  # omit these folders
+  # "*/config_sections/*",
+  # omit these single files
+  "__main__.py",
+  "config.py",
+  "main.py",
+]
+branch = true
+
+[tool.coverage.report]
+# Regexes for lines to exclude from consideration
+exclude_also = [
+  # Don't complain about missing debug-only code:
+  "def __repr__",
+  "if self\\.debug",
+
+  # Don't complain if tests don't hit defensive assertion code:
+  "raise AssertionError",
+  "raise NotImplementedError",
+
+  # Don't complain if non-runnable code isn't run:
+  "if 0:",
+  "if __name__ == .__main__.:",
+
+  # Don't complain about abstract methods, they aren't run:
+  "@(abc\\.)?abstractmethod",
+]
+
+ignore_errors = true
+
 [tool.pytest.ini_options]
+addopts = "--cov-report=xml:coverage.xml --cov-report=term-missing --cov-config=pyproject.toml --cov=application_settings --cov=tests"
+testpaths = ["tests"]
 filterwarnings = ["error"]
 
 [tool.black]
@@ -149,44 +183,91 @@ runtime-typing = false
 ignore-imports = "yes"
 
 [tool.tox]
-legacy_tox_ini = """
-[tox]
-isolated_build = true
-envlist =
-    py{310,311,312,313,314}-pytest
-    py{310,311,312,313,314}-typing
-    docs
-    style
+requires = ["tox>=4.49"]
 
-[testenv]
-allowlist_externals = poetry
+# Generates: py310-pytest, py310-mypy, py311-pytest, py311-mypy, ... py314-mypy
+env_list = [{ product = [["py310", "py311", "py312", "py313", "py314"], ["pytest", "mypy"]] }, "style", "docs"]
 
-[testenv:py{310,311,312,313,314}-pytest]
-commands_pre =
-    poetry install --no-root --with testing -v
-commands =
-    poetry run python -m pytest --cov-report xml:coverage.xml --cov-report term-missing --cov=application_settings tests/ --import-mode importlib
+[tool.tox.env_run_base]
+description = "Run {env_name}"
+skip_missing_interpreters = true
 
-[testenv:py{310,311,312,313,314}-typing]
+# Let Poetry handle the dependencies and installation of the environment
 skip_install = true
-commands_pre =
-    poetry install --with typing -v
-commands =
-    poetry run mypy ./src
+allowlist_externals = ["poetry"]
 
-[testenv:docs]
-skip_install = true
-commands_pre =
-    poetry install --with docs -v
-commands =
-    poetry run mkdocs build -f ./docs/mkdocs.yml -d ../site
+commands_pre = [
+  { replace = "if", condition = "factor.pytest", then = [
+    [
+      "poetry",
+      "install",
+      "--no-root",
+      "--with",
+      "testing",
+      "-v",
+    ],
+  ], extend = true },
+  { replace = "if", condition = "factor.mypy", then = [
+    [
+      "poetry",
+      "install",
+      "--with",
+      "typing",
+      "-v",
+    ],
+  ], extend = true },
+]
 
-[testenv:style]
+commands = [
+  { replace = "if", condition = "factor.pytest", then = [
+    [
+      "poetry",
+      "run",
+      "pytest",
+    ],
+  ], extend = true },
+  { replace = "if", condition = "factor.mypy", then = [
+    [
+      "poetry",
+      "run",
+      "mypy",
+      "{posargs:src}",
+    ],
+  ], extend = true },
+]
+
+[tool.tox.env.style]
+description = "Run style checks"
 skip_install = true
-commands_pre =
-    poetry install --with style -v
-commands =
-    poetry run python -m black --check ./src
-    poetry run isort --check --diff ./src
-    poetry run pylint ./src
-"""
+allowlist_externals = ["poetry"]
+commands_pre = [["poetry", "install", "--with", "style", "-v"]]
+commands = [
+  [
+    "poetry",
+    "run",
+    "black",
+    "--check",
+    "{posargs:src}",
+  ],
+  [
+    "poetry",
+    "run",
+    "isort",
+    "--check",
+    "--diff",
+    "{posargs:src}",
+  ],
+  [
+    "poetry",
+    "run",
+    "pylint",
+    "{posargs:src}",
+  ],
+]
+
+[tool.tox.env.docs]
+description = "Generate documentation"
+skip_install = true
+allowlist_externals = ["poetry"]
+commands_pre = [["poetry", "install", "--with", "docs", "-v"]]
+commands = [["poetry", "run", "mkdocs", "build", "-f", "./docs/mkdocs.yml", "-d", "../site"]]
