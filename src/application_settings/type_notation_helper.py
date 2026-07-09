@@ -1,5 +1,6 @@
 # pylint: disable=consider-alternative-union-syntax, useless-suppression
 """Defines type aliases that handle notational differences between python versions."""
+
 import sys
 from pathlib import Path
 
