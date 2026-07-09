@@ -27,9 +27,9 @@ else:
 class ParameterContainerBase(ParameterContainerSectionBase, ABC):
     """Base class for Config and Settings container classes"""
 
-    @classmethod
+    @staticmethod
     @abstractmethod
-    def default_file_format(cls) -> FileFormat:
+    def default_file_format() -> FileFormat:
         """Return the default file format"""
         # method added here because it is called by default_filename(cls)
 

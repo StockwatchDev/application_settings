@@ -47,8 +47,8 @@ class SettingsBase(ParameterContainerBase):
         """Return ParameterKind.SETTINGS"""
         return ParameterKind.SETTINGS
 
-    @classmethod
-    def default_file_format(cls) -> FileFormat:
+    @staticmethod
+    def default_file_format() -> FileFormat:
         """Return the default file format"""
         return FileFormat.JSON
 
