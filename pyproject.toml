@@ -186,7 +186,7 @@ ignore-imports = "yes"
 requires = ["tox>=4.49"]
 
 # Generates: py310-pytest, py310-mypy, py311-pytest, py311-mypy, ... py314-mypy
-env_list = [{ product = [["py310", "py311", "py312", "py313", "py314"], ["pytest", "mypy"]] }, "style", "docs"]
+env_list = [{ product = [["py310", "py311", "py312", "py313", "py314"], ["pytest", "typing"]] }, "style", "docs"]
 
 [tool.tox.env_run_base]
 description = "Run {env_name}"
@@ -207,7 +207,7 @@ commands_pre = [
       "-v",
     ],
   ], extend = true },
-  { replace = "if", condition = "factor.mypy", then = [
+  { replace = "if", condition = "factor.typing", then = [
     [
       "poetry",
       "install",
@@ -226,7 +226,7 @@ commands = [
       "pytest",
     ],
   ], extend = true },
-  { replace = "if", condition = "factor.mypy", then = [
+  { replace = "if", condition = "factor.typing", then = [
     [
       "poetry",
       "run",
