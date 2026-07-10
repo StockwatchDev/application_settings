@@ -19,15 +19,15 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v6
 
-      - name: Setup python 3.12
+      - name: Setup python 3.14
         uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: "3.14"
 
       - name: Install poetry
         uses: snok/install-poetry@v1
         with:
-          version: 1.7.0
+          version: 2.4.1
           virtualenvs-create: true
           virtualenvs-in-project: true
 
