@@ -42,7 +42,7 @@ jobs:
           virtualenvs-in-project: true
 
       - name: Check lockfile
-        run: poetry lock --check
+        run: poetry check
 
       - name: Install packages
         run: poetry install --no-interaction --no-root --only testrunner
