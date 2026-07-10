@@ -16,12 +16,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ["310", "311", "312", "313", "314"]
+        python: ["3.10", "3.11", "3.12", "3.13", "3.14"]
         toxenv: ["pytest", "typing"]
         include:
-          - python: "314"
+          - python: "3.14"
             toxenv: "style"
-          - python: "314"
+          - python: "3.14"
             toxenv: "docs"
     name: "${{ matrix.toxenv }} for python ${{ matrix.python }}"
 
@@ -48,7 +48,9 @@ jobs:
         run: poetry install --no-interaction --no-root --only testrunner
 
       - name: Run tests
-        run: poetry run tox -e py${{matrix.python}}-${{ matrix.toxenv }}
+        run: |
+          PYVER=$(echo "${{ matrix.python }}" | tr -d '.')
+          poetry run tox -e py${PYVER}-${{ matrix.toxenv }}
 
       - name: Report coverage
         uses: codecov/codecov-action@v6
