@@ -16,12 +16,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+        python: ["310", "311", "312", "313", "314"]
         toxenv: ["pytest", "typing"]
         include:
-          - python: "3.14"
+          - python: "314"
             toxenv: "style"
-          - python: "3.14"
+          - python: "314"
             toxenv: "docs"
     name: "${{ matrix.toxenv }} for python ${{ matrix.python }}"
 
