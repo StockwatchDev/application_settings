@@ -39,9 +39,9 @@ changelog = "https://stockwatchdev.github.io/application_settings/stable/CHANGEL
 
 [tool.poetry]
 include = [
-  { path = "CHANGELOG.md" },
-  { path = "LICENSE" },
-  { path = "README.md" },
+  { path = "CHANGELOG.md", format = "sdist" },
+  { path = "LICENSE", format = "sdist" },
+  { path = "README.md", format = "sdist" },
   { path = "tests", format = "sdist" },
   { path = "examples", format = "sdist" },
 ]
