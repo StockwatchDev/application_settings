@@ -8,16 +8,13 @@ from typing import Optional
 
 import pytest
 import tomlkit
-from loguru import logger
 
 from application_settings import (
-    LOGGER_NAME,
     ConfigBase,
     ConfigSectionBase,
     ValidationError,
     config_filepath_from_cli,
     dataclass,
-    use_standard_logging,
 )
 
 
@@ -261,14 +258,11 @@ def test_kind_string() -> None:
 
 
 def test_section_singleton(caplog: pytest.LogCaptureFixture) -> None:
-    use_standard_logging(enable=True)
     assert AnExample1ConfigSection.get().field1 == "field1"
     assert " accessed before data has been loaded" in caplog.records[-1].msg
-    logger.disable(LOGGER_NAME)
 
 
 def test_paths(toml_file: Path, caplog: pytest.LogCaptureFixture) -> None:
-    use_standard_logging(enable=True)
     # default_filepath:
     if the_path := Config.default_filepath():
         assert the_path.parts[-2] == ".config"
@@ -305,7 +299,6 @@ def test_paths(toml_file: Path, caplog: pytest.LogCaptureFixture) -> None:
     # raising in case of invalid path:
     with pytest.raises(ValueError):
         AnExample1Config.set_filepath('fi:\0\\l*e/p"a?t>h|.t<xt')
-    logger.disable(LOGGER_NAME)
 
 
 def test_decorator() -> None:
@@ -333,7 +326,6 @@ def test_get_defaults(
         return None
 
     monkeypatch.setattr(AnExample1Config, "default_filepath", mock_default_filepath)
-    use_standard_logging(enable=True)
     AnExample1Config.set_filepath("", load=True)
     assert AnExample1Config.get().section1.field1 == "field1"
     assert AnExample1Config.get().section1.field2 == 2
@@ -342,14 +334,12 @@ def test_get_defaults(
     # raising of FileNotFoundError:
     with pytest.raises(FileNotFoundError):
         AnExample1Config.load(throw_if_file_not_found=True)
-    logger.disable(LOGGER_NAME)
     caplog.clear()
 
 
 def test_set_filepath_after_get(
     toml_file: Path, caplog: pytest.LogCaptureFixture
 ) -> None:
-    use_standard_logging(enable=True)
     AnExample1Config.set_filepath(toml_file, load=True)
     assert AnExample1Config.get().section1.field1 == "f1"
     assert AnExample1Config.get().section1.subsec.field3[1] == "no"
@@ -357,7 +347,6 @@ def test_set_filepath_after_get(
     assert AnExampleConfigSubSection.get().field3[1] == "no"
     AnExample1Config.set_filepath("", load=False)
     assert "file is not loaded into the Config." in caplog.records[-1].msg
-    logger.disable(LOGGER_NAME)
 
 
 def test_get(toml_file: Path) -> None:
@@ -376,13 +365,11 @@ def test_get_json(json_file: Path) -> None:
 
 
 def test_get_ini(ini_file: Path, caplog: pytest.LogCaptureFixture) -> None:
-    use_standard_logging(enable=True)
     AnExample1Config.set_filepath(ini_file)
     AnExample1Config.load()
     assert AnExample1Config.get().section1.field1 == "field1"
     assert AnExample1Config.get().section1.field2 == 2
     assert "Unknown file format ini given in" in caplog.records[-2].msg
-    logger.disable(LOGGER_NAME)
 
 
 def test_type_coercion() -> None:

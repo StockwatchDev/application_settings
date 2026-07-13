@@ -5,6 +5,7 @@ This module tests all public functions and classes in `application_settings.para
 ensuring 100% code coverage.
 """
 
+import logging
 from unittest.mock import patch
 
 import pytest
@@ -25,14 +26,14 @@ def test_log_level_config() -> None:
         "get",
         return_value=ApplicationConfigSection(strict_mode=True),
     ):
-        assert log_level(ParameterKind.CONFIG) == "WARNING"
+        assert log_level(ParameterKind.CONFIG) == logging.WARNING
 
     with patch.object(
         ApplicationConfigSection,
         "get",
         return_value=ApplicationConfigSection(strict_mode=False),
     ):
-        assert log_level(ParameterKind.CONFIG) == "DEBUG"
+        assert log_level(ParameterKind.CONFIG) == logging.DEBUG
 
 
 def test_log_level_settings() -> None:
@@ -42,14 +43,14 @@ def test_log_level_settings() -> None:
         "get",
         return_value=ApplicationSettingsSection(strict_mode=True),
     ):
-        assert log_level(ParameterKind.SETTINGS) == "WARNING"
+        assert log_level(ParameterKind.SETTINGS) == logging.WARNING
 
     with patch.object(
         ApplicationSettingsSection,
         "get",
         return_value=ApplicationSettingsSection(strict_mode=False),
     ):
-        assert log_level(ParameterKind.SETTINGS) == "DEBUG"
+        assert log_level(ParameterKind.SETTINGS) == logging.DEBUG
 
 
 def test_log_level_invalid_kind() -> None:

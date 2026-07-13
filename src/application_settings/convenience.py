@@ -2,14 +2,12 @@
 
 import importlib
 import importlib.util
+import logging
 import sys
 from argparse import ArgumentParser
-from logging import Formatter, Handler, LogRecord, getLogger
 from pathlib import Path
 from types import ModuleType
 from typing import Optional
-
-from loguru import logger
 
 from application_settings._private.file_operations import get_container_from_file
 from application_settings.configuring_base import ConfigBase
@@ -19,6 +17,8 @@ from application_settings.protocols import (
     UpdateableParameterContainerProtocol,
 )
 from application_settings.settings_base import SettingsBase
+
+logger = logging.getLogger(__name__)
 
 
 def _get_module_from_file(qualified_classname: str) -> Optional[ModuleType]:
@@ -224,23 +224,3 @@ def _parameters_filepath_from_cli(  # pylint: disable=too-many-arguments,too-man
         elif settings_class:
             settings_class.set_filepath(universal_cmdline_path, load=load)
     return parser
-
-
-def use_standard_logging(enable: bool = False, fmt: Optional[Formatter] = None) -> None:
-    """Propagate Loguru messages to standard logging"""
-
-    class PropagateHandler(Handler):
-        """Handler to propagate log records to standard logging"""
-
-        def emit(self, record: LogRecord) -> None:
-            """Let the standard logger handle the log record"""
-
-            getLogger(record.name).handle(record)
-
-    handler = PropagateHandler()
-    handler.setFormatter(fmt)
-    logger.remove()  # Remove all handlers added so far, including the default one.
-    logger.add(handler, format="{message}")
-
-    if enable:
-        logger.enable(__package__)

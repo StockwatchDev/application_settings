@@ -1,16 +1,18 @@
 """Functions for storing dicts to and loading dicts from file."""
 
+import logging
 from collections.abc import Callable
 from enum import Enum, unique
 from pathlib import Path
 from typing import Any, Optional, cast
 
-from loguru import logger
 from pathvalidate import is_valid_filepath
 
 from application_settings._private.json_file_operations import load_json, save_json
 from application_settings._private.toml_file_operations import load_toml, save_toml
 from application_settings.parameter_kind import ParameterKind
+
+logger = logging.getLogger(__name__)
 
 
 @unique

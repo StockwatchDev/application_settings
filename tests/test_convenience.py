@@ -19,7 +19,6 @@ from application_settings.convenience import (
     config_filepath_from_cli,
     parameters_folderpath_from_cli,
     settings_filepath_from_cli,
-    use_standard_logging,
 )
 from application_settings.parameter_kind import ParameterKind, ParameterKindStr
 
@@ -353,12 +352,3 @@ def test_parameters_folderpath_from_cli() -> None:
     parser = ArgumentParser()
     result = parameters_folderpath_from_cli(parser=parser)
     assert isinstance(result, ArgumentParser)
-
-
-def test_use_standard_logging() -> None:
-    """Test enabling standard logging."""
-    with patch("application_settings.convenience.logger") as mock_logger:
-        use_standard_logging(enable=True)
-        mock_logger.remove.assert_called_once()
-        mock_logger.add.assert_called_once()
-        mock_logger.enable.assert_called_once()

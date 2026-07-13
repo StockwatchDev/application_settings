@@ -1,12 +1,13 @@
 """Functions for storing dicts to and loading dicts from json files."""
 
 import json
+import logging
 from pathlib import Path
 from typing import Any
 
-from loguru import logger
-
 from application_settings._private.file_operations_utils import deep_update
+
+logger = logging.getLogger(__name__)
 
 
 def load_json(path: Path) -> dict[str, Any]:
