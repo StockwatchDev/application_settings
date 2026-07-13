@@ -14,6 +14,7 @@ dependencies = [
   "pydantic (>=2.0)",
   "tomlkit (>=0.12)",
   "attributes-doc (>=0.3.0)",
+  "typing-extensions (>=4.5.0) ; python_version < '3.11'",
 ]
 
 classifiers = [
@@ -37,7 +38,26 @@ repository = "https://github.com/StockwatchDev/application_settings"
 documentation = "https://stockwatchdev.github.io/application_settings/stable/"
 changelog = "https://stockwatchdev.github.io/application_settings/stable/CHANGELOG/"
 
+[dependency-groups]
+testing = ["pytest (>=7.0)", "pytest-cov (>=4.0)"]
+typing = [
+  "mypy (>=1.1)",
+  # "lxml (>=4.9)",
+]
+style = ["black (>=22.10)", "isort (>=5.12)", "pylint (>=3.3)"]
+testrunner = ["tox (>=4.4)"]
+docs = [
+  "mkdocs (>=1.5)",
+  "mkdocstrings-python (>=1.5)",
+  "mkdocs-material (>=9.2)",
+  "pymdown-extensions (>=10.1)",
+  "mkdocs-include-markdown-plugin (>=6.0)",
+  "mkdocs-gen-files (>=0.5)",
+  "mkdocs-literate-nav (>=0.6)",
+]
+
 [tool.poetry]
+requires-poetry = ">=2.3"
 include = [
   { path = "CHANGELOG.md", format = "sdist" },
   { path = "LICENSE", format = "sdist" },
@@ -46,49 +66,20 @@ include = [
   { path = "examples", format = "sdist" },
 ]
 
-[tool.poetry.dependencies]
-typing-extensions = { version = ">=4.5.0", python = "<3.12" }
-
 [tool.poetry.group.testing]
 optional = true
-
-[tool.poetry.group.testing.dependencies]
-pytest = ">=7.0"
-pytest-cov = ">=4.0"
 
 [tool.poetry.group.typing]
 optional = true
 
-[tool.poetry.group.typing.dependencies]
-mypy = ">=1.1"
-lxml = ">=4.9"
-
 [tool.poetry.group.style]
 optional = true
-
-[tool.poetry.group.style.dependencies]
-black = ">=22.10"
-isort = ">=5.12"
-pylint = ">=3.3"
 
 [tool.poetry.group.testrunner]
 optional = true
 
-[tool.poetry.group.testrunner.dependencies]
-tox = ">=4.4"
-
 [tool.poetry.group.docs]
 optional = true
-
-[tool.poetry.group.docs.dependencies]
-black = ">=22.10"
-mkdocs = ">=1.5"
-mkdocstrings-python = ">=1.5"
-mkdocs-material = ">=9.2"
-pymdown-extensions = ">=10.1"
-mkdocs-include-markdown-plugin = ">=6.0"
-mkdocs-gen-files = ">=0.5"
-mkdocs-literate-nav = ">=0.6"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
