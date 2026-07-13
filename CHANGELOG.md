@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed - 0.6.0
 
 - Type alias PathOpt, use Optional[Path] instead (breaking)
+- Support for Python 3.9
 
 ## [0.5.0] - Released 2024-10-12
 
