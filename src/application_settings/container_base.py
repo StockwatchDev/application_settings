@@ -1,5 +1,6 @@
 """Base class for a container (= root section) for configuration and settings."""
 
+import logging
 import sys
 from abc import ABC, abstractmethod
 from dataclasses import asdict
@@ -7,7 +8,6 @@ from pathlib import Path
 from re import sub
 from typing import Any, Optional
 
-from loguru import logger
 from pathvalidate import is_valid_filepath
 
 from application_settings.container_section_base import ParameterContainerSectionBase
@@ -22,6 +22,9 @@ if sys.version_info >= (3, 11):
     from typing import Self
 else:
     from typing_extensions import Self
+
+
+logger = logging.getLogger(__name__)
 
 
 class ParameterContainerBase(ParameterContainerSectionBase, ABC):
