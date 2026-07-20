@@ -1432,7 +1432,7 @@
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -1458,6 +1458,7 @@
               Bases: <code><a class="autorefs autorefs-internal" title="ParameterContainerSectionBase (application_settings.container_section_base.ParameterContainerSectionBase)" href="../container_section_base/#application_settings.container_section_base.ParameterContainerSectionBase">ParameterContainerSectionBase</a></code></p>
 
 
+
         <p>Base class for ConfigSection classes, implements the abstract methods of the base(s)</p>
 
 
@@ -1470,7 +1471,7 @@
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -1501,12 +1502,12 @@
         <p>Return ParameterKind.CONFIG</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/configuring_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">kind</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ParameterKind</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ParameterKind.CONFIG&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">ParameterKind</span><span class="o">.</span><span class="n">CONFIG</span>
@@ -1540,6 +1541,7 @@
               Bases: <code><a class="autorefs autorefs-internal" title="ParameterContainerBase (application_settings.container_base.ParameterContainerBase)" href="../container_base/#application_settings.container_base.ParameterContainerBase">ParameterContainerBase</a></code></p>
 
 
+
         <p>Base class for main Config class, implements the abstract methods of the base(s)</p>
 
 
@@ -1552,7 +1554,7 @@
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -1608,12 +1610,12 @@
         <p>Return ParameterKind.CONFIG</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/configuring_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">kind</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ParameterKind</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ParameterKind.CONFIG&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">ParameterKind</span><span class="o">.</span><span class="n">CONFIG</span>
@@ -1643,12 +1645,12 @@
         <p>Return the default file format</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/configuring_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">43</span>
-<span class="normal">44</span>
-<span class="normal">45</span>
-<span class="normal">46</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">default_file_format</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">FileFormat</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the default file format&quot;&quot;&quot;</span>  <span class="c1"># disable=duplicate-code</span>
     <span class="k">return</span> <span class="n">FileFormat</span><span class="o">.</span><span class="n">TOML</span>

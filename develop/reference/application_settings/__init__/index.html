@@ -2330,7 +2330,7 @@
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -2356,6 +2356,7 @@
               Bases: <code><a class="autorefs autorefs-internal" title="ParameterContainerBase (application_settings.container_base.ParameterContainerBase)" href="../container_base/#application_settings.container_base.ParameterContainerBase">ParameterContainerBase</a></code></p>
 
 
+
         <p>Base class for main Config class, implements the abstract methods of the base(s)</p>
 
 
@@ -2368,7 +2369,7 @@
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -2424,12 +2425,12 @@
         <p>Return ParameterKind.CONFIG</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/configuring_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">kind</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ParameterKind</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ParameterKind.CONFIG&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">ParameterKind</span><span class="o">.</span><span class="n">CONFIG</span>
@@ -2459,12 +2460,12 @@
         <p>Return the default file format</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/configuring_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">43</span>
-<span class="normal">44</span>
-<span class="normal">45</span>
-<span class="normal">46</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">default_file_format</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">FileFormat</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the default file format&quot;&quot;&quot;</span>  <span class="c1"># disable=duplicate-code</span>
     <span class="k">return</span> <span class="n">FileFormat</span><span class="o">.</span><span class="n">TOML</span>
@@ -2498,6 +2499,7 @@
               Bases: <code><a class="autorefs autorefs-internal" title="ParameterContainerSectionBase (application_settings.container_section_base.ParameterContainerSectionBase)" href="../container_section_base/#application_settings.container_section_base.ParameterContainerSectionBase">ParameterContainerSectionBase</a></code></p>
 
 
+
         <p>Base class for ConfigSection classes, implements the abstract methods of the base(s)</p>
 
 
@@ -2510,7 +2512,7 @@
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -2541,12 +2543,12 @@
         <p>Return ParameterKind.CONFIG</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/configuring_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">kind</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ParameterKind</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ParameterKind.CONFIG&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">ParameterKind</span><span class="o">.</span><span class="n">CONFIG</span>
@@ -2580,6 +2582,7 @@
               Bases: <code><span title="enum.Enum">Enum</span></code></p>
 
 
+
         <p>The two kinds of parameters that are supported by application_settings</p>
 
 
@@ -2592,7 +2595,7 @@
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -2627,6 +2630,7 @@
               Bases: <code><a class="autorefs autorefs-internal" title="ApplicationSettingsContainerSectionBase (application_settings.parametrization.ApplicationSettingsContainerSectionBase)" href="../parametrization/#application_settings.parametrization.ApplicationSettingsContainerSectionBase">ApplicationSettingsContainerSectionBase</a></code></p>
 
 
+
         <p>Config parameters for the application_settings library package</p>
 
 
@@ -2639,7 +2643,7 @@
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -2724,7 +2728,7 @@ defaults to 'application_settings.ConfigBase' but should be given an application
         <p>Return ParameterKind.CONFIG</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">175</span>
 <span class="normal">176</span>
@@ -2763,6 +2767,7 @@ defaults to 'application_settings.ConfigBase' but should be given an application
               Bases: <code><a class="autorefs autorefs-internal" title="ApplicationSettingsContainerSectionBase (application_settings.parametrization.ApplicationSettingsContainerSectionBase)" href="../parametrization/#application_settings.parametrization.ApplicationSettingsContainerSectionBase">ApplicationSettingsContainerSectionBase</a></code></p>
 
 
+
         <p>Settings parameters for the application_settings library package</p>
 
 
@@ -2775,7 +2780,7 @@ defaults to 'application_settings.ConfigBase' but should be given an application
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -2797,9 +2802,7 @@ defaults to 'application_settings.ConfigBase' but should be given an application
   </span>
 
 </h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">settings_container_class</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;application_settings.SettingsBase&quot;</span>
-<span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">settings_container_class</span> <span class="o">=</span> <span class="s1">&#39;application_settings.SettingsBase&#39;</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -2862,7 +2865,7 @@ defaults to 'application_settings.SettingsBase' but should be given an applicati
         <p>Return ParameterKind.SETTINGS</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">154</span>
 <span class="normal">155</span>
@@ -2901,6 +2904,7 @@ defaults to 'application_settings.SettingsBase' but should be given an applicati
               Bases: <code><a class="autorefs autorefs-internal" title="ParameterContainerSectionProtocol (application_settings.protocols.ParameterContainerSectionProtocol)" href="../protocols/#application_settings.protocols.ParameterContainerSectionProtocol">ParameterContainerSectionProtocol</a></code>, <code><span title="typing.Protocol">Protocol</span></code></p>
 
 
+
         <p>Protocol for a Parameter Container without update (i.e., Config)</p>
 
 
@@ -2913,7 +2917,7 @@ defaults to 'application_settings.SettingsBase' but should be given an applicati
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -2944,7 +2948,7 @@ defaults to 'application_settings.SettingsBase' but should be given an applicati
         <p>Return the default file format</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">55</span>
 <span class="normal">56</span>
@@ -2978,7 +2982,7 @@ defaults to 'application_settings.SettingsBase' but should be given an applicati
 and underscores to seperate words.</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">59</span>
 <span class="normal">60</span>
@@ -3013,7 +3017,7 @@ and underscores to seperate words.</p>
         <p>Return the kind_string, lowercase, with the extension that fits the file_format.</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">64</span>
 <span class="normal">65</span>
@@ -3048,7 +3052,7 @@ and underscores to seperate words.</p>
 If you prefer to not have a default path then overwrite this method and return None.</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">68</span>
 <span class="normal">69</span>
@@ -3112,7 +3116,7 @@ If you prefer to not have a default path then overwrite this method and return N
     </table>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">76</span>
 <span class="normal">77</span>
@@ -3153,7 +3157,7 @@ If you prefer to not have a default path then overwrite this method and return N
         <p>Return the path for the file that holds the config / settings.</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">84</span>
 <span class="normal">85</span>
@@ -3239,7 +3243,7 @@ If you prefer to not have a default path then overwrite this method and return N
     </table>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">88</span>
 <span class="normal">89</span>
@@ -3286,7 +3290,7 @@ If you prefer to not have a default path then overwrite this method and return N
         <p>Get has been called on a section before a load was done; handle this.</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 99</span>
 <span class="normal">100</span>
@@ -3323,6 +3327,7 @@ If you prefer to not have a default path then overwrite this method and return N
               Bases: <code><span title="typing.Protocol">Protocol</span></code></p>
 
 
+
         <p>Protocol for a ParameterContainerSection</p>
 
 
@@ -3335,7 +3340,7 @@ If you prefer to not have a default path then overwrite this method and return N
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -3366,7 +3371,7 @@ If you prefer to not have a default path then overwrite this method and return N
         <p>Return either ParameterKind.CONFIG or ParameterKind.SETTINGS</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">22</span>
 <span class="normal">23</span>
@@ -3399,7 +3404,7 @@ If you prefer to not have a default path then overwrite this method and return N
         <p>Return either 'Config' or 'Settings'</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">26</span>
 <span class="normal">27</span>
@@ -3432,7 +3437,7 @@ If you prefer to not have a default path then overwrite this method and return N
         <p>Get the singleton; if not existing, create it. Loading from file only done for a container.</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">30</span>
 <span class="normal">31</span>
@@ -3465,7 +3470,7 @@ If you prefer to not have a default path then overwrite this method and return N
         <p>Get has been called on a section before a load was done; handle this.</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">34</span>
 <span class="normal">35</span>
@@ -3498,7 +3503,7 @@ If you prefer to not have a default path then overwrite this method and return N
         <p>Create a new dataclass instance using data and set the singleton.</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">38</span>
 <span class="normal">39</span>
@@ -3535,6 +3540,7 @@ If you prefer to not have a default path then overwrite this method and return N
               Bases: <code><a class="autorefs autorefs-internal" title="ParameterContainerProtocol (application_settings.protocols.ParameterContainerProtocol)" href="../protocols/#application_settings.protocols.ParameterContainerProtocol">ParameterContainerProtocol</a></code>, <code><span title="typing.Protocol">Protocol</span></code></p>
 
 
+
         <p>Protocol for a Parameter Container that has an update method (i.e., Settings)</p>
 
 
@@ -3547,7 +3553,7 @@ If you prefer to not have a default path then overwrite this method and return N
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -3578,7 +3584,7 @@ If you prefer to not have a default path then overwrite this method and return N
         <p>Update the settings with data specified in changes and save.</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/protocols.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">111</span>
 <span class="normal">112</span>
@@ -3615,6 +3621,7 @@ If you prefer to not have a default path then overwrite this method and return N
               Bases: <code><a class="autorefs autorefs-internal" title="ParameterContainerBase (application_settings.container_base.ParameterContainerBase)" href="../container_base/#application_settings.container_base.ParameterContainerBase">ParameterContainerBase</a></code></p>
 
 
+
         <p>Base class for main Settings class, implements the abstract methods of the base(s)</p>
 
 
@@ -3627,7 +3634,7 @@ If you prefer to not have a default path then overwrite this method and return N
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -3683,12 +3690,12 @@ If you prefer to not have a default path then overwrite this method and return N
         <p>Return ParameterKind.SETTINGS</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/settings_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">45</span>
-<span class="normal">46</span>
-<span class="normal">47</span>
-<span class="normal">48</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">kind</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ParameterKind</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ParameterKind.SETTINGS&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">ParameterKind</span><span class="o">.</span><span class="n">SETTINGS</span>
@@ -3706,7 +3713,7 @@ If you prefer to not have a default path then overwrite this method and return N
 
 
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
   </span>
 
 </h3>
@@ -3718,13 +3725,13 @@ If you prefer to not have a default path then overwrite this method and return N
         <p>Return the default file format</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/settings_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span>
-<span class="normal">53</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">default_file_format</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FileFormat</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">default_file_format</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">FileFormat</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the default file format&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">FileFormat</span><span class="o">.</span><span class="n">JSON</span>
 </code></pre></div></td></tr></table></div>
@@ -3776,9 +3783,13 @@ If you prefer to not have a default path then overwrite this method and return N
     </table>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/settings_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">55</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
 <span class="normal">56</span>
 <span class="normal">57</span>
 <span class="normal">58</span>
@@ -3787,11 +3798,7 @@ If you prefer to not have a default path then overwrite this method and return N
 <span class="normal">61</span>
 <span class="normal">62</span>
 <span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="normal">64</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">changes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the settings with data specified in changes and save.</span>
 
@@ -3835,6 +3842,7 @@ If you prefer to not have a default path then overwrite this method and return N
               Bases: <code><a class="autorefs autorefs-internal" title="ParameterContainerSectionBase (application_settings.container_section_base.ParameterContainerSectionBase)" href="../container_section_base/#application_settings.container_section_base.ParameterContainerSectionBase">ParameterContainerSectionBase</a></code></p>
 
 
+
         <p>Base class for SettingsSection classes, implements the abstract methods of the base(s)</p>
 
 
@@ -3847,7 +3855,7 @@ If you prefer to not have a default path then overwrite this method and return N
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -3878,12 +3886,12 @@ If you prefer to not have a default path then overwrite this method and return N
         <p>Return ParameterKind.SETTINGS</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/settings_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">kind</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ParameterKind</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ParameterKind.SETTINGS&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">ParameterKind</span><span class="o">.</span><span class="n">SETTINGS</span>
@@ -3910,13 +3918,7 @@ If you prefer to not have a default path then overwrite this method and return N
 
 
 </h2>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">config_filepath_from_cli</span><span class="p">(</span>
-    <span class="n">config_class</span><span class="o">=</span><span class="n">ConfigBase</span><span class="p">,</span>
-    <span class="n">parser</span><span class="o">=</span><span class="n">ArgumentParser</span><span class="p">(),</span>
-    <span class="n">short_option</span><span class="o">=</span><span class="s2">&quot;-c&quot;</span><span class="p">,</span>
-    <span class="n">long_option</span><span class="o">=</span><span class="s2">&quot;--config_filepath&quot;</span><span class="p">,</span>
-    <span class="n">load</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">config_filepath_from_cli</span><span class="p">(</span><span class="n">config_class</span><span class="o">=</span><span class="n">ConfigBase</span><span class="p">,</span> <span class="n">parser</span><span class="o">=</span><span class="n">ArgumentParser</span><span class="p">(),</span> <span class="n">short_option</span><span class="o">=</span><span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="n">long_option</span><span class="o">=</span><span class="s1">&#39;--config_filepath&#39;</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -3924,7 +3926,7 @@ If you prefer to not have a default path then overwrite this method and return N
         <p>Add a commandline option for the config file and set filepath if it is given</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/convenience.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">120</span>
 <span class="normal">121</span>
@@ -3975,14 +3977,7 @@ If you prefer to not have a default path then overwrite this method and return N
 
 
 </h2>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">parameters_folderpath_from_cli</span><span class="p">(</span>
-    <span class="n">config_class</span><span class="o">=</span><span class="n">ConfigBase</span><span class="p">,</span>
-    <span class="n">settings_class</span><span class="o">=</span><span class="n">SettingsBase</span><span class="p">,</span>
-    <span class="n">parser</span><span class="o">=</span><span class="n">ArgumentParser</span><span class="p">(),</span>
-    <span class="n">short_option</span><span class="o">=</span><span class="s2">&quot;-p&quot;</span><span class="p">,</span>
-    <span class="n">long_option</span><span class="o">=</span><span class="s2">&quot;--parameters_folderpath&quot;</span><span class="p">,</span>
-    <span class="n">load</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">parameters_folderpath_from_cli</span><span class="p">(</span><span class="n">config_class</span><span class="o">=</span><span class="n">ConfigBase</span><span class="p">,</span> <span class="n">settings_class</span><span class="o">=</span><span class="n">SettingsBase</span><span class="p">,</span> <span class="n">parser</span><span class="o">=</span><span class="n">ArgumentParser</span><span class="p">(),</span> <span class="n">short_option</span><span class="o">=</span><span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="n">long_option</span><span class="o">=</span><span class="s1">&#39;--parameters_folderpath&#39;</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -3991,7 +3986,7 @@ If you prefer to not have a default path then overwrite this method and return N
 <p>Default filenames will be appended to the folderpath for config and settings.</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/convenience.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">160</span>
 <span class="normal">161</span>
@@ -4048,13 +4043,7 @@ If you prefer to not have a default path then overwrite this method and return N
 
 
 </h2>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">settings_filepath_from_cli</span><span class="p">(</span>
-    <span class="n">settings_class</span><span class="o">=</span><span class="n">SettingsBase</span><span class="p">,</span>
-    <span class="n">parser</span><span class="o">=</span><span class="n">ArgumentParser</span><span class="p">(),</span>
-    <span class="n">short_option</span><span class="o">=</span><span class="s2">&quot;-s&quot;</span><span class="p">,</span>
-    <span class="n">long_option</span><span class="o">=</span><span class="s2">&quot;--settings_filepath&quot;</span><span class="p">,</span>
-    <span class="n">load</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">settings_filepath_from_cli</span><span class="p">(</span><span class="n">settings_class</span><span class="o">=</span><span class="n">SettingsBase</span><span class="p">,</span> <span class="n">parser</span><span class="o">=</span><span class="n">ArgumentParser</span><span class="p">(),</span> <span class="n">short_option</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span> <span class="n">long_option</span><span class="o">=</span><span class="s1">&#39;--settings_filepath&#39;</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -4062,7 +4051,7 @@ If you prefer to not have a default path then overwrite this method and return N
         <p>Add a commandline option for the settings file and set filepath if it is given</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/convenience.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">140</span>
 <span class="normal">141</span>
@@ -4121,7 +4110,7 @@ If you prefer to not have a default path then overwrite this method and return N
         <p>Propagate Loguru messages to standard logging</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/convenience.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">229</span>
 <span class="normal">230</span>

@@ -1454,7 +1454,7 @@
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -1480,6 +1480,7 @@
               Bases: <code><a class="autorefs autorefs-internal" title="ParameterContainerSectionBase (application_settings.container_section_base.ParameterContainerSectionBase)" href="../container_section_base/#application_settings.container_section_base.ParameterContainerSectionBase">ParameterContainerSectionBase</a></code></p>
 
 
+
         <p>Base class for SettingsSection classes, implements the abstract methods of the base(s)</p>
 
 
@@ -1492,7 +1493,7 @@
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -1523,12 +1524,12 @@
         <p>Return ParameterKind.SETTINGS</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/settings_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">kind</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ParameterKind</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ParameterKind.SETTINGS&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">ParameterKind</span><span class="o">.</span><span class="n">SETTINGS</span>
@@ -1562,6 +1563,7 @@
               Bases: <code><a class="autorefs autorefs-internal" title="ParameterContainerBase (application_settings.container_base.ParameterContainerBase)" href="../container_base/#application_settings.container_base.ParameterContainerBase">ParameterContainerBase</a></code></p>
 
 
+
         <p>Base class for main Settings class, implements the abstract methods of the base(s)</p>
 
 
@@ -1574,7 +1576,7 @@
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -1630,12 +1632,12 @@
         <p>Return ParameterKind.SETTINGS</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/settings_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">45</span>
-<span class="normal">46</span>
-<span class="normal">47</span>
-<span class="normal">48</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">kind</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ParameterKind</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ParameterKind.SETTINGS&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">ParameterKind</span><span class="o">.</span><span class="n">SETTINGS</span>
@@ -1653,7 +1655,7 @@
 
 
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
   </span>
 
 </h3>
@@ -1665,13 +1667,13 @@
         <p>Return the default file format</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/settings_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span>
-<span class="normal">53</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">default_file_format</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FileFormat</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">default_file_format</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">FileFormat</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the default file format&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">FileFormat</span><span class="o">.</span><span class="n">JSON</span>
 </code></pre></div></td></tr></table></div>
@@ -1723,9 +1725,13 @@
     </table>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/settings_base.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">55</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
 <span class="normal">56</span>
 <span class="normal">57</span>
 <span class="normal">58</span>
@@ -1734,11 +1740,7 @@
 <span class="normal">61</span>
 <span class="normal">62</span>
 <span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="normal">64</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">changes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the settings with data specified in changes and save.</span>
 

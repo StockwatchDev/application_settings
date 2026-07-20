@@ -1642,7 +1642,7 @@
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -1668,6 +1668,7 @@
               Bases: <code><span title="abc.ABC">ABC</span></code></p>
 
 
+
         <p>Behavior for parametrization of the application_settings library package</p>
 
 
@@ -1680,7 +1681,7 @@
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -1712,7 +1713,7 @@
         <p>Return either ParameterKind.CONFIG or ParameterKind.SETTINGS</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">40</span>
 <span class="normal">41</span>
@@ -1747,7 +1748,7 @@
         <p>Return either 'Config' or 'Settings'</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">45</span>
 <span class="normal">46</span>
@@ -1782,7 +1783,7 @@
         <p>Get the singleton; if not existing, create it. Loading from file only done for a container.</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">50</span>
 <span class="normal">51</span>
@@ -1829,7 +1830,7 @@
         <p>Get has been called on a section before a load was done; handle this.</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">61</span>
 <span class="normal">62</span>
@@ -1862,7 +1863,7 @@
         <p>Create a new dataclass instance using data and set the singleton.</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">66</span>
 <span class="normal">67</span>
@@ -1921,6 +1922,7 @@
               Bases: <code><a class="autorefs autorefs-internal" title="ApplicationSettingsContainerSectionBase (application_settings.parametrization.ApplicationSettingsContainerSectionBase)" href="#application_settings.parametrization.ApplicationSettingsContainerSectionBase">ApplicationSettingsContainerSectionBase</a></code></p>
 
 
+
         <p>Settings parameters for the application_settings library package</p>
 
 
@@ -1933,7 +1935,7 @@
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -1955,9 +1957,7 @@
   </span>
 
 </h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">settings_container_class</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;application_settings.SettingsBase&quot;</span>
-<span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">settings_container_class</span> <span class="o">=</span> <span class="s1">&#39;application_settings.SettingsBase&#39;</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -2020,7 +2020,7 @@ defaults to 'application_settings.SettingsBase' but should be given an applicati
         <p>Return ParameterKind.SETTINGS</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">154</span>
 <span class="normal">155</span>
@@ -2059,6 +2059,7 @@ defaults to 'application_settings.SettingsBase' but should be given an applicati
               Bases: <code><a class="autorefs autorefs-internal" title="ApplicationSettingsContainerSectionBase (application_settings.parametrization.ApplicationSettingsContainerSectionBase)" href="#application_settings.parametrization.ApplicationSettingsContainerSectionBase">ApplicationSettingsContainerSectionBase</a></code></p>
 
 
+
         <p>Config parameters for the application_settings library package</p>
 
 
@@ -2071,7 +2072,7 @@ defaults to 'application_settings.SettingsBase' but should be given an applicati
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -2156,7 +2157,7 @@ defaults to 'application_settings.ConfigBase' but should be given an application
         <p>Return ParameterKind.CONFIG</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">175</span>
 <span class="normal">176</span>
@@ -2196,7 +2197,7 @@ defaults to 'application_settings.ConfigBase' but should be given an application
         <p>Return the log level taking into consideration whether or not strict_mode is applied</p>
 
 
-            <details class="quote">
+            <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">28</span>
 <span class="normal">29</span>

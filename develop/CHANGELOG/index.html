@@ -1749,13 +1749,14 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <h3 id="removed-060">Removed - 0.6.0</h3>
 <ul>
 <li>Type alias PathOpt, use Optional[Path] instead (breaking)</li>
+<li>Support for Python 3.9</li>
 </ul>
 <h2 id="050-released-2024-10-12">[0.5.0] - Released 2024-10-12</h2>
 <h3 id="added-050">Added - 0.5.0</h3>
 <ul>
 <li>Enable file inclusion for json config files
   (Issue <a href="https://github.com/StockwatchDev/application_settings/issues/79">#79</a>)</li>
-<li>Document parameters by means of docstrings according to (the rejected) 
+<li>Document parameters by means of docstrings according to (the rejected)
   <a href="https://peps.python.org/pep-0224/">PEP224</a>
   (Issue <a href="https://github.com/StockwatchDev/application_settings/issues/140">#140</a>)</li>
 <li>Allow to specify the container class that takes care of loading in the parameter file rather than in
@@ -1784,8 +1785,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <ul>
 <li>pydantic.dataclasses.dataclass and pydantic.ValidationError now exported from our
   namespace (Issue <a href="https://github.com/StockwatchDev/application_settings/issues/36">#36</a>)</li>
-<li>Exceptions added to docstrings (Issue 
-  <a href="https://github.com/StockwatchDev/application_settings/issues/16">#16</a>)</li>
+<li>Exceptions added to docstrings (Issue <a href="https://github.com/StockwatchDev/application_settings/issues/16">#16</a>)</li>
 <li>Upgraded pydantic to version 2.0, which has a different way of doing type conversion,
   see the <a href="https://docs.pydantic.dev/2.0/usage/conversion_table/">conversion table</a>
   (Issue <a href="https://github.com/StockwatchDev/application_settings/issues/75">#75</a>)</li>
@@ -1803,8 +1803,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <li>Support for subsections (arbitrary depth) (Issue
   <a href="https://github.com/StockwatchDev/application_settings/issues/5">#5</a>).</li>
 <li>Sections also stored as a singleton, so that libs can define and access parameters
-  via their own Section (Issue 
-  <a href="https://github.com/StockwatchDev/application_settings/issues/46">#46</a>).</li>
+  via their own Section (Issue <a href="https://github.com/StockwatchDev/application_settings/issues/46">#46</a>).</li>
 <li>Literal SectionTypeStr exported.</li>
 <li>Convenience functions to specify filepath for config and settings via command-line
   [<a href="https://github.com/StockwatchDev/application_settings/issues/53">#53</a>]</li>
