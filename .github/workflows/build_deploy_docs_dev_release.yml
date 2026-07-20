@@ -51,27 +51,26 @@ jobs:
         run: echo "FOLDERNAME=develop" >> $GITHUB_ENV
         if: github.event_name != 'release'
 
-      - name: Setup python 3.12
+      - name: Setup python 3.14
         uses: actions/setup-python@v6
         with:
-          python-version: 3.12
+          python-version: 3.14
 
       - name: Install poetry
         uses: snok/install-poetry@v1
         with:
-          version: 1.7.0
+          version: 2.4.1
           virtualenvs-create: true
           virtualenvs-in-project: true
 
       - name: Check lockfile
-        run: poetry lock --check
+        run: poetry check
 
       - name: Install packages
         run: poetry install --no-interaction --with docs
 
       - name: Build html
-        run:
-          poetry run mkdocs build -f ./docs/mkdocs.yml -d ../site
+        run: poetry run mkdocs build -f ./docs/mkdocs.yml -d ../site
 
       - name: Setup git config
         run: |

@@ -1,7 +1,7 @@
 """Module for handling settings."""
 
 import sys
-from dataclasses import replace
+from dataclasses import KW_ONLY, replace
 from typing import Any, TypeVar
 
 from application_settings.container_base import ParameterContainerBase
@@ -11,9 +11,6 @@ from application_settings.parametrization import ApplicationSettingsSection
 from application_settings.protocols import UpdateableParameterContainerProtocol
 
 from ._private.file_operations import FileFormat
-
-if sys.version_info >= (3, 10):
-    from dataclasses import KW_ONLY
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -37,8 +34,7 @@ class SettingsSectionBase(ParameterContainerSectionBase):
 class SettingsBase(ParameterContainerBase):
     """Base class for main Settings class, implements the abstract methods of the base(s)"""
 
-    if sys.version_info >= (3, 10):
-        _: KW_ONLY
+    _: KW_ONLY
     application_settings: ApplicationSettingsSection = ApplicationSettingsSection()
     """Holds the settings parameters for application_settings"""
 
@@ -47,8 +43,8 @@ class SettingsBase(ParameterContainerBase):
         """Return ParameterKind.SETTINGS"""
         return ParameterKind.SETTINGS
 
-    @classmethod
-    def default_file_format(cls) -> FileFormat:
+    @staticmethod
+    def default_file_format() -> FileFormat:
         """Return the default file format"""
         return FileFormat.JSON
 

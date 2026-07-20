@@ -1,95 +1,129 @@
-[tool.poetry]
+[project]
 name = "application_settings"
 version = "0.6.0.dev"
 description = "For providing a python application with configuration and/or settings"
-authors = ["Stockwatchdevs <stockwatchdevs@gmail.com>"]
-license = "MIT"
 readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Stockwatchdevs", email = "stockwatchdevs@gmail.com" }]
+keywords = ["configuration", "settings", "dataclass", "pydantic", "toml", "json"]
+dynamic = ["classifiers"]
+requires-python = ">=3.10"
+dependencies = [
+  "loguru (>=0.7.0)",
+  "pathvalidate (>=2.5)",
+  "pydantic (>=2.0)",
+  "tomlkit (>=0.12)",
+  "attributes-doc (>=0.3.0)",
+  "typing-extensions (>=4.5.0) ; python_version < '3.11'",
+]
+
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Natural Language :: English",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Typing :: Typed",
+]
+
+[project.urls]
 homepage = "https://github.com/StockwatchDev/application_settings"
 repository = "https://github.com/StockwatchDev/application_settings"
 documentation = "https://stockwatchdev.github.io/application_settings/stable/"
-keywords = ["configuration", "settings", "dataclass", "pydantic", "toml"]
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "Natural Language :: English",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Typing :: Typed",
+changelog = "https://stockwatchdev.github.io/application_settings/stable/CHANGELOG/"
+
+[dependency-groups]
+testing = ["pytest (>=7.0)", "pytest-cov (>=4.0)"]
+typing = [
+  "mypy (>=1.1)",
+  # "lxml (>=4.9)",
 ]
+style = ["black (>=22.10)", "isort (>=5.12)", "pylint (>=3.3)"]
+testrunner = ["tox (>=4.4)"]
+docs = [
+  "mkdocs (>=1.5)",
+  "mkdocstrings-python (>=1.5)",
+  "mkdocs-material (>=9.2)",
+  "pymdown-extensions (>=10.1)",
+  "mkdocs-include-markdown-plugin (>=6.0)",
+  "mkdocs-gen-files (>=0.5)",
+  "mkdocs-literate-nav (>=0.6)",
+]
+
+[tool.poetry]
+requires-poetry = ">=2.3"
 include = [
-    { path = "CHANGELOG.md" },
-    { path = "LICENSE" },
-    { path = "README.md" },
-    { path = "tests", format = "sdist" },
-    { path = "examples", format = "sdist" },
+  { path = "CHANGELOG.md", format = "sdist" },
+  { path = "LICENSE", format = "sdist" },
+  { path = "README.md", format = "sdist" },
+  { path = "tests", format = "sdist" },
+  { path = "examples", format = "sdist" },
 ]
-
-[tool.poetry.urls]
-Changelog = "https://stockwatchdev.github.io/application_settings/stable/CHANGELOG/"
-
-[tool.poetry.dependencies]
-python = ">=3.9"
-loguru = ">=0.7.0"
-pathvalidate = ">=2.5"
-pydantic = ">=2.0"
-tomlkit = ">=0.12"
-typing-extensions = { version = ">=4.5.0", python = "<3.12" }
-attributes-doc = ">=0.3.0"
 
 [tool.poetry.group.testing]
 optional = true
 
-[tool.poetry.group.testing.dependencies]
-pytest = ">=7.0"
-pytest-cov = ">=4.0"
-
 [tool.poetry.group.typing]
 optional = true
-
-[tool.poetry.group.typing.dependencies]
-mypy = ">=1.1"
-lxml = ">=4.9"
 
 [tool.poetry.group.style]
 optional = true
 
-[tool.poetry.group.style.dependencies]
-black = ">=22.10"
-isort = ">=5.12"
-pylint = ">=3.3"
-
 [tool.poetry.group.testrunner]
 optional = true
 
-[tool.poetry.group.testrunner.dependencies]
-tox = ">=4.4"
-
 [tool.poetry.group.docs]
 optional = true
-
-[tool.poetry.group.docs.dependencies]
-black = ">=22.10"
-mkdocs = ">=1.5"
-mkdocstrings-python = ">=1.5"
-mkdocs-material = ">=9.2"
-pymdown-extensions = ">=10.1"
-mkdocs-include-markdown-plugin = ">=6.0"
-mkdocs-gen-files = ">=0.5"
-mkdocs-literate-nav = ">=0.6"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.coverage.run]
+omit = [
+  # omit these folders
+  # "*/config_sections/*",
+  # omit these single files
+  "__main__.py",
+  "config.py",
+  "main.py",
+]
+branch = true
+
+[tool.coverage.report]
+# Regexes for lines to exclude from consideration
+exclude_also = [
+  # Don't complain about missing debug-only code:
+  "def __repr__",
+  "if self\\.debug",
+
+  # Don't complain if tests don't hit defensive assertion code:
+  "raise AssertionError",
+  "raise NotImplementedError",
+
+  # Don't complain if non-runnable code isn't run:
+  "if 0:",
+  "if __name__ == .__main__.:",
+
+  # Don't complain about abstract methods, they aren't run:
+  "@(abc\\.)?abstractmethod",
+]
+
+ignore_errors = true
+
 [tool.pytest.ini_options]
+addopts = "--cov-report=xml:coverage.xml --cov-report=term-missing --cov-config=pyproject.toml --cov=application_settings --cov=tests"
+testpaths = ["tests"]
 filterwarnings = ["error"]
+
+[tool.black]
+target-version = ["py311", "py312", "py313", "py314"]
 
 [tool.isort]
 profile = "black"
@@ -115,10 +149,10 @@ ignore_missing_imports = true
 
 [tool.pylint.main]
 load-plugins = [
-    "pylint.extensions.bad_builtin",
-    "pylint.extensions.code_style",
-    "pylint.extensions.typing",
-    "pylint.extensions.no_self_use",
+  "pylint.extensions.bad_builtin",
+  "pylint.extensions.code_style",
+  "pylint.extensions.typing",
+  "pylint.extensions.no_self_use",
 ]
 
 [tool.pylint.messages_control]
@@ -140,44 +174,90 @@ runtime-typing = false
 ignore-imports = "yes"
 
 [tool.tox]
-legacy_tox_ini = """
-[tox]
-isolated_build = true
-envlist =
-    py{39,310,311,312,313}-pytest
-    py{39,310,311,312,313}-typing
-    docs
-    style
+requires = ["tox>=4.49"]
 
-[testenv]
-allowlist_externals = poetry
+# Generates: py310-pytest, py310-mypy, py311-pytest, py311-mypy, ... py314-mypy
+env_list = [{ product = [["py310", "py311", "py312", "py313", "py314"], ["pytest", "typing"]] }, "style", "docs"]
 
-[testenv:py{39,310,311,312,313}-pytest]
-commands_pre =
-    poetry install --no-root --with testing -v
-commands =
-    poetry run python -m pytest --cov-report xml:coverage.xml --cov-report term-missing --cov=application_settings tests/ --import-mode importlib
+[tool.tox.env_run_base]
+description = "Run {env_name}"
+skip_missing_interpreters = true
 
-[testenv:py{39,310,311,312,313}-typing]
+# Let Poetry handle the dependencies and installation of the environment
 skip_install = true
-commands_pre =
-    poetry install --with typing -v
-commands =
-    poetry run mypy ./src
+allowlist_externals = ["poetry"]
 
-[testenv:docs]
-skip_install = true
-commands_pre =
-    poetry install --with docs -v
-commands =
-    poetry run mkdocs build -f ./docs/mkdocs.yml -d ../site
+commands_pre = [
+  { replace = "if", condition = "factor.pytest", then = [
+    [
+      "poetry",
+      "install",
+      "--with",
+      "testing",
+      "-v",
+    ],
+  ], extend = true },
+  { replace = "if", condition = "factor.typing", then = [
+    [
+      "poetry",
+      "install",
+      "--with",
+      "typing",
+      "-v",
+    ],
+  ], extend = true },
+]
 
-[testenv:style]
+commands = [
+  { replace = "if", condition = "factor.pytest", then = [
+    [
+      "poetry",
+      "run",
+      "pytest",
+    ],
+  ], extend = true },
+  { replace = "if", condition = "factor.typing", then = [
+    [
+      "poetry",
+      "run",
+      "mypy",
+      "{posargs:src}",
+    ],
+  ], extend = true },
+]
+
+[tool.tox.env.style]
+description = "Run style checks"
 skip_install = true
-commands_pre =
-    poetry install --with style -v
-commands =
-    poetry run python -m black --check ./src
-    poetry run isort --check --diff ./src
-    poetry run pylint ./src
-"""
+allowlist_externals = ["poetry"]
+commands_pre = [["poetry", "install", "--with", "style", "-v"]]
+commands = [
+  [
+    "poetry",
+    "run",
+    "black",
+    "--check",
+    "{posargs:src}",
+  ],
+  [
+    "poetry",
+    "run",
+    "isort",
+    "--check",
+    "--diff",
+    "{posargs:src}",
+  ],
+  [
+    "poetry",
+    "run",
+    "pylint",
+    "{posargs:src}",
+  ],
+]
+
+[tool.tox.env.docs]
+description = "Generate documentation"
+skip_install = true
+allowlist_externals = ["poetry"]
+commands_pre = [["poetry", "install", "--with", "docs", "-v"]]
+commands = [["poetry", "run", "mkdocs", "build", "-f", "./docs/mkdocs.yml", "-d", "../site"]]

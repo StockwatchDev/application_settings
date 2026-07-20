@@ -18,9 +18,6 @@ from application_settings import (
     use_standard_logging,
 )
 
-if sys.version_info < (3, 10):
-    from typing import Union
-
 
 @dataclass(frozen=True)
 class AnExample1SettingsSubSection(SettingsSectionBase):
@@ -90,15 +87,9 @@ def test_parameters_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_update(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
-    if sys.version_info >= (3, 10):
 
-        def mock_default_filepath() -> Path | None:
-            return None
-
-    else:
-
-        def mock_default_filepath() -> Union[Path, None]:
-            return None
+    def mock_default_filepath() -> Path | None:
+        return None
 
     monkeypatch.setattr(AnExample1Settings, "default_filepath", mock_default_filepath)
     AnExample1Settings.set_filepath("")
@@ -125,15 +116,9 @@ def test_update(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
 
 
 def test_update_json(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
-    if sys.version_info >= (3, 10):
 
-        def mock_default_filepath() -> Path | None:
-            return None
-
-    else:
-
-        def mock_default_filepath() -> Union[Path, None]:
-            return None
+    def mock_default_filepath() -> Path | None:
+        return None
 
     monkeypatch.setattr(AnExample1Settings, "default_filepath", mock_default_filepath)
     AnExample1Settings.set_filepath("")
@@ -154,15 +139,9 @@ def test_update_json(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
 
 
 def test_update_toml(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
-    if sys.version_info >= (3, 10):
 
-        def mock_default_filepath() -> Path | None:
-            return None
-
-    else:
-
-        def mock_default_filepath() -> Union[Path, None]:
-            return None
+    def mock_default_filepath() -> Path | None:
+        return None
 
     monkeypatch.setattr(AnExample1Settings, "default_filepath", mock_default_filepath)
     AnExample1Settings.set_filepath("")
@@ -187,15 +166,9 @@ def test_update_toml(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
 def test_update_ini(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path, caplog: pytest.LogCaptureFixture
 ) -> None:
-    if sys.version_info >= (3, 10):
 
-        def mock_default_filepath() -> Path | None:
-            return None
-
-    else:
-
-        def mock_default_filepath() -> Union[Path, None]:
-            return None
+    def mock_default_filepath() -> Path | None:
+        return None
 
     monkeypatch.setattr(AnExample1Settings, "default_filepath", mock_default_filepath)
     use_standard_logging(enable=True)
