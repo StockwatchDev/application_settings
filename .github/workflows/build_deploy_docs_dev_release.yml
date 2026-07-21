@@ -30,14 +30,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout master
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
           ref: ${{ github.event.release.tag_name }}
         if: github.event_name == 'release'
 
       - name: Checkout develop
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
           ref: develop
@@ -52,7 +52,7 @@ jobs:
         if: github.event_name != 'release'
 
       - name: Setup python 3.14
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: 3.14
 
@@ -96,7 +96,7 @@ jobs:
         if: github.event_name == 'release'
 
       - name: Push changes
-        uses: ad-m/github-push-action@v1.1.0
+        uses: ad-m/github-push-action@v1.3.0
         with:
           branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
