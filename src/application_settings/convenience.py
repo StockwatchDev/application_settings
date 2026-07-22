@@ -26,9 +26,11 @@ def _get_module_from_file(qualified_classname: str) -> Optional[ModuleType]:
     module_name = components[-2]
     filename = "/".join(components[:-1])
     file_path = Path.cwd() / f"{filename}.py"
-    logger.debug(f"Trying to load {qualified_classname} from {file_path}")
+    logger.debug("Trying to load %s from %s", qualified_classname, file_path)
     if not (spec := importlib.util.spec_from_file_location(module_name, file_path)):
-        logger.error(f"Unable to find module spec {module_name} with path {file_path}.")
+        logger.error(
+            "Unable to find module spec %s with path %s.", module_name, file_path
+        )
         return None
     module = importlib.util.module_from_spec(spec)
     sys.modules[module_name] = module
@@ -41,13 +43,15 @@ def _get_module(qualified_classname: str) -> Optional[ModuleType]:
     components = qualified_classname.split(".")
     if len(components) < 2:
         logger.error(
-            f"Unable to import {qualified_classname}: no package / module name or no class name provided."
+            "Unable to import %s: no package / module name or no class name provided.",
+            qualified_classname,
         )
         return None
     if components[0] == "":
         # relative import, no package
         logger.info(
-            f"{qualified_classname}: attempted relative import with no known parent package. Will try to load file, but this may fail."
+            "%s: attempted relative import with no known parent package. Will try to load file, but this may fail.",
+            qualified_classname,
         )
         if not (module := _get_module_from_file(qualified_classname)):
             return None
@@ -55,7 +59,7 @@ def _get_module(qualified_classname: str) -> Optional[ModuleType]:
         try:
             module = importlib.import_module(".".join(components[:-1]))
         except ModuleNotFoundError:
-            logger.error(f"Module {'.'.join(components[:-1])} not found.")
+            logger.error("Module %s not found.", ".".join(components[:-1]))
             return None
     return module
 
@@ -68,15 +72,19 @@ def _get_config_class(
     components = qualified_classname.split(".")
     if not (the_class := getattr(module, components[-1], None)):
         logger.error(
-            f"No class {components[-1]} found in module {'.'.join(components[:-1])}"
+            "No class %s found in module %s", components[-1], ".".join(components[:-1])
         )
         return None
     if not isinstance(the_class, type):
         logger.error(
-            f"Attribute {components[-1]} found in module {'.'.join(components[:-1])} but this is not a class."
+            "Attribute %s found in module %s but this is not a class.",
+            components[-1],
+            ".".join(components[:-1]),
         )
         return None
-    logger.debug(f"Class {components[-1]} found in module {'.'.join(components[:-1])}")
+    logger.debug(
+        "Class %s found in module %s", components[-1], ".".join(components[:-1])
+    )
     if issubclass(the_class, ParameterContainerProtocol):
         if not issubclass(the_class, UpdateableParameterContainerProtocol):
             # next line should not be needed but otherwise mypy complains
@@ -84,10 +92,10 @@ def _get_config_class(
             return typed_class
 
         logger.error(
-            f"Class {components[-1]} implements a Settings rather than a Config"
+            "Class %s implements a Settings rather than a Config", components[-1]
         )
     else:
-        logger.error(f"Class {components[-1]} does not implement a Config")
+        logger.error("Class %s does not implement a Config", components[-1])
     return None
 
 
@@ -99,21 +107,25 @@ def _get_settings_class(
     components = qualified_classname.split(".")
     if not (the_class := getattr(module, components[-1], None)):
         logger.error(
-            f"No class {components[-1]} found in module {'.'.join(components[:-1])}"
+            "No class %s found in module %s", components[-1], ".".join(components[:-1])
         )
         return None
     if not isinstance(the_class, type):
         logger.error(
-            f"Attribute {components[-1]} found in module {'.'.join(components[:-1])} but this is not a class."
+            "Attribute %s found in module %s but this is not a class.",
+            components[-1],
+            ".".join(components[:-1]),
         )
         return None
-    logger.debug(f"Class {components[-1]} found in module {'.'.join(components[:-1])}")
+    logger.debug(
+        "Class %s found in module %s", components[-1], ".".join(components[:-1])
+    )
     if issubclass(the_class, UpdateableParameterContainerProtocol):
         # next line should not be needed but otherwise mypy complains
         typed_class: type[UpdateableParameterContainerProtocol] = the_class
         return typed_class
 
-    logger.error(f"Class {components[-1]} does not implement a Settings")
+    logger.error("Class %s does not implement a Settings", components[-1])
     return None
 
 

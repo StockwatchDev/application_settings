@@ -1,5 +1,7 @@
 """Functions for storing dicts to and loading dicts from toml files."""
 
+# pylint: disable=duplicate-code
+
 import logging
 from pathlib import Path
 from typing import Any
@@ -20,7 +22,7 @@ def load_toml(path: Path) -> dict[str, Any]:
         with path.open(mode="r") as fptr:
             data_stored = tomlkit.load(fptr).unwrap()
     else:
-        logger.warning(f"File {path} does not exist or is empty.")
+        logger.warning("File %s does not exist or is empty.", path)
     return data_stored
 
 

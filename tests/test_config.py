@@ -352,7 +352,10 @@ def test_set_filepath_after_get(
     assert AnExampleConfigSubSection.get().field3[1] == "no"
     with caplog.at_level(logging.DEBUG):
         AnExample1Config.set_filepath("", load=False)
-        assert "file is not loaded into the Config." in caplog.records[-1].msg
+        assert (
+            "The filepath is set, but no file has been loaded into the "
+            in caplog.records[-1].msg
+        )
 
 
 def test_get(toml_file: Path) -> None:
@@ -375,7 +378,8 @@ def test_get_ini(ini_file: Path, caplog: pytest.LogCaptureFixture) -> None:
     AnExample1Config.load()
     assert AnExample1Config.get().section1.field1 == "field1"
     assert AnExample1Config.get().section1.field2 == 2
-    assert "Unknown file format ini given in" in caplog.records[-2].msg
+    assert "Unknown file format" in caplog.records[-2].msg
+    assert "given in" in caplog.records[-2].msg
 
 
 def test_type_coercion() -> None:

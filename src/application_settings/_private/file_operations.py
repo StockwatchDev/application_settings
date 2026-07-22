@@ -40,16 +40,16 @@ def _check_filepath(
     try:
         FileFormat(ext)
     except ValueError:
-        logger.error(f"Unknown file format {ext} given in {path}.")
+        logger.error("Unknown file format %s given in %s.", ext, path)
         return False
     if not path.is_file():
         mess = f"Path {str(path)} is not a file."
         if create_file_if_not_found:
             path.touch()
             if not path.is_file():
-                logger.error(f"Creation of file {str(path)} failed.")
+                logger.error("Creation of file %s failed.", str(path))
                 return False
-            logger.info(f"File {str(path)} created.")
+            logger.info("File %s created.", str(path))
             return True
         if throw_if_file_not_found:
             raise FileNotFoundError(mess)

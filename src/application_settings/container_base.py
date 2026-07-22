@@ -89,7 +89,8 @@ class ParameterContainerBase(ParameterContainerSectionBase, ABC):
         else:
             if cls._get() is not None:
                 logger.info(
-                    f"Filepath has been set the but file is not loaded into the {cls.kind_string()}."
+                    "The filepath is set, but no file has been loaded into the %s.",
+                    cls.kind_string(),
                 )
 
     @classmethod
@@ -114,8 +115,10 @@ class ParameterContainerBase(ParameterContainerSectionBase, ABC):
         """Get has been called on a section before a load was done; handle this."""
         logger.log(
             log_level(cls.kind()),
-            f"{cls.kind_string()} {cls.__name__} accessed before data has been loaded; "
-            f"will try implicit loading with {cls.filepath()}.",
+            "%s %s accessed before data has been loaded; will try implicit loading with %s.",
+            cls.kind_string(),
+            cls.__name__,
+            cls.filepath(),
         )
 
     @classmethod

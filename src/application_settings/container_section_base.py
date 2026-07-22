@@ -53,8 +53,11 @@ class ParameterContainerSectionBase(ABC):
         # has not yet created or loaded a config.
         logger.log(
             log_level(cls.kind()),
-            f"{cls.kind_string()} section {cls.__name__} accessed before data has been loaded; "
-            f"will try to load via command line parameter '--{cls.__name__}_file'",
+            "%s section %s accessed before data has been loaded; "
+            "will try to load via command line parameter '--%s_file'",
+            cls.kind_string(),
+            cls.__name__,
+            cls.__name__,
         )
 
     @classmethod
@@ -138,14 +141,18 @@ class ParameterContainerSectionBase(ABC):
             for uninitialized_field in uninitialized_field_names:
                 logger.log(
                     log_level(self.kind()),
-                    f"Parameter {uninitialized_field}{section_specifier} initialized with default value.",
+                    "Parameter %s%s initialized with default value.",
+                    uninitialized_field,
+                    section_specifier,
                 )
             # data may also contain elements that are not fields, and we want to report that as well
             extra_data_fields = set(data.keys()) - field_names
             for extra_data_field in extra_data_fields:
                 logger.log(
                     log_level(self.kind()),
-                    f"Extra parameter {extra_data_field}{section_specifier} that is not used for initialization.",
+                    "Ignoring extra parameter %s%s because it is not used for initialization.",
+                    extra_data_field,
+                    section_specifier,
                 )
             # get subsections so that these can be checked as well
             subsections = [

@@ -186,7 +186,8 @@ def test_update_ini(
     # new settings have been applied but not stored to file
     assert new_settings.section1.setting1 == "new s1a"
     assert AnExample1Settings.get().section1.setting2 == 333
-    assert "Unknown file format ini given in" in caplog.records[-1].msg
+    assert "Unknown file format" in caplog.records[-1].msg
+    assert "given in" in caplog.records[-1].msg
     AnExample1Settings.load()
     assert AnExample1Settings.get().section1.setting1 == "setting1"
     assert AnExample1Settings.get().section1.setting2 == 2
@@ -202,4 +203,5 @@ def test_update_create_file_failed(
     some_path = Path.home() / "ProgramData" / "test" / "nonexistingfile.json"
     AnExample1Settings.set_filepath(some_path)
     AnExample1Settings.update({"section1": {"subsec": {"setting3": 5.55}}})
-    assert f"Creation of file {str(some_path)} failed." in caplog.records[-1].msg
+    assert "Creation of file " in caplog.records[-1].msg
+    assert " failed." in caplog.records[-1].msg
