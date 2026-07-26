@@ -67,18 +67,39 @@ def get_container_from_file(
     kind: ParameterKind, path: Optional[Path], throw_if_file_not_found: bool
 ) -> str:
     """Load data from the file given in path; log error or throw if not possible"""
-    if _check_filepath(
+    if not _check_filepath(
         path,
         throw_if_invalid_path=throw_if_file_not_found,
         throw_if_file_not_found=throw_if_file_not_found,
         create_file_if_not_found=False,
     ):
-        real_path = cast(Path, path)
-        if loader := _get_loader(path=real_path):
-            the_keys = _container_class_keys(kind)
-            if appl_sec := cast(dict[str, Any], loader(real_path).get(the_keys[0], {})):
-                return cast(str, appl_sec.get(the_keys[1], ""))
-    return ""
+        return ""
+    real_path = cast(Path, path)
+    if not (loader := _get_loader(path=real_path)):
+        logger.warning(
+            "Unknown file format %s given in %s.",
+            real_path.suffix[1:].lower(),
+            real_path,
+        )
+        return ""
+
+    the_keys = _container_class_keys(kind)
+    if not (appl_sec := cast(dict[str, Any], loader(real_path).get(the_keys[0], {}))):
+        logger.warning(
+            "File %s does not contain a section %s.", str(real_path), the_keys[0]
+        )
+        return ""
+
+    if not (container_class := cast(str, appl_sec.get(the_keys[1], ""))):
+        logger.warning(
+            "File %s does not contain a key %s in section %s.",
+            str(real_path),
+            the_keys[1],
+            the_keys[0],
+        )
+        return ""
+
+    return container_class
 
 
 def load(
