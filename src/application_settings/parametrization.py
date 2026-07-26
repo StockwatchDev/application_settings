@@ -21,7 +21,8 @@ else:
 
 
 logger = logging.getLogger(__name__)
-print(f"{__name__} logger level: {logger.level}")
+
+
 # This is not an example how to implement a ConfigSection
 # because class ApplicationSettingsContainerSectionBase (re-)implements all methods of ContainerSectionBase.
 # This is done so that this class will meet the ParameterContainerSection protocol
