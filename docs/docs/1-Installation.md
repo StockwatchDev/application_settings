@@ -41,7 +41,6 @@ can install from our repo.
 We have direct dependencies on the following packages:
 
 - [attributes-doc](https://pypi.org/project/attributes-doc/)
-- [loguru](https://pypi.org/project/loguru/)
 - [pathvalidate](https://pypi.org/project/pathvalidate/)
 - [pydantic](https://pypi.org/project/pydantic/)
 - [tomlkit](https://pypi.org/project/tomlkit/)
