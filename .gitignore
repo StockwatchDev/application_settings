@@ -5,7 +5,6 @@
 
 # Node artifact files
 node_modules/
-dist/
 
 # Compiled Java class files
 *.class
@@ -67,3 +66,6 @@ Thumbs.db
 
 # Playground folder for local develop scripts
 playground/
+
+# Temporary files
+temp/
