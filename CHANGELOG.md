@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Configuration - and settings parameters for the package `application_settings` itself, namely the
   import string for the Config class / the Settings class that the application uses and whether or not
   to use `application_settings` in strict mode.
+- Support for Python 3.15
+
+### Changed - 0.6.0
+
+- Logging now done with the standard logger, no longer with loguru
 
 ### Fixed - 0.6.0
 
@@ -21,8 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed - 0.6.0
 
-- Type alias PathOpt, use Optional[Path] instead (breaking)
-- Support for Python 3.9
+- Type alias PathOpt, use Path | None instead (breaking)
+- Support for Python 3.9 and 3.10
 
 ## [0.5.0] - Released 2024-10-12
 
