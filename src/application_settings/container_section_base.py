@@ -1,22 +1,15 @@
 """Abstract base class for sections to be added to containers and container sections for configuration and settings."""
 
 import logging
-import sys
 from abc import ABC, abstractmethod
 from dataclasses import fields
-from typing import Any, cast
+from typing import Any, Self, cast
 
 from pydantic.dataclasses import is_pydantic_dataclass
 
 from application_settings.parameter_kind import ParameterKind, ParameterKindStr
 from application_settings.parametrization import log_level
 from application_settings.protocols import ParameterContainerSectionProtocol
-
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
-
 
 logger = logging.getLogger(__name__)
 

@@ -2,10 +2,9 @@
 
 # pylint: disable=unused-argument
 
-import sys
 from argparse import ArgumentParser
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Self
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -21,11 +20,6 @@ from application_settings.convenience import (
     settings_filepath_from_cli,
 )
 from application_settings.parameter_kind import ParameterKind, ParameterKindStr
-
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
 
 
 class MockParameterContainerProtocolClass:

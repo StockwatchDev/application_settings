@@ -10,18 +10,21 @@ on:
       - "develop"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+        python: ["3.11", "3.12", "3.13", "3.14", "3.15"]
         toxenv: ["pytest", "typing"]
         include:
-          - python: "3.14"
+          - python: "3.15"
             toxenv: "style"
-          - python: "3.14"
+          - python: "3.15"
             toxenv: "docs"
     name: "${{ matrix.toxenv }} for python ${{ matrix.python }}"
 
@@ -47,12 +50,17 @@ jobs:
       - name: Install packages
         run: poetry install --no-interaction --no-root --only testrunner
 
-      - name: Run tests
+      - name: Run tox
         run: |
-          PYVER=$(echo "${{ matrix.python }}" | tr -d '.')
-          poetry run tox -e py${PYVER}-${{ matrix.toxenv }}
+          # style and docs are plain tox envs; pytest and typing are per python version
+          TOXENV="${{ matrix.toxenv }}"
+          case "$TOXENV" in
+            pytest|typing) TOXENV="py$(echo "${{ matrix.python }}" | tr -d '.')-$TOXENV" ;;
+          esac
+          poetry run tox -e "$TOXENV"
 
       - name: Report coverage
+        if: matrix.toxenv == 'pytest'
         uses: codecov/codecov-action@v7
         with:
           files: ./coverage.xml

@@ -3,22 +3,15 @@
 # pylint: disable=duplicate-code
 
 import logging
-import sys
 from abc import ABC, abstractmethod
 from dataclasses import fields
-from typing import Any, cast
+from typing import Any, Self, cast
 
 from attributes_doc import attributes_doc
 from pydantic.dataclasses import dataclass, is_pydantic_dataclass
 
 from application_settings.parameter_kind import ParameterKind, ParameterKindStr
 from application_settings.protocols import ParameterContainerSectionProtocol
-
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
-
 
 logger = logging.getLogger(__name__)
 

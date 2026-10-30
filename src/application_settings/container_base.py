@@ -1,12 +1,11 @@
 """Base class for a container (= root section) for configuration and settings."""
 
 import logging
-import sys
 from abc import ABC, abstractmethod
 from dataclasses import asdict
 from pathlib import Path
 from re import sub
-from typing import Any
+from typing import Any, Self
 
 from pathvalidate import is_valid_filepath
 
@@ -17,12 +16,6 @@ from application_settings.type_notation_helper import PathOrStr
 from ._private.file_operations import FileFormat
 from ._private.file_operations import load as _do_load
 from ._private.file_operations import save as _do_save
-
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
-
 
 logger = logging.getLogger(__name__)
 

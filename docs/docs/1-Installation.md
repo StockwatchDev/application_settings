@@ -44,4 +44,3 @@ We have direct dependencies on the following packages:
 - [pathvalidate](https://pypi.org/project/pathvalidate/)
 - [pydantic](https://pypi.org/project/pydantic/)
 - [tomlkit](https://pypi.org/project/tomlkit/)
-- [typing-extensions](https://pypi.org/project/typing-extensions/) (for python versions below 3.12)

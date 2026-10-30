@@ -1,8 +1,7 @@
 """Module for handling settings."""
 
-import sys
 from dataclasses import KW_ONLY, replace
-from typing import Any, TypeVar
+from typing import Any, Self, TypeVar
 
 from application_settings.container_base import ParameterContainerBase
 from application_settings.container_section_base import ParameterContainerSectionBase
@@ -11,11 +10,6 @@ from application_settings.parametrization import ApplicationSettingsSection
 from application_settings.protocols import UpdateableParameterContainerProtocol
 
 from ._private.file_operations import FileFormat
-
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
 
 UpdateableParameterContainerT = TypeVar(
     "UpdateableParameterContainerT", bound=UpdateableParameterContainerProtocol
