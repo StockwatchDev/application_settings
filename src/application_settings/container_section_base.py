@@ -4,7 +4,7 @@ import logging
 import sys
 from abc import ABC, abstractmethod
 from dataclasses import fields
-from typing import Any, Optional, cast
+from typing import Any, cast
 
 from pydantic.dataclasses import is_pydantic_dataclass
 
@@ -78,7 +78,7 @@ class ParameterContainerSectionBase(ABC):
     @classmethod
     def _get(
         cls,
-    ) -> Optional[Self]:  # pylint: disable=consider-alternative-union-syntax
+    ) -> Self | None:
         """Get the singleton."""
         if the_container := _ALL_CONTAINER_SECTION_SINGLETONS.get(id(cls)):
             return cast(Self, the_container)

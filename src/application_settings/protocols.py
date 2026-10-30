@@ -2,7 +2,7 @@
 
 import sys
 from pathlib import Path
-from typing import Any, Optional, Protocol, runtime_checkable
+from typing import Any, Protocol, runtime_checkable
 
 from application_settings.parameter_kind import ParameterKind, ParameterKindStr
 from application_settings.type_notation_helper import PathOrStr
@@ -66,7 +66,7 @@ class ParameterContainerProtocol(ParameterContainerSectionProtocol, Protocol):
         """Return the kind_string, lowercase, with the extension that fits the file_format."""
 
     @classmethod
-    def default_filepath(cls) -> Optional[Path]:
+    def default_filepath(cls) -> Path | None:
         """Return the fully qualified default path for the config/settingsfile
 
         E.g. ~/.example/config.toml.
@@ -82,7 +82,7 @@ class ParameterContainerProtocol(ParameterContainerSectionProtocol, Protocol):
         """
 
     @classmethod
-    def filepath(cls) -> Optional[Path]:
+    def filepath(cls) -> Path | None:
         """Return the path for the file that holds the config / settings."""
 
     @classmethod

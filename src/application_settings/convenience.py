@@ -7,7 +7,6 @@ import sys
 from argparse import ArgumentParser
 from pathlib import Path
 from types import ModuleType
-from typing import Optional
 
 from application_settings._private.file_operations import get_container_from_file
 from application_settings.configuring_base import ConfigBase
@@ -21,7 +20,7 @@ from application_settings.settings_base import SettingsBase
 logger = logging.getLogger(__name__)
 
 
-def _get_module_from_file(qualified_classname: str) -> Optional[ModuleType]:
+def _get_module_from_file(qualified_classname: str) -> ModuleType | None:
     components = qualified_classname.split(".")
     module_name = components[-2]
     filename = "/".join(components[:-1])
@@ -39,7 +38,7 @@ def _get_module_from_file(qualified_classname: str) -> Optional[ModuleType]:
     return module
 
 
-def _get_module(qualified_classname: str) -> Optional[ModuleType]:
+def _get_module(qualified_classname: str) -> ModuleType | None:
     components = qualified_classname.split(".")
     if len(components) < 2:
         logger.error(
@@ -66,7 +65,7 @@ def _get_module(qualified_classname: str) -> Optional[ModuleType]:
 
 def _get_config_class(
     qualified_classname: str,
-) -> Optional[type[ParameterContainerProtocol]]:
+) -> type[ParameterContainerProtocol] | None:
     if not (module := _get_module(qualified_classname)):
         return None
     components = qualified_classname.split(".")
@@ -101,7 +100,7 @@ def _get_config_class(
 
 def _get_settings_class(
     qualified_classname: str,
-) -> Optional[type[UpdateableParameterContainerProtocol]]:
+) -> type[UpdateableParameterContainerProtocol] | None:
     if not (module := _get_module(qualified_classname)):
         return None
     components = qualified_classname.split(".")
@@ -193,8 +192,8 @@ def parameters_folderpath_from_cli(  # pylint: disable=too-many-arguments,too-ma
 
 
 def _parameters_filepath_from_cli(  # pylint: disable=too-many-arguments,too-many-positional-arguments
-    config_class: Optional[type[ParameterContainerProtocol]],
-    settings_class: Optional[type[UpdateableParameterContainerProtocol]],
+    config_class: type[ParameterContainerProtocol] | None,
+    settings_class: type[UpdateableParameterContainerProtocol] | None,
     parser: ArgumentParser,
     short_option: str,
     long_option: str,

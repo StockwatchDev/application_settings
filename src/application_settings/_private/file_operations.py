@@ -4,7 +4,7 @@ import logging
 from collections.abc import Callable
 from enum import Enum, unique
 from pathlib import Path
-from typing import Any, Optional, cast
+from typing import Any, cast
 
 from pathvalidate import is_valid_filepath
 
@@ -24,7 +24,7 @@ class FileFormat(Enum):
 
 
 def _check_filepath(
-    path: Optional[Path],
+    path: Path | None,
     throw_if_invalid_path: bool,
     throw_if_file_not_found: bool,
     create_file_if_not_found: bool,
@@ -64,7 +64,7 @@ def _container_class_keys(kind: ParameterKind) -> tuple[str, str]:
 
 
 def get_container_from_file(
-    kind: ParameterKind, path: Optional[Path], throw_if_file_not_found: bool
+    kind: ParameterKind, path: Path | None, throw_if_file_not_found: bool
 ) -> str:
     """Load data from the file given in path; log error or throw if not possible"""
     if not _check_filepath(
@@ -103,7 +103,7 @@ def get_container_from_file(
 
 
 def load(
-    kind: ParameterKind, path: Optional[Path], throw_if_file_not_found: bool
+    kind: ParameterKind, path: Path | None, throw_if_file_not_found: bool
 ) -> dict[str, Any]:
     """Load data from the file given in path; log error or throw if not possible"""
     if _check_filepath(
@@ -136,7 +136,7 @@ def save(path: Path, data: dict[str, Any]) -> None:
     return None
 
 
-def _get_loader(path: Path) -> Optional[Callable[[Path], dict[str, Any]]]:
+def _get_loader(path: Path) -> Callable[[Path], dict[str, Any]] | None:
     """Return the loader to be used for the file extension ext and the kind (Config or Settings)"""
     # TODO: enable with_includes for all all kinds
     ext = path.suffix[1:].lower()
@@ -179,7 +179,7 @@ def _load_with_includes(
     return data_stored
 
 
-def _get_saver(path: Path) -> Optional[Callable[[Path, dict[str, Any]], None]]:
+def _get_saver(path: Path) -> Callable[[Path, dict[str, Any]], None] | None:
     """Return the loader to be used for the file extension ext and the kind (Config or Settings)"""
     # TODO: enable with_includes for all kinds
     ext = path.suffix[1:].lower()

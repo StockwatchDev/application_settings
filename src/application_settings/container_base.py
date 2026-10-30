@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from dataclasses import asdict
 from pathlib import Path
 from re import sub
-from typing import Any, Optional
+from typing import Any
 
 from pathvalidate import is_valid_filepath
 
@@ -52,7 +52,7 @@ class ParameterContainerBase(ParameterContainerSectionBase, ABC):
         return f"{cls.kind_string().lower()}.{cls.default_file_format().value}"
 
     @classmethod
-    def default_filepath(cls) -> Optional[Path]:
+    def default_filepath(cls) -> Path | None:
         """Return the fully qualified default path for the config/settingsfile
 
         E.g. ~/.example/config.toml.
@@ -68,7 +68,7 @@ class ParameterContainerBase(ParameterContainerSectionBase, ABC):
             ValueError: if file_path is not a valid path for the OS running the code
         """
 
-        path: Optional[Path] = None
+        path: Path | None = None
         if isinstance(file_path, Path):
             path = file_path.resolve()
         elif file_path:
@@ -94,7 +94,7 @@ class ParameterContainerBase(ParameterContainerSectionBase, ABC):
                 )
 
     @classmethod
-    def filepath(cls) -> Optional[Path]:
+    def filepath(cls) -> Path | None:
         """Return the path for the file that holds the config / settings."""
         return _ALL_PATHS.get(id(cls), cls.default_filepath())
 
@@ -151,4 +151,4 @@ class ParameterContainerBase(ParameterContainerSectionBase, ABC):
         return _do_load(cls.kind(), cls.filepath(), throw_if_file_not_found)
 
 
-_ALL_PATHS: dict[int, Optional[Path]] = {}
+_ALL_PATHS: dict[int, Path | None] = {}

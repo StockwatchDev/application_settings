@@ -326,7 +326,7 @@ def test_config_cmdline(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_get_defaults(
     monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
 ) -> None:
-    def mock_default_filepath() -> Optional[Path]:
+    def mock_default_filepath() -> Path | None:
         return None
 
     monkeypatch.setattr(AnExample1Config, "default_filepath", mock_default_filepath)

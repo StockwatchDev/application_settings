@@ -81,7 +81,7 @@ class MockParameterContainerProtocolClass:
         return " a filename"
 
     @classmethod
-    def default_filepath(cls) -> Optional[Path]:
+    def default_filepath(cls) -> Path | None:
         """default_filepath method"""
         return None
 
@@ -91,7 +91,7 @@ class MockParameterContainerProtocolClass:
         return None
 
     @classmethod
-    def filepath(cls) -> Optional[Path]:
+    def filepath(cls) -> Path | None:
         """filepath method"""
         return None
 
