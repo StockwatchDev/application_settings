@@ -2,10 +2,9 @@
 
 # pylint: disable=unused-argument
 
-import sys
 from argparse import ArgumentParser
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Self
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -19,14 +18,8 @@ from application_settings.convenience import (
     config_filepath_from_cli,
     parameters_folderpath_from_cli,
     settings_filepath_from_cli,
-    use_standard_logging,
 )
 from application_settings.parameter_kind import ParameterKind, ParameterKindStr
-
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
 
 
 class MockParameterContainerProtocolClass:
@@ -82,7 +75,7 @@ class MockParameterContainerProtocolClass:
         return " a filename"
 
     @classmethod
-    def default_filepath(cls) -> Optional[Path]:
+    def default_filepath(cls) -> Path | None:
         """default_filepath method"""
         return None
 
@@ -92,7 +85,7 @@ class MockParameterContainerProtocolClass:
         return None
 
     @classmethod
-    def filepath(cls) -> Optional[Path]:
+    def filepath(cls) -> Path | None:
         """filepath method"""
         return None
 
@@ -353,12 +346,3 @@ def test_parameters_folderpath_from_cli() -> None:
     parser = ArgumentParser()
     result = parameters_folderpath_from_cli(parser=parser)
     assert isinstance(result, ArgumentParser)
-
-
-def test_use_standard_logging() -> None:
-    """Test enabling standard logging."""
-    with patch("application_settings.convenience.logger") as mock_logger:
-        use_standard_logging(enable=True)
-        mock_logger.remove.assert_called_once()
-        mock_logger.add.assert_called_once()
-        mock_logger.enable.assert_called_once()

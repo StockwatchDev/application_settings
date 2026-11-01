@@ -1,16 +1,18 @@
 """Functions for storing dicts to and loading dicts from file."""
 
+import logging
 from collections.abc import Callable
 from enum import Enum, unique
 from pathlib import Path
-from typing import Any, Optional, cast
+from typing import Any, cast
 
-from loguru import logger
 from pathvalidate import is_valid_filepath
 
 from application_settings._private.json_file_operations import load_json, save_json
 from application_settings._private.toml_file_operations import load_toml, save_toml
 from application_settings.parameter_kind import ParameterKind
+
+logger = logging.getLogger(__name__)
 
 
 @unique
@@ -22,7 +24,7 @@ class FileFormat(Enum):
 
 
 def _check_filepath(
-    path: Optional[Path],
+    path: Path | None,
     throw_if_invalid_path: bool,
     throw_if_file_not_found: bool,
     create_file_if_not_found: bool,
@@ -38,16 +40,16 @@ def _check_filepath(
     try:
         FileFormat(ext)
     except ValueError:
-        logger.error(f"Unknown file format {ext} given in {path}.")
+        logger.error("Unknown file format %s given in %s.", ext, path)
         return False
     if not path.is_file():
         mess = f"Path {str(path)} is not a file."
         if create_file_if_not_found:
             path.touch()
             if not path.is_file():
-                logger.error(f"Creation of file {str(path)} failed.")
+                logger.error("Creation of file %s failed.", str(path))
                 return False
-            logger.info(f"File {str(path)} created.")
+            logger.info("File %s created.", str(path))
             return True
         if throw_if_file_not_found:
             raise FileNotFoundError(mess)
@@ -62,25 +64,46 @@ def _container_class_keys(kind: ParameterKind) -> tuple[str, str]:
 
 
 def get_container_from_file(
-    kind: ParameterKind, path: Optional[Path], throw_if_file_not_found: bool
+    kind: ParameterKind, path: Path | None, throw_if_file_not_found: bool
 ) -> str:
     """Load data from the file given in path; log error or throw if not possible"""
-    if _check_filepath(
+    if not _check_filepath(
         path,
         throw_if_invalid_path=throw_if_file_not_found,
         throw_if_file_not_found=throw_if_file_not_found,
         create_file_if_not_found=False,
     ):
-        real_path = cast(Path, path)
-        if loader := _get_loader(path=real_path):
-            the_keys = _container_class_keys(kind)
-            if appl_sec := cast(dict[str, Any], loader(real_path).get(the_keys[0], {})):
-                return cast(str, appl_sec.get(the_keys[1], ""))
-    return ""
+        return ""
+    real_path = cast(Path, path)
+    if not (loader := _get_loader(path=real_path)):
+        logger.warning(
+            "Unknown file format %s given in %s.",
+            real_path.suffix[1:].lower(),
+            real_path,
+        )
+        return ""
+
+    the_keys = _container_class_keys(kind)
+    if not (appl_sec := cast(dict[str, Any], loader(real_path).get(the_keys[0], {}))):
+        logger.warning(
+            "File %s does not contain a section %s.", str(real_path), the_keys[0]
+        )
+        return ""
+
+    if not (container_class := cast(str, appl_sec.get(the_keys[1], ""))):
+        logger.warning(
+            "File %s does not contain a key %s in section %s.",
+            str(real_path),
+            the_keys[1],
+            the_keys[0],
+        )
+        return ""
+
+    return container_class
 
 
 def load(
-    kind: ParameterKind, path: Optional[Path], throw_if_file_not_found: bool
+    kind: ParameterKind, path: Path | None, throw_if_file_not_found: bool
 ) -> dict[str, Any]:
     """Load data from the file given in path; log error or throw if not possible"""
     if _check_filepath(
@@ -113,7 +136,7 @@ def save(path: Path, data: dict[str, Any]) -> None:
     return None
 
 
-def _get_loader(path: Path) -> Optional[Callable[[Path], dict[str, Any]]]:
+def _get_loader(path: Path) -> Callable[[Path], dict[str, Any]] | None:
     """Return the loader to be used for the file extension ext and the kind (Config or Settings)"""
     # TODO: enable with_includes for all all kinds
     ext = path.suffix[1:].lower()
@@ -156,7 +179,7 @@ def _load_with_includes(
     return data_stored
 
 
-def _get_saver(path: Path) -> Optional[Callable[[Path, dict[str, Any]], None]]:
+def _get_saver(path: Path) -> Callable[[Path, dict[str, Any]], None] | None:
     """Return the loader to be used for the file extension ext and the kind (Config or Settings)"""
     # TODO: enable with_includes for all kinds
     ext = path.suffix[1:].lower()

@@ -3,31 +3,29 @@ name = "application_settings"
 version = "0.6.0.dev"
 description = "For providing a python application with configuration and/or settings"
 readme = "README.md"
-license = { text = "MIT" }
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [{ name = "Stockwatchdevs", email = "stockwatchdevs@gmail.com" }]
 keywords = ["configuration", "settings", "dataclass", "pydantic", "toml", "json"]
 dynamic = ["classifiers"]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
-  "loguru (>=0.7.0)",
   "pathvalidate (>=2.5)",
   "pydantic (>=2.0)",
   "tomlkit (>=0.12)",
   "attributes-doc (>=0.3.0)",
-  "typing-extensions (>=4.5.0) ; python_version < '3.11'",
 ]
 
 classifiers = [
   "Development Status :: 4 - Beta",
   "Intended Audience :: Developers",
   "Natural Language :: English",
-  "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Typing :: Typed",
 ]
@@ -44,7 +42,7 @@ typing = [
   "mypy (>=1.1)",
   # "lxml (>=4.9)",
 ]
-style = ["black (>=22.10)", "isort (>=5.12)", "pylint (>=3.3)"]
+style = ["check-dependencies (>=1.7.0)", "black (>=22.10)", "isort (>=5.12)", "pylint (>=3.3)"]
 testrunner = ["tox (>=4.4)"]
 docs = [
   "mkdocs (>=1.5)",
@@ -60,8 +58,6 @@ docs = [
 requires-poetry = ">=2.3"
 include = [
   { path = "CHANGELOG.md", format = "sdist" },
-  { path = "LICENSE", format = "sdist" },
-  { path = "README.md", format = "sdist" },
   { path = "tests", format = "sdist" },
   { path = "examples", format = "sdist" },
 ]
@@ -82,7 +78,7 @@ optional = true
 optional = true
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=2.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.coverage.run]
@@ -123,7 +119,7 @@ testpaths = ["tests"]
 filterwarnings = ["error"]
 
 [tool.black]
-target-version = ["py311", "py312", "py313", "py314"]
+target-version = ["py311", "py312", "py313", "py314", "py315"]
 
 [tool.isort]
 profile = "black"
@@ -160,8 +156,7 @@ load-plugins = [
 # format - handled by black
 # wrong-import-order - isort guards this
 # fixme - too handy for now
-# consider-alternative-union-syntax: we still support 3.9
-disable = ["fixme", "format", "wrong-import-order", "consider-alternative-union-syntax"]
+disable = ["fixme", "format", "wrong-import-order"]
 enable = ["useless-suppression", "use-symbolic-message-instead"]
 
 [tool.pylint.typecheck]
@@ -176,8 +171,8 @@ ignore-imports = "yes"
 [tool.tox]
 requires = ["tox>=4.49"]
 
-# Generates: py310-pytest, py310-mypy, py311-pytest, py311-mypy, ... py314-mypy
-env_list = [{ product = [["py310", "py311", "py312", "py313", "py314"], ["pytest", "typing"]] }, "style", "docs"]
+# Generates: py311-pytest, py311-mypy, py312-pytest, py312-mypy, ... py315-mypy
+env_list = [{ product = [["py311", "py312", "py313", "py314", "py315"], ["pytest", "typing"]] }, "style", "docs"]
 
 [tool.tox.env_run_base]
 description = "Run {env_name}"
@@ -232,6 +227,12 @@ skip_install = true
 allowlist_externals = ["poetry"]
 commands_pre = [["poetry", "install", "--with", "style", "-v"]]
 commands = [
+  [
+    "poetry",
+    "run",
+    "check-dependencies",
+    "{posargs:src}",
+  ],
   [
     "poetry",
     "run",

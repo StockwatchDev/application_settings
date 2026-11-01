@@ -86,8 +86,8 @@ Presence of sections and/or fields in the files that are not defined in the clas
 by silently.
 
 Fields or complete sections defined in the classes can be absent in the files as long as
-default values have been specified for all fields that have been left out. For more info
-on data validation [click here](./6-Handling_deviations.md)
+default values have been specified for all fields that have been left out. More info
+on data validation is given in the [section on handling deviations](./6-Handling_deviations.md)
 
 ## Location, name and type of the file
 

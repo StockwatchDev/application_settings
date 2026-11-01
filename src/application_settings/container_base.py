@@ -1,13 +1,12 @@
 """Base class for a container (= root section) for configuration and settings."""
 
-import sys
+import logging
 from abc import ABC, abstractmethod
 from dataclasses import asdict
 from pathlib import Path
 from re import sub
-from typing import Any, Optional
+from typing import Any, Self
 
-from loguru import logger
 from pathvalidate import is_valid_filepath
 
 from application_settings.container_section_base import ParameterContainerSectionBase
@@ -18,10 +17,7 @@ from ._private.file_operations import FileFormat
 from ._private.file_operations import load as _do_load
 from ._private.file_operations import save as _do_save
 
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
+logger = logging.getLogger(__name__)
 
 
 class ParameterContainerBase(ParameterContainerSectionBase, ABC):
@@ -49,7 +45,7 @@ class ParameterContainerBase(ParameterContainerSectionBase, ABC):
         return f"{cls.kind_string().lower()}.{cls.default_file_format().value}"
 
     @classmethod
-    def default_filepath(cls) -> Optional[Path]:
+    def default_filepath(cls) -> Path | None:
         """Return the fully qualified default path for the config/settingsfile
 
         E.g. ~/.example/config.toml.
@@ -65,7 +61,7 @@ class ParameterContainerBase(ParameterContainerSectionBase, ABC):
             ValueError: if file_path is not a valid path for the OS running the code
         """
 
-        path: Optional[Path] = None
+        path: Path | None = None
         if isinstance(file_path, Path):
             path = file_path.resolve()
         elif file_path:
@@ -86,11 +82,12 @@ class ParameterContainerBase(ParameterContainerSectionBase, ABC):
         else:
             if cls._get() is not None:
                 logger.info(
-                    f"Filepath has been set the but file is not loaded into the {cls.kind_string()}."
+                    "The filepath is set, but no file has been loaded into the %s.",
+                    cls.kind_string(),
                 )
 
     @classmethod
-    def filepath(cls) -> Optional[Path]:
+    def filepath(cls) -> Path | None:
         """Return the path for the file that holds the config / settings."""
         return _ALL_PATHS.get(id(cls), cls.default_filepath())
 
@@ -111,8 +108,10 @@ class ParameterContainerBase(ParameterContainerSectionBase, ABC):
         """Get has been called on a section before a load was done; handle this."""
         logger.log(
             log_level(cls.kind()),
-            f"{cls.kind_string()} {cls.__name__} accessed before data has been loaded; "
-            f"will try implicit loading with {cls.filepath()}.",
+            "%s %s accessed before data has been loaded; will try implicit loading with %s.",
+            cls.kind_string(),
+            cls.__name__,
+            cls.filepath(),
         )
 
     @classmethod
@@ -145,4 +144,4 @@ class ParameterContainerBase(ParameterContainerSectionBase, ABC):
         return _do_load(cls.kind(), cls.filepath(), throw_if_file_not_found)
 
 
-_ALL_PATHS: dict[int, Optional[Path]] = {}
+_ALL_PATHS: dict[int, Path | None] = {}
