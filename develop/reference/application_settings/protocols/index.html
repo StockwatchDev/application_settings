@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -31,10 +31,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -1762,7 +1762,7 @@
 <span class="normal">23</span>
 <span class="normal">24</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">kind</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ParameterKind</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return either ParameterKind.CONFIG or ParameterKind.SETTINGS&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return either ParameterKind.CONFIG or ParameterKind.SETTINGS"""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1795,7 +1795,7 @@
 <span class="normal">27</span>
 <span class="normal">28</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">kind_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParameterKindStr</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return either &#39;Config&#39; or &#39;Settings&#39;&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return either 'Config' or 'Settings'"""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1828,7 +1828,7 @@
 <span class="normal">31</span>
 <span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the singleton; if not existing, create it. Loading from file only done for a container.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Get the singleton; if not existing, create it. Loading from file only done for a container."""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1861,7 +1861,7 @@
 <span class="normal">35</span>
 <span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_without_load</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get has been called on a section before a load was done; handle this.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Get has been called on a section before a load was done; handle this."""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1894,7 +1894,7 @@
 <span class="normal">39</span>
 <span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">set</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new dataclass instance using data and set the singleton.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Create a new dataclass instance using data and set the singleton."""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1975,7 +1975,7 @@
 <span class="normal">56</span>
 <span class="normal">57</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">default_file_format</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FileFormat</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the default file format&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the default file format"""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2010,8 +2010,8 @@ and underscores to seperate words.</p>
 <span class="normal">61</span>
 <span class="normal">62</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">default_foldername</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the class name without kind_string, lowercase, with a preceding dot</span>
-<span class="sd">    and underscores to seperate words.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the class name without kind_string, lowercase, with a preceding dot</span>
+<span class="sd">    and underscores to seperate words."""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2044,7 +2044,7 @@ and underscores to seperate words.</p>
 <span class="normal">65</span>
 <span class="normal">66</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">default_filename</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the kind_string, lowercase, with the extension that fits the file_format.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the kind_string, lowercase, with the extension that fits the file_format."""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2083,11 +2083,11 @@ If you prefer to not have a default path then overwrite this method and return N
 <span class="normal">73</span>
 <span class="normal">74</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">default_filepath</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the fully qualified default path for the config/settingsfile</span>
+<span class="w">    </span><span class="sd">"""Return the fully qualified default path for the config/settingsfile</span>
 
 <span class="sd">    E.g. ~/.example/config.toml.</span>
 <span class="sd">    If you prefer to not have a default path then overwrite this method and return None.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2106,7 +2106,7 @@ If you prefer to not have a default path then overwrite this method and return N
   </span>
 
 </h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">set_filepath</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">set_filepath</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -2146,12 +2146,12 @@ If you prefer to not have a default path then overwrite this method and return N
 <span class="normal">80</span>
 <span class="normal">81</span>
 <span class="normal">82</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">set_filepath</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="n">PathOrStr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">load</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the path for the file (a singleton).</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_filepath</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="n">PathOrStr</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span> <span class="n">load</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Set the path for the file (a singleton).</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        ValueError: if file_path is not a valid path for the OS running the code</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2184,7 +2184,7 @@ If you prefer to not have a default path then overwrite this method and return N
 <span class="normal">85</span>
 <span class="normal">86</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">filepath</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the path for the file that holds the config / settings.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the path for the file that holds the config / settings."""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2277,14 +2277,14 @@ If you prefer to not have a default path then overwrite this method and return N
 <span class="normal">96</span>
 <span class="normal">97</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">throw_if_file_not_found</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new singleton, try to load parameter values from file.</span>
+<span class="w">    </span><span class="sd">"""Create a new singleton, try to load parameter values from file.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        FileNotFoundError: if throw_if_file_not_found == True and filepath() cannot be resolved</span>
 <span class="sd">        TOMLDecodeError: if FileFormat == TOML and the file is not a valid toml document</span>
 <span class="sd">        JSONDecodeError: if FileFormat == JSON and the file is not a valid json document</span>
 <span class="sd">        ValidationError: if a parameter value in the file cannot be coerced into the specified parameter type</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2317,7 +2317,7 @@ If you prefer to not have a default path then overwrite this method and return N
 <span class="normal">100</span>
 <span class="normal">101</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_without_load</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get has been called on a section before a load was done; handle this.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Get has been called on a section before a load was done; handle this."""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2398,7 +2398,7 @@ If you prefer to not have a default path then overwrite this method and return N
 <span class="normal">112</span>
 <span class="normal">113</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">changes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the settings with data specified in changes and save.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Update the settings with data specified in changes and save."""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2470,10 +2470,10 @@ If you prefer to not have a default path then overwrite this method and return N
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>

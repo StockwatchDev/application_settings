@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -31,10 +31,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -1351,7 +1351,7 @@ reloading will return the changed parameter values.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">MyExampleConfig</span>
 
 <span class="c1"># If the config file is not in the default location, then set the path first</span>
-<span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\ProgramData\MyApp\config.toml&quot;</span><span class="p">)</span>
+<span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="sa">r</span><span class="s2">"C:\ProgramData\MyApp\config.toml"</span><span class="p">)</span>
 
 <span class="c1"># The next statement will create the config</span>
 <span class="n">field1_var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MyExampleConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">section1</span><span class="o">.</span><span class="n">field1</span>  <span class="c1"># field1_var == -0.5</span>
@@ -1369,10 +1369,10 @@ reloading will return the changed parameter values.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">MyExampleSettings</span>
 
 <span class="c1"># If the settings file is not in the default location, then set the path first</span>
-<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\ProgramData\MyApp\settings.json&quot;</span><span class="p">)</span>
+<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">set_filepath</span><span class="p">(</span><span class="sa">r</span><span class="s2">"C:\ProgramData\MyApp\settings.json"</span><span class="p">)</span>
 
 <span class="c1"># The next statement will create the settings</span>
-<span class="n">name_var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>  <span class="c1"># name_var == &quot;the stored name&quot;</span>
+<span class="n">name_var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>  <span class="c1"># name_var == "the stored name"</span>
 <span class="c1"># The next statement just gets that same instance</span>
 <span class="n">totals_var</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">totals</span>  <span class="c1"># totals_var == 3</span>
 
@@ -1381,7 +1381,7 @@ reloading will return the changed parameter values.</p>
 <span class="n">name_var</span> <span class="o">=</span> <span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
 
 <span class="c1"># change settings parameters programmatically using update</span>
-<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;updated name&quot;</span><span class="p">,</span> <span class="s2">&quot;basics&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;totals&quot;</span><span class="p">:</span> <span class="mi">33</span><span class="p">}})</span>
+<span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"updated name"</span><span class="p">,</span> <span class="s2">"basics"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"totals"</span><span class="p">:</span> <span class="mi">33</span><span class="p">}})</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># updated name</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">MyExampleSettings</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">totals</span><span class="p">)</span>  <span class="c1"># 33</span>
 <span class="c1"># the update has been written to file as well</span>
@@ -1440,10 +1440,10 @@ reloading will return the changed parameter values.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>

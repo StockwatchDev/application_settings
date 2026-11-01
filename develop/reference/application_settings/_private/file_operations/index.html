@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -31,10 +31,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -1461,7 +1461,7 @@
 <span class="normal">79</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_container_from_file</span><span class="p">(</span>
     <span class="n">kind</span><span class="p">:</span> <span class="n">ParameterKind</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span> <span class="n">throw_if_file_not_found</span><span class="p">:</span> <span class="nb">bool</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load data from the file given in path; log error or throw if not possible&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Load data from the file given in path; log error or throw if not possible"""</span>
     <span class="k">if</span> <span class="n">_check_filepath</span><span class="p">(</span>
         <span class="n">path</span><span class="p">,</span>
         <span class="n">throw_if_invalid_path</span><span class="o">=</span><span class="n">throw_if_file_not_found</span><span class="p">,</span>
@@ -1472,8 +1472,8 @@
         <span class="k">if</span> <span class="n">loader</span> <span class="o">:=</span> <span class="n">_get_loader</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">real_path</span><span class="p">):</span>
             <span class="n">the_keys</span> <span class="o">=</span> <span class="n">_container_class_keys</span><span class="p">(</span><span class="n">kind</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">appl_sec</span> <span class="o">:=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">loader</span><span class="p">(</span><span class="n">real_path</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">the_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">{})):</span>
-                <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">appl_sec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">the_keys</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
-    <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">appl_sec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">the_keys</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">""</span><span class="p">))</span>
+    <span class="k">return</span> <span class="s2">""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1519,7 +1519,7 @@
 <span class="normal">100</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span>
     <span class="n">kind</span><span class="p">:</span> <span class="n">ParameterKind</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span> <span class="n">throw_if_file_not_found</span><span class="p">:</span> <span class="nb">bool</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load data from the file given in path; log error or throw if not possible&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Load data from the file given in path; log error or throw if not possible"""</span>
     <span class="k">if</span> <span class="n">_check_filepath</span><span class="p">(</span>
         <span class="n">path</span><span class="p">,</span>
         <span class="n">throw_if_invalid_path</span><span class="o">=</span><span class="n">throw_if_file_not_found</span><span class="p">,</span>
@@ -1532,7 +1532,7 @@
                 <span class="k">return</span> <span class="n">_load_with_includes</span><span class="p">(</span><span class="n">real_path</span><span class="p">,</span> <span class="n">throw_if_file_not_found</span><span class="p">,</span> <span class="n">loader</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">loader</span><span class="p">(</span><span class="n">real_path</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-        <span class="s2">&quot;Trying with default values, as loading from file is impossible. This may fail.&quot;</span>
+        <span class="s2">"Trying with default values, as loading from file is impossible. This may fail."</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="p">{}</span>
 </code></pre></div></td></tr></table></div>
@@ -1570,7 +1570,7 @@
 <span class="normal">111</span>
 <span class="normal">112</span>
 <span class="normal">113</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save data to the file given in path; log error or throw if not possible&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Save data to the file given in path; log error or throw if not possible"""</span>
     <span class="k">if</span> <span class="n">_check_filepath</span><span class="p">(</span>
         <span class="n">path</span><span class="p">,</span>
         <span class="n">throw_if_invalid_path</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -1642,10 +1642,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": [], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": [], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>

@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -31,10 +31,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -1375,7 +1375,7 @@ exports this decorator to facilitate documentation and introspection.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Configuration</label><label for="__tabbed_1_2">Settings</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Configuration parameter definition&quot;&quot;&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="sd">"""Configuration parameter definition"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">application_settings</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">ConfigBase</span><span class="p">,</span>
@@ -1389,25 +1389,25 @@ exports this decorator to facilitate documentation and introspection.</p>
 <span class="nd">@attributes_doc</span>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">MyExampleConfigSection</span><span class="p">(</span><span class="n">ConfigSectionBase</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Config section for an example&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Config section for an example"""</span>
 
     <span class="n">field1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The first field; defaults to 0.5&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The first field; defaults to 0.5"""</span>
 
     <span class="n">field2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The second field; defaults to 2&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The second field; defaults to 2"""</span>
 
 
 <span class="nd">@attributes_doc</span>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">MyExampleConfig</span><span class="p">(</span><span class="n">ConfigBase</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Config for an example&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Config for an example"""</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nice example&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Name of the application; defaults to &#39;nice example&#39;&quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"nice example"</span>
+<span class="w">    </span><span class="sd">"""Name of the application; defaults to 'nice example'"""</span>
 
     <span class="n">section1</span><span class="p">:</span> <span class="n">MyExampleConfigSection</span> <span class="o">=</span> <span class="n">MyExampleConfigSection</span><span class="p">()</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Holds the configuration parameters for the first section&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Holds the configuration parameters for the first section"""</span>
 
 
 <span class="c1"># It is good practice to set the filepath via the command line interface</span>
@@ -1416,7 +1416,7 @@ exports this decorator to facilitate documentation and introspection.</p>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Settings definitions&quot;&quot;&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="sd">"""Settings definitions"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">application_settings</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">SettingsBase</span><span class="p">,</span>
@@ -1430,22 +1430,22 @@ exports this decorator to facilitate documentation and introspection.</p>
 <span class="nd">@attributes_doc</span>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">BasicSettingsSection</span><span class="p">(</span><span class="n">SettingsSectionBase</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Settings section for the basics&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Settings section for the basics"""</span>
 
     <span class="n">totals</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The totals value; defaults to 2&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The totals value; defaults to 2"""</span>
 
 
 <span class="nd">@attributes_doc</span>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">MyExampleSettings</span><span class="p">(</span><span class="n">SettingsBase</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Settings for an example&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Settings for an example"""</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nice name&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;This parameter holds the name setting; defaults to &#39;nice name&#39;&quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"nice name"</span>
+<span class="w">    </span><span class="sd">"""This parameter holds the name setting; defaults to 'nice name'"""</span>
 
     <span class="n">basics</span><span class="p">:</span> <span class="n">BasicSettingsSection</span> <span class="o">=</span> <span class="n">BasicSettingsSection</span><span class="p">()</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Holds the setting parameters for the basic section&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Holds the setting parameters for the basic section"""</span>
 
 
 <span class="c1"># It is good practice to set the filepath via the command line interface</span>
@@ -1503,10 +1503,10 @@ exports this decorator to facilitate documentation and introspection.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>

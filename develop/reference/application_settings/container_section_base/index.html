@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -31,10 +31,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -1499,7 +1499,7 @@
 <span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="nd">@abstractmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">kind</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ParameterKind</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return either ParameterKind.CONFIG or ParameterKind.SETTINGS&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return either ParameterKind.CONFIG or ParameterKind.SETTINGS"""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1533,7 +1533,7 @@
 <span class="normal">32</span>
 <span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">kind_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParameterKindStr</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return either &#39;Config&#39; or &#39;Settings&#39;&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return either 'Config' or 'Settings'"""</span>
     <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">kind</span><span class="p">()</span><span class="o">.</span><span class="n">value</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -1574,12 +1574,12 @@
 <span class="normal">43</span>
 <span class="normal">44</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the singleton; if not existing, create it. Loading from file only done for a container.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Get the singleton; if not existing, create it. Loading from file only done for a container."""</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">_the_container_or_none</span> <span class="o">:=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get</span><span class="p">())</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># no config section has been made yet</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">get_without_load</span><span class="p">()</span>
-        <span class="c1"># so let&#39;s instantiate one and keep it in the global store</span>
+        <span class="c1"># so let's instantiate one and keep it in the global store</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_create_instance</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">_the_container_or_none</span>
 </code></pre></div></td></tr></table></div>
@@ -1621,13 +1621,13 @@
 <span class="normal">54</span>
 <span class="normal">55</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_without_load</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get has been called on a section before a load was done; handle this.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Get has been called on a section before a load was done; handle this."""</span>
     <span class="c1"># get() is called on a Section but the application</span>
     <span class="c1"># has not yet created or loaded a config.</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
         <span class="n">log_level</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">kind</span><span class="p">()),</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">kind_string</span><span class="p">()</span><span class="si">}</span><span class="s2"> section </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> accessed before data has been loaded; &quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;will try to load via command line parameter &#39;--</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">_file&#39;&quot;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">kind_string</span><span class="p">()</span><span class="si">}</span><span class="s2"> section </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> accessed before data has been loaded; "</span>
+        <span class="sa">f</span><span class="s2">"will try to load via command line parameter '--</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">_file'"</span><span class="p">,</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -1672,14 +1672,14 @@
 <span class="normal">69</span>
 <span class="normal">70</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">set</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new dataclass instance using data and set the singleton.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Create a new dataclass instance using data and set the singleton."""</span>
     <span class="n">new_instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
     <span class="c1"># config sections may be initialized without data in two situations:</span>
     <span class="c1"># - during import, because a config section is a class variables of</span>
     <span class="c1">#   a dataclass and hence will always be initialized without data if</span>
     <span class="c1">#   they has a default value;</span>
     <span class="c1"># - when the application is used in a zero conf manner.</span>
-    <span class="c1"># In these cases we don&#39;t want to do check for uninitialized and we</span>
+    <span class="c1"># In these cases we don't want to do check for uninitialized and we</span>
     <span class="c1"># will not have extra parameters, in all other cases we do check.</span>
     <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
         <span class="n">new_instance</span><span class="o">.</span><span class="n">_check_uninitialized_and_extra</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -1755,10 +1755,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>
