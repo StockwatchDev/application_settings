@@ -11,7 +11,8 @@ dynamic = ["classifiers"]
 requires-python = ">=3.11"
 dependencies = [
   "pathvalidate (>=2.5)",
-  "pydantic (>=2.0)",
+  "pydantic (>=2.7)",
+  "python-dotenv (>=1.0)",
   "tomlkit (>=0.12)",
   "attributes-doc (>=0.3.0)",
 ]
