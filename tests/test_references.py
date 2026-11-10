@@ -1,11 +1,17 @@
 """Test the module application_settings._private.references"""
 
+from pathlib import Path
+
 import pytest
 
 from application_settings._private.references import (
     Reference,
+    ReferenceContext,
+    ReferenceResolutionError,
     ReferenceSyntaxError,
+    Resolved,
     parse,
+    resolve,
 )
 
 
@@ -87,6 +93,10 @@ def test_parse_escape(value: str, expected: str) -> None:
         "${env:NAME }",
         "${env:A} and ${env:B}",  # looks like one reference but is not
         "${env:a/b}",  # no path separators in names
+        "${file:..}",  # would point outside the secrets folder
+        "${file:.}",
+        "${file:..,default}",
+        "${env:..}",  # names are validated the same way for every scheme
     ],
 )
 def test_parse_invalid_reference(value: str) -> None:
@@ -107,3 +117,145 @@ def test_reference_is_immutable() -> None:
     reference = Reference("env", "X", None)
     with pytest.raises(AttributeError):
         reference.name = "Y"  # type: ignore[misc]
+
+
+# --- resolve ---
+
+
+def test_resolve_env() -> None:
+    context = ReferenceContext(env={"X": "value"}, secrets_dir=None)
+    assert resolve(Reference("env", "X"), context) == Resolved("value", False)
+
+
+def test_resolve_env_ignores_default_if_set() -> None:
+    context = ReferenceContext(env={"X": "value"}, secrets_dir=None)
+    assert resolve(Reference("env", "X", "fallback"), context) == Resolved(
+        "value", False
+    )
+
+
+def test_resolve_env_empty_value_counts_as_set() -> None:
+    context = ReferenceContext(env={"X": ""}, secrets_dir=None)
+    assert resolve(Reference("env", "X", "fallback"), context) == Resolved("", False)
+
+
+def test_resolve_env_default() -> None:
+    context = ReferenceContext(env={}, secrets_dir=None)
+    assert resolve(Reference("env", "X", "fallback"), context) == Resolved(
+        "fallback", True
+    )
+    assert resolve(Reference("env", "X", ""), context) == Resolved("", True)
+
+
+def test_resolve_env_missing() -> None:
+    context = ReferenceContext(env={}, secrets_dir=None)
+    with pytest.raises(ReferenceResolutionError, match="X"):
+        resolve(Reference("env", "X"), context)
+
+
+def test_resolve_file(tmp_path: Path) -> None:
+    (tmp_path / "pw").write_text("s3cret", encoding="utf-8")
+    context = ReferenceContext(env={}, secrets_dir=tmp_path)
+    assert resolve(Reference("file", "pw"), context) == Resolved("s3cret", False)
+
+
+@pytest.mark.parametrize("content", ["s3cret\n", "s3cret\r\n"])
+def test_resolve_file_strips_trailing_newline(tmp_path: Path, content: str) -> None:
+    (tmp_path / "pw").write_bytes(content.encode("utf-8"))
+    context = ReferenceContext(env={}, secrets_dir=tmp_path)
+    assert resolve(Reference("file", "pw"), context).value == "s3cret"
+
+
+def test_resolve_file_keeps_other_whitespace(tmp_path: Path) -> None:
+    (tmp_path / "pw").write_text(" s3 cret ", encoding="utf-8")
+    context = ReferenceContext(env={}, secrets_dir=tmp_path)
+    assert resolve(Reference("file", "pw"), context).value == " s3 cret "
+
+
+def test_resolve_file_reads_utf8(tmp_path: Path) -> None:
+    (tmp_path / "pw").write_bytes("wachtwoord-é".encode("utf-8"))
+    context = ReferenceContext(env={}, secrets_dir=tmp_path)
+    assert resolve(Reference("file", "pw"), context).value == "wachtwoord-é"
+
+
+def test_resolve_file_does_not_use_the_environment(tmp_path: Path) -> None:
+    context = ReferenceContext(env={"pw": "from env"}, secrets_dir=tmp_path)
+    with pytest.raises(ReferenceResolutionError):
+        resolve(Reference("file", "pw"), context)
+
+
+def test_resolve_file_default_if_missing(tmp_path: Path) -> None:
+    context = ReferenceContext(env={}, secrets_dir=tmp_path)
+    assert resolve(Reference("file", "pw", "fallback"), context) == Resolved(
+        "fallback", True
+    )
+
+
+def test_resolve_file_missing(tmp_path: Path) -> None:
+    context = ReferenceContext(env={}, secrets_dir=tmp_path)
+    with pytest.raises(ReferenceResolutionError, match="pw"):
+        resolve(Reference("file", "pw"), context)
+
+
+def test_resolve_file_is_a_directory(tmp_path: Path) -> None:
+    (tmp_path / "pw").mkdir()
+    context = ReferenceContext(env={}, secrets_dir=tmp_path)
+    with pytest.raises(ReferenceResolutionError):
+        resolve(Reference("file", "pw"), context)
+
+
+def test_resolve_file_no_secrets_dir() -> None:
+    context = ReferenceContext(env={}, secrets_dir=None)
+    with pytest.raises(ReferenceResolutionError, match="secrets_dir"):
+        resolve(Reference("file", "pw"), context)
+    assert resolve(Reference("file", "pw", "fallback"), context) == Resolved(
+        "fallback", True
+    )
+
+
+def test_resolve_file_secrets_dir_does_not_exist(tmp_path: Path) -> None:
+    context = ReferenceContext(env={}, secrets_dir=tmp_path / "nope")
+    with pytest.raises(ReferenceResolutionError):
+        resolve(Reference("file", "pw"), context)
+
+
+def test_resolve_file_unreadable_content_is_not_replaced_by_default(
+    tmp_path: Path,
+) -> None:
+    (tmp_path / "pw").write_bytes(b"\xff\xfe\x00bad")
+    context = ReferenceContext(env={}, secrets_dir=tmp_path)
+    with pytest.raises(ReferenceResolutionError, match="pw"):
+        resolve(Reference("file", "pw", "fallback"), context)
+
+
+@pytest.mark.parametrize(
+    "name", ["..", ".", "../pw", "sub/pw", "sub\\pw", "/etc/passwd", "C:\\pw", ""]
+)
+def test_resolve_file_rejects_unsafe_names(tmp_path: Path, name: str) -> None:
+    (tmp_path / "pw").write_text("s3cret", encoding="utf-8")
+    context = ReferenceContext(env={}, secrets_dir=tmp_path)
+    # a default must not hide an unsafe name, and must not end up in the message
+    with pytest.raises(ReferenceSyntaxError) as excinfo:
+        resolve(Reference("file", name, "default-value"), context)
+    assert "default-value" not in str(excinfo.value)
+
+
+def test_resolve_file_follows_symlinks_in_secrets_dir(tmp_path: Path) -> None:
+    # kubernetes mounts secrets as symlinks into a hidden, timestamped folder
+    data_dir = tmp_path / "..data"
+    data_dir.mkdir()
+    (data_dir / "pw").write_text("s3cret", encoding="utf-8")
+    try:
+        (tmp_path / "pw").symlink_to(Path("..data") / "pw")
+    except OSError:
+        pytest.skip("symlinks are not available on this system")
+    context = ReferenceContext(env={}, secrets_dir=tmp_path)
+    assert resolve(Reference("file", "pw"), context).value == "s3cret"
+
+
+def test_resolution_errors_never_contain_the_default() -> None:
+    context = ReferenceContext(env={}, secrets_dir=None)
+    with pytest.raises(ReferenceResolutionError) as excinfo:
+        resolve(Reference("file", "pw"), context)
+    assert "s3cret" not in str(excinfo.value)
+    assert issubclass(ReferenceResolutionError, ValueError)
