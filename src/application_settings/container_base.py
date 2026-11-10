@@ -11,13 +11,14 @@ from pathvalidate import is_valid_filepath
 
 from application_settings.container_section_base import ParameterContainerSectionBase
 from application_settings.parameter_kind import ParameterKind
-from application_settings.parametrization import log_level
+from application_settings.parametrization import ApplicationConfigSection, log_level
 from application_settings.type_notation_helper import PathOrStr
 
 from ._private.file_operations import FileFormat
 from ._private.file_operations import load as _do_load
 from ._private.file_operations import save as _do_save
-from ._private.references import resolve_config_data
+from ._private.references import ResolutionReport, resolve_config_data
+from ._private.secret_checks import check_secrets
 
 logger = logging.getLogger(__name__)
 
@@ -122,11 +123,16 @@ class ParameterContainerBase(ParameterContainerSectionBase, ABC):
 
         # get whatever is stored in the config/settings file
         data_stored = cls._get_saved_data(throw_if_file_not_found)
+        report = ResolutionReport()
         if cls.kind() == ParameterKind.CONFIG and (path := cls.filepath()):
             # references are only supported for config, settings are written back to file
-            data_stored, _ = resolve_config_data(data_stored, path.parent)
-        # instantiate and store the ParameterContainer with the stored data
-        return cls.set(data_stored)
+            data_stored, report = resolve_config_data(data_stored, path.parent)
+        # instantiate the ParameterContainer with the stored data
+        new_instance = cls._build(data_stored)
+        if cls.kind() == ParameterKind.CONFIG:
+            # check before storing, so that a failure does not replace the current config
+            check_secrets(new_instance, data_stored, report, _is_strict(new_instance))
+        return new_instance._set()
 
     def _save(self) -> Self:
         """Protected method to save the singleton to file."""
@@ -147,6 +153,12 @@ class ParameterContainerBase(ParameterContainerSectionBase, ABC):
     def _get_saved_data(cls, throw_if_file_not_found: bool = False) -> dict[str, Any]:
         """Get the data stored in the parameter file"""
         return _do_load(cls.kind(), cls.filepath(), throw_if_file_not_found)
+
+
+def _is_strict(container: object) -> bool:
+    """Whether the application_config section of the container says to apply strict mode."""
+    section = getattr(container, "application_config", None)
+    return isinstance(section, ApplicationConfigSection) and section.strict_mode
 
 
 _ALL_PATHS: dict[int, Path | None] = {}
