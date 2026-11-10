@@ -231,3 +231,33 @@ def _read_dotenv(path: Path) -> dict[str, str]:
         for key, value in dotenv_values(path, interpolate=False).items()
         if value is not None  # a key without a value, e.g. a line 'KEY'
     }
+
+
+def resolve_config_data(
+    data: Mapping[str, Any],
+    config_dir: Path,
+    application_config_key: str = "application_config",
+) -> tuple[dict[str, Any], ResolutionReport]:
+    """Resolve the references in the data of a config file, in two phases.
+
+    Phase 1 reads the section with the parameters of application_settings (never
+    resolved itself) to find out where the dotenv file and the secrets folder are;
+    phase 2 resolves the references in all other sections.
+    """
+    raw = data.get(application_config_key)
+    raw_section: Mapping[str, Any] = raw if isinstance(raw, Mapping) else {}
+    dotenv_file = raw_section.get("dotenv_file", "")
+    secrets_dir = raw_section.get("secrets_dir", "")
+    # a value of the wrong type is reported when the section is validated
+    context = build_context(
+        dotenv_file if isinstance(dotenv_file, str) else "",
+        secrets_dir if isinstance(secrets_dir, str) else "",
+        config_dir,
+    )
+    others = {
+        key: value for key, value in data.items() if key != application_config_key
+    }
+    resolved, report = resolve_references(others, context)
+    if application_config_key in data:
+        resolved[application_config_key] = data[application_config_key]
+    return resolved, report

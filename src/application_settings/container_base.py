@@ -10,12 +10,14 @@ from typing import Any, Self
 from pathvalidate import is_valid_filepath
 
 from application_settings.container_section_base import ParameterContainerSectionBase
+from application_settings.parameter_kind import ParameterKind
 from application_settings.parametrization import log_level
 from application_settings.type_notation_helper import PathOrStr
 
 from ._private.file_operations import FileFormat
 from ._private.file_operations import load as _do_load
 from ._private.file_operations import save as _do_save
+from ._private.references import resolve_config_data
 
 logger = logging.getLogger(__name__)
 
@@ -120,6 +122,9 @@ class ParameterContainerBase(ParameterContainerSectionBase, ABC):
 
         # get whatever is stored in the config/settings file
         data_stored = cls._get_saved_data(throw_if_file_not_found)
+        if cls.kind() == ParameterKind.CONFIG and (path := cls.filepath()):
+            # references are only supported for config, settings are written back to file
+            data_stored, _ = resolve_config_data(data_stored, path.parent)
         # instantiate and store the ParameterContainer with the stored data
         return cls.set(data_stored)
 
