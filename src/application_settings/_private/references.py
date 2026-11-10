@@ -9,11 +9,17 @@ A value that starts with `$${` is not a reference, the leading `$` is an escape
 that is removed: `$${env:NAME}` becomes the literal `${env:NAME}`.
 """
 
+import logging
+import os
 import re
 from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Literal
+
+from dotenv import dotenv_values
+
+logger = logging.getLogger(__name__)
 
 Scheme = Literal["env", "file"]
 
@@ -188,3 +194,40 @@ def resolve_references(
             "References that cannot be resolved:\n" + "\n".join(problems)
         )
     return result, ResolutionReport(frozenset(from_reference), frozenset(from_default))
+
+
+def build_context(
+    dotenv_file: str,
+    secrets_dir: str,
+    config_dir: Path,
+    environ: Mapping[str, str] | None = None,
+) -> ReferenceContext:
+    """Create the context to resolve references in; empty strings mean 'not configured'.
+
+    Relative paths are relative to config_dir. The values from the dotenv file are
+    available to references, but os.environ is not modified and, if a name is in both,
+    the real environment variable wins. environ defaults to os.environ.
+    """
+    env: dict[str, str] = {}
+    if dotenv_file:
+        env.update(_read_dotenv(_absolute(dotenv_file, config_dir)))
+    env.update(os.environ if environ is None else environ)
+    return ReferenceContext(
+        env, _absolute(secrets_dir, config_dir) if secrets_dir else None
+    )
+
+
+def _absolute(path: str, config_dir: Path) -> Path:
+    return config_dir / path  # an absolute path replaces config_dir
+
+
+def _read_dotenv(path: Path) -> dict[str, str]:
+    if not path.is_file():
+        logger.warning("The dotenv file %s is not a file, it will not be used.", path)
+        return {}
+    # interpolate=False: take values as they are, do not read os.environ at this point
+    return {
+        key: value
+        for key, value in dotenv_values(path, interpolate=False).items()
+        if value is not None  # a key without a value, e.g. a line 'KEY'
+    }

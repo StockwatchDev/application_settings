@@ -1,5 +1,7 @@
 """Test the module application_settings._private.references"""
 
+import logging
+import os
 from pathlib import Path
 
 import pytest
@@ -11,6 +13,7 @@ from application_settings._private.references import (
     ReferenceSyntaxError,
     ResolutionReport,
     Resolved,
+    build_context,
     parse,
     resolve,
     resolve_references,
@@ -353,3 +356,123 @@ def test_resolve_references_problems_never_show_defaults() -> None:
     with pytest.raises(ReferenceResolutionError) as excinfo:
         resolve_references(data, _context())
     assert "hunter2" not in str(excinfo.value)
+
+
+# --- build_context ---
+
+
+def test_build_context_uses_the_environment_by_default(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setenv("APPSET_TEST_VAR", "from environment")
+    context = build_context("", "", tmp_path)
+    assert context.env["APPSET_TEST_VAR"] == "from environment"
+
+
+def test_build_context_nothing_configured(tmp_path: Path) -> None:
+    context = build_context("", "", tmp_path, environ={"A": "a"})
+    assert dict(context.env) == {"A": "a"}
+    assert context.secrets_dir is None
+
+
+def test_build_context_reads_dotenv(tmp_path: Path) -> None:
+    (tmp_path / ".env").write_text("A=from dotenv\nB=b\n", encoding="utf-8")
+    context = build_context(".env", "", tmp_path, environ={"C": "c"})
+    assert dict(context.env) == {"A": "from dotenv", "B": "b", "C": "c"}
+
+
+def test_build_context_real_environment_wins(tmp_path: Path) -> None:
+    (tmp_path / ".env").write_text("A=from dotenv\nB=b\n", encoding="utf-8")
+    context = build_context(".env", "", tmp_path, environ={"A": "real"})
+    assert context.env["A"] == "real"
+    assert context.env["B"] == "b"
+
+
+def test_build_context_does_not_touch_os_environ(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.delenv("APPSET_ONLY_IN_DOTENV", raising=False)
+    (tmp_path / ".env").write_text("APPSET_ONLY_IN_DOTENV=x\n", encoding="utf-8")
+    before = dict(os.environ)
+    context = build_context(".env", "", tmp_path)
+    assert context.env["APPSET_ONLY_IN_DOTENV"] == "x"
+    assert dict(os.environ) == before
+    assert "APPSET_ONLY_IN_DOTENV" not in os.environ
+
+
+def test_build_context_is_a_snapshot(tmp_path: Path) -> None:
+    environ = {"A": "a"}
+    context = build_context("", "", tmp_path, environ=environ)
+    environ["A"] = "changed"
+    environ["B"] = "new"
+    assert dict(context.env) == {"A": "a"}
+
+
+def test_build_context_dotenv_path_relative_to_config_dir(tmp_path: Path) -> None:
+    (tmp_path / "conf").mkdir()
+    (tmp_path / "conf" / "my.env").write_text("A=a\n", encoding="utf-8")
+    context = build_context("my.env", "", tmp_path / "conf", environ={})
+    assert context.env["A"] == "a"
+
+
+def test_build_context_dotenv_absolute_path(tmp_path: Path) -> None:
+    other = tmp_path / "other"
+    other.mkdir()
+    (other / "x.env").write_text("A=a\n", encoding="utf-8")
+    context = build_context(
+        str(other / "x.env"), "", tmp_path / "unrelated", environ={}
+    )
+    assert context.env["A"] == "a"
+
+
+def test_build_context_dotenv_syntax(tmp_path: Path) -> None:
+    (tmp_path / ".env").write_text(
+        "# comment\n\nexport A=exported\nB='single quoted'\nC=\"double quoted\"\n"
+        "NO_VALUE\nD=a${A}c\n",
+        encoding="utf-8",
+    )
+    context = build_context(".env", "", tmp_path, environ={})
+    assert context.env["A"] == "exported"
+    assert context.env["B"] == "single quoted"
+    assert context.env["C"] == "double quoted"
+    assert "NO_VALUE" not in context.env  # a key without a value is not a value
+    assert context.env["D"] == "a${A}c"  # no interpolation, the text is kept as is
+
+
+@pytest.mark.parametrize("kind", ["missing", "directory"])
+def test_build_context_unusable_dotenv_warns_and_continues(
+    tmp_path: Path, caplog: pytest.LogCaptureFixture, kind: str
+) -> None:
+    if kind == "directory":
+        (tmp_path / ".env").mkdir()
+    with caplog.at_level(logging.WARNING):
+        context = build_context(".env", "", tmp_path, environ={"A": "a"})
+    assert dict(context.env) == {"A": "a"}
+    assert any(
+        record.levelno == logging.WARNING and ".env" in record.getMessage()
+        for record in caplog.records
+    )
+
+
+def test_build_context_secrets_dir(tmp_path: Path) -> None:
+    context = build_context("", "secrets", tmp_path, environ={})
+    assert context.secrets_dir == tmp_path / "secrets"
+    absolute = tmp_path / "elsewhere"
+    context = build_context("", str(absolute), tmp_path / "conf", environ={})
+    assert context.secrets_dir == absolute
+
+
+def test_build_context_secrets_dir_does_not_have_to_exist(tmp_path: Path) -> None:
+    # it only matters when a file reference needs it
+    context = build_context("", "nope", tmp_path, environ={})
+    assert context.secrets_dir == tmp_path / "nope"
+
+
+def test_build_context_end_to_end(tmp_path: Path) -> None:
+    (tmp_path / "secrets").mkdir()
+    (tmp_path / "secrets" / "pw").write_text("s3cret\n", encoding="utf-8")
+    (tmp_path / ".env").write_text("USER_NAME=from dotenv\nPORT=1\n", encoding="utf-8")
+    context = build_context(".env", "secrets", tmp_path, environ={"PORT": "2"})
+    data = {"user": "${env:USER_NAME}", "port": "${env:PORT}", "pw": "${file:pw}"}
+    resolved, _ = resolve_references(data, context)
+    assert resolved == {"user": "from dotenv", "port": "2", "pw": "s3cret"}
