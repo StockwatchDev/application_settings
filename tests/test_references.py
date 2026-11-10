@@ -9,9 +9,11 @@ from application_settings._private.references import (
     ReferenceContext,
     ReferenceResolutionError,
     ReferenceSyntaxError,
+    ResolutionReport,
     Resolved,
     parse,
     resolve,
+    resolve_references,
 )
 
 
@@ -259,3 +261,95 @@ def test_resolution_errors_never_contain_the_default() -> None:
         resolve(Reference("file", "pw"), context)
     assert "s3cret" not in str(excinfo.value)
     assert issubclass(ReferenceResolutionError, ValueError)
+
+
+# --- resolve_references ---
+
+
+def _context(tmp_path: Path | None = None, **env: str) -> ReferenceContext:
+    return ReferenceContext(env=env, secrets_dir=tmp_path)
+
+
+def test_resolve_references_without_references() -> None:
+    data = {"a": 1, "b": "text", "c": {"d": 2.5, "e": [1, "x"]}, "f": True}
+    resolved, report = resolve_references(data, _context())
+    assert resolved == data
+    assert report == ResolutionReport()
+
+
+def test_resolve_references_nested(tmp_path: Path) -> None:
+    (tmp_path / "pw").write_text("s3cret", encoding="utf-8")
+    data = {
+        "name": "${env:APP_NAME}",
+        "section": {"password": "${file:pw}", "sub": {"port": "${env:PORT}"}},
+    }
+    resolved, _ = resolve_references(
+        data, _context(tmp_path, APP_NAME="app", PORT="8080")
+    )
+    assert resolved == {
+        "name": "app",
+        "section": {"password": "s3cret", "sub": {"port": "8080"}},
+    }
+
+
+def test_resolve_references_in_lists() -> None:
+    data = {"hosts": ["${env:A}", "fixed", {"name": "${env:B}"}]}
+    resolved, report = resolve_references(data, _context(A="a", B="b"))
+    assert resolved == {"hosts": ["a", "fixed", {"name": "b"}]}
+    assert report.from_reference == {"hosts[0]", "hosts[2].name"}
+
+
+def test_resolve_references_keeps_other_types_and_keys() -> None:
+    data = {"${env:A}": "x", "n": 3, "flag": False, "nothing": None}
+    resolved, report = resolve_references(data, _context(A="a"))
+    assert resolved == data  # keys are never resolved
+    assert report == ResolutionReport()
+
+
+def test_resolve_references_does_not_modify_its_input() -> None:
+    data = {"a": {"b": "${env:X}"}, "c": ["${env:X}"]}
+    resolve_references(data, _context(X="x"))
+    assert data == {"a": {"b": "${env:X}"}, "c": ["${env:X}"]}
+
+
+def test_resolve_references_report() -> None:
+    data = {
+        "from_env": "${env:SET}",
+        "from_default": "${env:UNSET,fallback}",
+        "section": {"also_default": "${env:UNSET,}", "literal": "plain", "number": 1},
+    }
+    resolved, report = resolve_references(data, _context(SET="value"))
+    assert resolved["from_default"] == "fallback"
+    assert report.from_reference == {"from_env"}
+    assert report.from_default == {"from_default", "section.also_default"}
+
+
+def test_resolve_references_escaped_value_is_a_literal() -> None:
+    resolved, report = resolve_references({"a": "$${env:X}"}, _context(X="x"))
+    assert resolved == {"a": "${env:X}"}
+    assert report == ResolutionReport()
+
+
+def test_resolve_references_collects_all_problems(tmp_path: Path) -> None:
+    (tmp_path / "ok").write_text("s3cret", encoding="utf-8")
+    data = {
+        "good": "${file:ok}",
+        "missing_env": "${env:NOPE}",
+        "section": {"missing_file": "${file:nope}", "bad": "${unknown:X}"},
+        "items": ["${env:NOPE2}"],
+    }
+    with pytest.raises(ReferenceResolutionError) as excinfo:
+        resolve_references(data, _context(tmp_path))
+    message = str(excinfo.value)
+    for path in ("missing_env", "section.missing_file", "section.bad", "items[0]"):
+        assert path in message
+    assert "good" not in message
+    assert "NOPE" in message and "nope" in message
+    assert "s3cret" not in message  # values of references that did resolve
+
+
+def test_resolve_references_problems_never_show_defaults() -> None:
+    data = {"a": "${file:../x,hunter2}", "b": "${file:missing}"}
+    with pytest.raises(ReferenceResolutionError) as excinfo:
+        resolve_references(data, _context())
+    assert "hunter2" not in str(excinfo.value)

@@ -13,7 +13,7 @@ import re
 from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 Scheme = Literal["env", "file"]
 
@@ -134,3 +134,57 @@ def _read_secret_file(name: str, secrets_dir: Path | None) -> tuple[str | None, 
             f"File '{name}' in the secrets folder cannot be read ({type(error).__name__})."
         ) from None
     return content.rstrip("\r\n"), ""
+
+
+@dataclass(frozen=True)
+class ResolutionReport:
+    """Where the values came from, as dotted paths like 'section.field' or 'hosts[0]'.
+
+    A value that is in the data but in neither set is a literal.
+    """
+
+    from_reference: frozenset[str] = frozenset()
+    from_default: frozenset[str] = frozenset()
+
+
+def resolve_references(
+    data: Mapping[str, Any], context: ReferenceContext
+) -> tuple[dict[str, Any], ResolutionReport]:
+    """Return a copy of data with all references resolved, and a report on the origin.
+
+    Raises:
+        ReferenceResolutionError: if one or more references are malformed or cannot be
+            resolved; the message lists all of them, by path
+    """
+    from_reference: set[str] = set()
+    from_default: set[str] = set()
+    problems: list[str] = []
+
+    def walk(value: Any, path: str) -> Any:
+        if isinstance(value, str):
+            return resolve_value(value, path)
+        if isinstance(value, Mapping):
+            prefix = f"{path}." if path else ""
+            return {key: walk(item, f"{prefix}{key}") for key, item in value.items()}
+        if isinstance(value, list):
+            return [walk(item, f"{path}[{index}]") for index, item in enumerate(value)]
+        return value
+
+    def resolve_value(value: str, path: str) -> str:
+        try:
+            parsed = parse(value)
+            if isinstance(parsed, str):
+                return parsed
+            resolved = resolve(parsed, context)
+        except (ReferenceSyntaxError, ReferenceResolutionError) as error:
+            problems.append(f"  {path}: {error}")
+            return value
+        (from_default if resolved.from_default else from_reference).add(path)
+        return resolved.value
+
+    result = walk(data, "")
+    if problems:
+        raise ReferenceResolutionError(
+            "References that cannot be resolved:\n" + "\n".join(problems)
+        )
+    return result, ResolutionReport(frozenset(from_reference), frozenset(from_default))
