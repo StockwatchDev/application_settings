@@ -5,9 +5,13 @@ from abc import ABC, abstractmethod
 from dataclasses import fields
 from typing import Any, Self, cast
 
+from pydantic import ValidationError
 from pydantic.dataclasses import is_pydantic_dataclass
 
-from application_settings._private.secret_checks import forbid_secrets
+from application_settings._private.secret_checks import (
+    forbid_secrets,
+    redact_validation_error,
+)
 from application_settings.parameter_kind import ParameterKind, ParameterKindStr
 from application_settings.parametrization import log_level
 from application_settings.protocols import ParameterContainerSectionProtocol
@@ -62,7 +66,12 @@ class ParameterContainerSectionBase(ABC):
     @classmethod
     def _build(cls, data: dict[str, Any]) -> Self:
         """Create a new dataclass instance using data, without setting the singleton."""
-        new_instance = cls(**data)
+        try:
+            new_instance = cls(**data)
+        except ValidationError as error:
+            if (redacted := redact_validation_error(error, cls)) is error:
+                raise
+            raise redacted from None  # the original error shows the secrets
         # config sections may be initialized without data in two situations:
         # - during import, because a config section is a class variables of
         #   a dataclass and hence will always be initialized without data if

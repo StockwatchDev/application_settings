@@ -1,7 +1,9 @@
 # pylint: disable=missing-module-docstring
 # pylint: disable=missing-function-docstring
 import logging
+import traceback
 from pathlib import Path
+from typing import Literal
 
 import pytest
 
@@ -269,3 +271,155 @@ def test_non_secret_literals_are_not_flagged(
         config = _load(SecretConfig, tmp_path, content)
     assert isinstance(config, SecretConfig)
     assert not any(STORE_WARNING in message for message in _warnings(caplog))
+
+
+# --- secret values must not end up in validation errors ---
+
+REDACTED = "**********"
+
+
+@dataclass(frozen=True)
+class PinSection(ConfigSectionBase):
+    """Section with a secret that is coerced"""
+
+    pin: Secret[int]
+
+
+@dataclass(frozen=True)
+class LeakConfig(ConfigBase):
+    """Config with a required parameter that is not a secret"""
+
+    needed: str
+    api_key: Secret[int]
+    pins: PinSection
+    name: str = "default name"
+
+
+@dataclass(frozen=True)
+class PlainConfig(ConfigBase):
+    """Config without secrets"""
+
+    ratio: float = 1.0
+
+
+def _full_text(error: BaseException) -> str:
+    """Everything that would be shown: the message and the whole traceback chain"""
+    return str(error) + "".join(traceback.format_exception(error))
+
+
+@pytest.mark.parametrize("source", ["env", "literal"])
+def test_failed_coercion_does_not_show_the_value(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, source: str
+) -> None:
+    monkeypatch.setenv("APPSET_BAD", "not-a-number-s3cret")
+    value = '"${env:APPSET_BAD}"' if source == "env" else '"not-a-number-s3cret"'
+    content = f'needed = "n"\napi_key = {value}\n[pins]\npin = 1\n'
+    with pytest.raises(ValidationError) as excinfo:
+        _load(LeakConfig, tmp_path, content)
+    assert "s3cret" not in _full_text(excinfo.value)
+    assert "api_key" in str(excinfo.value)
+    assert "valid integer" in str(excinfo.value)  # what is wrong is still reported
+    assert excinfo.value.title == "LeakConfig"
+    (error,) = excinfo.value.errors()
+    assert error["loc"] == ("api_key",)
+    assert error["type"] == "int_parsing"
+    assert error["input"] == REDACTED
+
+
+def test_failed_coercion_in_a_section_does_not_show_the_value(
+    tmp_path: Path,
+) -> None:
+    content = 'needed = "n"\napi_key = 1\n[pins]\npin = "not-a-pin-s3cret"\n'
+    with pytest.raises(ValidationError) as excinfo:
+        _load(LeakConfig, tmp_path, content)
+    assert "s3cret" not in _full_text(excinfo.value)
+    (error,) = excinfo.value.errors()
+    assert error["loc"] == ("pins", "pin")
+    assert error["input"] == REDACTED
+
+
+def test_error_in_another_parameter_does_not_show_secrets(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # pydantic reports a missing parameter with all arguments as its input
+    monkeypatch.setenv("APPSET_KEY", "987654")
+    monkeypatch.setenv("APPSET_PIN", "246810")
+    content = 'api_key = "${env:APPSET_KEY}"\n[pins]\npin = "${env:APPSET_PIN}"\n'
+    with pytest.raises(ValidationError) as excinfo:
+        _load(LeakConfig, tmp_path, content)
+    text = _full_text(excinfo.value)
+    assert "987654" not in text and "246810" not in text
+    assert "needed" in text
+    assert [e["loc"] for e in excinfo.value.errors()] == [("needed",)]
+
+
+def test_all_errors_are_kept(tmp_path: Path) -> None:
+    content = (
+        'api_key = "bad-s3cret"\n[pins]\npin = "bad-s3cret"\n'  # and needed is missing
+    )
+    with pytest.raises(ValidationError) as excinfo:
+        _load(LeakConfig, tmp_path, content)
+    assert excinfo.value.error_count() == 3
+    assert "s3cret" not in _full_text(excinfo.value)
+
+
+def test_input_of_non_secret_parameters_is_still_shown(tmp_path: Path) -> None:
+    content = 'needed = "n"\napi_key = 1\nname = 12345\n[pins]\npin = 1\n'
+    with pytest.raises(ValidationError) as excinfo:
+        _load(LeakConfig, tmp_path, content)
+    (error,) = excinfo.value.errors()
+    assert error["loc"] == ("name",)
+    assert error["input"] == 12345
+    assert "12345" in str(excinfo.value)
+
+
+def test_config_without_secrets_is_not_changed(tmp_path: Path) -> None:
+    with pytest.raises(ValidationError) as excinfo:
+        _load(PlainConfig, tmp_path, 'ratio = "not-a-float"\n')
+    assert "not-a-float" in str(excinfo.value)
+
+
+def test_set_redacts_as_well() -> None:
+    # not a literal in the source line, because a traceback shows source lines
+    bad_value = "bad-" + "s3" + "cret"
+    with pytest.raises(ValidationError) as excinfo:
+        LeakConfig.set({"needed": "n", "api_key": bad_value, "pins": {"pin": 1}})
+    assert bad_value not in _full_text(excinfo.value)
+
+
+def test_if_the_error_cannot_be_rebuilt_nothing_is_shown(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    class CannotRebuild:  # ValidationError is a built-in type: it cannot be patched
+        @staticmethod
+        def from_exception_data(*args: object, **kwargs: object) -> ValidationError:
+            raise TypeError("cannot rebuild")
+
+    monkeypatch.setattr(
+        "application_settings._private.secret_checks.ValidationError", CannotRebuild
+    )
+    content = 'needed = "n"\napi_key = "bad-s3cret"\n[pins]\npin = 1\n'
+    with pytest.raises(ValueError) as excinfo:
+        _load(LeakConfig, tmp_path, content)
+    text = _full_text(excinfo.value)
+    assert "s3cret" not in text
+    assert "api_key" in text
+
+
+@dataclass(frozen=True)
+class ModeConfig(ConfigBase):
+    """Config with a secret that can only have a few values"""
+
+    mode: Secret[Literal["a", "b"]]
+
+
+def test_errors_with_context_are_kept(tmp_path: Path) -> None:
+    # a literal error has context (the expected values); that is kept, the input is not
+    content = 'mode = "zzz-s3cret"\n'
+    with pytest.raises(ValidationError) as excinfo:
+        _load(ModeConfig, tmp_path, content)
+    assert "s3cret" not in _full_text(excinfo.value)
+    assert "'a' or 'b'" in str(excinfo.value)
+    (error,) = excinfo.value.errors()
+    assert error["type"] == "literal_error"
+    assert error["input"] == REDACTED

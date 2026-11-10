@@ -5,11 +5,14 @@ import logging
 from collections.abc import Mapping
 from typing import Any, get_origin, get_type_hints
 
-from pydantic import Secret
+from pydantic import Secret, ValidationError
+from pydantic_core import ArgsKwargs, InitErrorDetails
 
 from application_settings._private.references import ResolutionReport
 
 logger = logging.getLogger(__name__)
+
+REDACTED = "**********"
 
 
 class SecretsError(ValueError):
@@ -84,6 +87,53 @@ def check_secrets(
         raise SecretsError("\n".join(offenders))
     for offender in offenders:
         logger.warning(offender)
+
+
+def redact_validation_error(error: ValidationError, cls: type) -> ValidationError:
+    """Return the error with the input hidden where it may contain a secret value.
+
+    Pydantic includes the offending input in its errors. That is a secret for a Secret
+    parameter, and pydantic also reports the whole set of arguments (and so all secrets)
+    as the input of an error such as a missing parameter. The error is returned as is
+    if cls has no secret parameters.
+    """
+    if not (
+        secret_paths := [tuple(path.split(".")) for path in secret_field_paths(cls)]
+    ):
+        return error
+
+    def is_sensitive(loc: tuple[Any, ...], value: Any) -> bool:
+        if isinstance(value, (ArgsKwargs, Mapping)):
+            return True  # may hold any of the secrets
+        # the error is for a secret, or for a section that holds a secret
+        return any(
+            loc[: len(path)] == path or path[: len(loc)] == loc for path in secret_paths
+        )
+
+    details = error.errors(include_url=False)
+    init_errors: list[InitErrorDetails] = []
+    for detail in details:
+        init_error: InitErrorDetails = {
+            "type": detail["type"],
+            "loc": detail["loc"],
+            "input": (
+                REDACTED
+                if is_sensitive(detail["loc"], detail["input"])
+                else detail["input"]
+            ),
+        }
+        if "ctx" in detail:
+            init_error["ctx"] = detail["ctx"]
+        init_errors.append(init_error)
+    try:
+        return ValidationError.from_exception_data(error.title, init_errors)
+    except (TypeError, ValueError, KeyError):
+        # better to show less than to risk showing a secret
+        locs = ", ".join(".".join(str(part) for part in d["loc"]) for d in details)
+        raise ValueError(
+            f"{error.title}: invalid value for {locs}. Details are not shown "
+            "because there are secret parameters."
+        ) from None
 
 
 def _get_path(instance: object, path: str) -> Any:
