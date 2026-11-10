@@ -373,6 +373,16 @@ def test_input_of_non_secret_parameters_is_still_shown(tmp_path: Path) -> None:
     assert "12345" in str(excinfo.value)
 
 
+def test_input_that_is_not_a_plain_value_is_hidden(tmp_path: Path) -> None:
+    # a list or table could hold a secret, so only plain values are ever shown
+    content = 'needed = "n"\napi_key = 1\nname = [1, 2]\n[pins]\npin = 1\n'
+    with pytest.raises(ValidationError) as excinfo:
+        _load(LeakConfig, tmp_path, content)
+    (error,) = excinfo.value.errors()
+    assert error["loc"] == ("name",)
+    assert error["input"] == REDACTED
+
+
 def test_config_without_secrets_is_not_changed(tmp_path: Path) -> None:
     with pytest.raises(ValidationError) as excinfo:
         _load(PlainConfig, tmp_path, 'ratio = "not-a-float"\n')

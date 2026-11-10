@@ -30,6 +30,9 @@ into dataclasses. This brings some benefits:
 - Configuration parameters are read-only (i.e., changed by editing the config file); we
   recommend (and support) the use of `toml` for this, which is a human-oriented,
   flexible, standardardized and not overly complex format.
+- Values in a config file can refer to environment variables and to files (e.g., as
+  provided by Docker or Kubernetes), and parameters can be declared as `Secret` so
+  that their values are masked in output, logs and errors.
 - Settings parameters are read-write (i.e., mostly changed via the UI of the
   application); we recommend (and support) use `json` for this, an established
   standardized machine-oriented format.

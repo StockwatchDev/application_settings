@@ -6,7 +6,6 @@ from collections.abc import Mapping
 from typing import Any, get_origin, get_type_hints
 
 from pydantic import Secret, ValidationError
-from pydantic_core import ArgsKwargs, InitErrorDetails
 
 from application_settings._private.references import ResolutionReport
 
@@ -103,17 +102,19 @@ def redact_validation_error(error: ValidationError, cls: type) -> ValidationErro
         return error
 
     def is_sensitive(loc: tuple[Any, ...], value: Any) -> bool:
-        if isinstance(value, (ArgsKwargs, Mapping)):
-            return True  # may hold any of the secrets
+        if not isinstance(value, (str, int, float, bool, type(None))):
+            return True  # e.g. all arguments, or a table: may hold any of the secrets
         # the error is for a secret, or for a section that holds a secret
         return any(
             loc[: len(path)] == path or path[: len(loc)] == loc for path in secret_paths
         )
 
     details = error.errors(include_url=False)
-    init_errors: list[InitErrorDetails] = []
+    # entries are pydantic_core.InitErrorDetails; that is not imported, because it is
+    # not a direct dependency of this package
+    init_errors: list[Any] = []
     for detail in details:
-        init_error: InitErrorDetails = {
+        init_error: dict[str, Any] = {
             "type": detail["type"],
             "loc": detail["loc"],
             "input": (

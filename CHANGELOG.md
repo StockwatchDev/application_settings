@@ -15,10 +15,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   import string for the Config class / the Settings class that the application uses and whether or not
   to use `application_settings` in strict mode.
 - Support for Python 3.15
+- References in config files: the value of a parameter can be `${env:NAME}`, `${env:NAME,default}`,
+  `${file:NAME}` or `${file:NAME,default}` to take the value from an environment variable or from a file in
+  a secrets folder. Environment variables can be read from a dotenv file without changing the environment
+  of the process. This is configured with the new parameters `dotenv_file` and `secrets_dir` in
+  `ApplicationConfigSection`. See the chapter on environment variables, files and secrets in the docs.
+- Support for secrets in config: parameters annotated with `Secret[...]` (`Secret` and the exceptions
+  `SecretsError` and `ReferenceResolutionError` are exported by `application_settings`) are masked in
+  `repr`, logs and validation errors. A secret that does not come from a reference gives a warning, or
+  a `SecretsError` in strict mode. `Secret` is not supported in settings.
+- Dependency python-dotenv.
 
 ### Changed - 0.6.0
 
 - Logging now done with the standard logger, no longer with loguru
+- Minimal version of pydantic is now 2.7, because we use `pydantic.Secret`.
 
 ### Fixed - 0.6.0
 
