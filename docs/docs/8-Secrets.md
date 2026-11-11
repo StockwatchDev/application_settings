@@ -160,6 +160,11 @@ is not replaced in that case.
 
 Messages never contain the value of a secret.
 
+Strict mode is off by default, so by default a secret that does not come from a
+reference is only a warning. For production, set `strict_mode = true`: a misconfigured
+deployment then fails at startup instead of silently running with a default or literal
+secret.
+
 ## Setting this up on a platform
 
 === "Local development"
