@@ -191,7 +191,10 @@ def _load_with_includes(
             raise ValueError(
                 f"Given path: '{included_file}' is not a valid path for this OS"
             )
-    return deep_update(data_included, data_stored)
+    data_own = {
+        key: value for key, value in data_stored.items() if key != "__include__"
+    }
+    return deep_update(data_included, data_own)
 
 
 def _included_files(data: dict[str, Any]) -> list[str]:

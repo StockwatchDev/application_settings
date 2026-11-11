@@ -235,7 +235,21 @@ def test_a_file_that_is_included_twice_is_no_cycle(tmp_path: Path) -> None:
     assert _load(main)["port"] == 7
 
 
-@pytest.mark.xfail(strict=True, reason="__include__ is reported as extra (step 6)")
+def test_include_key_is_not_in_the_loaded_data(tmp_path: Path) -> None:
+    _write(tmp_path, "common.toml", "port = 5\n")
+    main = _write(tmp_path, "main.toml", '__include__ = "common.toml"\n')
+    assert "__include__" not in _load(main)
+
+
+def test_include_key_of_a_nested_include_is_not_in_the_loaded_data(
+    tmp_path: Path,
+) -> None:
+    _write(tmp_path, "c.toml", "port = 5\n")
+    _write(tmp_path, "b.toml", '__include__ = "c.toml"\n')
+    main = _write(tmp_path, "main.toml", '__include__ = "b.toml"\n')
+    assert "__include__" not in _load(main)
+
+
 def test_include_key_is_not_reported_as_an_extra_parameter(
     tmp_path: Path, caplog: pytest.LogCaptureFixture
 ) -> None:
