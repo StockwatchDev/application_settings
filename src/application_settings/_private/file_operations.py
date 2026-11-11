@@ -164,7 +164,7 @@ def _load_with_includes(
                 included_file_path = Path(included_file)
                 if not included_file_path.is_absolute():
                     included_file_path = path.parents[0] / included_file_path
-                included_file_path.resolve()
+                included_file_path = included_file_path.resolve()
                 if _check_filepath(
                     included_file_path,
                     throw_if_invalid_path=throw_if_file_not_found,

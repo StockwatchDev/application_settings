@@ -54,6 +54,25 @@ def test_include_path_is_relative_to_the_including_file(tmp_path: Path) -> None:
     assert _load(main)["port"] == 1
 
 
+def test_include_path_with_parent_folder(tmp_path: Path) -> None:
+    (tmp_path / "sub").mkdir()
+    _write(tmp_path, "common.toml", "port = 6\n")
+    main = _write(tmp_path, "main.toml", '__include__ = "sub/../common.toml"\n')
+    assert _load(main)["port"] == 6
+
+
+def test_include_path_is_normalised(
+    tmp_path: Path, caplog: pytest.LogCaptureFixture
+) -> None:
+    (tmp_path / "sub").mkdir()
+    main = _write(tmp_path, "main.toml", '__include__ = "sub/../nope.toml"\n')
+    with caplog.at_level(logging.WARNING):
+        _load(main)
+    messages = [r.getMessage() for r in caplog.records if "nope.toml" in r.getMessage()]
+    assert messages
+    assert not any(".." in message for message in messages)
+
+
 def test_absolute_include_path(tmp_path: Path) -> None:
     common = _write(tmp_path / "elsewhere", "common.toml", "port = 2\n")
     main = _write(
