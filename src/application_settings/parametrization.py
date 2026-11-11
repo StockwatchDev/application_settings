@@ -181,6 +181,17 @@ class ApplicationConfigSection(ApplicationSettingsContainerSectionBase):
     2) parameters are missing from the loaded file
     3) unknown parameters are found in the loaded file"""
 
+    dotenv_file: str = ""
+    """Path of a dotenv file whose variables can be used in references like '${env:NAME}';
+    a relative path is relative to the folder of the config file. Empty means: no dotenv file.
+    Real environment variables take precedence over the variables in the dotenv file.
+    This parameter cannot itself contain references."""
+
+    secrets_dir: str = ""
+    """Path of the folder that holds the files that are used in references like '${secret:NAME}';
+    a relative path is relative to the folder of the config file. Empty means: no secrets folder.
+    This parameter cannot itself contain references."""
+
     @staticmethod
     def kind() -> ParameterKind:
         """Return ParameterKind.CONFIG"""

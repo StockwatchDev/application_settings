@@ -4,9 +4,11 @@ import logging
 from importlib.metadata import version
 
 from attributes_doc import attributes_doc
-from pydantic import ValidationError
+from pydantic import Secret, ValidationError
 from pydantic.dataclasses import dataclass
 
+from application_settings._private.references import ReferenceResolutionError
+from application_settings._private.secret_checks import SecretsError
 from application_settings.configuring_base import ConfigBase, ConfigSectionBase
 from application_settings.convenience import (
     config_filepath_from_cli,
@@ -41,6 +43,9 @@ __all__ = [
     "ParameterKind",
     "ParameterKindStr",
     "PathOrStr",
+    "ReferenceResolutionError",
+    "Secret",
+    "SecretsError",
     "SettingsBase",
     "SettingsSectionBase",
     "ValidationError",

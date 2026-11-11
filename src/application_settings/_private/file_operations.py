@@ -156,6 +156,11 @@ def _load_with_includes(
         if not isinstance(included_files, list):
             included_files = [included_files]
         for included_file in included_files:
+            if _looks_like_reference(included_file):
+                raise ValueError(
+                    "__include__ does not support references; "
+                    f"use a literal path instead of '{included_file}'"
+                )
             if is_valid_filepath(included_file, platform="auto"):
                 included_file_path = Path(included_file)
                 if not included_file_path.is_absolute():
@@ -178,6 +183,11 @@ def _load_with_includes(
                     f"Given path: '{included_file}' is not a valid path for this OS"
                 )
     return data_stored
+
+
+def _looks_like_reference(value: Any) -> bool:
+    """Includes are loaded before references are resolved, so they cannot hold one."""
+    return isinstance(value, str) and "${" in value
 
 
 def _get_saver(path: Path) -> Callable[[Path, dict[str, Any]], None] | None:

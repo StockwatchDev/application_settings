@@ -89,6 +89,10 @@ Fields or complete sections defined in the classes can be absent in the files as
 default values have been specified for all fields that have been left out. More info
 on data validation is given in the [section on handling deviations](./6-Handling_deviations.md)
 
+Values in a config file can also refer to environment variables and to files, for example
+to keep a password out of the config file. This is described in the chapter on
+[environment variables and secrets](./8-Secrets.md).
+
 ## Location, name and type of the file
 
 By default, the config and settings files are located in a subfolder of the home folder of
