@@ -2,22 +2,19 @@
 
 # pylint: disable=duplicate-code
 
-import sys
+import logging
 from abc import ABC, abstractmethod
 from dataclasses import fields
-from typing import Any, Optional, cast
+from typing import Any, Self, cast
 
 from attributes_doc import attributes_doc
-from loguru import logger
 from pydantic.dataclasses import dataclass, is_pydantic_dataclass
 
 from application_settings.parameter_kind import ParameterKind, ParameterKindStr
 from application_settings.protocols import ParameterContainerSectionProtocol
 
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
+logger = logging.getLogger(__name__)
+
 
 # This is not an example how to implement a ConfigSection
 # because class ApplicationSettingsContainerSectionBase (re-)implements all methods of ContainerSectionBase.
@@ -25,12 +22,20 @@ else:
 # yet does not inherit from ContainerSectionBase and therewith prevents circular imports.
 
 
-def log_level(kind: ParameterKind) -> str:
+def log_level(kind: ParameterKind) -> int:
     """Return the log level taking into consideration whether or not strict_mode is applied"""
     if kind == ParameterKind.CONFIG:
-        return "WARNING" if ApplicationConfigSection.get().strict_mode else "DEBUG"
+        return (
+            logging.WARNING
+            if ApplicationConfigSection.get().strict_mode
+            else logging.DEBUG
+        )
     if kind == ParameterKind.SETTINGS:
-        return "WARNING" if ApplicationSettingsSection.get().strict_mode else "DEBUG"
+        return (
+            logging.WARNING
+            if ApplicationSettingsSection.get().strict_mode
+            else logging.DEBUG
+        )
     raise ValueError(f"Unknown value {kind} for ParameterKind.")
 
 
@@ -81,7 +86,7 @@ class ApplicationSettingsContainerSectionBase(ABC):
     @classmethod
     def _get(
         cls,
-    ) -> Optional[Self]:  # pylint: disable=consider-alternative-union-syntax
+    ) -> Self | None:
         """Get the singleton."""
         if the_container := _ALL_APPLICATION_SETTINGS_CONTAINER_SECTION_SINGLETONS.get(
             id(cls)
@@ -124,14 +129,18 @@ class ApplicationSettingsContainerSectionBase(ABC):
             for uninitialized_field in uninitialized_field_names:
                 logger.log(
                     log_level(self.kind()),
-                    f"Parameter {uninitialized_field}{section_specifier} initialized with default value.",
+                    "Parameter %s%s initialized with default value.",
+                    uninitialized_field,
+                    section_specifier,
                 )
             # data may also contain elements that are not fields, and we want to report that as well
             extra_data_fields = set(data.keys()) - field_names
             for extra_data_field in extra_data_fields:
                 logger.log(
                     log_level(self.kind()),
-                    f"Extra parameter {extra_data_field}{section_specifier} that is not used for initialization.",
+                    "Extra parameter %s%s that is not used for initialization.",
+                    extra_data_field,
+                    section_specifier,
                 )
         return self
 
