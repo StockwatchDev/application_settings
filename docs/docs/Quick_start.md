@@ -102,14 +102,15 @@ By default, the following files are expected for the dataclasses defined above:
 
     # Use this file to set the config that you prefer by editing the file
 
-    # The next element is refering to the Config container class that
-    # defines the config parameters of the application.
-    # It is used when loading from command line
-    __Config_container_class__ = "config.MyExampleConfig"
-
-
     # With this parameter you can configure the name; defaults to 'nice example'
     name = "the real thing"
+
+    # Holds the configuration parameters for application_settings
+    [application_config]
+
+    # The Config container class that defines the config parameters of the application.
+    # It is used when loading from command line
+    config_container_class = "config.MyExampleConfig"
 
     # Holds the configuration parameters for the first section
     [section1]
@@ -125,7 +126,9 @@ By default, the following files are expected for the dataclasses defined above:
 === "`~/.my_example/settings.json`"
     ```json
     {
-        "__Settings_container_class__": "settings.MyExampleSettings",
+        "application_settings": {
+            "settings_container_class": "settings.MyExampleSettings"
+        },
         "name": "the stored name",
         "basics": {
                 "totals": 3

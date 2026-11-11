@@ -16,8 +16,9 @@ application\_settings takes care of the logic."
 ## What and why
 
 Application\_settings is a package for providing a python application or library with
-parameters for configuration and settings. It uses [toml](https://toml.io/en/) or
-[json](https://www.json.org/) files that are parsed
+parameters for configuration and settings. Configuration is the API of your package for
+deployment; settings are its API for the end user. The package uses
+[toml](https://toml.io/en/) or [json](https://www.json.org/) files that are parsed
 into dataclasses. This brings some benefits:
 
 - Minimal work for the developer of the application / library
@@ -29,7 +30,7 @@ into dataclasses. This brings some benefits:
   aim for "zeroconf".
 - Configuration parameters are read-only (i.e., changed by editing the config file); we
   recommend (and support) the use of `toml` for this, which is a human-oriented,
-  flexible, standardardized and not overly complex format.
+  flexible, standardized and not overly complex format.
 - Values in a config file can refer to environment variables and to files (e.g., as
   provided by Docker or Kubernetes), and parameters can be declared as `Secret` so
   that their values are masked in output, logs and errors.
@@ -44,6 +45,8 @@ Interested? Then have a look at our
 [quick start](https://stockwatchdev.github.io/application_settings/develop/Quick_start/)
 or dive into the
 [full documentation](https://stockwatchdev.github.io/application_settings/develop/).
+The [design principles](https://stockwatchdev.github.io/application_settings/develop/Design_principles/)
+explain what the package is for and what it is not.
 
 If you appreciate this library package, then please give us a star on
 [Github](https://github.com/StockwatchDev/application_settings).

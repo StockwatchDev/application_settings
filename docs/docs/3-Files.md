@@ -8,10 +8,10 @@ values from files and, in case of settings, store updated values to files.
 Currently, two formats are supported for persistent storage of parameters:
 [`toml`](https://toml.io/en/) and [`json`](https://www.json.org/).
 
-The `toml` format is human-oriented, flexible, standardardized and not overly complex.
+The `toml` format is human-oriented, flexible, standardized and not overly complex.
 It supports comments, and hence parameters can be easily documented in a toml file.
 However, when parameters are initialized by reading from a toml file, then changed
-(because it concerns settings) and subsequently written to file again for persistance,
+(because it concerns settings) and subsequently written to file again for persistence,
 the comments will be lost. Therefore, it does not make much sense to add documenting
 comments to a settings file. Because config parameters are read-only, comments in a
 config file will not get lost and do make sense. Because of this, the default format for
@@ -34,14 +34,15 @@ following files.
 
     # Use this file to set the config that you prefer by editing the file
 
-    # The next element is refering to the Config container class that
-    # defines the config parameters of the application.
-    # It is used when loading from command line
-    __Config_container_class__ = "config.MyExampleConfig"
-
-
     # With this parameter you can configure the name; defaults to 'nice example'
     name = "the real thing"
+
+    # Holds the configuration parameters for application_settings
+    [application_config]
+
+    # The Config container class that defines the config parameters of the application.
+    # It is used when loading from command line
+    config_container_class = "config.MyExampleConfig"
 
     # Holds the configuration parameters for the first section
     [section1]
@@ -56,7 +57,9 @@ following files.
 === "`settings.json` file for the settings example"
     ```json
     {
-        "__Settings_container_class__": "settings.MyExampleSettings",
+        "application_settings": {
+            "settings_container_class": "settings.MyExampleSettings"
+        },
         "name": "the stored name",
         "basics": {
             "totals": 3
@@ -65,8 +68,9 @@ following files.
 
     ```
 Although not strictly necessary, it is recommended to include the fully qualified name
-of the container class in the parameter file. The key for this item is `__Config_container_class__`
-for a configuration and `__Settings_container_class__` for settings.
+of the container class in the parameter file. The key for this item is
+`config_container_class` in the section `application_config` for a configuration, and
+`settings_container_class` in the section `application_settings` for settings.
 
 The field names of a Container class are found as:
 
@@ -82,8 +86,9 @@ The field names of a Section class are found as:
 The order of sections and/or fields in the file does not have to adhere to the order
 in which fields have been specified in the Container - or Section classes.
 
-Presence of sections and/or fields in the files that are not defined in the classes goes
-by silently.
+Sections and/or fields in the files that are not defined in the classes are ignored. This
+is logged: as a debug message, or as a warning when `strict_mode` is set in the section
+`application_config` (config) or `application_settings` (settings).
 
 Fields or complete sections defined in the classes can be absent in the files as long as
 default values have been specified for all fields that have been left out. More info
@@ -113,7 +118,7 @@ do not set `load=True`, then a warning is printed. Example:
 
 ```python
 # the next statement sets the location, name and format of the settings file
-# the argument can be eiter a string or a Path
+# the argument can be either a string or a Path
 MyExampleSettings.set_filepath(r"C:\ProgramData\testsettings.toml")
 # the next statement loads the settings
 MyExampleSettings.load()
@@ -206,9 +211,9 @@ When loading a parameter file, you have a choice what should happen when the par
 file is not found in the location that has been specified:
 
 - if you `load(throw_if_file_not_found = False)`, then the `FileNotFoundError` is
-  catched by `application_settings`, an error message is generated and program flow is
+  caught by `application_settings`, an error message is generated and program flow is
   continued by trying to instantiate the config / settings using default values. If you
-  have defined parameters without default values, a TypeError exception will be raised.
+  have defined parameters without default values, a `ValidationError` will be raised.
 - if you `load(throw_if_file_not_found = True)`, then the `FileNotFoundError` exception
   is thrown and the application can decide how this situation should be handled.
 

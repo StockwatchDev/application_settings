@@ -25,6 +25,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `repr`, logs and validation errors. A secret that does not come from a reference gives a warning, or
   a `SecretsError` in strict mode. `Secret` is not supported in settings.
 - Dependency python-dotenv.
+- Documentation: a chapter on the design principles of the package, with the purpose and priorities, a
+  comparison with pydantic-settings and guidance on what does and does not belong in the package; sections
+  on limits and on settings in the chapter on usage in a library package, with an example.
 
 ### Changed - 0.6.0
 
@@ -45,6 +48,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Files that include each other now raise a `ValueError` instead of a `RecursionError`.
 - Paths in `__include__` are now normalised (`..` is resolved).
 - `__include__` is no longer reported as an extra parameter.
+- Documentation: the examples now use the keys `config_container_class` and `settings_container_class` in
+  the sections `application_config` and `application_settings` (the old keys `__Config_container_class__`
+  and `__Settings_container_class__` were no longer in use); a missing parameter without default raises a
+  `ValidationError`, not a `TypeError`; unknown entries and defaults that are used are logged, not ignored
+  silently; typos.
 
 ### Removed - 0.6.0
 

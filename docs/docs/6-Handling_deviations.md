@@ -5,8 +5,8 @@
 ### When your parameter file does not adhere to the specified types
 
 When loading the parameter file, the values specified are coerced into the appropriate
-type where possible. The details of the coersion are specified in this
-[conversion table](https://docs.pydantic.dev/2.0/usage/conversion_table/) If type
+type where possible. The details of the coercion are specified in this
+[conversion table](https://docs.pydantic.dev/latest/concepts/conversion_table/). If type
 coercion is not possible, then a `ValidationError` is raised (which is actually a
 [`pydantic.ValidationError`](https://docs.pydantic.dev/latest/usage/validation_errors/)
 that has been exported from our namespace). Consider the case where you would use the
@@ -26,9 +26,12 @@ The `str` specified for `field2` will be coerced into an `int` value of `22`.
 If your Config or Settings has one of more sections with one or more attributes that do
 not have a default value, then a parameter file must be loaded and these sections and
 attributes must be present in the loaded parameter file. If this is not the case, a
-`TypeError` is raised. Attributes that have default values can be omitted
+`ValidationError` is raised. Attributes that have default values can be omitted
 from the parameter file without problems. Likewise, sections of which all attributes
-have default values can also be omitted without problems.
+have default values can also be omitted without problems. That a parameter is
+initialized with its default value is logged: as a debug message, or as a warning when
+`strict_mode` is set in the section `application_config` (config) or
+`application_settings` (settings).
 
 Note that in the dataclass definitions, attributes without default value have to come
 before attributes with default values.
@@ -36,7 +39,8 @@ before attributes with default values.
 ### When your parameter file contains additional, unspecified attributes
 
 Entries in a parameter file that are not defined in the Container or Section classes
-will simply be ignored silently.
+are ignored. This is logged in the same way as for missing attributes: as a debug
+message, or as a warning in strict mode.
 
 ## More advanced typing and validation with pydantic
 

@@ -59,5 +59,6 @@ nav:
   - 6. Handling deviations: 6-Handling_deviations.md
   - 7. Recipes: 7-Recipes.md
   - 8. Environment variables and secrets: 8-Secrets.md
+- Design principles: Design_principles.md
 - Changelog: CHANGELOG.md
 - Code Reference: reference/

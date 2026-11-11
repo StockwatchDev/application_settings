@@ -76,7 +76,7 @@ ConfigSection before the configurable module globals are initialized.
 
 The only way that we currently see to handle such a situation properly is the following:
 
-- make a separate package for the ConfigSection (i.e., isolated from your libary package)
+- make a separate package for the ConfigSection (i.e., isolated from your library package)
 - `import` that config package first, `set` (or `load`) the config values and only then
   import your library package (which will also import the config package, but the
   singleton has been initialized now).
