@@ -202,8 +202,11 @@ secret.
 
 ## Good to know
 
-- Values are read when the config is loaded and do not change afterwards. To pick up a
-  changed secret, load the config again.
+- Values are read when the config is loaded and do not change afterwards. This holds
+  for environment variables, the dotenv file and the files in the secrets folder alike,
+  and also for `dotenv_file` and `secrets_dir` themselves. `get()` returns the loaded
+  config without reading anything again; call `load()` or restart your application to
+  pick up a change.
 - A dotenv file is not encrypted. It is intended for development, do not commit one with
   real secrets.
 - The check on the origin of secrets is done for parameters that are annotated with
