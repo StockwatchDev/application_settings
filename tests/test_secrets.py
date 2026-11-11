@@ -128,7 +128,7 @@ def test_secret_from_file_reference(tmp_path: Path) -> None:
     config = _load(
         SecretConfig,
         tmp_path,
-        'api_key = "${file:key}"\n[application_config]\nsecrets_dir = "secrets"\n',
+        'api_key = "${secret:key}"\n[application_config]\nsecrets_dir = "secrets"\n',
     )
     assert isinstance(config, SecretConfig)
     assert config.api_key.get_secret_value() == 42

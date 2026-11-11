@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   to use `application_settings` in strict mode.
 - Support for Python 3.15
 - References in config files: the value of a parameter can be `${env:NAME}`, `${env:NAME,default}`,
-  `${file:NAME}` or `${file:NAME,default}` to take the value from an environment variable or from a file in
+  `${secret:NAME}` or `${secret:NAME,default}` to take the value from an environment variable or from a file in
   a secrets folder. Environment variables can be read from a dotenv file without changing the environment
   of the process. This is configured with the new parameters `dotenv_file` and `secrets_dir` in
   `ApplicationConfigSection`. See the chapter on environment variables, files and secrets in the docs.

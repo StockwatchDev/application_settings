@@ -188,7 +188,7 @@ class ApplicationConfigSection(ApplicationSettingsContainerSectionBase):
     This parameter cannot itself contain references."""
 
     secrets_dir: str = ""
-    """Path of the folder that holds the files that are used in references like '${file:NAME}';
+    """Path of the folder that holds the files that are used in references like '${secret:NAME}';
     a relative path is relative to the folder of the config file. Empty means: no secrets folder.
     This parameter cannot itself contain references."""
 

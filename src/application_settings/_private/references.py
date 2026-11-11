@@ -3,7 +3,7 @@
 A reference must be the whole value of a parameter:
 
 - `${env:NAME}` or `${env:NAME,default}` refers to an environment variable;
-- `${file:NAME}` or `${file:NAME,default}` refers to a file in the secrets folder.
+- `${secret:NAME}` or `${secret:NAME,default}` refers to a file in the secrets folder.
 
 A value that starts with `$${` is not a reference, the leading `$` is an escape
 that is removed: `$${env:NAME}` becomes the literal `${env:NAME}`.
@@ -21,9 +21,9 @@ from dotenv import dotenv_values
 
 logger = logging.getLogger(__name__)
 
-Scheme = Literal["env", "file"]
+Scheme = Literal["env", "secret"]
 
-_SCHEMES: tuple[Scheme, ...] = ("env", "file")
+_SCHEMES: tuple[Scheme, ...] = ("env", "secret")
 _REFERENCE = re.compile(r"\$\{(?P<body>.*)\}", re.DOTALL)
 _NAME = re.compile(r"[\w.-]+")
 
@@ -67,7 +67,7 @@ def parse(value: str) -> Reference | str:
     scheme, separator, rest = match.group("body").partition(":")
     if not separator:
         raise ReferenceSyntaxError(
-            "Invalid reference: expected '${env:NAME}' or '${file:NAME}'."
+            "Invalid reference: expected '${env:NAME}' or '${secret:NAME}'."
         )
     if scheme not in _SCHEMES:
         raise ReferenceSyntaxError(
@@ -102,7 +102,7 @@ def resolve(reference: Reference, context: ReferenceContext) -> Resolved:
     """Resolve a reference; fall back to its default if it cannot be found.
 
     Raises:
-        ReferenceSyntaxError: if a file reference has an unsafe name
+        ReferenceSyntaxError: if a secret reference has an unsafe name
         ReferenceResolutionError: if the reference cannot be found and has no default,
             or if a secret file exists but cannot be read
     """
@@ -125,7 +125,7 @@ def _read_secret_file(name: str, secrets_dir: Path | None) -> tuple[str | None, 
     # this is what keeps the lookup inside the secrets folder.
     if not _is_valid_name(name):
         raise ReferenceSyntaxError(
-            f"Invalid file reference: '{name}' is not a valid file name."
+            f"Invalid secret reference: '{name}' is not a valid file name."
         )
     if secrets_dir is None:
         return None, f"File '{name}' cannot be found: no secrets_dir has been set."

@@ -19,15 +19,15 @@ A reference is a value in the config file that has one of the following forms:
 | ------------------------ | --------------------------------------------------------------------- |
 | `${env:NAME}`            | the value of the environment variable `NAME`                          |
 | `${env:NAME,default}`    | the same, but if `NAME` is not set, then `default` is used            |
-| `${file:NAME}`           | the content of the file `NAME` in the secrets folder                  |
-| `${file:NAME,default}`   | the same, but if the file is not found, then `default` is used        |
+| `${secret:NAME}`         | the content of the file `NAME` in the secrets folder                  |
+| `${secret:NAME,default}` | the same, but if the file is not found, then `default` is used        |
 
 ```toml
 name = "${env:MYAPP_NAME,my application}"
 port = "${env:MYAPP_PORT,8080}"
 
 [database]
-password = "${file:db_password}"
+password = "${secret:db_password}"
 ```
 
 The following rules apply:
@@ -46,6 +46,9 @@ The following rules apply:
 - References work in every part of a config file, also in included files, except
   in the section `application_config`.
 - References are resolved when the config is loaded.
+- A reference is not a file inclusion: `${secret:NAME}` reads a single value from a file
+  in the secrets folder, whereas [`__include__`](3-Files.md) merges a whole config file.
+  The value of `__include__` is not a reference.
 
 If a reference cannot be resolved and has no default, then loading the config raises a
 `ReferenceResolutionError`. Its message lists _all_ references that could not be
@@ -74,7 +77,7 @@ are taken as they are: there is no variable expansion.
 ### Files in the secrets folder
 
 Platforms like Docker and Kubernetes can provide secrets as files, one file per secret,
-in a folder like `/run/secrets`. A reference `${file:NAME}` reads the file `NAME` in the
+in a folder like `/run/secrets`. A reference `${secret:NAME}` reads the file `NAME` in the
 folder that is set by `secrets_dir` in the section `application_config`.
 
 ```toml
@@ -176,13 +179,13 @@ Messages never contain the value of a secret.
     Environment variables can be passed with `docker run -e NAME=value`, `--env-file`, or
     the `environment:` and `env_file:` keys of Docker Compose. Docker secrets are
     mounted as files in `/run/secrets`, so set that as the secrets folder and use
-    `${file:NAME}`. Files are preferred, because environment variables can be seen with
+    `${secret:NAME}`. Files are preferred, because environment variables can be seen with
     `docker inspect`.
 
 === "Kubernetes"
     A `Secret` can be exposed to a container as an environment variable (`secretKeyRef`)
     or as files in a mounted volume. Use `${env:NAME}`, or mount the volume and use
-    `${file:NAME}` with `secrets_dir` set to the mount path. Note that a Kubernetes
+    `${secret:NAME}` with `secrets_dir` set to the mount path. Note that a Kubernetes
     `Secret` is only base64 encoded; it needs encryption at rest or an external store
     (e.g., by the External Secrets Operator or the Secrets Store CSI Driver) to be
     safe.

@@ -123,18 +123,18 @@ def test_secrets_dir(tmp_path: Path) -> None:
     (tmp_path / "secrets" / "the_name").write_text("secret name\n")
     config = _load(
         tmp_path,
-        'name = "${file:the_name}"\n[application_config]\nsecrets_dir = "secrets"\n',
+        'name = "${secret:the_name}"\n[application_config]\nsecrets_dir = "secrets"\n',
     )
     assert config.name == "secret name"
 
 
 def test_file_reference_without_secrets_dir_raises(tmp_path: Path) -> None:
     with pytest.raises(ReferenceResolutionError, match="secrets_dir"):
-        _load(tmp_path, 'name = "${file:the_name}"\n')
+        _load(tmp_path, 'name = "${secret:the_name}"\n')
 
 
 def test_file_reference_default_without_secrets_dir(tmp_path: Path) -> None:
-    config = _load(tmp_path, 'name = "${file:the_name,fallback}"\n')
+    config = _load(tmp_path, 'name = "${secret:the_name,fallback}"\n')
     assert config.name == "fallback"
 
 
