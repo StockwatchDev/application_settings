@@ -73,6 +73,7 @@ def get_container_from_file(
         throw_if_file_not_found=throw_if_file_not_found,
         create_file_if_not_found=False,
     ):
+        # _check_filepath has already logged why (or raised, if throw_if_file_not_found)
         return ""
     real_path = cast(Path, path)
     if not (loader := _get_loader(path=real_path)):
