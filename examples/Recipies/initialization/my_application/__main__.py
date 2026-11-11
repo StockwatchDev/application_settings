@@ -1,7 +1,7 @@
 """Example to demonstrate how to implement configurable module globals and class variables
 
 Cd to the folder containing this file and run this example with the following command:
-python . -c ./the_config.toml -w ./the_config.toml
+python . -c ./config.toml -w ./config.toml
 """
 
 # import of WronglyInitializedConfig placed at the top of the entry point but that does not help
