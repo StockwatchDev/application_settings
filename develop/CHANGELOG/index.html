@@ -623,6 +623,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#changed-060" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed - 0.6.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#fixed-060" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1488,6 +1499,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#changed-060" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed - 0.6.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#fixed-060" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1741,6 +1763,11 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <li>Configuration - and settings parameters for the package <code>application_settings</code> itself, namely the
   import string for the Config class / the Settings class that the application uses and whether or not
   to use <code>application_settings</code> in strict mode.</li>
+<li>Support for Python 3.15</li>
+</ul>
+<h3 id="changed-060">Changed - 0.6.0</h3>
+<ul>
+<li>Logging now done with the standard logger, no longer with loguru</li>
 </ul>
 <h3 id="fixed-060">Fixed - 0.6.0</h3>
 <ul>
@@ -1748,8 +1775,8 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 </ul>
 <h3 id="removed-060">Removed - 0.6.0</h3>
 <ul>
-<li>Type alias PathOpt, use Optional[Path] instead (breaking)</li>
-<li>Support for Python 3.9</li>
+<li>Type alias PathOpt, use Path | None instead (breaking)</li>
+<li>Support for Python 3.9 and 3.10</li>
 </ul>
 <h2 id="050-released-2024-10-12">[0.5.0] - Released 2024-10-12</h2>
 <h3 id="added-050">Added - 0.5.0</h3>

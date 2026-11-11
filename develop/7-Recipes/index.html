@@ -567,45 +567,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#logging" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Logging
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Logging">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#using-loguru" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Using Loguru
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#using-standard-logging" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Using standard logging
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#having-a-test-configuration-during-testing" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1311,45 +1272,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#logging" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Logging
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Logging">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#using-loguru" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Using Loguru
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#using-standard-logging" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Using standard logging
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#having-a-test-configuration-during-testing" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1420,35 +1342,6 @@
 
 
 <h1 id="code-snippets-and-recipes">Code snippets and recipes</h1>
-<h2 id="logging">Logging</h2>
-<h3 id="using-loguru">Using <code>Loguru</code></h3>
-<p><code>application_settings</code> makes use of the <a href="https://github.com/Delgan/loguru">Loguru</a> library
-for logging. By default, logging is disabled, hence you need to enable it to get
-logging output.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">loguru</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
-
-<span class="n">logger</span><span class="o">.</span><span class="n">enable</span><span class="p">(</span><span class="s2">"application_settings"</span><span class="p">)</span>
-</code></pre></div>
-<p>The logical location for this statement is before the first invocation of <code>load</code> (or, if
-you do not <code>load</code> explicitly, before the first invocation of <code>get</code>).</p>
-<p>Note that by default <code>Loguru</code> logs to <code>stderr</code>, not <code>stdout</code> (as the standard <code>logging</code>
-library does). Have a look at the
-<a href="https://loguru.readthedocs.io/en/stable/index.html">Loguru documentation</a> if you want
-to configure the logger in the way that you want to.</p>
-<h3 id="using-standard-logging">Using standard <code>logging</code></h3>
-<p>If you prefer to use the standard <code>logging</code> library, then you need to do two things.
-By default, logging is disabled, hence you need to enable it to get logging output. In
-addition to that, you need to propagate Loguru messages to standard logging.
-<code>application_settings</code> provides a convenience function <code>use_standard_logging</code> for this
-purpose. This function sets the propagation to the standard logger. The function has a
-single argument <code>enable</code> that by default is set to <code>False</code>. If a parameter <code>True</code> is
-provided, then the convenience function also enables logging.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">application_settings</span><span class="w"> </span><span class="kn">import</span> <span class="n">use_standard_logging</span>
-
-<span class="n">use_standard_logging</span><span class="p">(</span><span class="n">enable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</code></pre></div>
-<p>The logical location for this statement is before the first invocation of <code>load</code> (or, if
-you do not <code>load</code> explicitly, before the first invocation of <code>get</code>).</p>
 <h2 id="having-a-test-configuration-during-testing">Having a test configuration during testing</h2>
 <p>During unit testing, you typically would like to have a specific test configuration and
 it would be a hassle to provide a file for this purpose. this especially holds true
