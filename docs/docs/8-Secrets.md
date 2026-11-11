@@ -48,7 +48,8 @@ The following rules apply:
 - References are resolved when the config is loaded.
 - A reference is not a file inclusion: `${secret:NAME}` reads a single value from a file
   in the secrets folder, whereas [`__include__`](3-Files.md) merges a whole config file.
-  The value of `__include__` is not a reference.
+  Includes are loaded before references are resolved, so the value of `__include__` must
+  be a literal path; a value with `${` in it is an error.
 
 If a reference cannot be resolved and has no default, then loading the config raises a
 `ReferenceResolutionError`. Its message lists _all_ references that could not be

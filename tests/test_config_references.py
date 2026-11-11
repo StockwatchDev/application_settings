@@ -158,6 +158,22 @@ def test_references_in_included_file(
     assert config.section.port == 81
 
 
+@pytest.mark.parametrize(
+    "include",
+    [
+        '"${env:APPSET_DIR}/included.toml"',
+        '"${secret:included}"',
+        '["./other.toml", "${env:APPSET_DIR}"]',
+    ],
+)
+def test_reference_in_include_is_rejected(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, include: str
+) -> None:
+    monkeypatch.setenv("APPSET_DIR", ".")
+    with pytest.raises(ValueError, match="__include__.*reference"):
+        _load(tmp_path, f"name = 'main'\n__include__ = {include}\n")
+
+
 def test_config_without_references_is_unchanged(tmp_path: Path) -> None:
     config = _load(tmp_path, 'name = "plain"\nratio = 2.5\n[section]\nport = 5\n')
     assert (config.name, config.ratio, config.section.port) == ("plain", 2.5, 5)
