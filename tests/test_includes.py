@@ -133,7 +133,6 @@ def test_include_with_a_reference_is_rejected(tmp_path: Path) -> None:
 # --- problems that are to be fixed; the markers go away together with the fix ---
 
 
-@pytest.mark.xfail(strict=True, reason="no cycle detection yet (step 3)")
 @pytest.mark.parametrize("cycle", ["self", "two files"])
 def test_circular_include_raises(tmp_path: Path, cycle: str) -> None:
     if cycle == "self":
@@ -143,6 +142,22 @@ def test_circular_include_raises(tmp_path: Path, cycle: str) -> None:
         _write(tmp_path, "other.toml", '__include__ = "main.toml"\n')
     with pytest.raises(ValueError, match="circular"):
         _load(main)
+
+
+def test_circular_include_names_the_files(tmp_path: Path) -> None:
+    main = _write(tmp_path, "main.toml", '__include__ = "other.toml"\n')
+    _write(tmp_path, "other.toml", '__include__ = "main.toml"\n')
+    with pytest.raises(ValueError) as excinfo:
+        _load(main)
+    assert "main.toml" in str(excinfo.value) and "other.toml" in str(excinfo.value)
+
+
+def test_a_file_that_is_included_twice_is_no_cycle(tmp_path: Path) -> None:
+    _write(tmp_path, "shared.toml", "port = 7\n")
+    _write(tmp_path, "b.toml", '__include__ = "shared.toml"\n')
+    _write(tmp_path, "c.toml", '__include__ = "shared.toml"\n')
+    main = _write(tmp_path, "main.toml", '__include__ = ["b.toml", "c.toml"]\n')
+    assert _load(main)["port"] == 7
 
 
 @pytest.mark.xfail(strict=True, reason="__include__ is reported as extra (step 6)")

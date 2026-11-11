@@ -148,8 +148,17 @@ def _get_loader(path: Path) -> Callable[[Path], dict[str, Any]] | None:
 
 
 def _load_with_includes(
-    path: Path, throw_if_file_not_found: bool, loader: Callable[[Path], dict[str, Any]]
+    path: Path,
+    throw_if_file_not_found: bool,
+    loader: Callable[[Path], dict[str, Any]],
+    chain: tuple[Path, ...] = (),
 ) -> dict[str, Any]:
+    """Load a file and, recursively, the files it includes; chain holds the files being loaded."""
+    chain = (*chain, path.resolve())
+    if chain[-1] in chain[:-1]:
+        raise ValueError(
+            "The include chain is circular: " + " -> ".join(str(p) for p in chain)
+        )
     data_stored = loader(path)
     if included_files := data_stored.get("__include__"):
         if not isinstance(included_files, list):
@@ -173,7 +182,7 @@ def _load_with_includes(
                 ):
                     data_stored = (
                         _load_with_includes(
-                            included_file_path, throw_if_file_not_found, loader
+                            included_file_path, throw_if_file_not_found, loader, chain
                         )
                         | data_stored
                     )
