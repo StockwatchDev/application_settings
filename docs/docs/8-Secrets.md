@@ -202,5 +202,7 @@ Messages never contain the value of a secret.
 - A dotenv file is not encrypted. It is intended for development, do not commit one with
   real secrets.
 - The check on the origin of secrets is done for parameters that are annotated with
-  `Secret[...]`, also in nested sections. It is not done for `Secret` inside a union
-  like `Secret[int] | None` or inside a container like `list[Secret[int]]`.
+  `Secret[...]` or `Secret[...] | None`, also in nested sections. An optional secret that
+  is `None` is not reported, because there is no value to protect. The check is not done
+  for a `Secret` inside another union or inside a container, like `list[Secret[int]]`.
+  Such a parameter is still hidden in errors and is still not allowed in settings.

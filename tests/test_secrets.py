@@ -1,5 +1,6 @@
 # pylint: disable=missing-module-docstring
 # pylint: disable=missing-function-docstring
+import dataclasses
 import logging
 import traceback
 from pathlib import Path
@@ -414,6 +415,148 @@ def test_if_the_error_cannot_be_rebuilt_nothing_is_shown(
     text = _full_text(excinfo.value)
     assert "s3cret" not in text
     assert "api_key" in text
+
+
+# --- secrets that are optional or inside a container ---
+
+
+@dataclass(frozen=True)
+class OptionalSecretConfig(ConfigBase):
+    """Config with a secret that can be left out"""
+
+    name: str = "default name"
+    token: Secret[int] | None = None
+
+
+@dataclass(frozen=True)
+class OptionalDefaultSecretConfig(ConfigBase):
+    """Config with an optional secret that has a default in the code"""
+
+    token: Secret[int] | None = Secret(7)
+
+
+@dataclass(frozen=True)
+class SecretListConfig(ConfigBase):
+    """Config with a list of secrets"""
+
+    tokens: list[Secret[int]]
+
+
+@dataclass(frozen=True)
+class SectionListConfig(ConfigBase):
+    """Config with a list of sections that have a secret"""
+
+    pins: list[PinSection]
+
+
+@dataclass(frozen=True)
+class OptionalSecretSettings(SettingsBase):
+    """Settings must not have secrets, also not optional ones"""
+
+    api_key: Secret[int] | None = None
+
+
+@dataclass(frozen=True)
+class SecretListSettings(SettingsBase):
+    """Settings must not have secrets, also not in a list"""
+
+    keys: list[Secret[int]] = dataclasses.field(default_factory=list)
+
+
+def test_optional_secret_that_is_not_given_is_fine(
+    tmp_path: Path, caplog: pytest.LogCaptureFixture
+) -> None:
+    content = "[application_config]\nstrict_mode = true\n"
+    with caplog.at_level(logging.WARNING):
+        config = _load(OptionalSecretConfig, tmp_path, content)  # None is no secret
+    assert isinstance(config, OptionalSecretConfig)
+    assert config.token is None
+    assert not any(STORE_WARNING in message for message in _warnings(caplog))
+
+
+def test_optional_secret_from_reference(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
+) -> None:
+    monkeypatch.setenv("APPSET_TOKEN", "4321")
+    content = (
+        'token = "${env:APPSET_TOKEN}"\n[application_config]\nstrict_mode = true\n'
+    )
+    with caplog.at_level(logging.WARNING):
+        config = _load(OptionalSecretConfig, tmp_path, content)
+    assert isinstance(config, OptionalSecretConfig)
+    assert config.token is not None and config.token.get_secret_value() == 4321
+    assert "4321" not in repr(config)
+    assert not any(STORE_WARNING in message for message in _warnings(caplog))
+
+
+def test_optional_secret_that_is_a_literal_warns(
+    tmp_path: Path, caplog: pytest.LogCaptureFixture
+) -> None:
+    with caplog.at_level(logging.WARNING):
+        _load(OptionalSecretConfig, tmp_path, "token = 1234\n")
+    messages = [m for m in _warnings(caplog) if "token" in m and STORE_WARNING in m]
+    assert len(messages) == 1 and "1234" not in messages[0]
+
+
+def test_optional_secret_that_is_a_literal_in_strict_mode_raises(
+    tmp_path: Path,
+) -> None:
+    content = "token = 1234\n[application_config]\nstrict_mode = true\n"
+    with pytest.raises(SecretsError, match="token") as excinfo:
+        _load(OptionalSecretConfig, tmp_path, content)
+    assert "1234" not in str(excinfo.value)
+
+
+def test_optional_secret_default_in_code_warns(
+    tmp_path: Path, caplog: pytest.LogCaptureFixture
+) -> None:
+    with caplog.at_level(logging.WARNING):
+        _load(OptionalDefaultSecretConfig, tmp_path, "")
+    assert any("token" in m and STORE_WARNING in m for m in _warnings(caplog))
+
+
+def test_failed_coercion_of_an_optional_secret_does_not_show_the_value(
+    tmp_path: Path,
+) -> None:
+    content = 'token = "bad-s3cret"\n'
+    with pytest.raises(ValidationError) as excinfo:
+        _load(OptionalSecretConfig, tmp_path, content)
+    assert "s3cret" not in _full_text(excinfo.value)
+    assert "token" in str(excinfo.value)
+    assert all(e["input"] == REDACTED for e in excinfo.value.errors())
+
+
+def test_failed_coercion_in_a_list_of_secrets_does_not_show_the_value(
+    tmp_path: Path,
+) -> None:
+    content = 'tokens = [1, "bad-s3cret"]\n'
+    with pytest.raises(ValidationError) as excinfo:
+        _load(SecretListConfig, tmp_path, content)
+    assert "s3cret" not in _full_text(excinfo.value)
+    (error,) = excinfo.value.errors()
+    assert error["loc"] == ("tokens", 1)  # where it went wrong is still reported
+    assert error["input"] == REDACTED
+
+
+def test_failed_coercion_in_a_list_of_sections_does_not_show_the_value(
+    tmp_path: Path,
+) -> None:
+    content = "[[pins]]\npin = 1\n[[pins]]\npin = 'bad-s3cret'\n"
+    with pytest.raises(ValidationError) as excinfo:
+        _load(SectionListConfig, tmp_path, content)
+    assert "s3cret" not in _full_text(excinfo.value)
+    assert all(e["input"] == REDACTED for e in excinfo.value.errors())
+
+
+@pytest.mark.parametrize("settings_class", [OptionalSecretSettings, SecretListSettings])
+def test_optional_secret_or_list_in_settings_raises(
+    tmp_path: Path, settings_class: type[SettingsBase]
+) -> None:
+    file_path = tmp_path / "settings.json"
+    file_path.write_text("{}", encoding="utf-8")
+    settings_class.set_filepath(file_path)
+    with pytest.raises(TypeError, match="Config"):
+        settings_class.load()
 
 
 @dataclass(frozen=True)

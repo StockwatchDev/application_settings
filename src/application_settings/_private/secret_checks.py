@@ -3,7 +3,8 @@
 import dataclasses
 import logging
 from collections.abc import Mapping
-from typing import Any, get_origin, get_type_hints
+from types import NoneType, UnionType
+from typing import Any, Union, get_args, get_origin, get_type_hints
 
 from pydantic import Secret, ValidationError
 
@@ -12,6 +13,9 @@ from application_settings._private.references import ResolutionReport
 logger = logging.getLogger(__name__)
 
 REDACTED = "**********"
+
+# Optional[X] is a typing.Union, X | None a types.UnionType (the same from python 3.14)
+_UNION_ORIGINS = (Union, UnionType)  # pylint: disable=consider-alternative-union-syntax
 
 
 class SecretsError(ValueError):
@@ -22,17 +26,61 @@ class SecretsError(ValueError):
 
 
 def secret_field_paths(cls: type) -> list[str]:
-    """Return the dotted paths, like 'section.password', of all Secret parameters of a dataclass."""
+    """Return the dotted paths, like 'section.password', of the Secret parameters of a dataclass.
+
+    These are the parameters declared as Secret[...] or Secret[...] | None, also in
+    nested sections; their origin can be checked.
+    """
+    return _paths(cls, deep=False, seen={cls})
+
+
+def sensitive_field_paths(cls: type) -> list[str]:
+    """Return the dotted paths of all parameters that hold a Secret, wholly or in part.
+
+    Besides the paths of secret_field_paths, this includes parameters in which a Secret
+    is nested deeper, like list[Secret[int]] or list[SectionWithSecret].
+    """
+    return _paths(cls, deep=True, seen={cls})
+
+
+def _is_secret(hint: Any) -> bool:
+    return hint is Secret or get_origin(hint) is Secret
+
+
+def _without_none(hint: Any) -> Any:
+    """Return X for X | None (or Optional[X]), otherwise hint."""
+    if get_origin(hint) in _UNION_ORIGINS:
+        others = [arg for arg in get_args(hint) if arg is not NoneType]
+        if len(others) == 1:
+            return others[0]
+    return hint
+
+
+def _contains_secret(hint: Any, seen: set[type]) -> bool:
+    if _is_secret(hint):
+        return True
+    if isinstance(hint, type) and dataclasses.is_dataclass(hint):
+        return hint not in seen and bool(_paths(hint, deep=True, seen=seen | {hint}))
+    return any(_contains_secret(arg, seen) for arg in get_args(hint))
+
+
+def _paths(cls: type, deep: bool, seen: set[type]) -> list[str]:
+    # seen guards against sections that contain themselves
     if not dataclasses.is_dataclass(cls):
         return []
     hints = get_type_hints(cls)
     paths: list[str] = []
     for fld in dataclasses.fields(cls):
         hint = hints[fld.name]
-        if hint is Secret or get_origin(hint) is Secret:
+        if _is_secret(_without_none(hint)):
             paths.append(fld.name)
         elif isinstance(hint, type):
-            paths.extend(f"{fld.name}.{path}" for path in secret_field_paths(hint))
+            if hint not in seen:
+                paths.extend(
+                    f"{fld.name}.{path}" for path in _paths(hint, deep, seen | {hint})
+                )
+        elif deep and _contains_secret(hint, seen):
+            paths.append(fld.name)
     return paths
 
 
@@ -41,7 +89,7 @@ def forbid_secrets(instance: object) -> None:
 
     Settings are written back to file, secrets must never end up there.
     """
-    if paths := secret_field_paths(type(instance)):
+    if paths := sensitive_field_paths(type(instance)):
         raise TypeError(
             f"{type(instance).__name__} has Secret parameter(s) {', '.join(paths)}; "
             "Secret is only supported in Config, not in Settings."
@@ -65,7 +113,9 @@ def check_secrets(
     """
     offenders: list[str] = []
     for path in secret_field_paths(type(instance)):
-        if not isinstance(_get_path(instance, path), Secret):
+        if (value := _get_path(instance, path)) is None:
+            continue  # an optional secret that is not given: nothing to protect
+        if not isinstance(value, Secret):
             raise TypeError(
                 f"Parameter '{path}' is declared as Secret but its value is not; "
                 "use Secret(...) for its default value."
@@ -97,7 +147,7 @@ def redact_validation_error(error: ValidationError, cls: type) -> ValidationErro
     if cls has no secret parameters.
     """
     if not (
-        secret_paths := [tuple(path.split(".")) for path in secret_field_paths(cls)]
+        secret_paths := [tuple(path.split(".")) for path in sensitive_field_paths(cls)]
     ):
         return error
 
