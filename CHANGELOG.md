@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `${secret:NAME}` or `${secret:NAME,default}` to take the value from an environment variable or from a file in
   a secrets folder. Environment variables can be read from a dotenv file without changing the environment
   of the process. This is configured with the new parameters `dotenv_file` and `secrets_dir` in
-  `ApplicationConfigSection`. See the chapter on environment variables, files and secrets in the docs.
+  `ApplicationConfigSection`. See the chapter on environment variables and secrets in the docs.
 - Support for secrets in config: parameters annotated with `Secret[...]` (`Secret` and the exceptions
   `SecretsError` and `ReferenceResolutionError` are exported by `application_settings`) are masked in
   `repr`, logs and validation errors. A secret that does not come from a reference gives a warning, or

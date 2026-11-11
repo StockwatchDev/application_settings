@@ -91,7 +91,7 @@ on data validation is given in the [section on handling deviations](./6-Handling
 
 Values in a config file can also refer to environment variables and to files, for example
 to keep a password out of the config file. This is described in the chapter on
-[environment variables, files and secrets](./8-Secrets.md).
+[environment variables and secrets](./8-Secrets.md).
 
 ## Location, name and type of the file
 

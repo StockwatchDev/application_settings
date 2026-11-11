@@ -1,4 +1,4 @@
-# Environment variables, files and secrets
+# Environment variables and secrets
 
 A config file is often not the right place for every value. A password or an API key
 should not be committed with the rest of the config, and some values differ per
