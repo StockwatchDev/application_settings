@@ -30,10 +30,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Logging now done with the standard logger, no longer with loguru
 - Minimal version of pydantic is now 2.7, because we use `pydantic.Secret`.
+- File inclusion (`__include__`) now merges files deeply: tables (sections) are merged per key, other
+  values are replaced. Before, a section in the including file replaced the whole section of an
+  included file (breaking for configs that relied on that).
+- When several files are included, a file now overrides the ones listed before it. Before, the first
+  file listed took precedence (breaking for configs with overlapping includes). The including file
+  still overrides all included files.
+- The value of `__include__` is validated: it must be a non-empty path or an array of non-empty paths,
+  and it cannot contain a reference (`${...}`); otherwise a `ValueError` is raised.
 
 ### Fixed - 0.6.0
 
 - Toml files read with `tomlkit` need to be `unwrap`ped before processing with pydantic.
+- Files that include each other now raise a `ValueError` instead of a `RecursionError`.
+- Paths in `__include__` are now normalised (`..` is resolved).
+- `__include__` is no longer reported as an extra parameter.
 
 ### Removed - 0.6.0
 

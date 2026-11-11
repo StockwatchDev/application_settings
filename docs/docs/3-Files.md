@@ -252,11 +252,43 @@ The file inclusion mechanism has been kept simple; the following rules apply:
 
 - The key to use for specifying a file to include is `__include__`; hence, this key is
   to be treated as a keyword and is not available as field name.
-- The value can be either a single path string or an array of path strings.
+- The value can be either a single path string or an array of path strings. Anything
+  else, like a number or an empty string, raises a `ValueError`.
+- A path is relative to the folder of the file that includes it; an absolute path is
+  allowed as well.
+- The value of `__include__` must be a literal path: it cannot hold a
+  [reference](./8-Secrets.md) like `${env:NAME}`, because files are included before
+  references are resolved. A value that contains `${` raises a `ValueError`.
 - File inclusion can only be specified at the top level, not inside a section.
 - File inclusion is only available for configuration, not for settings.
 - File inclusion can be nested, i.e., in the included config file one can again specify
-  another file to include (albeit at the top level only).
-- If the included file specifies a key that was already specified in the file that does
-  the inclusion, then it is disregarded and the key-value pair of the latter file is
-  kept.
+  another file to include (albeit at the top level only). Files that include each other,
+  directly or indirectly, raise a `ValueError`.
+- If an included file is not found, then it is skipped and a warning is logged, unless
+  the config is loaded with `throw_if_file_not_found`: then a `FileNotFoundError` is
+  raised. A file with an unsupported extension is skipped and an error is logged. A path
+  that is not valid for the operating system always raises a `ValueError`.
+
+### How the files are merged
+
+The files are merged key by key:
+
+- A table (section) is merged with a table of the same name, at any depth: keys that
+  only one of the files specifies are all kept, and for keys that both specify, the
+  value from the file with the highest precedence is used.
+- Any other value, like a number, a string or an array, is replaced as a whole.
+
+Precedence is as follows: the including file wins over all files that it includes, and
+if several files are included, then a file wins over the ones listed before it.
+
+```toml
+__include__ = ["base.toml", "production.toml"]
+# production.toml overrides base.toml, and values set here override both
+
+[section1]
+field2 = 33
+```
+
+If `base.toml` and `production.toml` both have a `[section1]` with a `field1` and
+`production.toml` also has a `field2`, then `section1.field1` comes from
+`production.toml`, and `section1.field2` is 33.
