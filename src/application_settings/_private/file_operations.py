@@ -160,42 +160,48 @@ def _load_with_includes(
             "The include chain is circular: " + " -> ".join(str(p) for p in chain)
         )
     data_stored = loader(path)
-    if included_files := data_stored.get("__include__"):
-        if not isinstance(included_files, list):
-            included_files = [included_files]
-        for included_file in included_files:
-            if _looks_like_reference(included_file):
-                raise ValueError(
-                    "__include__ does not support references; "
-                    f"use a literal path instead of '{included_file}'"
-                )
-            if is_valid_filepath(included_file, platform="auto"):
-                included_file_path = Path(included_file)
-                if not included_file_path.is_absolute():
-                    included_file_path = path.parents[0] / included_file_path
-                included_file_path = included_file_path.resolve()
-                if _check_filepath(
-                    included_file_path,
-                    throw_if_invalid_path=throw_if_file_not_found,
-                    throw_if_file_not_found=throw_if_file_not_found,
-                    create_file_if_not_found=False,
-                ):
-                    data_stored = (
-                        _load_with_includes(
-                            included_file_path, throw_if_file_not_found, loader, chain
-                        )
-                        | data_stored
+    for included_file in _included_files(data_stored):
+        # includes are loaded before references are resolved, so they cannot hold one
+        if "${" in included_file:
+            raise ValueError(
+                "__include__ does not support references; "
+                f"use a literal path instead of '{included_file}'"
+            )
+        if is_valid_filepath(included_file, platform="auto"):
+            included_file_path = Path(included_file)
+            if not included_file_path.is_absolute():
+                included_file_path = path.parents[0] / included_file_path
+            included_file_path = included_file_path.resolve()
+            if _check_filepath(
+                included_file_path,
+                throw_if_invalid_path=throw_if_file_not_found,
+                throw_if_file_not_found=throw_if_file_not_found,
+                create_file_if_not_found=False,
+            ):
+                data_stored = (
+                    _load_with_includes(
+                        included_file_path, throw_if_file_not_found, loader, chain
                     )
-            else:
-                raise ValueError(
-                    f"Given path: '{included_file}' is not a valid path for this OS"
+                    | data_stored
                 )
+        else:
+            raise ValueError(
+                f"Given path: '{included_file}' is not a valid path for this OS"
+            )
     return data_stored
 
 
-def _looks_like_reference(value: Any) -> bool:
-    """Includes are loaded before references are resolved, so they cannot hold one."""
-    return isinstance(value, str) and "${" in value
+def _included_files(data: dict[str, Any]) -> list[str]:
+    """Return the paths in __include__; raise a ValueError if it is not a path or a list of paths."""
+    if "__include__" not in data:
+        return []
+    value = data["__include__"]
+    paths = value if isinstance(value, list) else [value]
+    if not all(isinstance(item, str) and item for item in paths):
+        raise ValueError(
+            f"__include__ must be a path or a list of paths, got {value!r}"
+        )
+    return cast(list[str], paths)
 
 
 def _get_saver(path: Path) -> Callable[[Path, dict[str, Any]], None] | None:

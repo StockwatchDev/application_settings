@@ -124,6 +124,32 @@ def test_missing_include_raises_if_the_file_is_required(tmp_path: Path) -> None:
         _load(main, throw=True)
 
 
+@pytest.mark.parametrize(
+    "value",
+    [
+        14,
+        True,
+        None,
+        "",
+        [""],
+        [1],
+        ["common.json", 2],
+        ["common.json", None],
+        {"a": 1},
+    ],
+)
+def test_include_with_a_wrong_shape_is_rejected(tmp_path: Path, value: object) -> None:
+    _write(tmp_path, "common.json", json.dumps({"port": 1}))
+    main = _write(tmp_path, "main.json", json.dumps({"__include__": value}))
+    with pytest.raises(ValueError, match="__include__ must be"):
+        _load(main)
+
+
+def test_empty_list_of_includes_is_fine(tmp_path: Path) -> None:
+    main = _write(tmp_path, "main.toml", 'name = "m"\n__include__ = []\n')
+    assert _load(main)["name"] == "m"
+
+
 def test_include_with_a_reference_is_rejected(tmp_path: Path) -> None:
     main = _write(tmp_path, "main.toml", '__include__ = "${env:DIR}/common.toml"\n')
     with pytest.raises(ValueError, match="__include__.*reference"):
