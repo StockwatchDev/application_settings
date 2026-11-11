@@ -28,7 +28,6 @@ from application_settings.protocols import (
 from application_settings.settings_base import SettingsBase, SettingsSectionBase
 from application_settings.type_notation_helper import PathOrStr
 
-# Communicate that this library does not manage logging output itself
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 __version__ = version("application-settings")
