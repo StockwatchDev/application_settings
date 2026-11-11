@@ -89,14 +89,63 @@ def test_nested_includes(tmp_path: Path) -> None:
     assert (data["port"], data["ratio"]) == (3, 2.5)  # the including file wins
 
 
-def test_first_listed_include_wins_over_later_ones(tmp_path: Path) -> None:
+def test_last_listed_include_wins_over_earlier_ones(tmp_path: Path) -> None:
     _write(tmp_path, "first.toml", "port = 1\n")
     _write(tmp_path, "second.toml", "port = 2\nratio = 2.5\n")
     main = _write(
         tmp_path, "main.toml", '__include__ = ["first.toml", "second.toml"]\n'
     )
     data = _load(main)
-    assert (data["port"], data["ratio"]) == (1, 2.5)
+    assert (data["port"], data["ratio"]) == (2, 2.5)
+
+
+def test_including_file_wins_over_all_includes(tmp_path: Path) -> None:
+    _write(tmp_path, "first.toml", "port = 1\nratio = 1.5\n")
+    _write(tmp_path, "second.toml", "port = 2\nratio = 2.5\n")
+    main = _write(
+        tmp_path, "main.toml", 'port = 9\n__include__ = ["first.toml", "second.toml"]\n'
+    )
+    data = _load(main)
+    assert (data["port"], data["ratio"]) == (9, 2.5)
+
+
+def test_three_includes_are_applied_in_the_listed_order(tmp_path: Path) -> None:
+    for number in (1, 2, 3):
+        _write(tmp_path, f"inc{number}.toml", f"port = {number}\nn{number} = 1\n")
+    main = _write(
+        tmp_path, "main.toml", '__include__ = ["inc2.toml", "inc3.toml", "inc1.toml"]\n'
+    )
+    data = _load(main)
+    assert data["port"] == 1  # listed last
+    assert (data["n1"], data["n2"], data["n3"]) == (1, 1, 1)
+
+
+def test_tables_are_merged_per_key(tmp_path: Path) -> None:
+    _write(tmp_path, "common.toml", '[section]\nport = 2\nlabel = "common"\n')
+    main = _write(
+        tmp_path, "main.toml", '__include__ = "common.toml"\n[section]\nport = 1\n'
+    )
+    assert _load(main)["section"] == {"port": 1, "label": "common"}
+
+
+def test_tables_of_several_includes_are_merged(tmp_path: Path) -> None:
+    _write(tmp_path, "a.toml", "[section]\nport = 1\nlabel = 'a'\n")
+    _write(tmp_path, "b.toml", "[section]\nport = 2\nratio = 2.5\n")
+    main = _write(tmp_path, "main.toml", '__include__ = ["a.toml", "b.toml"]\n')
+    assert _load(main)["section"] == {"port": 2, "label": "a", "ratio": 2.5}
+
+
+def test_tables_are_merged_through_nested_includes(tmp_path: Path) -> None:
+    _write(tmp_path, "c.toml", "[section]\nx = 0\ny = 2\n")
+    _write(tmp_path, "b.toml", '__include__ = "c.toml"\n[section]\nx = 1\n')
+    main = _write(tmp_path, "main.toml", '__include__ = "b.toml"\n[section]\nz = 3\n')
+    assert _load(main)["section"] == {"x": 1, "y": 2, "z": 3}
+
+
+def test_lists_are_replaced_not_merged(tmp_path: Path) -> None:
+    _write(tmp_path, "common.toml", "items = [1, 2]\n")
+    main = _write(tmp_path, "main.toml", '__include__ = "common.toml"\nitems = [3]\n')
+    assert _load(main)["items"] == [3]
 
 
 def test_json_includes(tmp_path: Path) -> None:

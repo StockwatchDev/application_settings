@@ -8,6 +8,7 @@ from typing import Any, cast
 
 from pathvalidate import is_valid_filepath
 
+from application_settings._private.file_operations_utils import deep_update
 from application_settings._private.json_file_operations import load_json, save_json
 from application_settings._private.toml_file_operations import load_toml, save_toml
 from application_settings.parameter_kind import ParameterKind
@@ -160,6 +161,8 @@ def _load_with_includes(
             "The include chain is circular: " + " -> ".join(str(p) for p in chain)
         )
     data_stored = loader(path)
+    # later includes win over earlier ones, and the including file wins over all
+    data_included: dict[str, Any] = {}
     for included_file in _included_files(data_stored):
         # includes are loaded before references are resolved, so they cannot hold one
         if "${" in included_file:
@@ -178,17 +181,17 @@ def _load_with_includes(
                 throw_if_file_not_found=throw_if_file_not_found,
                 create_file_if_not_found=False,
             ):
-                data_stored = (
+                data_included = deep_update(
+                    data_included,
                     _load_with_includes(
                         included_file_path, throw_if_file_not_found, loader, chain
-                    )
-                    | data_stored
+                    ),
                 )
         else:
             raise ValueError(
                 f"Given path: '{included_file}' is not a valid path for this OS"
             )
-    return data_stored
+    return deep_update(data_included, data_stored)
 
 
 def _included_files(data: dict[str, Any]) -> list[str]:
