@@ -30,6 +30,9 @@ from application_settings._private.references import (
             "${secret:db-password.txt,fallback}",
             Reference("secret", "db-password.txt", "fallback"),
         ),
+        ("${secret:.secret}", Reference("secret", ".secret", None)),  # a hidden file
+        # only the names '.' and '..' are not allowed
+        ("${secret:..data}", Reference("secret", "..data", None)),
     ],
 )
 def test_parse_reference(value: str, expected: Reference) -> None:
@@ -99,6 +102,8 @@ def test_parse_escape(value: str, expected: str) -> None:
         "${env:A} and ${env:B}",  # looks like one reference but is not
         "${env:a/b}",  # no path separators in names
         "${secret:..}",  # would point outside the secrets folder
+        "${secret:../test}",  # a name never contains a path separator
+        "${secret:./../../test}",
         "${secret:.}",
         "${secret:..,default}",
         "${env:..}",  # names are validated the same way for every scheme
@@ -234,7 +239,18 @@ def test_resolve_file_unreadable_content_is_not_replaced_by_default(
 
 
 @pytest.mark.parametrize(
-    "name", ["..", ".", "../pw", "sub/pw", "sub\\pw", "/etc/passwd", "C:\\pw", ""]
+    "name",
+    [
+        "..",
+        ".",
+        "../pw",
+        "./../../pw",
+        "sub/pw",
+        "sub\\pw",
+        "/etc/passwd",
+        "C:\\pw",
+        "",
+    ],
 )
 def test_resolve_file_rejects_unsafe_names(tmp_path: Path, name: str) -> None:
     (tmp_path / "pw").write_text("s3cret", encoding="utf-8")
@@ -243,6 +259,12 @@ def test_resolve_file_rejects_unsafe_names(tmp_path: Path, name: str) -> None:
     with pytest.raises(ReferenceSyntaxError) as excinfo:
         resolve(Reference("secret", name, "default-value"), context)
     assert "default-value" not in str(excinfo.value)
+
+
+def test_resolve_hidden_file(tmp_path: Path) -> None:
+    (tmp_path / ".secret").write_text("s3cret", encoding="utf-8")
+    context = ReferenceContext(env={}, secrets_dir=tmp_path)
+    assert resolve(Reference("secret", ".secret"), context).value == "s3cret"
 
 
 def test_resolve_file_follows_symlinks_in_secrets_dir(tmp_path: Path) -> None:

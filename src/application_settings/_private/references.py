@@ -29,7 +29,8 @@ _NAME = re.compile(r"[\w.-]+")
 
 
 def _is_valid_name(name: str) -> bool:
-    # '.' and '..' match the pattern but are not names; they would escape the secrets folder
+    # The pattern allows no '/', '\' or ':', so a name can never be a path. Only '.' and '..'
+    # match it and are path components; they would escape the secrets folder.
     return bool(_NAME.fullmatch(name)) and name not in (".", "..")
 
 
