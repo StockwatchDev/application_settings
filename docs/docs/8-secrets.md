@@ -155,17 +155,11 @@ case if the value comes from
   was not found, or
 - a literal in the config file, e.g. `api_key = "abc"`.
 
-By default, a warning is logged that names the parameter. In strict mode (set
-`strict_mode = true` in the section `application_config`), a `SecretsError` is raised
-instead, which lists all such parameters. The config that was loaded previously, if any,
-is not replaced in that case.
-
-Messages never contain the value of a secret.
-
-Strict mode is off by default, so by default a secret that does not come from a
-reference is only a warning. For production, set `strict_mode = true`: a misconfigured
-deployment then fails at startup instead of silently running with a default or literal
-secret.
+By default, a warning is logged that names the parameter (never its value). In strict mode
+(set `strict_mode = true` in the section `application_config`), a `SecretsError` is raised
+instead, which lists all such parameters; the config that was loaded previously, if any,
+is not replaced in that case. Use strict mode in production: a misconfigured deployment
+then fails at startup instead of silently running with a default or literal secret.
 
 ## Setting this up on a platform
 
