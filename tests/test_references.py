@@ -204,6 +204,25 @@ def test_resolve_file_strips_trailing_newline(tmp_path: Path, content: str) -> N
     assert resolve(Reference("secret", "pw"), context).value == "s3cret"
 
 
+@pytest.mark.parametrize(
+    "content, expected",
+    [
+        ("s3cret\n\n", "s3cret\n"),  # only one newline is removed
+        ("s3cret\r\n\r\n", "s3cret\r\n"),
+        ("s3cret\n\r\n", "s3cret\n"),
+        ("s3cret\r", "s3cret\r"),  # a lone carriage return is not a newline
+        ("s3cret\n\r", "s3cret\n\r"),
+        ("\n", ""),
+    ],
+)
+def test_resolve_file_strips_one_trailing_newline_only(
+    tmp_path: Path, content: str, expected: str
+) -> None:
+    (tmp_path / "pw").write_bytes(content.encode("utf-8"))
+    context = ReferenceContext(env={}, secrets_dir=tmp_path)
+    assert resolve(Reference("secret", "pw"), context).value == expected
+
+
 def test_resolve_file_keeps_other_whitespace(tmp_path: Path) -> None:
     (tmp_path / "pw").write_text(" s3 cret ", encoding="utf-8")
     context = ReferenceContext(env={}, secrets_dir=tmp_path)

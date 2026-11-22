@@ -143,7 +143,10 @@ def _read_secret_file(name: str, secrets_dir: Path | None) -> tuple[str | None, 
         raise ReferenceResolutionError(
             f"File '{name}' in the secrets folder cannot be read ({type(error).__name__})."
         ) from None
-    return content.rstrip("\r\n"), ""
+    # one newline only: it is added by tools like echo, anything beyond it is content
+    if content.endswith("\r\n"):
+        return content[:-2], ""
+    return content.removesuffix("\n"), ""
 
 
 @dataclass(frozen=True)
