@@ -35,6 +35,13 @@ class RefConfig(ConfigBase):
 
 
 @dataclass(frozen=True)
+class ListConfig(ConfigBase):
+    """Example config with a list parameter, which a reference cannot provide"""
+
+    ports: tuple[int, ...] = ()
+
+
+@dataclass(frozen=True)
 class RefSettings(SettingsBase):
     """Example settings, in which references must not be resolved"""
 
@@ -73,6 +80,22 @@ def test_reference_is_coerced_to_the_field_type(
     assert config.ratio == 0.25
     assert config.section.port == 8080
     assert RefSection.get().port == 8080
+
+
+def test_value_without_reference_is_coerced_in_the_same_way(tmp_path: Path) -> None:
+    config = _load(tmp_path, '[section]\nport = "8080"\n')
+    assert config.section.port == 8080
+
+
+def test_reference_cannot_provide_a_list(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("APPSET_PORTS", "1,2,3")
+    file_path = tmp_path / "config.toml"
+    file_path.write_text('ports = "${env:APPSET_PORTS}"\n', encoding="utf-8")
+    ListConfig.set_filepath(file_path)
+    with pytest.raises(ValidationError):
+        ListConfig.load()
 
 
 def test_reference_default(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

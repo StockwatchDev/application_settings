@@ -45,8 +45,10 @@ The following rules apply:
 - The default is everything after the first comma, as is: spaces are part of it, and a
   reference in it is not resolved but taken literally, so `${env:A,${env:B}}` gives
   the text `${env:B}` when `A` is not set. It can be empty: `${env:VAR_NAME,}`.
-- A reference works for any parameter of any type. The value that is found is a string,
-  which is converted to the type of the parameter, just like a value from the file is.
+- A reference works for any parameter. The value that is found is always a string. It is
+  converted to the type of the parameter in the same way as any value from the file, e.g.
+  `"5"` becomes `5` for an `int` parameter; `strict_mode` does not change this. Hence, a
+  reference cannot provide a list or a table: loading then fails with a validation error.
 - References work in every part of a config file, also in included files, except
   in the section `application_config`.
 - References are resolved when the config is loaded.
