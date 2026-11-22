@@ -131,8 +131,8 @@ api_key = "${env:MYAPP_API_KEY}"
 api_key = MyConfig.get().api_key.get_secret_value()
 ```
 
-- The value is converted to the type that is given, in the example a `str`; `Secret[int]`
-  would convert the value to an `int`.
+- The value is converted to `T` as for any other parameter, e.g. `Secret[int]` gives an
+  `int`, and is then wrapped in a `Secret`.
 - The value is hidden when the config is printed or logged: you see `Secret('**********')`.
   The value has to be asked for explicitly with `get_secret_value()`.
 - The value is also hidden in the error when it is not valid. The error still tells which
