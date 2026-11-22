@@ -151,13 +151,17 @@ def _read_secret_file(name: str, secrets_dir: Path | None) -> tuple[str | None, 
 
 @dataclass(frozen=True)
 class ResolutionReport:
-    """Where the values came from, as dotted paths like 'section.field' or 'hosts[0]'.
+    """Where the values in the resolved data came from.
 
-    A value that is in the data but in neither set is a literal.
+    Each entry is a dotted path like 'section.field' or 'hosts[0]'. A value that is in
+    neither of the two sets was a literal in the data and not a reference.
     """
 
     from_reference: frozenset[str] = frozenset()
+    """Paths of values that were found: the environment variable or secret file exists."""
+
     from_default: frozenset[str] = frozenset()
+    """Paths of references that were not found, so that their default was used."""
 
 
 def resolve_references(
