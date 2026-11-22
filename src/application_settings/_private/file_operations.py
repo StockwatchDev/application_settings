@@ -158,8 +158,8 @@ def _load_with_includes(
         for included_file in included_files:
             if _looks_like_reference(included_file):
                 raise ValueError(
-                    "__include__ does not support references; "
-                    f"use a literal path instead of '{included_file}'"
+                    "__include__ does not support references, so '${' is not allowed "
+                    f"in a path; use a literal path instead of '{included_file}'"
                 )
             if is_valid_filepath(included_file, platform="auto"):
                 included_file_path = Path(included_file)

@@ -187,13 +187,16 @@ def test_references_in_included_file(
         '"${env:APPSET_DIR}/included.toml"',
         '"${secret:included}"',
         '["./other.toml", "${env:APPSET_DIR}"]',
+        '"${something}.toml"',  # not a reference, but '${' is not allowed in a path
     ],
 )
 def test_reference_in_include_is_rejected(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, include: str
 ) -> None:
     monkeypatch.setenv("APPSET_DIR", ".")
-    with pytest.raises(ValueError, match="__include__.*reference"):
+    with pytest.raises(
+        ValueError, match=r"__include__.*reference.*'\$\{' is not allowed"
+    ):
         _load(tmp_path, f"name = 'main'\n__include__ = {include}\n")
 
 
