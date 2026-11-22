@@ -1,7 +1,7 @@
 """Example for settings.
 
 Cd to the folder containing this file and run this example with the following command:
-python ./example_settings.py -s ./settings.json
+python . -s ./settings.json
 """
 
 from pathlib import Path

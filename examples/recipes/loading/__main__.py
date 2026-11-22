@@ -1,7 +1,7 @@
 """Example to demonstrate how to load a config without specifying the config class in code
 
 Cd to the folder containing this file and run this example with the following command:
-python . -c ./the_config.toml
+python . -c ./config.toml
 """
 
 from lib_config import MyLibConfigSection
