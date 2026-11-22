@@ -41,7 +41,7 @@ Parsing is done once before or during first access and the resulting set of para
 stored as a singleton.
 
 Interested? Then have a look at our
-[quick start](https://stockwatchdev.github.io/application_settings/develop/Quick_start/)
+[quick start](https://stockwatchdev.github.io/application_settings/develop/quick_start/)
 or dive into the
 [full documentation](https://stockwatchdev.github.io/application_settings/develop/).
 

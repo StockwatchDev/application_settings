@@ -87,11 +87,11 @@ by silently.
 
 Fields or complete sections defined in the classes can be absent in the files as long as
 default values have been specified for all fields that have been left out. More info
-on data validation is given in the [section on handling deviations](./6-Handling_deviations.md)
+on data validation is given in the [section on handling deviations](./6-handling_deviations.md)
 
 Values in a config file can also refer to environment variables and to files, for example
 to keep a password out of the config file. This is described in the chapter on
-[environment variables and secrets](./8-Secrets.md).
+[environment variables and secrets](./8-secrets.md).
 
 ## Location, name and type of the file
 
@@ -198,7 +198,7 @@ module from the standard library:
 It is good practice make a separate module that defines the container class and the
 sections and to add both the convenience function for setting the filepath via the
 cli and the `load` statement in that module.
-[This may help to prevent initialization problems.](7-Recipes.md#initialization-needs-to-depend-on-configuration)
+[This may help to prevent initialization problems.](7-recipes.md#initialization-needs-to-depend-on-configuration)
 
 ## Handling FileNotFoundError
 

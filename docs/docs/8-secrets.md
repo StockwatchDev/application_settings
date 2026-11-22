@@ -9,7 +9,7 @@ This is only available for config (and config sections), not for settings: setti
 written back to file, and a secret should never end up there.
 
 A complete example is available in the folder
-[`examples/Recipies/secrets`](https://github.com/StockwatchDev/application_settings/tree/develop/examples/Recipies/secrets).
+[`examples/recipes/secrets`](https://github.com/StockwatchDev/application_settings/tree/develop/examples/recipes/secrets).
 
 ## References
 
@@ -47,7 +47,7 @@ The following rules apply:
   in the section `application_config`.
 - References are resolved when the config is loaded.
 - A reference is not a file inclusion: `${secret:NAME}` reads a single value from a file
-  in the secrets folder, whereas [`__include__`](3-Files.md) merges a whole config file.
+  in the secrets folder, whereas [`__include__`](3-files.md) merges a whole config file.
   Includes are loaded before references are resolved, so the value of `__include__` must
   be a literal path; a value with `${` in it is an error.
 
