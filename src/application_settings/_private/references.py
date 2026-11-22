@@ -2,11 +2,11 @@
 
 A reference must be the whole value of a parameter:
 
-- `${env:NAME}` or `${env:NAME,default}` refers to an environment variable;
-- `${secret:NAME}` or `${secret:NAME,default}` refers to a file in the secrets folder.
+- `${env:VAR_NAME}` or `${env:VAR_NAME,default}` refers to an environment variable;
+- `${secret:file_name}` or `${secret:file_name,default}` refers to a file in the secrets folder.
 
 A value that starts with `$${` is not a reference, the leading `$` is an escape
-that is removed: `$${env:NAME}` becomes the literal `${env:NAME}`.
+that is removed: `$${env:VAR_NAME}` becomes the literal `${env:VAR_NAME}`.
 """
 
 import logging
@@ -67,7 +67,7 @@ def parse(value: str) -> Reference | str:
     scheme, separator, rest = match.group("body").partition(":")
     if not separator:
         raise ReferenceSyntaxError(
-            "Invalid reference: expected '${env:NAME}' or '${secret:NAME}'."
+            "Invalid reference: expected '${env:VAR_NAME}' or '${secret:file_name}'."
         )
     if scheme not in _SCHEMES:
         raise ReferenceSyntaxError(
