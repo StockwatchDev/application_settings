@@ -135,12 +135,11 @@ api_key = MyConfig.get().api_key.get_secret_value()
   `int`, and is then wrapped in a `Secret`.
 - The value is hidden when the config is printed or logged: you see `Secret('**********')`.
   The value has to be asked for explicitly with `get_secret_value()`.
-- The value is also hidden in the error when it is not valid. The error still tells which
-  parameter is wrong and why, but it does not show the input. The same holds for an
-  error of another parameter in which pydantic would show all arguments, e.g. when a
-  parameter is missing, because that would show the secrets as well. In fact, in a
-  config that has secrets, only plain values (text, numbers, booleans) are shown in
-  errors for other parameters; a list or a table is not.
+- If the config is not valid, the error does not show secret values. The error still
+  names the parameter and says what is wrong, but not its input when that is a
+  `Secret`. For other parameters, only plain values (text, numbers, booleans) are shown,
+  because a list or a table could hold a secret, and pydantic reports all arguments
+  for errors like a missing parameter.
 - `Secret` is not available in settings. Loading a settings class that has a `Secret`
   raises a `TypeError`.
 - The default value of a secret has to be a `Secret` as well, e.g. `Secret("x")`.
