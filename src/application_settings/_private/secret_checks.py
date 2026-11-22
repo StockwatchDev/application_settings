@@ -105,7 +105,8 @@ def check_secrets(
     """Check that the secrets of a Config instance are Secrets that came from a store.
 
     A secret that was set by a default (in the code or in a reference) or by a literal
-    in the file is logged as a warning, or, if strict, raised as a SecretsError.
+    in the file is logged as a warning; if strict, it is logged as an error and raised
+    as a SecretsError.
 
     Raises:
         TypeError: if a secret parameter has a value that is not a Secret
@@ -132,10 +133,11 @@ def check_secrets(
             f"Secret parameter '{path}' does not come from a secrets store, "
             f"its value is set by {origin}."
         )
+    # log before raising: a caller that catches the error may not show it
+    for offender in offenders:
+        logger.log(logging.ERROR if strict else logging.WARNING, offender)
     if offenders and strict:
         raise SecretsError("\n".join(offenders))
-    for offender in offenders:
-        logger.warning(offender)
 
 
 def redact_validation_error(error: ValidationError, cls: type) -> ValidationError:

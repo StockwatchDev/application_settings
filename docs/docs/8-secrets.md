@@ -162,9 +162,9 @@ case if the value comes from
 - a literal in the config file, e.g. `api_key = "abc"`.
 
 By default, a warning is logged that names the parameter (never its value). In strict mode
-(set `strict_mode = true` in the section `application_config`), a `SecretsError` is raised
-instead, which lists all such parameters; the config that was loaded previously, if any,
-is not replaced in that case. Use strict mode in production: a misconfigured deployment
+(set `strict_mode = true` in the section `application_config`), the same is logged as an
+error and a `SecretsError` is raised as well, which lists all such parameters; the config
+that was loaded previously, if any, is not replaced in that case. Use strict mode in production: a misconfigured deployment
 then fails at startup instead of silently running with a default or literal secret.
 
 ## Setting this up on a platform

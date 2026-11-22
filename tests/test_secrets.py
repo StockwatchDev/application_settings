@@ -215,7 +215,7 @@ def test_secret_default_in_code_warns(
 
 
 def test_secret_not_from_a_store_in_strict_mode_raises(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
 ) -> None:
     monkeypatch.setenv("APPSET_OTHER", "1")
     good = _load(SecretConfig, tmp_path, 'api_key = "${env:APPSET_OTHER}"\n')
@@ -223,12 +223,18 @@ def test_secret_not_from_a_store_in_strict_mode_raises(
         'api_key = 1234\n[db]\npassword = "literal-pw"\n'
         "[application_config]\nstrict_mode = true\n"
     )
-    with pytest.raises(SecretsError) as excinfo:
+    with caplog.at_level(logging.WARNING), pytest.raises(SecretsError) as excinfo:
         _load(SecretConfig, tmp_path, content)
     message = str(excinfo.value)
     assert "api_key" in message and "db.password" in message  # all offenders
     assert "1234" not in message and "literal-pw" not in message
     assert SecretConfig.get() is good  # the failed load did not replace the config
+    # the offenders are logged as well, at error level and without values
+    errors = [r for r in caplog.records if r.levelno == logging.ERROR]
+    assert len(errors) == 2
+    logged = "\n".join(_warnings(caplog))
+    assert "api_key" in logged and "db.password" in logged
+    assert "1234" not in logged and "literal-pw" not in logged
 
 
 def test_secret_from_reference_in_strict_mode_is_fine(
@@ -499,12 +505,17 @@ def test_optional_secret_that_is_a_literal_warns(
 
 
 def test_optional_secret_that_is_a_literal_in_strict_mode_raises(
-    tmp_path: Path,
+    tmp_path: Path, caplog: pytest.LogCaptureFixture
 ) -> None:
     content = "token = 1234\n[application_config]\nstrict_mode = true\n"
-    with pytest.raises(SecretsError, match="token") as excinfo:
+    with (
+        caplog.at_level(logging.WARNING),
+        pytest.raises(SecretsError, match="token") as excinfo,
+    ):
         _load(OptionalSecretConfig, tmp_path, content)
     assert "1234" not in str(excinfo.value)
+    assert any("token" in m for m in _warnings(caplog))
+    assert "1234" not in "\n".join(_warnings(caplog))
 
 
 def test_optional_secret_default_in_code_warns(
