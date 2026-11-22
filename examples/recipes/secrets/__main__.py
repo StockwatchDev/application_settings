@@ -19,7 +19,9 @@ def main() -> None:
 
     # Secrets are masked when printed or logged
     print(config)
-    print(f"{config.database.password = }")
+    # Print the section, not only the password: it shows the same masked value, and
+    # code scanning flags the printing of a field that is named password
+    print(f"{config.database = }")
 
     # Other values are used as usual, they have the type of the parameter
     print(f"{config.name = }")
