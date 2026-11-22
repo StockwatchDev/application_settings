@@ -37,8 +37,11 @@ The following rules apply:
 - A value that starts with `$${` is taken literally, without the first `$`. Hence, to get
   the text `${env:VAR_NAME}` as a value, write `"$${env:VAR_NAME}"`.
 - A name consists of letters, digits, `_`, `-` and `.`; the names `.` and `..` are not
-  allowed. A value that looks like a reference but is not valid, like `${env:}` or
-  `${other:NAME}`, is an error.
+  allowed.
+- Only the schemes `env` and `secret` exist. A value of the form `${...}` that is not a
+  valid reference to one of them is an error: this holds for an unknown scheme
+  (`${other:name}`), a missing scheme (`${name}`) and an empty or invalid name
+  (`${env:}`).
 - The default is everything after the first comma, as is: spaces are part of it, and it
   cannot contain a reference. It can be empty: `${env:VAR_NAME,}`.
 - A reference works for any parameter of any type. The value that is found is a string,
