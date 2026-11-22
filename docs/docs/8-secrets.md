@@ -15,12 +15,12 @@ A complete example is available in the folder
 
 A reference is a value in the config file that has one of the following forms:
 
-| Reference                | Value                                                                 |
-| ------------------------ | --------------------------------------------------------------------- |
-| `${env:NAME}`            | the value of the environment variable `NAME`                          |
-| `${env:NAME,default}`    | the same, but if `NAME` is not set, then `default` is used            |
-| `${secret:NAME}`         | the content of the file `NAME` in the secrets folder                  |
-| `${secret:NAME,default}` | the same, but if the file is not found, then `default` is used        |
+| Reference                     | Value                                                          |
+| ----------------------------- | -------------------------------------------------------------- |
+| `${env:VAR_NAME}`             | the value of the environment variable `VAR_NAME`               |
+| `${env:VAR_NAME,default}`     | the same, but if `VAR_NAME` is not set, then `default` is used |
+| `${secret:file_name}`         | the content of the file `file_name` in the secrets folder      |
+| `${secret:file_name,default}` | the same, but if the file is not found, then `default` is used |
 
 ```toml
 name = "${env:MYAPP_NAME,my application}"
@@ -32,21 +32,21 @@ password = "${secret:db_password}"
 
 The following rules apply:
 
-- The reference has to be the _whole_ value. A value like `"prefix-${env:NAME}"` is taken
-  literally, as is a value that is not closed (`"${env:NAME"`).
+- The reference has to be the _whole_ value. A value like `"prefix-${env:VAR_NAME}"` is taken
+  literally, as is a value that is not closed (`"${env:VAR_NAME"`).
 - A value that starts with `$${` is taken literally, without the first `$`. Hence, to get
-  the text `${env:NAME}` as a value, write `"$${env:NAME}"`.
+  the text `${env:VAR_NAME}` as a value, write `"$${env:VAR_NAME}"`.
 - A name consists of letters, digits, `_`, `-` and `.`; the names `.` and `..` are not
   allowed. A value that looks like a reference but is not valid, like `${env:}` or
   `${other:NAME}`, is an error.
 - The default is everything after the first comma, as is: spaces are part of it, and it
-  cannot contain a reference. It can be empty: `${env:NAME,}`.
+  cannot contain a reference. It can be empty: `${env:VAR_NAME,}`.
 - A reference works for any parameter of any type. The value that is found is a string,
   which is converted to the type of the parameter, just like a value from the file is.
 - References work in every part of a config file, also in included files, except
   in the section `application_config`.
 - References are resolved when the config is loaded.
-- A reference is not a file inclusion: `${secret:NAME}` reads a single value from a file
+- A reference is not a file inclusion: `${secret:file_name}` reads a single value from a file
   in the secrets folder, whereas [`__include__`](3-files.md) merges a whole config file.
   Includes are loaded before references are resolved, so the value of `__include__` must
   be a literal path; a value with `${` in it is an error.
@@ -78,7 +78,7 @@ are taken as they are: there is no variable expansion.
 ### Files in the secrets folder
 
 Platforms like Docker and Kubernetes can provide secrets as files, one file per secret,
-in a folder like `/run/secrets`. A reference `${secret:NAME}` reads the file `NAME` in the
+in a folder like `/run/secrets`. A reference `${secret:file_name}` reads the file `file_name` in the
 folder that is set by `secrets_dir` in the section `application_config`.
 
 ```toml
@@ -89,7 +89,7 @@ secrets_dir = "/run/secrets"
 - A relative path is relative to the folder of the config file.
 - The file is read as UTF-8 and a single trailing newline is removed. Other whitespace is
   kept.
-- `NAME` is the name of a file and can never be a path: it is not possible to
+- `file_name` is the name of a file and can never be a path: it is not possible to
   refer to a file outside the secrets folder.
 - Symbolic links are followed, which is what Kubernetes uses to provide secrets.
 - If `secrets_dir` is not set or the file is not found, then the default is used; without
@@ -149,7 +149,7 @@ when the value of a secret is not found by a reference, that is reported. This i
 case if the value comes from
 
 - a default value in the code,
-- the default in a reference, e.g. `${env:NAME,default}`, that was used because `NAME`
+- the default in a reference, e.g. `${env:VAR_NAME,default}`, that was used because `VAR_NAME`
   was not found, or
 - a literal in the config file, e.g. `api_key = "abc"`.
 
@@ -185,20 +185,20 @@ secret.
     Environment variables can be passed with `docker run -e NAME=value`, `--env-file`, or
     the `environment:` and `env_file:` keys of Docker Compose. Docker secrets are
     mounted as files in `/run/secrets`, so set that as the secrets folder and use
-    `${secret:NAME}`. Files are preferred, because environment variables can be seen with
+    `${secret:file_name}`. Files are preferred, because environment variables can be seen with
     `docker inspect`.
 
 === "Kubernetes"
     A `Secret` can be exposed to a container as an environment variable (`secretKeyRef`)
-    or as files in a mounted volume. Use `${env:NAME}`, or mount the volume and use
-    `${secret:NAME}` with `secrets_dir` set to the mount path. Note that a Kubernetes
+    or as files in a mounted volume. Use `${env:VAR_NAME}`, or mount the volume and use
+    `${secret:file_name}` with `secrets_dir` set to the mount path. Note that a Kubernetes
     `Secret` is only base64 encoded; it needs encryption at rest or an external store
     (e.g., by the External Secrets Operator or the Secrets Store CSI Driver) to be
     safe.
 
 === "CI"
     Pass the secrets of the CI system as environment variables to the job and use
-    `${env:NAME}`.
+    `${env:VAR_NAME}`.
 
 ## Good to know
 
