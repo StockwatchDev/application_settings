@@ -228,15 +228,10 @@ def build_context(
     """
     env: dict[str, str] = {}
     if dotenv_file:
-        env.update(_read_dotenv(_absolute(dotenv_file, config_dir)))
+        # an absolute path replaces config_dir in the join
+        env.update(_read_dotenv(config_dir / dotenv_file))
     env.update(os.environ if environ is None else environ)
-    return ReferenceContext(
-        env, _absolute(secrets_dir, config_dir) if secrets_dir else None
-    )
-
-
-def _absolute(path: str, config_dir: Path) -> Path:
-    return config_dir / path  # an absolute path replaces config_dir
+    return ReferenceContext(env, config_dir / secrets_dir if secrets_dir else None)
 
 
 def _read_dotenv(path: Path) -> dict[str, str]:
