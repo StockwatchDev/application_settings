@@ -131,9 +131,6 @@ api_key = "${env:MYAPP_API_KEY}"
 api_key = MyConfig.get().api_key.get_secret_value()
 ```
 
-Note that a parameter without a default value must come before the ones with a default
-value, and that it has to be given in the config file.
-
 - The value is converted to the type that is given, in the example a `str`; `Secret[int]`
   would convert the value to an `int`.
 - The value is hidden when the config is printed or logged: you see `Secret('**********')`.
