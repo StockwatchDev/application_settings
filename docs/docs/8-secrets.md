@@ -36,8 +36,11 @@ The following rules apply:
   literally, as is a value that is not closed (`"${env:VAR_NAME"`).
 - A value that starts with `$${` is taken literally, without the first `$`. Hence, to get
   the text `${env:VAR_NAME}` as a value, write `"$${env:VAR_NAME}"`.
-- A name consists of letters, digits, `_`, `-` and `.`; the names `.` and `..` are not
-  allowed.
+- A name (of an environment variable or of a file in the secrets folder) consists of
+  letters, digits, `_`, `-` and `.`; the names `.` and `..` are not allowed. The rule is
+  the same for both and deliberately not stricter, because the platform that provides the
+  variables and files may use names beyond the portable `A-Z`, `a-z`, `0-9` and `_`. A
+  name that does not exist is reported as not found.
 - Only the schemes `env` and `secret` exist. A value of the form `${...}` that is not a
   valid reference to one of them is an error: this holds for an unknown scheme
   (`${other:name}`), a missing scheme (`${name}`) and an empty or invalid name
