@@ -42,8 +42,9 @@ The following rules apply:
   valid reference to one of them is an error: this holds for an unknown scheme
   (`${other:name}`), a missing scheme (`${name}`) and an empty or invalid name
   (`${env:}`).
-- The default is everything after the first comma, as is: spaces are part of it, and it
-  cannot contain a reference. It can be empty: `${env:VAR_NAME,}`.
+- The default is everything after the first comma, as is: spaces are part of it, and a
+  reference in it is not resolved but taken literally, so `${env:A,${env:B}}` gives
+  the text `${env:B}` when `A` is not set. It can be empty: `${env:VAR_NAME,}`.
 - A reference works for any parameter of any type. The value that is found is a string,
   which is converted to the type of the parameter, just like a value from the file is.
 - References work in every part of a config file, also in included files, except
