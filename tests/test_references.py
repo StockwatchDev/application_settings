@@ -2,6 +2,7 @@
 
 import logging
 import os
+import traceback
 from pathlib import Path
 
 import pytest
@@ -261,8 +262,11 @@ def test_resolve_file_unreadable_content_is_not_replaced_by_default(
 ) -> None:
     (tmp_path / "pw").write_bytes(b"\xff\xfe\x00bad")
     context = ReferenceContext(env={}, secrets_dir=tmp_path)
-    with pytest.raises(ReferenceResolutionError, match="pw"):
+    with pytest.raises(ReferenceResolutionError, match="pw") as excinfo:
         resolve(Reference("secret", "pw", "fallback"), context)
+    # the original error shows (a byte of) the content, so it must not be chained
+    shown = "".join(traceback.format_exception(excinfo.value))
+    assert "0xff" not in shown
 
 
 @pytest.mark.parametrize(

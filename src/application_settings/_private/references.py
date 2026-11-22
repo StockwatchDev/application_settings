@@ -139,6 +139,7 @@ def _read_secret_file(name: str, secrets_dir: Path | None) -> tuple[str | None, 
     try:
         content = path.read_bytes().decode("utf-8")
     except (OSError, UnicodeDecodeError) as error:
+        # from None: the original message can show content of the file, which may be a secret
         raise ReferenceResolutionError(
             f"File '{name}' in the secrets folder cannot be read ({type(error).__name__})."
         ) from None
