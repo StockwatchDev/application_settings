@@ -26,6 +26,8 @@ Scheme = Literal["env", "secret"]
 _SCHEMES: tuple[Scheme, ...] = ("env", "secret")
 _REFERENCE = re.compile(r"\$\{(?P<body>.*)\}", re.DOTALL)
 _NAME = re.compile(r"[\w.-]+")
+# a complete reference somewhere in a value; as part of a larger value it is not one
+_EMBEDDED_REFERENCE = re.compile(r"\$\{(?:env|secret):[\w.-]+(?:,[^}]*)?\}")
 
 
 def _is_valid_name(name: str) -> bool:
@@ -181,6 +183,13 @@ def resolve_references(
         try:
             parsed = parse(value)
             if isinstance(parsed, str):
+                if parsed == value and _EMBEDDED_REFERENCE.search(value):
+                    # the path only, not the value: it may be a secret
+                    logger.warning(
+                        "Value of '%s' contains a reference, but a reference must be "
+                        "the whole value; the value is taken literally.",
+                        path,
+                    )
                 return parsed
             resolved = resolve(parsed, context)
         except (ReferenceSyntaxError, ReferenceResolutionError) as error:

@@ -68,10 +68,37 @@ def test_parse_default(value: str, expected_default: str) -> None:
         "${env:MY_VAR}-b",
         "${env:MY_VAR",  # not closed, so not a reference
         "{env:MY_VAR}",
+        "$$${secret:TEST}",  # the escape is only for exactly '$${' at the start
+        "$$$${secret:TEST}",
     ],
 )
 def test_parse_literal(value: str) -> None:
     assert parse(value) == value
+
+
+@pytest.mark.parametrize(
+    "value", ["prefix-${env:MY_VAR}", "$$${secret:TEST}", "x ${env:A,y} z"]
+)
+def test_embedded_reference_is_literal_with_a_warning(
+    value: str, caplog: pytest.LogCaptureFixture
+) -> None:
+    with caplog.at_level(logging.WARNING):
+        resolved, report = resolve_references({"section": {"a": value}}, _context())
+    assert resolved == {"section": {"a": value}}
+    assert report == ResolutionReport()
+    assert "section.a" in caplog.text
+    assert value not in caplog.text  # the value may be a secret
+
+
+@pytest.mark.parametrize(
+    "value", ["plain", "$${env:MY_VAR}", "cost: $$5", "${env:MY_VAR", "a ${b} c"]
+)
+def test_other_literals_do_not_warn(
+    value: str, caplog: pytest.LogCaptureFixture
+) -> None:
+    with caplog.at_level(logging.WARNING):
+        resolve_references({"a": value}, _context())
+    assert not caplog.records
 
 
 @pytest.mark.parametrize(

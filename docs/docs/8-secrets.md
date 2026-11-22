@@ -33,9 +33,12 @@ password = "${secret:db_password}"
 The following rules apply:
 
 - The reference has to be the _whole_ value. A value like `"prefix-${env:VAR_NAME}"` is taken
-  literally, as is a value that is not closed (`"${env:VAR_NAME"`).
-- A value that starts with `$${` is taken literally, without the first `$`. Hence, to get
-  the text `${env:VAR_NAME}` as a value, write `"$${env:VAR_NAME}"`.
+  literally, as is a value that is not closed (`"${env:VAR_NAME"`). If such a value
+  contains a complete reference, then a warning is logged, because that is probably not
+  what was meant; the warning names the parameter and never shows the value.
+- A value that starts with exactly `$${` is taken literally, without the first `$`.
+  Hence, to get the text `${env:VAR_NAME}` as a value, write `"$${env:VAR_NAME}"`. With
+  more `$` signs, as in `"$$${env:VAR_NAME}"`, the value is taken literally as is.
 - A name (of an environment variable or of a file in the secrets folder) consists of
   letters, digits, `_`, `-` and `.`; the names `.` and `..` are not allowed. The rule is
   the same for both and deliberately not stricter, because the platform that provides the
