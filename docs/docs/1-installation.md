@@ -43,4 +43,5 @@ We have direct dependencies on the following packages:
 - [attributes-doc](https://pypi.org/project/attributes-doc/)
 - [pathvalidate](https://pypi.org/project/pathvalidate/)
 - [pydantic](https://pypi.org/project/pydantic/)
+- [python-dotenv](https://pypi.org/project/python-dotenv/)
 - [tomlkit](https://pypi.org/project/tomlkit/)

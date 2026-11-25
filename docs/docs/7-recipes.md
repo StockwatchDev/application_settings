@@ -10,7 +10,7 @@ that can do the file handling.
 
 Fortunately, there is another way, namely by using classmethod `set`. As an example,
 let's create a test config for `ExampleConfigSection`, (see
-[Quick Start](Quick_start.md)):
+[Quick Start](quick_start.md)):
 
 ```python
 # Create a (nested) dictionary that holds the test values for the relevant fields
@@ -49,7 +49,7 @@ suggested:
 Obviously, the same approach can be followed for settings.
 
 To make this more clear, an example is provided in the folder
-[`examples/Recipies/initialization`](https://github.com/StockwatchDev/application_settings/tree/examples/Recipies/initialization).
+[`examples/recipes/initialization`](https://github.com/StockwatchDev/application_settings/tree/develop/examples/recipes/initialization).
 Two configurations are defined: one that is loaded as described in the second bullet
 above, and one that is (wrongly) loaded with the entry point file `__main__` and not in
 the Config module. When running the example, it will become apparent that loading in the

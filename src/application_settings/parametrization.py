@@ -179,7 +179,20 @@ class ApplicationConfigSection(ApplicationSettingsContainerSectionBase):
     """Whether or not to apply strict mode. In strict mode, warnings rather than debug messages are logged when: 
     1) parameters are accessed before a file is loaded
     2) parameters are missing from the loaded file
-    3) unknown parameters are found in the loaded file"""
+    3) unknown parameters are found in the loaded file
+    Moreover, a secret parameter whose value does not come from a reference (but from a default
+    or a literal in the file) raises a SecretsError rather than logging a warning."""
+
+    dotenv_file: str = ""
+    """Path of a dotenv file whose variables can be used in references like '${env:VAR_NAME}';
+    a relative path is relative to the folder of the config file. Empty means: no dotenv file.
+    Real environment variables take precedence over the variables in the dotenv file.
+    This parameter cannot itself contain references."""
+
+    secrets_dir: str = ""
+    """Path of the folder that holds the files that are used in references like '${secret:file_name}';
+    a relative path is relative to the folder of the config file. Empty means: no secrets folder.
+    This parameter cannot itself contain references."""
 
     @staticmethod
     def kind() -> ParameterKind:

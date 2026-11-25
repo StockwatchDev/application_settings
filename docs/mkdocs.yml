@@ -49,14 +49,15 @@ plugins:
 
 nav:
 - Home: README.md
-- Quick start: Quick_start.md
+- Quick start: quick_start.md
 - Usage:
-  - 1. Installation: 1-Installation.md
-  - 2. Defining parameters: 2-Defining_parameters.md
-  - 3. Files and file locations: 3-Files.md
-  - 4. Using parameters: 4-Using_parameters.md
-  - 5. Usage in a library package: 5-Usage_in_a_library_package.md
-  - 6. Handling deviations: 6-Handling_deviations.md
-  - 7. Recipes: 7-Recipes.md
+  - 1. Installation: 1-installation.md
+  - 2. Defining parameters: 2-defining_parameters.md
+  - 3. Files and file locations: 3-files.md
+  - 4. Using parameters: 4-using_parameters.md
+  - 5. Usage in a library package: 5-usage_in_a_library_package.md
+  - 6. Handling deviations: 6-handling_deviations.md
+  - 7. Recipes: 7-recipes.md
+  - 8. Environment variables and secrets: 8-secrets.md
 - Changelog: CHANGELOG.md
 - Code Reference: reference/

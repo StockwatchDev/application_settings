@@ -11,7 +11,8 @@ dynamic = ["classifiers"]
 requires-python = ">=3.11"
 dependencies = [
   "pathvalidate (>=2.5)",
-  "pydantic (>=2.0)",
+  "pydantic (>=2.7)",
+  "python-dotenv (>=1.0)",
   "tomlkit (>=0.12)",
   "attributes-doc (>=0.3.0)",
 ]
@@ -80,6 +81,10 @@ optional = true
 [build-system]
 requires = ["poetry-core>=2.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.check-dependencies.provides]
+# import name differs from the package name
+python-dotenv = "dotenv"
 
 [tool.coverage.run]
 omit = [
@@ -171,8 +176,22 @@ ignore-imports = "yes"
 [tool.tox]
 requires = ["tox>=4.49"]
 
-# Generates: py311-pytest, py311-mypy, py312-pytest, py312-mypy, ... py315-mypy
-env_list = [{ product = [["py311", "py312", "py313", "py314", "py315"], ["pytest", "typing"]] }, "style", "docs"]
+# All entries are plain strings (no inline table), because Snyk cannot parse a mixed array.
+# This is what { product = [[py311 ... py315], [pytest, typing]] } would generate.
+env_list = [
+  "py311-pytest",
+  "py311-typing",
+  "py312-pytest",
+  "py312-typing",
+  "py313-pytest",
+  "py313-typing",
+  "py314-pytest",
+  "py314-typing",
+  "py315-pytest",
+  "py315-typing",
+  "style",
+  "docs",
+]
 
 [tool.tox.env_run_base]
 description = "Run {env_name}"
