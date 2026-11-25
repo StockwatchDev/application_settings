@@ -1,4 +1,4 @@
-# application_settings - version develop (to become 0.6.0)
+# application_settings - version develop (to become 0.7.0)
 
 [![pypi](https://img.shields.io/pypi/v/application-settings.svg)](https://pypi.python.org/pypi/application-settings)
 [![versions](https://img.shields.io/pypi/pyversions/application-settings.svg)](https://github.com/StockwatchDev/application_settings)
@@ -45,7 +45,7 @@ Interested? Then have a look at our
 or dive into the
 [full documentation](https://stockwatchdev.github.io/application_settings/develop/).
 
-If you appreciate this library package, then please give us a star on
+If you appreciate this library package, then give us a star on
 [Github](https://github.com/StockwatchDev/application_settings).
 
 [//]: # (Change version in header and link to published quick start and full doc)
