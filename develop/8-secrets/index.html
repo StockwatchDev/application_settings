@@ -10,24 +10,24 @@
       
       
       
-        <link rel="canonical" href="https://stockwatchdev.github.io/application_settings/6-Handling_deviations/">
+        <link rel="canonical" href="https://stockwatchdev.github.io/application_settings/8-secrets/">
       
       
-        <link rel="prev" href="../5-Usage_in_a_library_package/">
+        <link rel="prev" href="../7-recipes/">
       
       
-        <link rel="next" href="../7-Recipes/">
+        <link rel="next" href="../CHANGELOG/">
       
       
         
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
-        <title>6. Handling deviations - application_settings</title>
+        <title>8. Environment variables and secrets - application_settings</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#handling-deviations" class="md-skip">
+        <a href="#environment-variables-and-secrets" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              6. Handling deviations
+              8. Environment variables and secrets
             
           </span>
         </div>
@@ -261,7 +261,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Quick_start/" class="md-nav__link">
+      <a href="../quick_start/" class="md-nav__link">
         
   
   
@@ -337,7 +337,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../1-Installation/" class="md-nav__link">
+      <a href="../1-installation/" class="md-nav__link">
         
   
   
@@ -365,7 +365,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../2-Defining_parameters/" class="md-nav__link">
+      <a href="../2-defining_parameters/" class="md-nav__link">
         
   
   
@@ -393,7 +393,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../3-Files/" class="md-nav__link">
+      <a href="../3-files/" class="md-nav__link">
         
   
   
@@ -421,7 +421,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../4-Using_parameters/" class="md-nav__link">
+      <a href="../4-using_parameters/" class="md-nav__link">
         
   
   
@@ -449,7 +449,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../5-Usage_in_a_library_package/" class="md-nav__link">
+      <a href="../5-usage_in_a_library_package/" class="md-nav__link">
         
   
   
@@ -457,6 +457,62 @@
     
   
     5. Usage in a library package
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6-handling_deviations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Handling deviations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7-recipes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Recipes
   
 
     
@@ -493,7 +549,7 @@
   <span class="md-ellipsis">
     
   
-    6. Handling deviations
+    8. Environment variables and secrets
   
 
     
@@ -511,7 +567,7 @@
   <span class="md-ellipsis">
     
   
-    6. Handling deviations
+    8. Environment variables and secrets
   
 
     
@@ -539,22 +595,33 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#handling-deviations-in-the-parameter-file" class="md-nav__link">
+  <a href="#references" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Handling deviations in the parameter file
+        References
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Handling deviations in the parameter file">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-the-values-come-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the values come from
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Where the values come from">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#when-your-parameter-file-does-not-adhere-to-the-specified-types" class="md-nav__link">
+  <a href="#environment-variables" class="md-nav__link">
     <span class="md-ellipsis">
       
-        When your parameter file does not adhere to the specified types
+        Environment variables
       
     </span>
   </a>
@@ -562,21 +629,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#when-your-parameter-file-does-not-contain-all-specified-attributes" class="md-nav__link">
+  <a href="#files-in-the-secrets-folder" class="md-nav__link">
     <span class="md-ellipsis">
       
-        When your parameter file does not contain all specified attributes
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#when-your-parameter-file-contains-additional-unspecified-attributes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        When your parameter file contains additional, unspecified attributes
+        Files in the secrets folder
       
     </span>
   </a>
@@ -589,10 +645,49 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#more-advanced-typing-and-validation-with-pydantic" class="md-nav__link">
+  <a href="#secrets" class="md-nav__link">
     <span class="md-ellipsis">
       
-        More advanced typing and validation with pydantic
+        Secrets
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Secrets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#secrets-that-do-not-come-from-a-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Secrets that do not come from a reference
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setting-this-up-on-a-platform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setting this up on a platform
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#good-to-know" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Good to know
       
     </span>
   </a>
@@ -603,34 +698,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../7-Recipes/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    7. Recipes
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -938,6 +1005,62 @@
     
   
     json_file_operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    references
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/secret_checks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    secret_checks
   
 
     
@@ -1283,22 +1406,33 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#handling-deviations-in-the-parameter-file" class="md-nav__link">
+  <a href="#references" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Handling deviations in the parameter file
+        References
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Handling deviations in the parameter file">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-the-values-come-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the values come from
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Where the values come from">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#when-your-parameter-file-does-not-adhere-to-the-specified-types" class="md-nav__link">
+  <a href="#environment-variables" class="md-nav__link">
     <span class="md-ellipsis">
       
-        When your parameter file does not adhere to the specified types
+        Environment variables
       
     </span>
   </a>
@@ -1306,21 +1440,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#when-your-parameter-file-does-not-contain-all-specified-attributes" class="md-nav__link">
+  <a href="#files-in-the-secrets-folder" class="md-nav__link">
     <span class="md-ellipsis">
       
-        When your parameter file does not contain all specified attributes
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#when-your-parameter-file-contains-additional-unspecified-attributes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        When your parameter file contains additional, unspecified attributes
+        Files in the secrets folder
       
     </span>
   </a>
@@ -1333,10 +1456,49 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#more-advanced-typing-and-validation-with-pydantic" class="md-nav__link">
+  <a href="#secrets" class="md-nav__link">
     <span class="md-ellipsis">
       
-        More advanced typing and validation with pydantic
+        Secrets
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Secrets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#secrets-that-do-not-come-from-a-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Secrets that do not come from a reference
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setting-this-up-on-a-platform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setting this up on a platform
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#good-to-know" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Good to know
       
     </span>
   </a>
@@ -1363,42 +1525,211 @@
   
 
 
-<h1 id="handling-deviations">Handling deviations</h1>
-<h2 id="handling-deviations-in-the-parameter-file">Handling deviations in the parameter file</h2>
-<h3 id="when-your-parameter-file-does-not-adhere-to-the-specified-types">When your parameter file does not adhere to the specified types</h3>
-<p>When loading the parameter file, the values specified are coerced into the appropriate
-type where possible. The details of the coersion are specified in this
-<a href="https://docs.pydantic.dev/2.0/usage/conversion_table/">conversion table</a> If type
-coercion is not possible, then a <code>ValidationError</code> is raised (which is actually a
-<a href="https://docs.pydantic.dev/latest/usage/validation_errors/"><code>pydantic.ValidationError</code></a>
-that has been exported from our namespace). Consider the case where you would use the
-following config file for the <code>MyExampleConfig</code> defined before:</p>
-<div class="highlight"><pre><span></span><code><span class="k">[section1]</span>
-<span class="n">field1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span>
-<span class="n">field2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"22"</span>
+<h1 id="environment-variables-and-secrets">Environment variables and secrets</h1>
+<p>A config file is often not the right place for every value. A password or an API key
+should not be committed with the rest of the config, and some values differ per
+environment. For this purpose, the value of a config parameter can be a <em>reference</em> to an
+environment variable or to a file, and a parameter can be declared to be a <em>secret</em>.</p>
+<p>This is only available for config (and config sections), not for settings: settings are
+written back to file, and a secret should never end up there.</p>
+<p>A complete example is available in the folder
+<a href="https://github.com/StockwatchDev/application_settings/tree/develop/examples/recipes/secrets"><code>examples/recipes/secrets</code></a>.</p>
+<h2 id="references">References</h2>
+<p>A reference is a value in the config file that has one of the following forms:</p>
+<table>
+<thead>
+<tr>
+<th>Reference</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>${env:VAR_NAME}</code></td>
+<td>the value of the environment variable <code>VAR_NAME</code></td>
+</tr>
+<tr>
+<td><code>${env:VAR_NAME,default}</code></td>
+<td>the same, but if <code>VAR_NAME</code> is not set, then <code>default</code> is used</td>
+</tr>
+<tr>
+<td><code>${secret:file_name}</code></td>
+<td>the content of the file <code>file_name</code> in the secrets folder</td>
+</tr>
+<tr>
+<td><code>${secret:file_name,default}</code></td>
+<td>the same, but if the file is not found, then <code>default</code> is used</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"${env:MYAPP_NAME,my application}"</span>
+<span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"${env:MYAPP_PORT,8080}"</span>
+
+<span class="k">[database]</span>
+<span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"${secret:db_password}"</span>
 </code></pre></div>
-<p>The <code>int</code> specified for <code>field1</code> will be coerced into a <code>float</code> value of <code>4.0</code>.
-The <code>str</code> specified for <code>field2</code> will be coerced into an <code>int</code> value of <code>22</code>.</p>
-<h3 id="when-your-parameter-file-does-not-contain-all-specified-attributes">When your parameter file does not contain all specified attributes</h3>
-<p>If your Config or Settings has one of more sections with one or more attributes that do
-not have a default value, then a parameter file must be loaded and these sections and
-attributes must be present in the loaded parameter file. If this is not the case, a
-<code>TypeError</code> is raised. Attributes that have default values can be omitted
-from the parameter file without problems. Likewise, sections of which all attributes
-have default values can also be omitted without problems.</p>
-<p>Note that in the dataclass definitions, attributes without default value have to come
-before attributes with default values.</p>
-<h3 id="when-your-parameter-file-contains-additional-unspecified-attributes">When your parameter file contains additional, unspecified attributes</h3>
-<p>Entries in a parameter file that are not defined in the Container or Section classes
-will simply be ignored silently.</p>
-<h2 id="more-advanced-typing-and-validation-with-pydantic">More advanced typing and validation with pydantic</h2>
+<p>The following rules apply:</p>
 <ul>
-<li>Non-standard types useful for configuration or settings, such as FilePath,
-  are offered, see <a href="https://docs.pydantic.dev/latest/api/types/">pydantic types</a></li>
-<li>In addition, a <a href="https://docs.pydantic.dev/latest/api/networks/">network module</a> is
-  provided by pydantic that contains types for common network-related fields</li>
-<li>The value of numeric types can be restricted using
-  <a href="https://docs.pydantic.dev/latest/usage/types/number_types/#constrained-types">pydantic constrained types</a></li>
+<li>The reference has to be the <em>whole</em> value. A value like <code>"prefix-${env:VAR_NAME}"</code> is taken
+  literally, as is a value that is not closed (<code>"${env:VAR_NAME"</code>). If such a value
+  contains a complete reference, then a warning is logged, because that is probably not
+  what was meant; the warning names the parameter and never shows the value.</li>
+<li>A value that starts with exactly <code>$${</code> is taken literally, without the first <code>$</code>.
+  Hence, to get the text <code>${env:VAR_NAME}</code> as a value, write <code>"$${env:VAR_NAME}"</code>. With
+  more <code>$</code> signs, as in <code>"$$${env:VAR_NAME}"</code>, the value is taken literally as is.</li>
+<li>A name (of an environment variable or of a file in the secrets folder) consists of
+  letters, digits, <code>_</code>, <code>-</code> and <code>.</code>; the names <code>.</code> and <code>..</code> are not allowed. The rule is
+  the same for both and deliberately not stricter, because the platform that provides the
+  variables and files may use names beyond the portable <code>A-Z</code>, <code>a-z</code>, <code>0-9</code> and <code>_</code>. A
+  name that does not exist is reported as not found.</li>
+<li>Only the schemes <code>env</code> and <code>secret</code> exist. A value of the form <code>${...}</code> that is not a
+  valid reference to one of them is an error: this holds for an unknown scheme
+  (<code>${other:name}</code>), a missing scheme (<code>${name}</code>) and an empty or invalid name
+  (<code>${env:}</code>).</li>
+<li>The default is everything after the first comma, as is: spaces are part of it, and a
+  reference in it is not resolved but taken literally, so <code>${env:A,${env:B}}</code> gives
+  the text <code>${env:B}</code> when <code>A</code> is not set. It can be empty: <code>${env:VAR_NAME,}</code>.</li>
+<li>A reference works for any parameter. The value that is found is always a string. It is
+  converted to the type of the parameter in the same way as any value from the file, e.g.
+  <code>"5"</code> becomes <code>5</code> for an <code>int</code> parameter; <code>strict_mode</code> does not change this. Hence, a
+  reference cannot provide a list or a table: loading then fails with a validation error.</li>
+<li>References work in every part of a config file, also in included files, except
+  in the section <code>application_config</code>.</li>
+<li>References are resolved when the config is loaded.</li>
+<li>A reference is not a file inclusion: <code>${secret:file_name}</code> reads a single value from a file
+  in the secrets folder, whereas <a href="../3-files/"><code>__include__</code></a> merges a whole config file.
+  Includes are loaded before references are resolved, so the value of <code>__include__</code> must
+  be a literal path; a value with <code>${</code> in it is an error.</li>
+</ul>
+<p>If a reference cannot be resolved and has no default, then loading the config raises a
+<code>ReferenceResolutionError</code>. Its message lists <em>all</em> references that could not be
+resolved, by parameter, and never shows values.</p>
+<h2 id="where-the-values-come-from">Where the values come from</h2>
+<h3 id="environment-variables">Environment variables</h3>
+<p>Environment variables are looked up in the environment of the process. To make life easy
+during development, they can also be read from a
+<a href="https://pypi.org/project/python-dotenv/">dotenv file</a> by setting <code>dotenv_file</code> in the
+section <code>application_config</code>. A real environment variable takes precedence over a
+variable in the dotenv file, and the dotenv file does not change the environment of the
+process.</p>
+<div class="highlight"><pre><span></span><code><span class="k">[application_config]</span>
+<span class="n">dotenv_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">".env"</span>
+</code></pre></div>
+<p>A relative path is relative to the folder of the config file. If the dotenv file does not
+exist, then a warning is logged and the real environment is used. Values in a dotenv file
+are taken as they are: there is no variable expansion.</p>
+<h3 id="files-in-the-secrets-folder">Files in the secrets folder</h3>
+<p>Platforms like Docker and Kubernetes can provide secrets as files, one file per secret,
+in a folder like <code>/run/secrets</code>. A reference <code>${secret:file_name}</code> reads the file <code>file_name</code> in the
+folder that is set by <code>secrets_dir</code> in the section <code>application_config</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">[application_config]</span>
+<span class="n">secrets_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/run/secrets"</span>
+</code></pre></div>
+<ul>
+<li>A relative path is relative to the folder of the config file.</li>
+<li>The file is read as UTF-8 and a single trailing newline is removed. Other whitespace is
+  kept.</li>
+<li><code>file_name</code> is the name of a file and can never be a path: it is not possible to
+  refer to a file outside the secrets folder.</li>
+<li>Symbolic links are followed, which is what Kubernetes uses to provide secrets.</li>
+<li>If <code>secrets_dir</code> is not set or the file is not found, then the default is used; without
+  a default, this is an error. A file that exists but cannot be read is always an error.</li>
+</ul>
+<p>The parameters <code>dotenv_file</code> and <code>secrets_dir</code> are both empty by default, which means
+that they are not used. They are read before any reference is resolved; hence, they
+cannot contain a reference themselves.</p>
+<h2 id="secrets">Secrets</h2>
+<p>To prevent that a value is shown by accident, declare a parameter as <code>Secret</code>. This is
+the <a href="https://docs.pydantic.dev/latest/api/types/#pydantic.types.Secret"><code>Secret</code> of pydantic</a>,
+which is available from <code>application_settings</code> as well.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">application_settings</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfigBase</span><span class="p">,</span> <span class="n">Secret</span><span class="p">,</span> <span class="n">dataclass</span>
+
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyConfig</span><span class="p">(</span><span class="n">ConfigBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Config for my application"""</span>
+
+    <span class="n">api_key</span><span class="p">:</span> <span class="n">Secret</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8080</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">api_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"${env:MYAPP_API_KEY}"</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">api_key</span> <span class="o">=</span> <span class="n">MyConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">api_key</span><span class="o">.</span><span class="n">get_secret_value</span><span class="p">()</span>
+</code></pre></div>
+<ul>
+<li>The value is converted to <code>T</code> as for any other parameter, e.g. <code>Secret[int]</code> gives an
+  <code>int</code>, and is then wrapped in a <code>Secret</code>.</li>
+<li>The value is hidden when the config is printed or logged: you see <code>Secret('**********')</code>.
+  The value has to be asked for explicitly with <code>get_secret_value()</code>.</li>
+<li>If the config is not valid, the error does not show secret values. The error still
+  names the parameter and says what is wrong, but not its input when that is a
+  <code>Secret</code>. For other parameters, only plain values (text, numbers, booleans) are shown,
+  because a list or a table could hold a secret, and pydantic reports all arguments
+  for errors like a missing parameter.</li>
+<li><code>Secret</code> is not available in settings. Loading a settings class that has a <code>Secret</code>
+  raises a <code>TypeError</code>.</li>
+<li>The default value of a secret has to be a <code>Secret</code> as well, e.g. <code>Secret("x")</code>.</li>
+</ul>
+<h3 id="secrets-that-do-not-come-from-a-reference">Secrets that do not come from a reference</h3>
+<p>The point of a secret is that its value is not in the config file or in the code. Hence,
+when the value of a secret is not found by a reference, that is reported. This is the
+case if the value comes from</p>
+<ul>
+<li>a default value in the code,</li>
+<li>the default in a reference, e.g. <code>${env:VAR_NAME,default}</code>, that was used because <code>VAR_NAME</code>
+  was not found, or</li>
+<li>a literal in the config file, e.g. <code>api_key = "abc"</code>.</li>
+</ul>
+<p>By default, a warning is logged that names the parameter (never its value). In strict mode
+(set <code>strict_mode = true</code> in the section <code>application_config</code>), the same is logged as an
+error and a <code>SecretsError</code> is raised as well, which lists all such parameters; the config
+that was loaded previously, if any, is not replaced in that case. Use strict mode in production: a misconfigured deployment
+then fails at startup instead of silently running with a default or literal secret.</p>
+<h2 id="setting-this-up-on-a-platform">Setting this up on a platform</h2>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Local development</label><label for="__tabbed_1_2">Docker</label><label for="__tabbed_1_3">Kubernetes</label><label for="__tabbed_1_4">CI</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Keep a dotenv file out of version control (add it to <code>.gitignore</code>) and refer to it
+from the config file:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[application_config]</span>
+<span class="n">dotenv_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">".env"</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code># .env
+MYAPP_API_KEY=value-for-development
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>Environment variables can be passed with <code>docker run -e NAME=value</code>, <code>--env-file</code>, or
+the <code>environment:</code> and <code>env_file:</code> keys of Docker Compose. Docker secrets are
+mounted as files in <code>/run/secrets</code>, so set that as the secrets folder and use
+<code>${secret:file_name}</code>. Files are preferred, because environment variables can be seen with
+<code>docker inspect</code>.</p>
+</div>
+<div class="tabbed-block">
+<p>A <code>Secret</code> can be exposed to a container as an environment variable (<code>secretKeyRef</code>)
+or as files in a mounted volume. Use <code>${env:VAR_NAME}</code>, or mount the volume and use
+<code>${secret:file_name}</code> with <code>secrets_dir</code> set to the mount path. Note that a Kubernetes
+<code>Secret</code> is only base64 encoded; it needs encryption at rest or an external store
+(e.g., by the External Secrets Operator or the Secrets Store CSI Driver) to be
+safe.</p>
+</div>
+<div class="tabbed-block">
+<p>Pass the secrets of the CI system as environment variables to the job and use
+<code>${env:VAR_NAME}</code>.</p>
+</div>
+</div>
+</div>
+<h2 id="good-to-know">Good to know</h2>
+<ul>
+<li>Values are read when the config is loaded and do not change afterwards. To pick up a
+  changed secret, load the config again.</li>
+<li>A dotenv file is not encrypted. It is intended for development, do not commit one with
+  real secrets.</li>
+<li>The check on the origin of secrets is done for parameters that are annotated with
+  <code>Secret[...]</code> or <code>Secret[...] | None</code>, also in nested sections. An optional secret that
+  is <code>None</code> is not reported, because there is no value to protect. The check is not done
+  for a <code>Secret</code> inside another union or inside a container, like <code>list[Secret[int]]</code>.
+  Such a parameter is still hidden in errors and is still not allowed in settings.</li>
 </ul>
 
 
@@ -1452,7 +1783,7 @@ will simply be ignored silently.</p>
       <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
+      <script src="../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   </body>

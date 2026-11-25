@@ -10,24 +10,24 @@
       
       
       
-        <link rel="canonical" href="https://stockwatchdev.github.io/application_settings/7-Recipes/">
+        <link rel="canonical" href="https://stockwatchdev.github.io/application_settings/6-handling_deviations/">
       
       
-        <link rel="prev" href="../6-Handling_deviations/">
+        <link rel="prev" href="../5-usage_in_a_library_package/">
       
       
-        <link rel="next" href="../CHANGELOG/">
+        <link rel="next" href="../7-recipes/">
       
       
         
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
-        <title>7. Recipes - application_settings</title>
+        <title>6. Handling deviations - application_settings</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#code-snippets-and-recipes" class="md-skip">
+        <a href="#handling-deviations" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              7. Recipes
+              6. Handling deviations
             
           </span>
         </div>
@@ -261,7 +261,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Quick_start/" class="md-nav__link">
+      <a href="../quick_start/" class="md-nav__link">
         
   
   
@@ -337,7 +337,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../1-Installation/" class="md-nav__link">
+      <a href="../1-installation/" class="md-nav__link">
         
   
   
@@ -365,7 +365,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../2-Defining_parameters/" class="md-nav__link">
+      <a href="../2-defining_parameters/" class="md-nav__link">
         
   
   
@@ -393,7 +393,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../3-Files/" class="md-nav__link">
+      <a href="../3-files/" class="md-nav__link">
         
   
   
@@ -421,7 +421,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../4-Using_parameters/" class="md-nav__link">
+      <a href="../4-using_parameters/" class="md-nav__link">
         
   
   
@@ -449,7 +449,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../5-Usage_in_a_library_package/" class="md-nav__link">
+      <a href="../5-usage_in_a_library_package/" class="md-nav__link">
         
   
   
@@ -457,34 +457,6 @@
     
   
     5. Usage in a library package
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../6-Handling_deviations/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    6. Handling deviations
   
 
     
@@ -521,7 +493,7 @@
   <span class="md-ellipsis">
     
   
-    7. Recipes
+    6. Handling deviations
   
 
     
@@ -539,7 +511,7 @@
   <span class="md-ellipsis">
     
   
-    7. Recipes
+    6. Handling deviations
   
 
     
@@ -567,33 +539,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#having-a-test-configuration-during-testing" class="md-nav__link">
+  <a href="#handling-deviations-in-the-parameter-file" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Having a test configuration during testing
+        Handling deviations in the parameter file
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#initialization-needs-to-depend-on-configuration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Initialization needs to depend on configuration
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Initialization needs to depend on configuration">
+    <nav class="md-nav" aria-label="Handling deviations in the parameter file">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#application-case" class="md-nav__link">
+  <a href="#when-your-parameter-file-does-not-adhere-to-the-specified-types" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Application case
+        When your parameter file does not adhere to the specified types
       
     </span>
   </a>
@@ -601,10 +562,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#library-package-case" class="md-nav__link">
+  <a href="#when-your-parameter-file-does-not-contain-all-specified-attributes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Library package case
+        When your parameter file does not contain all specified attributes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-your-parameter-file-contains-additional-unspecified-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When your parameter file contains additional, unspecified attributes
       
     </span>
   </a>
@@ -616,10 +588,77 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#more-advanced-typing-and-validation-with-pydantic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        More advanced typing and validation with pydantic
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7-recipes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Recipes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8-secrets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. Environment variables and secrets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -927,6 +966,62 @@
     
   
     json_file_operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    references
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/secret_checks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    secret_checks
   
 
     
@@ -1272,33 +1367,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#having-a-test-configuration-during-testing" class="md-nav__link">
+  <a href="#handling-deviations-in-the-parameter-file" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Having a test configuration during testing
+        Handling deviations in the parameter file
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#initialization-needs-to-depend-on-configuration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Initialization needs to depend on configuration
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Initialization needs to depend on configuration">
+    <nav class="md-nav" aria-label="Handling deviations in the parameter file">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#application-case" class="md-nav__link">
+  <a href="#when-your-parameter-file-does-not-adhere-to-the-specified-types" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Application case
+        When your parameter file does not adhere to the specified types
       
     </span>
   </a>
@@ -1306,10 +1390,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#library-package-case" class="md-nav__link">
+  <a href="#when-your-parameter-file-does-not-contain-all-specified-attributes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Library package case
+        When your parameter file does not contain all specified attributes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-your-parameter-file-contains-additional-unspecified-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When your parameter file contains additional, unspecified attributes
       
     </span>
   </a>
@@ -1318,6 +1413,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#more-advanced-typing-and-validation-with-pydantic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        More advanced typing and validation with pydantic
+      
+    </span>
+  </a>
   
 </li>
       
@@ -1341,72 +1447,42 @@
   
 
 
-<h1 id="code-snippets-and-recipes">Code snippets and recipes</h1>
-<h2 id="having-a-test-configuration-during-testing">Having a test configuration during testing</h2>
-<p>During unit testing, you typically would like to have a specific test configuration and
-it would be a hassle to provide a file for this purpose. this especially holds true
-for the situation in which you have used <code>application_settings</code> to define a config
-section for your library package, and hence have no config container in your package
-that can do the file handling.</p>
-<p>Fortunately, there is another way, namely by using classmethod <code>set</code>. As an example,
-let's create a test config for <code>ExampleConfigSection</code>, (see
-<a href="../Quick_start/">Quick Start</a>):</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Create a (nested) dictionary that holds the test values for the relevant fields</span>
-<span class="n">test_config</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"field1"</span><span class="p">:</span> <span class="mf">3.3</span><span class="p">,</span>
-    <span class="s2">"field2"</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span>
-<span class="p">}</span>
-
-<span class="c1"># Invoke classmethod set on the Config(Section) with this dict as parameter;</span>
-<span class="c1"># this will set the config singleton with the provided values</span>
-<span class="n">ExampleConfigSection</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">test_config</span><span class="p">)</span>
+<h1 id="handling-deviations">Handling deviations</h1>
+<h2 id="handling-deviations-in-the-parameter-file">Handling deviations in the parameter file</h2>
+<h3 id="when-your-parameter-file-does-not-adhere-to-the-specified-types">When your parameter file does not adhere to the specified types</h3>
+<p>When loading the parameter file, the values specified are coerced into the appropriate
+type where possible. The details of the coersion are specified in this
+<a href="https://docs.pydantic.dev/2.0/usage/conversion_table/">conversion table</a> If type
+coercion is not possible, then a <code>ValidationError</code> is raised (which is actually a
+<a href="https://docs.pydantic.dev/latest/usage/validation_errors/"><code>pydantic.ValidationError</code></a>
+that has been exported from our namespace). Consider the case where you would use the
+following config file for the <code>MyExampleConfig</code> defined before:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[section1]</span>
+<span class="n">field1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span>
+<span class="n">field2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"22"</span>
 </code></pre></div>
-<p>The <code>test_config</code> dictionary only has to contain values for fields that have no default
-and for fields for which the test value differs from the default one.</p>
-<h2 id="initialization-needs-to-depend-on-configuration">Initialization needs to depend on configuration</h2>
-<h3 id="application-case">Application case</h3>
-<p>The situation may occur that your application imports a module that holds code that is
-initialized during import and you want this initialization to be configurable. For
-example, you might want a configurable initial value for a module global variable
-or a class variable.</p>
-<p>To make this work, you need to assure that the configuration is loaded before the
-module of concern is imported. To make this robust, the following way of work is
-suggested:</p>
+<p>The <code>int</code> specified for <code>field1</code> will be coerced into a <code>float</code> value of <code>4.0</code>.
+The <code>str</code> specified for <code>field2</code> will be coerced into an <code>int</code> value of <code>22</code>.</p>
+<h3 id="when-your-parameter-file-does-not-contain-all-specified-attributes">When your parameter file does not contain all specified attributes</h3>
+<p>If your Config or Settings has one of more sections with one or more attributes that do
+not have a default value, then a parameter file must be loaded and these sections and
+attributes must be present in the loaded parameter file. If this is not the case, a
+<code>TypeError</code> is raised. Attributes that have default values can be omitted
+from the parameter file without problems. Likewise, sections of which all attributes
+have default values can also be omitted without problems.</p>
+<p>Note that in the dataclass definitions, attributes without default value have to come
+before attributes with default values.</p>
+<h3 id="when-your-parameter-file-contains-additional-unspecified-attributes">When your parameter file contains additional, unspecified attributes</h3>
+<p>Entries in a parameter file that are not defined in the Container or Section classes
+will simply be ignored silently.</p>
+<h2 id="more-advanced-typing-and-validation-with-pydantic">More advanced typing and validation with pydantic</h2>
 <ul>
-<li>Define your configuration class(es) in a separate module;</li>
-<li>In the module that defines your configuration container, set <code>config_filepath_from_cli</code>
-  and <code>load</code> the configuration (this ensures that the config is loaded during import of
-  the configuration container, which will always be before usage of a config parameter);</li>
-<li>Start your application with the filepath to the config file as command line parameter.</li>
-</ul>
-<p>Obviously, the same approach can be followed for settings.</p>
-<p>To make this more clear, an example is provided in the folder
-<a href="https://github.com/StockwatchDev/application_settings/tree/examples/Recipies/initialization"><code>examples/Recipies/initialization</code></a>.
-Two configurations are defined: one that is loaded as described in the second bullet
-above, and one that is (wrongly) loaded with the entry point file <code>__main__</code> and not in
-the Config module. When running the example, it will become apparent that loading in the
-entry point file is too late.</p>
-<p>As described <a href="#having-a-test-configuration-during-testing">here</a>, in a test setting it
-is generally easier to use class method <code>set</code>. Unfortunately, there is no straightforward
-way to invoke <code>set</code> with test values during <code>import</code>, which means that you will have to
-fall back to creating a test config file and loading that in the way described in this
-section. An example on how to do this can be found in the file
-<a href="https://github.com/StockwatchDev/application_settings/blob/develop/tests/test__initialization_import.py"><code>tests/test_initialization_import.py</code></a>
-(also part of the source distribution of this package).</p>
-<h3 id="library-package-case">Library package case</h3>
-<p>It can be that you have defined a ConfigSection for your library package and that your
-library also has module globals or class variables that need to be initialized with
-fields defined in that ConfigSection.</p>
-<p>The normal situation would be that your ConfigSection and the module with configurable
-module globals are both imported in the <code>__init__.py</code> file of your package.
-Unfortunately, this implies that there is no way to <code>set</code> or <code>load</code> values for your
-ConfigSection before the configurable module globals are initialized.</p>
-<p>The only way that we currently see to handle such a situation properly is the following:</p>
-<ul>
-<li>make a separate package for the ConfigSection (i.e., isolated from your libary package)</li>
-<li><code>import</code> that config package first, <code>set</code> (or <code>load</code>) the config values and only then
-  import your library package (which will also import the config package, but the
-  singleton has been initialized now).</li>
+<li>Non-standard types useful for configuration or settings, such as FilePath,
+  are offered, see <a href="https://docs.pydantic.dev/latest/api/types/">pydantic types</a></li>
+<li>In addition, a <a href="https://docs.pydantic.dev/latest/api/networks/">network module</a> is
+  provided by pydantic that contains types for common network-related fields</li>
+<li>The value of numeric types can be restricted using
+  <a href="https://docs.pydantic.dev/latest/usage/types/number_types/#constrained-types">pydantic constrained types</a></li>
 </ul>
 
 
@@ -1460,7 +1536,7 @@ ConfigSection before the configurable module globals are initialized.</p>
       <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
+      <script src="../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   </body>

@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
@@ -261,7 +261,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Quick_start/" class="md-nav__link">
+      <a href="../../../quick_start/" class="md-nav__link">
         
   
   
@@ -335,7 +335,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../1-Installation/" class="md-nav__link">
+      <a href="../../../1-installation/" class="md-nav__link">
         
   
   
@@ -363,7 +363,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../2-Defining_parameters/" class="md-nav__link">
+      <a href="../../../2-defining_parameters/" class="md-nav__link">
         
   
   
@@ -391,7 +391,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../3-Files/" class="md-nav__link">
+      <a href="../../../3-files/" class="md-nav__link">
         
   
   
@@ -419,7 +419,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../4-Using_parameters/" class="md-nav__link">
+      <a href="../../../4-using_parameters/" class="md-nav__link">
         
   
   
@@ -447,7 +447,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../5-Usage_in_a_library_package/" class="md-nav__link">
+      <a href="../../../5-usage_in_a_library_package/" class="md-nav__link">
         
   
   
@@ -475,7 +475,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../6-Handling_deviations/" class="md-nav__link">
+      <a href="../../../6-handling_deviations/" class="md-nav__link">
         
   
   
@@ -503,7 +503,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../7-Recipes/" class="md-nav__link">
+      <a href="../../../7-recipes/" class="md-nav__link">
         
   
   
@@ -511,6 +511,34 @@
     
   
     7. Recipes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-secrets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. Environment variables and secrets
   
 
     
@@ -830,6 +858,62 @@
     
   
     json_file_operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../_private/references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    references
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../_private/secret_checks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    secret_checks
   
 
     
@@ -1251,6 +1335,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#application_settings.parametrization.ApplicationConfigSection.dotenv_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dotenv_file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application_settings.parametrization.ApplicationConfigSection.secrets_dir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        secrets_dir
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#application_settings.parametrization.ApplicationConfigSection.kind" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1572,6 +1678,28 @@
     <span class="md-ellipsis">
       
         strict_mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application_settings.parametrization.ApplicationConfigSection.dotenv_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dotenv_file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application_settings.parametrization.ApplicationConfigSection.secrets_dir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        secrets_dir
       
     </span>
   </a>
@@ -2128,7 +2256,64 @@ defaults to 'application_settings.ConfigBase' but should be given an application
         <p>Whether or not to apply strict mode. In strict mode, warnings rather than debug messages are logged when: 
 1) parameters are accessed before a file is loaded
 2) parameters are missing from the loaded file
-3) unknown parameters are found in the loaded file</p>
+3) unknown parameters are found in the loaded file
+Moreover, a secret parameter whose value does not come from a reference (but from a default
+or a literal in the file) raises a SecretsError rather than logging a warning.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="application_settings.parametrization.ApplicationConfigSection.dotenv_file" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">dotenv_file</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">dotenv_file</span> <span class="o">=</span> <span class="s1">''</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Path of a dotenv file whose variables can be used in references like '${env:VAR_NAME}';
+a relative path is relative to the folder of the config file. Empty means: no dotenv file.
+Real environment variables take precedence over the variables in the dotenv file.
+This parameter cannot itself contain references.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="application_settings.parametrization.ApplicationConfigSection.secrets_dir" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">secrets_dir</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">secrets_dir</span> <span class="o">=</span> <span class="s1">''</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Path of the folder that holds the files that are used in references like '${secret:file_name}';
+a relative path is relative to the folder of the config file. Empty means: no secrets folder.
+This parameter cannot itself contain references.</p>
 
     </div>
 
@@ -2159,10 +2344,10 @@ defaults to 'application_settings.ConfigBase' but should be given an application
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>src/application_settings/parametrization.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">184</span>
-<span class="normal">185</span>
-<span class="normal">186</span>
-<span class="normal">187</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">kind</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ParameterKind</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Return ParameterKind.CONFIG"""</span>
     <span class="k">return</span> <span class="n">ParameterKind</span><span class="o">.</span><span class="n">CONFIG</span>
@@ -2293,7 +2478,7 @@ defaults to 'application_settings.ConfigBase' but should be given an application
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   </body>

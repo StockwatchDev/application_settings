@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://stockwatchdev.github.io/application_settings/CHANGELOG/">
       
       
-        <link rel="prev" href="../7-Recipes/">
+        <link rel="prev" href="../8-secrets/">
       
       
         <link rel="next" href="../reference/application_settings/__init__/">
@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
@@ -261,7 +261,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Quick_start/" class="md-nav__link">
+      <a href="../quick_start/" class="md-nav__link">
         
   
   
@@ -335,7 +335,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../1-Installation/" class="md-nav__link">
+      <a href="../1-installation/" class="md-nav__link">
         
   
   
@@ -363,7 +363,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../2-Defining_parameters/" class="md-nav__link">
+      <a href="../2-defining_parameters/" class="md-nav__link">
         
   
   
@@ -391,7 +391,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../3-Files/" class="md-nav__link">
+      <a href="../3-files/" class="md-nav__link">
         
   
   
@@ -419,7 +419,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../4-Using_parameters/" class="md-nav__link">
+      <a href="../4-using_parameters/" class="md-nav__link">
         
   
   
@@ -447,7 +447,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../5-Usage_in_a_library_package/" class="md-nav__link">
+      <a href="../5-usage_in_a_library_package/" class="md-nav__link">
         
   
   
@@ -475,7 +475,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../6-Handling_deviations/" class="md-nav__link">
+      <a href="../6-handling_deviations/" class="md-nav__link">
         
   
   
@@ -503,7 +503,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../7-Recipes/" class="md-nav__link">
+      <a href="../7-recipes/" class="md-nav__link">
         
   
   
@@ -511,6 +511,34 @@
     
   
     7. Recipes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8-secrets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. Environment variables and secrets
   
 
     
@@ -1151,6 +1179,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    references
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/secret_checks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    secret_checks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../reference/application_settings/_private/toml_file_operations/" class="md-nav__link">
         
   
@@ -1764,10 +1848,21 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
   import string for the Config class / the Settings class that the application uses and whether or not
   to use <code>application_settings</code> in strict mode.</li>
 <li>Support for Python 3.15</li>
+<li>References in config files: the value of a parameter can be <code>${env:VAR_NAME}</code>, <code>${env:VAR_NAME,default}</code>,
+  <code>${secret:file_name}</code> or <code>${secret:file_name,default}</code> to take the value from an environment variable or from a
+  file in a secrets folder. Environment variables can be read from a dotenv file without changing the environment
+  of the process. This is configured with the new parameters <code>dotenv_file</code> and <code>secrets_dir</code> in
+  <code>ApplicationConfigSection</code>. See the chapter on environment variables and secrets in the docs.</li>
+<li>Support for secrets in config: parameters annotated with <code>Secret[...]</code> (<code>Secret</code> and the exceptions
+  <code>SecretsError</code> and <code>ReferenceResolutionError</code> are exported by <code>application_settings</code>) are masked in
+  <code>repr</code>, logs and validation errors. A secret that does not come from a reference gives a warning, or
+  a <code>SecretsError</code> in strict mode. <code>Secret</code> is not supported in settings.</li>
+<li>Dependency python-dotenv.</li>
 </ul>
 <h3 id="changed-060">Changed - 0.6.0</h3>
 <ul>
 <li>Logging now done with the standard logger, no longer with loguru</li>
+<li>Minimal version of pydantic is now 2.7, because we use <code>pydantic.Secret</code>.</li>
 </ul>
 <h3 id="fixed-060">Fixed - 0.6.0</h3>
 <ul>
@@ -1922,7 +2017,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
       <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
+      <script src="../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   </body>
