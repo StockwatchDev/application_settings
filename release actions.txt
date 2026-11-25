@@ -1,4 +1,6 @@
 - create branch release/<version> from develop
+- update pyproject
+- update test_version.py
 - changelog Unreleased -> <version> + <date> 
 - readme version develop -> version <version>
 - readme quickstart link develop -> <version>

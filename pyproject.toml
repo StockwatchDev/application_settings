@@ -1,6 +1,6 @@
 [project]
 name = "application_settings"
-version = "0.6.0.dev"
+version = "0.6.0"
 description = "For providing a python application with configuration and/or settings"
 readme = "README.md"
 license = "MIT"
