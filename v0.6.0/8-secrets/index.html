@@ -1,0 +1,1790 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="For providing a python application or library with configuration and/or settings">
+      
+      
+      
+        <link rel="canonical" href="https://stockwatchdev.github.io/application_settings/8-secrets/">
+      
+      
+        <link rel="prev" href="../7-recipes/">
+      
+      
+        <link rel="next" href="../CHANGELOG/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>8. Environment variables and secrets - application_settings</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#environment-variables-and-secrets" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="application_settings" class="md-header__button md-logo" aria-label="application_settings" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            application_settings
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              8. Environment variables and secrets
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/StockwatchDev/application_settings" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    StockwatchDev/application_settings
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="application_settings" class="md-nav__button md-logo" aria-label="application_settings" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    application_settings
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/StockwatchDev/application_settings" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    StockwatchDev/application_settings
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quick_start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Usage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1-installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2-defining_parameters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Defining parameters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Files and file locations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4-using_parameters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Using parameters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5-usage_in_a_library_package/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Usage in a library package
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6-handling_deviations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Handling deviations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7-recipes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Recipes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. Environment variables and secrets
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. Environment variables and secrets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Page contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Page contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-the-values-come-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the values come from
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Where the values come from">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#files-in-the-secrets-folder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files in the secrets folder
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Secrets
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Secrets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#secrets-that-do-not-come-from-a-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Secrets that do not come from a reference
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setting-this-up-on-a-platform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setting this up on a platform
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#good-to-know" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Good to know
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CHANGELOG/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Code Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    application_settings
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    application_settings
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/__init__/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+      init  
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1_2" id="__nav_5_1_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    _private
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    _private
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/__init__/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+      init  
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/file_operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    file_operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/file_operations_utils/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    file_operations_utils
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/json_file_operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    json_file_operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    references
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/secret_checks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    secret_checks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/_private/toml_file_operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    toml_file_operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/configuring_base/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    configuring_base
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/container_base/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    container_base
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/container_section_base/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    container_section_base
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/convenience/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    convenience
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/parameter_kind/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    parameter_kind
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/parametrization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    parametrization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/protocols/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    protocols
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/settings_base/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    settings_base
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/application_settings/type_notation_helper/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    type_notation_helper
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Page contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Page contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-the-values-come-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the values come from
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Where the values come from">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#files-in-the-secrets-folder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files in the secrets folder
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Secrets
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Secrets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#secrets-that-do-not-come-from-a-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Secrets that do not come from a reference
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setting-this-up-on-a-platform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setting this up on a platform
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#good-to-know" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Good to know
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="environment-variables-and-secrets">Environment variables and secrets</h1>
+<p>A config file is often not the right place for every value. A password or an API key
+should not be committed with the rest of the config, and some values differ per
+environment. For this purpose, the value of a config parameter can be a <em>reference</em> to an
+environment variable or to a file, and a parameter can be declared to be a <em>secret</em>.</p>
+<p>This is only available for config (and config sections), not for settings: settings are
+written back to file, and a secret should never end up there.</p>
+<p>A complete example is available in the folder
+<a href="https://github.com/StockwatchDev/application_settings/tree/develop/examples/recipes/secrets"><code>examples/recipes/secrets</code></a>.</p>
+<h2 id="references">References</h2>
+<p>A reference is a value in the config file that has one of the following forms:</p>
+<table>
+<thead>
+<tr>
+<th>Reference</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>${env:VAR_NAME}</code></td>
+<td>the value of the environment variable <code>VAR_NAME</code></td>
+</tr>
+<tr>
+<td><code>${env:VAR_NAME,default}</code></td>
+<td>the same, but if <code>VAR_NAME</code> is not set, then <code>default</code> is used</td>
+</tr>
+<tr>
+<td><code>${secret:file_name}</code></td>
+<td>the content of the file <code>file_name</code> in the secrets folder</td>
+</tr>
+<tr>
+<td><code>${secret:file_name,default}</code></td>
+<td>the same, but if the file is not found, then <code>default</code> is used</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"${env:MYAPP_NAME,my application}"</span>
+<span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"${env:MYAPP_PORT,8080}"</span>
+
+<span class="k">[database]</span>
+<span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"${secret:db_password}"</span>
+</code></pre></div>
+<p>The following rules apply:</p>
+<ul>
+<li>The reference has to be the <em>whole</em> value. A value like <code>"prefix-${env:VAR_NAME}"</code> is taken
+  literally, as is a value that is not closed (<code>"${env:VAR_NAME"</code>). If such a value
+  contains a complete reference, then a warning is logged, because that is probably not
+  what was meant; the warning names the parameter and never shows the value.</li>
+<li>A value that starts with exactly <code>$${</code> is taken literally, without the first <code>$</code>.
+  Hence, to get the text <code>${env:VAR_NAME}</code> as a value, write <code>"$${env:VAR_NAME}"</code>. With
+  more <code>$</code> signs, as in <code>"$$${env:VAR_NAME}"</code>, the value is taken literally as is.</li>
+<li>A name (of an environment variable or of a file in the secrets folder) consists of
+  letters, digits, <code>_</code>, <code>-</code> and <code>.</code>; the names <code>.</code> and <code>..</code> are not allowed. The rule is
+  the same for both and deliberately not stricter, because the platform that provides the
+  variables and files may use names beyond the portable <code>A-Z</code>, <code>a-z</code>, <code>0-9</code> and <code>_</code>. A
+  name that does not exist is reported as not found.</li>
+<li>Only the schemes <code>env</code> and <code>secret</code> exist. A value of the form <code>${...}</code> that is not a
+  valid reference to one of them is an error: this holds for an unknown scheme
+  (<code>${other:name}</code>), a missing scheme (<code>${name}</code>) and an empty or invalid name
+  (<code>${env:}</code>).</li>
+<li>The default is everything after the first comma, as is: spaces are part of it, and a
+  reference in it is not resolved but taken literally, so <code>${env:A,${env:B}}</code> gives
+  the text <code>${env:B}</code> when <code>A</code> is not set. It can be empty: <code>${env:VAR_NAME,}</code>.</li>
+<li>A reference works for any parameter. The value that is found is always a string. It is
+  converted to the type of the parameter in the same way as any value from the file, e.g.
+  <code>"5"</code> becomes <code>5</code> for an <code>int</code> parameter; <code>strict_mode</code> does not change this. Hence, a
+  reference cannot provide a list or a table: loading then fails with a validation error.</li>
+<li>References work in every part of a config file, also in included files, except
+  in the section <code>application_config</code>.</li>
+<li>References are resolved when the config is loaded.</li>
+<li>A reference is not a file inclusion: <code>${secret:file_name}</code> reads a single value from a file
+  in the secrets folder, whereas <a href="../3-files/"><code>__include__</code></a> merges a whole config file.
+  Includes are loaded before references are resolved, so the value of <code>__include__</code> must
+  be a literal path; a value with <code>${</code> in it is an error.</li>
+</ul>
+<p>If a reference cannot be resolved and has no default, then loading the config raises a
+<code>ReferenceResolutionError</code>. Its message lists <em>all</em> references that could not be
+resolved, by parameter, and never shows values.</p>
+<h2 id="where-the-values-come-from">Where the values come from</h2>
+<h3 id="environment-variables">Environment variables</h3>
+<p>Environment variables are looked up in the environment of the process. To make life easy
+during development, they can also be read from a
+<a href="https://pypi.org/project/python-dotenv/">dotenv file</a> by setting <code>dotenv_file</code> in the
+section <code>application_config</code>. A real environment variable takes precedence over a
+variable in the dotenv file, and the dotenv file does not change the environment of the
+process.</p>
+<div class="highlight"><pre><span></span><code><span class="k">[application_config]</span>
+<span class="n">dotenv_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">".env"</span>
+</code></pre></div>
+<p>A relative path is relative to the folder of the config file. If the dotenv file does not
+exist, then a warning is logged and the real environment is used. Values in a dotenv file
+are taken as they are: there is no variable expansion.</p>
+<h3 id="files-in-the-secrets-folder">Files in the secrets folder</h3>
+<p>Platforms like Docker and Kubernetes can provide secrets as files, one file per secret,
+in a folder like <code>/run/secrets</code>. A reference <code>${secret:file_name}</code> reads the file <code>file_name</code> in the
+folder that is set by <code>secrets_dir</code> in the section <code>application_config</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">[application_config]</span>
+<span class="n">secrets_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/run/secrets"</span>
+</code></pre></div>
+<ul>
+<li>A relative path is relative to the folder of the config file.</li>
+<li>The file is read as UTF-8 and a single trailing newline is removed. Other whitespace is
+  kept.</li>
+<li><code>file_name</code> is the name of a file and can never be a path: it is not possible to
+  refer to a file outside the secrets folder.</li>
+<li>Symbolic links are followed, which is what Kubernetes uses to provide secrets.</li>
+<li>If <code>secrets_dir</code> is not set or the file is not found, then the default is used; without
+  a default, this is an error. A file that exists but cannot be read is always an error.</li>
+</ul>
+<p>The parameters <code>dotenv_file</code> and <code>secrets_dir</code> are both empty by default, which means
+that they are not used. They are read before any reference is resolved; hence, they
+cannot contain a reference themselves.</p>
+<h2 id="secrets">Secrets</h2>
+<p>To prevent that a value is shown by accident, declare a parameter as <code>Secret</code>. This is
+the <a href="https://docs.pydantic.dev/latest/api/types/#pydantic.types.Secret"><code>Secret</code> of pydantic</a>,
+which is available from <code>application_settings</code> as well.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">application_settings</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfigBase</span><span class="p">,</span> <span class="n">Secret</span><span class="p">,</span> <span class="n">dataclass</span>
+
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyConfig</span><span class="p">(</span><span class="n">ConfigBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Config for my application"""</span>
+
+    <span class="n">api_key</span><span class="p">:</span> <span class="n">Secret</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8080</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">api_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"${env:MYAPP_API_KEY}"</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">api_key</span> <span class="o">=</span> <span class="n">MyConfig</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">api_key</span><span class="o">.</span><span class="n">get_secret_value</span><span class="p">()</span>
+</code></pre></div>
+<ul>
+<li>The value is converted to <code>T</code> as for any other parameter, e.g. <code>Secret[int]</code> gives an
+  <code>int</code>, and is then wrapped in a <code>Secret</code>.</li>
+<li>The value is hidden when the config is printed or logged: you see <code>Secret('**********')</code>.
+  The value has to be asked for explicitly with <code>get_secret_value()</code>.</li>
+<li>If the config is not valid, the error does not show secret values. The error still
+  names the parameter and says what is wrong, but not its input when that is a
+  <code>Secret</code>. For other parameters, only plain values (text, numbers, booleans) are shown,
+  because a list or a table could hold a secret, and pydantic reports all arguments
+  for errors like a missing parameter.</li>
+<li><code>Secret</code> is not available in settings. Loading a settings class that has a <code>Secret</code>
+  raises a <code>TypeError</code>.</li>
+<li>The default value of a secret has to be a <code>Secret</code> as well, e.g. <code>Secret("x")</code>.</li>
+</ul>
+<h3 id="secrets-that-do-not-come-from-a-reference">Secrets that do not come from a reference</h3>
+<p>The point of a secret is that its value is not in the config file or in the code. Hence,
+when the value of a secret is not found by a reference, that is reported. This is the
+case if the value comes from</p>
+<ul>
+<li>a default value in the code,</li>
+<li>the default in a reference, e.g. <code>${env:VAR_NAME,default}</code>, that was used because <code>VAR_NAME</code>
+  was not found, or</li>
+<li>a literal in the config file, e.g. <code>api_key = "abc"</code>.</li>
+</ul>
+<p>By default, a warning is logged that names the parameter (never its value). In strict mode
+(set <code>strict_mode = true</code> in the section <code>application_config</code>), the same is logged as an
+error and a <code>SecretsError</code> is raised as well, which lists all such parameters; the config
+that was loaded previously, if any, is not replaced in that case. Use strict mode in production: a misconfigured deployment
+then fails at startup instead of silently running with a default or literal secret.</p>
+<h2 id="setting-this-up-on-a-platform">Setting this up on a platform</h2>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Local development</label><label for="__tabbed_1_2">Docker</label><label for="__tabbed_1_3">Kubernetes</label><label for="__tabbed_1_4">CI</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Keep a dotenv file out of version control (add it to <code>.gitignore</code>) and refer to it
+from the config file:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[application_config]</span>
+<span class="n">dotenv_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">".env"</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code># .env
+MYAPP_API_KEY=value-for-development
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>Environment variables can be passed with <code>docker run -e NAME=value</code>, <code>--env-file</code>, or
+the <code>environment:</code> and <code>env_file:</code> keys of Docker Compose. Docker secrets are
+mounted as files in <code>/run/secrets</code>, so set that as the secrets folder and use
+<code>${secret:file_name}</code>. Files are preferred, because environment variables can be seen with
+<code>docker inspect</code>.</p>
+</div>
+<div class="tabbed-block">
+<p>A <code>Secret</code> can be exposed to a container as an environment variable (<code>secretKeyRef</code>)
+or as files in a mounted volume. Use <code>${env:VAR_NAME}</code>, or mount the volume and use
+<code>${secret:file_name}</code> with <code>secrets_dir</code> set to the mount path. Note that a Kubernetes
+<code>Secret</code> is only base64 encoded; it needs encryption at rest or an external store
+(e.g., by the External Secrets Operator or the Secrets Store CSI Driver) to be
+safe.</p>
+</div>
+<div class="tabbed-block">
+<p>Pass the secrets of the CI system as environment variables to the job and use
+<code>${env:VAR_NAME}</code>.</p>
+</div>
+</div>
+</div>
+<h2 id="good-to-know">Good to know</h2>
+<ul>
+<li>Values are read when the config is loaded and do not change afterwards. To pick up a
+  changed secret, load the config again.</li>
+<li>A dotenv file is not encrypted. It is intended for development, do not commit one with
+  real secrets.</li>
+<li>The check on the origin of secrets is done for parameters that are annotated with
+  <code>Secret[...]</code> or <code>Secret[...] | None</code>, also in nested sections. An optional secret that
+  is <code>None</code> is not reported, because there is no value to protect. The check is not done
+  for a <code>Secret</code> inside another union or inside a container, like <code>list[Secret[int]]</code>.
+  Such a parameter is still hidden in errors and is still not allowed in settings.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>
