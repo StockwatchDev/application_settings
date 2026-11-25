@@ -1,35 +1,36 @@
 """Base class for a container (= root section) for configuration and settings."""
 
-import sys
+import logging
 from abc import ABC, abstractmethod
 from dataclasses import asdict
 from pathlib import Path
 from re import sub
-from typing import Any
+from typing import Any, Self
 
-from loguru import logger
 from pathvalidate import is_valid_filepath
 
-from application_settings.container_section_base import ContainerSectionBase
-from application_settings.type_notation_helper import PathOpt, PathOrStr
+from application_settings.container_section_base import ParameterContainerSectionBase
+from application_settings.parameter_kind import ParameterKind
+from application_settings.parametrization import ApplicationConfigSection, log_level
+from application_settings.type_notation_helper import PathOrStr
 
 from ._private.file_operations import FileFormat
 from ._private.file_operations import load as _do_load
 from ._private.file_operations import save as _do_save
+from ._private.references import ResolutionReport, resolve_config_data
+from ._private.secret_checks import check_secrets
 
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
+logger = logging.getLogger(__name__)
 
 
-class ContainerBase(ContainerSectionBase, ABC):
+class ParameterContainerBase(ParameterContainerSectionBase, ABC):
     """Base class for Config and Settings container classes"""
 
-    @classmethod
+    @staticmethod
     @abstractmethod
-    def default_file_format(cls) -> FileFormat:
+    def default_file_format() -> FileFormat:
         """Return the default file format"""
+        # method added here because it is called by default_filename(cls)
 
     @classmethod
     def default_foldername(cls) -> str:
@@ -47,7 +48,7 @@ class ContainerBase(ContainerSectionBase, ABC):
         return f"{cls.kind_string().lower()}.{cls.default_file_format().value}"
 
     @classmethod
-    def default_filepath(cls) -> PathOpt:
+    def default_filepath(cls) -> Path | None:
         """Return the fully qualified default path for the config/settingsfile
 
         E.g. ~/.example/config.toml.
@@ -63,7 +64,7 @@ class ContainerBase(ContainerSectionBase, ABC):
             ValueError: if file_path is not a valid path for the OS running the code
         """
 
-        path: PathOpt = None
+        path: Path | None = None
         if isinstance(file_path, Path):
             path = file_path.resolve()
         elif file_path:
@@ -84,11 +85,12 @@ class ContainerBase(ContainerSectionBase, ABC):
         else:
             if cls._get() is not None:
                 logger.info(
-                    f"Filepath has been set the but file is not loaded into the {cls.kind_string()}."
+                    "The filepath is set, but no file has been loaded into the %s.",
+                    cls.kind_string(),
                 )
 
     @classmethod
-    def filepath(cls) -> PathOpt:
+    def filepath(cls) -> Path | None:
         """Return the path for the file that holds the config / settings."""
         return _ALL_PATHS.get(id(cls), cls.default_filepath())
 
@@ -107,22 +109,33 @@ class ContainerBase(ContainerSectionBase, ABC):
     @classmethod
     def get_without_load(cls) -> None:
         """Get has been called on a section before a load was done; handle this."""
-        logger.warning(
-            f"{cls.kind_string()} {cls.__name__} accessed before data has been loaded; "
-            f"will try implicit loading with {cls.filepath()}."
+        logger.log(
+            log_level(cls.kind()),
+            "%s %s accessed before data has been loaded; will try implicit loading with %s.",
+            cls.kind_string(),
+            cls.__name__,
+            cls.filepath(),
         )
 
     @classmethod
     def _create_instance(cls, throw_if_file_not_found: bool = False) -> Self:
-        """Load stored data, instantiate the Container with it, store it in the singleton and return it."""
+        """Load stored data, instantiate the ParameterContainer with it, store it in the singleton and return it."""
 
         # get whatever is stored in the config/settings file
         data_stored = cls._get_saved_data(throw_if_file_not_found)
-        # instantiate and store the Container with the stored data
-        return cls.set(data_stored)
+        report = ResolutionReport()
+        if cls.kind() == ParameterKind.CONFIG and (path := cls.filepath()):
+            # references are only supported for config, settings are written back to file
+            data_stored, report = resolve_config_data(data_stored, path.parent)
+        # instantiate the ParameterContainer with the stored data
+        new_instance = cls._build(data_stored)
+        if cls.kind() == ParameterKind.CONFIG:
+            # check before storing, so that a failure does not replace the current config
+            check_secrets(new_instance, data_stored, report, _is_strict(new_instance))
+        return new_instance._set()
 
     def _save(self) -> Self:
-        """Private method to save the singleton to file."""
+        """Protected method to save the singleton to file."""
         if path := self.filepath():
             path.parent.mkdir(parents=True, exist_ok=True)
             # in self._set(), which normally is always executed, we ensured that
@@ -142,4 +155,10 @@ class ContainerBase(ContainerSectionBase, ABC):
         return _do_load(cls.kind(), cls.filepath(), throw_if_file_not_found)
 
 
-_ALL_PATHS: dict[int, PathOpt] = {}
+def _is_strict(container: object) -> bool:
+    """Whether the application_config section of the container says to apply strict mode."""
+    section = getattr(container, "application_config", None)
+    return isinstance(section, ApplicationConfigSection) and section.strict_mode
+
+
+_ALL_PATHS: dict[int, Path | None] = {}

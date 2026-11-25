@@ -5,7 +5,7 @@ You can use `application_settings` also to parametrize a library package:
 - Define parameters in one or more Section classes (i.e., not in a Container) - best
   practice is to have a single main section with possibly nested sub-sections;
 - Use parameters in the code of your library by invoking class method `get()` on your
-  Section class(es) (see [chapter on using parameters](./4-Using_parameters.md));
+  Section class(es) (see [chapter on using parameters](./4-using_parameters.md));
 - The application that uses your library has to take care of loading stored values into
   your parameters. This can be done in two ways:
   - If the application also uses `application_settings`, it's simple; the main Section

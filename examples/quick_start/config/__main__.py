@@ -15,11 +15,11 @@ def main1() -> None:
     # If you get() MyExampleConfig before load(), it will be loaded automatically
     # using the filepath that has been set via the command line
     a_variable = MyExampleConfig.get().section1.field1
-    print(f"{a_variable =}")  # a_variable = -0.5
+    print(f"{a_variable = }")  # a_variable = -0.5
     # You can also directly get() a section; but remember that the config should
     # be loaded already then (get() on a section does not automatically load())
     another_variable = MyExampleConfigSection.get().field2
-    print(f"{another_variable =}")  # another_variable = 22
+    print(f"{another_variable = }")  # another_variable = 22
 
 
 def main2() -> None:
@@ -34,7 +34,7 @@ def main2() -> None:
     new_variable = MyExampleConfig.get().name
     print(f"new_variable = '{new_variable}'")  # new_variable == 'new name'
     another_new_variable = MyExampleConfigSection.get().field2
-    print(f"{another_new_variable =}")  # another_new_variable = 2
+    print(f"{another_new_variable = }")  # another_new_variable = 2
 
 
 if __name__ == "__main__":

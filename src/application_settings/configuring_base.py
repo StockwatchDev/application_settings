@@ -1,43 +1,42 @@
 """Module for handling configuration."""
 
-import sys
-from typing import TypeVar
+from dataclasses import KW_ONLY
 
-from application_settings.container_base import ContainerBase
-from application_settings.container_section_base import ContainerSectionBase
+from attributes_doc import attributes_doc
+from pydantic.dataclasses import dataclass
+
+from application_settings._private.file_operations import FileFormat
+from application_settings.container_base import ParameterContainerBase
+from application_settings.container_section_base import ParameterContainerSectionBase
 from application_settings.parameter_kind import ParameterKind
-
-from ._private.file_operations import FileFormat
-
-if sys.version_info >= (3, 12):
-    from typing import override
-else:
-    from typing_extensions import override
+from application_settings.parametrization import ApplicationConfigSection
 
 
-ConfigT = TypeVar("ConfigT", bound="ConfigBase")
-ConfigT.__doc__ = "Represents ConfigBase and all subclasses"
+@dataclass(frozen=True)
+class ConfigSectionBase(ParameterContainerSectionBase):
+    """Base class for ConfigSection classes, implements the abstract methods of the base(s)"""
 
-
-class ConfigSectionBase(ContainerSectionBase):
-    """Base class for all ConfigSection classes (so that we can bound a TypeVar)"""
-
-    @classmethod
-    def kind(cls) -> ParameterKind:
+    @staticmethod
+    def kind() -> ParameterKind:
         """Return ParameterKind.CONFIG"""
         return ParameterKind.CONFIG
 
 
-class ConfigBase(ContainerBase):
-    """Base class for main Config class"""
+@attributes_doc
+@dataclass(frozen=True)
+class ConfigBase(ParameterContainerBase):
+    """Base class for main Config class, implements the abstract methods of the base(s)"""
 
-    @classmethod
-    def kind(cls) -> ParameterKind:
+    _: KW_ONLY
+    application_config: ApplicationConfigSection = ApplicationConfigSection()
+    """Holds the configuration parameters for application_settings"""
+
+    @staticmethod
+    def kind() -> ParameterKind:
         """Return ParameterKind.CONFIG"""
         return ParameterKind.CONFIG
 
-    @override
-    @classmethod
-    def default_file_format(cls) -> FileFormat:
-        """Return the default file format"""
+    @staticmethod
+    def default_file_format() -> FileFormat:
+        """Return the default file format"""  # disable=duplicate-code
         return FileFormat.TOML

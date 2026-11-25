@@ -52,12 +52,11 @@ the docstring literals to the objects in question such that introspection tools 
 by means of a decorator `@attributes_doc` for the class that defines the attributes. Our package `application_settings`
 exports this decorator to facilitate documentation and introspection.
 
-
 ## Example
 
 === "Configuration"
     ```python
-    """Configuration parameter definition"""
+    """Configuration definitions"""
 
     from application_settings import (
         ConfigBase,
@@ -133,6 +132,7 @@ exports this decorator to facilitate documentation and introspection.
 
 
     # It is good practice to set the filepath via the command line interface
+    # You can optionally set load=True
     settings_filepath_from_cli()
 
     ```

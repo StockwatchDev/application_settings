@@ -1,48 +1,5 @@
 # Code snippets and recipes
 
-## Logging
-
-### Using `Loguru`
-
-`application_settings` makes use of the [Loguru](https://github.com/Delgan/loguru) library
-for logging. By default, logging is disabled, hence you need to enable it to get
-logging output.
-
-```python
-from loguru import logger
-
-logger.enable("application_settings")
-
-```
-
-The logical location for this statement is before the first invocation of `load` (or, if
-you do not `load` explicitly, before the first invocation of `get`).
-
-Note that by default `Loguru` logs to `stderr`, not `stdout` (as the standard `logging`
-library does). Have a look at the
-[Loguru documentation](https://loguru.readthedocs.io/en/stable/index.html) if you want
-to configure the logger in the way that you want to.
-
-### Using standard `logging`
-
-If you prefer to use the standard `logging` library, then you need to do two things.
-By default, logging is disabled, hence you need to enable it to get logging output. In
-addition to that, you need to propagate Loguru messages to standard logging.
-`application_settings` provides a convenience function `use_standard_logging` for this
-purpose. This function sets the propagation to the standard logger. The function has a
-single argument `enable` that by default is set to `False`. If a parameter `True` is
-provided, then the convenience function also enables logging.
-
-```python
-from application_settings import use_standard_logging
-
-use_standard_logging(enable=True)
-
-```
-
-The logical location for this statement is before the first invocation of `load` (or, if
-you do not `load` explicitly, before the first invocation of `get`).
-
 ## Having a test configuration during testing
 
 During unit testing, you typically would like to have a specific test configuration and
@@ -53,7 +10,7 @@ that can do the file handling.
 
 Fortunately, there is another way, namely by using classmethod `set`. As an example,
 let's create a test config for `ExampleConfigSection`, (see
-[Quick Start](Quick_start.md)):
+[Quick Start](quick_start.md)):
 
 ```python
 # Create a (nested) dictionary that holds the test values for the relevant fields
@@ -92,7 +49,7 @@ suggested:
 Obviously, the same approach can be followed for settings.
 
 To make this more clear, an example is provided in the folder
-[`examples/Recipies/initialization`](https://github.com/StockwatchDev/application_settings/tree/examples/Recipies/initialization).
+[`examples/recipes/initialization`](https://github.com/StockwatchDev/application_settings/tree/develop/examples/recipes/initialization).
 Two configurations are defined: one that is loaded as described in the second bullet
 above, and one that is (wrongly) loaded with the entry point file `__main__` and not in
 the Config module. When running the example, it will become apparent that loading in the

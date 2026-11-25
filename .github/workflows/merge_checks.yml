@@ -10,48 +10,58 @@ on:
       - "develop"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python: ['3.9', '3.10', '3.11', '3.12']
-        toxenv: ['pytest', 'typing']
+        python: ["3.11", "3.12", "3.13", "3.14", "3.15"]
+        toxenv: ["pytest", "typing"]
         include:
-          - python: '3.12'
-            toxenv: 'style'
-          - python: '3.12'
-            toxenv: 'docs'
+          - python: "3.15"
+            toxenv: "style"
+          - python: "3.15"
+            toxenv: "docs"
     name: "${{ matrix.toxenv }} for python ${{ matrix.python }}"
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup python ${{ matrix.python }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python }}
 
       - name: Install poetry
         uses: snok/install-poetry@v1
         with:
-          version: 1.5.1
+          version: 2.4.1
           virtualenvs-create: true
           virtualenvs-in-project: true
 
       - name: Check lockfile
-        run: poetry lock --check
+        run: poetry check
 
       - name: Install packages
         run: poetry install --no-interaction --no-root --only testrunner
 
-      - name: Run tests
-        run: poetry run tox -e py${{matrix.python}}-${{ matrix.toxenv }}
+      - name: Run tox
+        run: |
+          # style and docs are plain tox envs; pytest and typing are per python version
+          TOXENV="${{ matrix.toxenv }}"
+          case "$TOXENV" in
+            pytest|typing) TOXENV="py$(echo "${{ matrix.python }}" | tr -d '.')-$TOXENV" ;;
+          esac
+          poetry run tox -e "$TOXENV"
 
       - name: Report coverage
-        uses: codecov/codecov-action@v4
+        if: matrix.toxenv == 'pytest'
+        uses: codecov/codecov-action@v7
         with:
           files: ./coverage.xml
           flags: unittests
