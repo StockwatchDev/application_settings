@@ -1,4 +1,4 @@
-# application_settings - version  develop (to become 0.7.0)
+# application_settings - version develop (to become 0.7.0)
 
 [![pypi](https://img.shields.io/pypi/v/application-settings.svg)](https://pypi.python.org/pypi/application-settings)
 [![versions](https://img.shields.io/pypi/pyversions/application-settings.svg)](https://github.com/StockwatchDev/application_settings)
